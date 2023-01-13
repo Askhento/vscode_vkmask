@@ -2,6 +2,9 @@
   "name": "vkmask",
   "displayName": "vkmask",
   "publisher": "askhento",
+  "repository": {
+    "url": "https://github.com/Askhento/vscode_vkmask"
+  },
   "description": "UI for vkontakte AR development ",
   "version": "0.0.2",
   "engines": {
