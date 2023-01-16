@@ -14,24 +14,11 @@
     "Other"
   ],
   "activationEvents": [
-    "onView:vkmask_outline_view"
+    "onView:vkmask.sidepanel"
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [
-      {
-        "command": "vkmask.helloWorld",
-        "title": "Hello World"
-      },
-      {
-        "command": "vkmask.runTestMask",
-        "title": "Run test.mask"
-      },
-      {
-        "command": "vkmask.item_clicked",
-        "title": "Item Clicked"
-      }
-    ],
+    "commands": [],
     "viewsContainers": {
       "activitybar": [
         {
@@ -44,12 +31,10 @@
     "views": {
       "vkmask_primary_bar": [
         {
-          "id": "vkmask_outline_view",
-          "name": "Outline"
-        },
-        {
-          "id": "effects_tree_view",
-          "name": "Effects"
+          "type": "webview",
+          "contextualTitle": "vkmask sidepanel",
+          "id": "vkmask.sidepanel",
+          "name": "Sidepanel"
         }
       ]
     },

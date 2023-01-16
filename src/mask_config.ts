@@ -7,6 +7,7 @@ import { MaskJSON } from "./types"
 import * as t from "io-ts";
 import { PathReporter } from 'io-ts/lib/PathReporter'
 import * as jsonMap from "json-source-map";
+import { prettyPrintArray } from "./utils/prettyPrintJson";
 
 
 // class MaskTreeItem extends tree_item{
@@ -32,103 +33,91 @@ export class MaskConfig {
 
     public maskJSON : t.TypeOf<typeof MaskJSON> | undefined;
     private sourceMaskJSON : jsonMap.ParseResult | undefined;
+    public maskLinePointers : jsonMap.Pointers = {};
     public rawMaskJSON : string = "";
     private pathMaskJSON : string = "";
-    private effectsTree : TreeView;
-    private effectsLineNumber : number = 0;
-    private maskLinePointers : jsonMap.Pointers = {};
+    // private effectsTree : TreeView;
 
     constructor() {
         vscode.window.setStatusBarMessage("wzp aaan");
         vscode.window.showInformationMessage('Hello!');
 
-
         this.parseMaskJSON();
-        
-        this.effectsTree = new TreeView((item : TreeItem) => this.onEffectClicked(item));
-        // this.effectsTree = new tree_view((item : tree_item)=> {
-        //     // console.log("yoyyo")
-        //     // console.log(item)
-        //     console.log(item.label)
-        //     // const pointer = item.data;
-        //     // if (item.data === undefined) return;
-
-        //     console.log(item)
-
-        //     // // return;
-
-        // });
-        
         this.refreshEffects();
-
-        vscode.window.registerTreeDataProvider('effects_tree_view', this.effectsTree);
-
-
-        // const item = vscode.window.createStatusBarItem();
-        // item.text = "Hello World!";
-        // item.color = "yellow";
-        // item.show();
-
-        // vscode.workspace.findFiles("*.*").then(files=>{
-        //     // console.log(files);
-        //     files.forEach(file=>{
-        //         console.log(file.fsPath);
-        //     })
-        // })
     }
 
-    public onEffectClicked(item : TreeItem) {
-        console.log(item.id);
-        // console.log(item)
-        if (item.id === undefined) return;
-        const key = "/effects/" + item.id;
-        const pointer = this.maskLinePointers[key];
-        console.log(pointer)
+
+    public showConfigAt(pointer : Record<jsonMap.PointerProp, jsonMap.Location>) {
 
         vscode.workspace.openTextDocument(this.pathMaskJSON).then( document => {
             // console.log(document.uri);
             // after opening the document, we set the cursor 
             // and here we make use of the line property which makes imo the code easier to read
-            vscode.window.showTextDocument(document).then( editor => {
-                    let pos = new vscode.Position(pointer.value.line, 0);
-                    let posEnd = new vscode.Position(pointer.valueEnd.line + 1, 0);
-                    // here we set the cursor
-                    editor.selection = new vscode.Selection(posEnd, pos);
-                    // here we set the focus of the opened editor
-                    editor.revealRange(new vscode.Range(posEnd, pos));
-                }
-            );
+            return vscode.window.showTextDocument(document)
+        }).then((editor)=> {
+            let pos = new vscode.Position(pointer.value.line, 0);
+            let posEnd = new vscode.Position(pointer.valueEnd.line + 1, 0);
+            // here we set the cursor
+            editor.selection = new vscode.Selection(posEnd, pos);
+            // here we set the focus of the opened editor
+            editor.revealRange(new vscode.Range(posEnd, pos));
+
+    
+            return Promise.resolve(editor);
         });
-        // first we open the document
+    }
+
+    // todo 
+    private showConfig() {
+
+    }
+
+    private prettyJson(json : any) {
+        return JSON.stringify(json, function(k,v){
+           if((v instanceof Array) && ( v.length > 0 ) && (typeof(v[0]) === "number" ))
+           {
+                console.log(this)
+           } else {
+                // return JSON.stringify(v, null, 0);
+             
+           }
+           return v;
+        }, "\t");
+    }
+
+    public removeFromConfig(id : number) {
+        vscode.workspace.openTextDocument(this.pathMaskJSON).then( document => {
+            // console.log(document.uri);
+            // after opening the document, we set the cursor 
+            // and here we make use of the line property which makes imo the code easier to read
+            return vscode.window.showTextDocument(document)
+        }).then((editor)=> {
+            
+            // editor.edit((builder) => {
+            //     builder.delete(new vscode.Range(posEnd, pos))
+            // })
+            // this.refreshEffects();
+
+            this.maskJSON?.effects.splice(id , 1);
+
+
+            const newConfigString = this.prettyJson(this.maskJSON)
+
+            editor.edit((builder) => {
+                
+                builder.delete(new vscode.Range(0, 0, editor.document.lineCount , 0) )
+                builder.insert(new vscode.Position(0,0), newConfigString);
+            })
+            // this.refreshEffects();
+        });
+
+
+
     }
 
     public refreshEffects() {
+        // ! need to check if mask.json opened in other tabs 
 
-        const maskDecode = MaskJSON.decode(this.maskJSON);
-        if (maskDecode._tag === "Left")
-        {
-            console.log(PathReporter.report(maskDecode))
-            return;
-        } 
-
-        const effects = maskDecode.right.effects;
-
-        if (this.sourceMaskJSON?.pointers === undefined) return;
-        
-        this.maskLinePointers = this.sourceMaskJSON?.pointers;
-
-        effects.forEach((effect, index) => {
-            // console.log(effect.name)
-            const pointer = this.maskLinePointers["/effects/" + index];
-            // console.log(pointer)
-            const newItem = new TreeItem(effect.name);
-            newItem.id = index.toString();
-            this.effectsTree.addItem(newItem);
-
-        })
-    }
-
-    public parseMaskJSON() {
         if(!vscode.workspace.workspaceFolders) 
         {
             console.log("No folder opened!");
@@ -137,27 +126,56 @@ export class MaskConfig {
 
         const dir = vscode.workspace.workspaceFolders[0].uri.fsPath;
 
+
         this.pathMaskJSON = path.join(dir, "mask.json");
-        console.log("mask.json path : " + this.pathMaskJSON);
-
-        this.rawMaskJSON = fs.readFileSync(this.pathMaskJSON, 'utf8');
+        // console.log("mask.json path : " + this.pathMaskJSON);
 
 
-        this.maskJSON = JSON.parse(this.rawMaskJSON);
+        const currentDocument = vscode.window.activeTextEditor?.document;
+        if (currentDocument?.uri.fsPath === this.pathMaskJSON) 
+        {
+            this.rawMaskJSON = currentDocument.getText();
+        } else {
+            this.rawMaskJSON = fs.readFileSync(this.pathMaskJSON, 'utf8');
+        }
+
+        this.sourceMaskJSON = jsonMap.parse(this.rawMaskJSON);
+
+        if (this.sourceMaskJSON === undefined) return;
+
+        this.maskJSON = this.sourceMaskJSON.data as t.TypeOf<typeof MaskJSON>;
+
+        const maskDecode = MaskJSON.decode(this.maskJSON);
+        if (maskDecode._tag === "Left")
+        {
+            console.log(PathReporter.report(maskDecode))
+            return;
+        } 
+
+        // const effects = maskDecode.right.effects;
+
+        if (this.sourceMaskJSON?.pointers === undefined) return;
+
+        this.maskLinePointers = this.sourceMaskJSON?.pointers;
+
+    }
+
+    public parseMaskJSON() {
+    
+
         // console.log(this.maskJSON)
 
-        const rawLines = this.rawMaskJSON.split("\n");
+        // const rawLines = this.rawMaskJSON.split("\n");
 
-        const effectsRegExp = new RegExp("effects");
+        // const effectsRegExp = new RegExp("effects");
 
-        this.effectsLineNumber = 0;
-        rawLines.forEach((line, lineNumber) => {
-            if(line.match(effectsRegExp)) {
-                console.log("effects start " + lineNumber);
-                this.effectsLineNumber = lineNumber;
-            }
-        });
-        this.sourceMaskJSON = jsonMap.parse(this.rawMaskJSON);
+        // this.effectsLineNumber = 0;
+        // rawLines.forEach((line, lineNumber) => {
+        //     if(line.match(effectsRegExp)) {
+        //         console.log("effects start " + lineNumber);
+        //         this.effectsLineNumber = lineNumber;
+        //     }
+        // });
 
         // this.sourceMaskJSON = jsonMap.stringify(this.maskJSON,, null, 2);
         // const jsonPointers = this.sourceMaskJSON.pointers;
