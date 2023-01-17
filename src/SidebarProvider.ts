@@ -36,20 +36,23 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
 		webviewView.webview.onDidReceiveMessage(data => {
 			switch (data.type) {
-				case 'effect-clicked':
-					{
-						console.log(data.value);
-						const id = data.value.id;
-						const key = "/effects/" + id;
+				case 'effectDelete':
+				{
+					console.log(data.value);
+					const id = data.value;
+					this.maskConfig.removeFromConfig(id);
 
-						const pointer = this.maskConfig.maskLinePointers[key]
-						// this.maskConfig.showConfigAt(pointer)
-						
-						this.maskConfig.removeFromConfig(id);
-
-						// vscode.window.activeTextEditor?.insertSnippet(new vscode.SnippetString(`#${data.value}`));
-						break;
-					}
+					break;
+				}
+				case 'effectSelected':
+				{
+					console.log(data.value);
+					const id = data.value;
+					const key = "/effects/" + id;
+					const pointer = this.maskConfig.maskLinePointers[key]
+					this.maskConfig.showConfigAt(pointer);
+					break;
+				}
 			}
 		});
 
@@ -82,24 +85,10 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 		setTimeout(() => {
 			this.updateEffects();
 			
-		}, 500);
+		}, 1000);
 
 	}
 
-
-
-	public addColor() {
-		if (this._view) {
-			this._view.show?.(true); // `show` is not implemented in 1.49 but is for 1.50 insiders
-			this._view.webview.postMessage({ type: 'addColor' });
-		}
-	}
-
-	public clearColors() {
-		if (this._view) {
-			this._view.webview.postMessage({ type: 'clearColors' });
-		}
-	}
 
 	public updateEffects() {
 		const effects = this.maskConfig.maskJSON?.effects.map((effect, index) => {
@@ -124,9 +113,13 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 		const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'reset.css'));
 		const styleVSCodeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'vscode.css'));
 		const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'main.css'));
+		const styleFontAwesomeUri = webview.asWebviewUri(vscode.Uri.joinPath(this._extensionUri, 'media', 'fas.css'));
 
 		// Use a nonce to only allow a specific script to be run.
 		const nonce = getNonce();
+
+		// <link href="${styleVSCodeUri}" rel="stylesheet">
+		// <link href="${styleResetUri}" rel="stylesheet">
 
 		return `<!DOCTYPE html>
 			<html lang="en">
@@ -139,14 +132,20 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 				-->
 				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
-				<link href="${styleResetUri}" rel="stylesheet">
-				<link href="${styleVSCodeUri}" rel="stylesheet">
 				<link href="${styleMainUri}" rel="stylesheet">
+				<link href="${styleFontAwesomeUri}" rel="stylesheet">
 				<title>Cat Colors</title>
 			</head>
-			<body>
-				<ul class="color-list">
-				</ul>
+			<body> 
+				<div class="wrapper">
+					<!--<div class="field">
+						<input type="text" required placeholder="Add effect">
+						<span class="add-btn">ADD</span>
+					</div>-->
+
+					<ul class="effectsList">
+					</ul>
+				</div>
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
 			</html>`;

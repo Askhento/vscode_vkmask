@@ -7,8 +7,8 @@ import { MaskJSON } from "./types"
 import * as t from "io-ts";
 import { PathReporter } from 'io-ts/lib/PathReporter'
 import * as jsonMap from "json-source-map";
-import { prettyPrintArray } from "./utils/prettyPrintJson";
-
+// import jsonStringify from "json-stringify-pretty-compact";
+import { jsonPrettyArray } from "./utils/jsonStringify";
 
 // class MaskTreeItem extends tree_item{
 //     public pointer : Record<jsonMap.PointerProp, jsonMap.Location>;
@@ -55,6 +55,7 @@ export class MaskConfig {
             // and here we make use of the line property which makes imo the code easier to read
             return vscode.window.showTextDocument(document)
         }).then((editor)=> {
+            console.log("showing config at ");
             let pos = new vscode.Position(pointer.value.line, 0);
             let posEnd = new vscode.Position(pointer.valueEnd.line + 1, 0);
             // here we set the cursor
@@ -72,18 +73,6 @@ export class MaskConfig {
 
     }
 
-    private prettyJson(json : any) {
-        return JSON.stringify(json, function(k,v){
-           if((v instanceof Array) && ( v.length > 0 ) && (typeof(v[0]) === "number" ))
-           {
-                console.log(this)
-           } else {
-                // return JSON.stringify(v, null, 0);
-             
-           }
-           return v;
-        }, "\t");
-    }
 
     public removeFromConfig(id : number) {
         vscode.workspace.openTextDocument(this.pathMaskJSON).then( document => {
@@ -93,21 +82,21 @@ export class MaskConfig {
             return vscode.window.showTextDocument(document)
         }).then((editor)=> {
             
-            // editor.edit((builder) => {
-            //     builder.delete(new vscode.Range(posEnd, pos))
-            // })
-            // this.refreshEffects();
-
             this.maskJSON?.effects.splice(id , 1);
 
-
-            const newConfigString = this.prettyJson(this.maskJSON)
-
+            // const newConfigString = this.prettyJson(this.maskJSON)
+            const newConfigString = jsonPrettyArray(this.maskJSON)
+            
             editor.edit((builder) => {
                 
                 builder.delete(new vscode.Range(0, 0, editor.document.lineCount , 0) )
                 builder.insert(new vscode.Position(0,0), newConfigString);
+
+                var postion = editor.selection.end; 
+                editor.selection = new vscode.Selection(postion, postion);
             })
+
+            
             // this.refreshEffects();
         });
 

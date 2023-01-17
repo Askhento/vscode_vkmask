@@ -16,6 +16,7 @@
     //     addColor();
     // });
 
+    // document.querySelector('')
 
 
     // Handle messages sent from the extension to the webview
@@ -23,18 +24,7 @@
         const message = event.data; // The json data that the extension sent
         console.log(message)
         switch (message.type) {
-            // case 'addColor':
-            //     {
-            //         addColor();
-            //         break;
-            //     }
-            // case 'clearColors':
-            //     {
-            //         console.log("clearing colors")
-            //         colors = [];
-            //         updateColorList(colors);
-            //         break;
-            //     }
+
             case 'updateEffects':
                 {
                     console.log("updatingEffects")
@@ -47,85 +37,49 @@
     });
 
     function updateEffects(effects) {
-        const ul = document.querySelector('.color-list');
-        ul.textContent = '';
+        const ul = document.querySelector('.effectsList');
+        ul.innerHTML = '';
         console.log("main.js update effects \n")
         console.log(effects)
+
         for (const effect of effects) {
+
             const li = document.createElement('li');
-            li.className = 'color-preview';
             li.textContent = effect.name;
-            li.addEventListener('click', (e) => {
-                const value = e.target;
-                // console.log(value);
-                // console.log(vscodeWeb)
-                vscodeWeb.postMessage({ type: 'effect-clicked', value: effect });
 
-            });
+            li.onclick = () => {
+                for (let i = 0; i < ul.childElementCount; i++) {
+                    ul.children[i].classList.remove("selected")
+                }
 
+                onEffectSelected(effect.id);
+                li.classList.toggle("selected")
+            }
+
+            const span = document.createElement('span');
+            span.className = 'icon';
+
+            span.onclick = (e) => {
+                e.stopPropagation();
+                onEffectDelete(effect.id)
+            }
+            const icon = document.createElement('i');
+            icon.className = "fas fa-trash";
+
+            span.appendChild(icon);
+            li.appendChild(span);
             ul.appendChild(li);
-
         }
     }
 
-    // /**
-    //  * @param {Array<{ value: string }>} colors
-    //  */
-    // function updateColorList(colors) {
-    //     const ul = document.querySelector('.color-list');
-    //     ul.textContent = '';
-    //     for (const color of colors) {
-    //         const li = document.createElement('li');
-    //         li.className = 'color-entry';
 
-    //         const colorPreview = document.createElement('div');
-    //         colorPreview.className = 'color-preview';
-    //         colorPreview.style.backgroundColor = `#${color.value}`;
-    //         colorPreview.addEventListener('click', () => {
-    //             onColorClicked(color.value);
-    //         });
-    //         li.appendChild(colorPreview);
+    function onEffectSelected(effectId) {
+        vscodeWeb.postMessage({ type: 'effectSelected', value: effectId });
+    }
 
-    //         const input = document.createElement('input');
-    //         input.className = 'color-input';
-    //         input.type = 'text';
-    //         input.value = color.value;
-    //         input.addEventListener('change', (e) => {
-    //             const value = e.target.value;
-    //             if (!value) {
-    //                 // Treat empty value as delete
-    //                 colors.splice(colors.indexOf(color), 1);
-    //             } else {
-    //                 color.value = value;
-    //             }
-    //             updateColorList(colors);
-    //         });
-    //         li.appendChild(input);
+    function onEffectDelete(effectId) {
+        vscodeWeb.postMessage({ type: 'effectDelete', value: effectId });
+    }
 
-    //         ul.appendChild(li);
-    //     }
 
-    //     // Update the saved state
-    //     vscodeWeb.setState({ colors: colors });
-    // }
-
-    // /** 
-    //  * @param {string} color 
-    //  */
-    // function onColorClicked(color) {
-    //     vscodeWeb.postMessage({ type: 'colorSelected', value: color });
-    // }
-
-    // /**
-    //  * @returns string
-    //  */
-    // function getNewCalicoColor() {
-    //     const colors = ['020202', 'f1eeee', 'a85b20', 'daab70', 'efcb99'];
-    //     return colors[Math.floor(Math.random() * colors.length)];
-    // }
-
-    // function addColor() {
-    //     colors.push({ value: getNewCalicoColor() });
-    //     updateColorList(colors);
-    // }
 }());
