@@ -1,14 +1,11 @@
 import * as vscode from "vscode";
 import * as fs from 'fs';
 import * as path from 'path';
-import * as rd from 'readline';
-import { TreeView, TreeItem } from "./tree";
 import { MaskJSON } from "./types"
 import * as t from "io-ts";
-import { PathReporter } from 'io-ts/lib/PathReporter'
 import * as jsonMap from "json-source-map";
-// import jsonStringify from "json-stringify-pretty-compact";
 import { jsonPrettyArray } from "./utils/jsonStringify";
+import {report, reportOne} from "io-ts-human-reporter"
 
 // class MaskTreeItem extends tree_item{
 //     public pointer : Record<jsonMap.PointerProp, jsonMap.Location>;
@@ -42,7 +39,6 @@ export class MaskConfig {
         vscode.window.setStatusBarMessage("wzp aaan");
         vscode.window.showInformationMessage('Hello!');
 
-        this.parseMaskJSON();
         this.refreshEffects();
     }
 
@@ -56,6 +52,7 @@ export class MaskConfig {
             return vscode.window.showTextDocument(document)
         }).then((editor)=> {
             console.log("showing config at ");
+            console.log(pointer)
             let pos = new vscode.Position(pointer.value.line, 0);
             let posEnd = new vscode.Position(pointer.valueEnd.line + 1, 0);
             // here we set the cursor
@@ -64,7 +61,9 @@ export class MaskConfig {
             editor.revealRange(new vscode.Range(posEnd, pos));
 
     
-            return Promise.resolve(editor);
+            // return Promise.resolve(editor);
+        }).then(()=>{}, (err)=>{
+            console.log(err);
         });
     }
 
@@ -130,67 +129,45 @@ export class MaskConfig {
 
         this.sourceMaskJSON = jsonMap.parse(this.rawMaskJSON);
 
-        if (this.sourceMaskJSON === undefined) return;
+        if (this.sourceMaskJSON === undefined) {
+            vscode.window.showErrorMessage("mask json source is undefined")
+            return;
+        }
 
         this.maskJSON = this.sourceMaskJSON.data as t.TypeOf<typeof MaskJSON>;
 
         const maskDecode = MaskJSON.decode(this.maskJSON);
         if (maskDecode._tag === "Left")
         {
-            console.log(PathReporter.report(maskDecode))
+            let errMsg = "mask.json require keys : \n"
+            const errors = report(maskDecode, {
+                messages: {
+                    missing: (keys, path) => {
+                        errMsg += (path.join('/') + "/" + keys + ", ");
+                        return 'lol';
+                        // `YOINKS! You forgot to add "${keys.join(',')}" at "${path.join('/')}".`,
+                    }
+                    }
+                });
+
+            errMsg = errMsg.slice(0, -2);
+
+            console.log(errors)
+            vscode.window.showErrorMessage(errMsg);
             return;
         } 
 
-        // const effects = maskDecode.right.effects;
 
-        if (this.sourceMaskJSON?.pointers === undefined) return;
+        if (this.sourceMaskJSON?.pointers === undefined) 
+        {
+            vscode.window.showErrorMessage("source map pointers is undefined")
+            return;
+        }
 
         this.maskLinePointers = this.sourceMaskJSON?.pointers;
 
     }
 
-    public parseMaskJSON() {
-    
-
-        // console.log(this.maskJSON)
-
-        // const rawLines = this.rawMaskJSON.split("\n");
-
-        // const effectsRegExp = new RegExp("effects");
-
-        // this.effectsLineNumber = 0;
-        // rawLines.forEach((line, lineNumber) => {
-        //     if(line.match(effectsRegExp)) {
-        //         console.log("effects start " + lineNumber);
-        //         this.effectsLineNumber = lineNumber;
-        //     }
-        // });
-
-        // this.sourceMaskJSON = jsonMap.stringify(this.maskJSON,, null, 2);
-        // const jsonPointers = this.sourceMaskJSON.pointers;
-
-
-        // console.log(jsonPointers)
-        // for (const key in jsonPointers) {
-        //     if (Object.prototype.hasOwnProperty.call(jsonPointers, key)) {
-        //         const pointer = jsonPointers[key];
-        //         console.log(key)
-        //     }
-        // }
-
-
-    }
-
-
-
-
-    // public refresh() {
-    //     if (vscode.workspace.workspaceFolders) {
-    //         this.m_data = [];
-    //         this.read_directory(vscode.workspace.workspaceFolders[0].uri.fsPath);
-    //         this.m_onDidChangeTreeData.fire(undefined);
-    //     } 
-    // }
 
     // Values returned in the callback of `hotRequire` must
     // have a `dispose` function.

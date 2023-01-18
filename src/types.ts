@@ -12,12 +12,13 @@ export const Plugin = t.type({
 
 export const MaskJSON = t.intersection([
     t.type({
-        name : t.string,
         preview : t.string,
         script : t.string,
         effects : t.array(Effect)
     }),
     t.partial({
+        name : t.string,
+        user_hint : t.string,
         facemodel_version : t.number,
         mouse_input : t.boolean,
         plugins : t.array(Plugin)

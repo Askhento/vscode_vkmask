@@ -38,18 +38,19 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 			switch (data.type) {
 				case 'effectDelete':
 				{
-					console.log(data.value);
 					const id = data.value;
+					console.log("delete effect " + id);
 					this.maskConfig.removeFromConfig(id);
 
 					break;
 				}
 				case 'effectSelected':
 				{
-					console.log(data.value);
 					const id = data.value;
 					const key = "/effects/" + id;
 					const pointer = this.maskConfig.maskLinePointers[key]
+					console.log("selec effect " + key);
+					console.log(this.maskConfig.maskLinePointers)
 					this.maskConfig.showConfigAt(pointer);
 					break;
 				}
