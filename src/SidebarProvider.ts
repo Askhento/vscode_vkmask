@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { MaskConfig } from "./mask_config";
+import { MaskConfig } from "./MaskConfig";
 import { getNonce } from "./utils/getNonce";
 import * as path from 'path';
 
@@ -22,11 +22,12 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 		context: vscode.WebviewViewResolveContext,
 		_token: vscode.CancellationToken,
 	) {
+
 		this._view = webviewView;
 		webviewView.webview.options = {
 			// Allow scripts in the webview
 			enableScripts: true,
-
+		
 			localResourceRoots: [
 				this._extensionUri
 			]
@@ -39,7 +40,9 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 				case 'effectDelete':
 				{
 					const id = data.value;
-					console.log("delete effect " + id);
+					console.log("sidebar : delete effect " + id);
+					console.log("sidebar : delete effect selected " + this.maskConfig.selectedEffectId);
+
 					this.maskConfig.removeFromConfig(id);
 
 					break;
@@ -47,53 +50,67 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 				case 'effectSelected':
 				{
 					const id = data.value;
-					const key = "/effects/" + id;
-					const pointer = this.maskConfig.maskLinePointers[key]
-					console.log("selec effect " + key);
-					console.log(this.maskConfig.maskLinePointers)
-					this.maskConfig.showConfigAt(pointer);
+					console.log("sidebar : selected id = " + id);
+					this.maskConfig.selectedEffectId = id;
+					this.maskConfig.showEffect(id).then(()=>{
+						// this.sendEffects();
+					});
+
+					
 					break;
 				}
+				// case 'effectDeselected':
+				// {
+				// 	console.log("sidebar : deselect effect");
+				// 	this.maskConfig.selectedEffectId = undefined;
+				// 	break;
+				// }
 			}
 		});
 
-
-
-		vscode.workspace.onDidChangeTextDocument((e)=>{
-
-			const activeUri = e.document.uri;
-			const fsPath = activeUri?.fsPath;
-			console.log(fsPath)
-
-			if (vscode.workspace.workspaceFolders === undefined) return;
-
-			const dir = vscode.workspace.workspaceFolders[0].uri;
-
-			if (fsPath === vscode.Uri.joinPath(dir, "mask.json").fsPath )
+		webviewView.onDidChangeVisibility(()=>{
+			const visible =  this._view?.visible
+			if (visible)
 			{
-				if (e.contentChanges === undefined || e.contentChanges.length === 0) return;
-
-				const newChar = e.contentChanges[0].text;
-				console.log("updated mask.json \n");
-
+				console.log("sidebar : webview visible update effects");
 				this.maskConfig.refreshEffects();
-				this.updateEffects();
+				this.sendEffects();
 			}
+		}, this);
+		
 
-		})
+
+		// vscode.window.onDidChangeTextEditorSelection((event)=>{
+		// 	if (this.maskConfig.selectedEffectId === undefined) return;
+		// 	console.log("sidebar : " + this.maskConfig.selectedEffectId)
+
+		// 	const editor = event.textEditor;
+		// 	if (this.isSameDocument(editor.document, "mask.json")) {
+		// 		console.log("sidebar : deslect effects in mask.json");
+		// 		if (this._view) {
+		// 			this.maskConfig.selectedEffectId = undefined;
+		// 			this._view.webview.postMessage({ type: 'deselectEffects'});
+		// 		}
+		// 	}
+		// })
+
 
 		// triyng to fix not updating view
 		setTimeout(() => {
-			this.updateEffects();
-			
+			this.maskConfig.onConfigUpdate = ()=>{
+				this.sendEffects();
+			}
+			this.maskConfig.refreshEffects();
+			this.sendEffects();
 		}, 1000);
 
 	}
 
 
-	public updateEffects() {
+	public sendEffects() {
 		const effects = this.maskConfig.maskJSON?.effects.map((effect, index) => {
-			return {name : effect.name, id : index}
+			// console.log(index === this.maskConfig.selectedEffectId)
+			return {name : effect.name, id : index, selected : (index === this.maskConfig.selectedEffectId)}
 		});
 		
 		if (effects === undefined) return;
@@ -131,10 +148,9 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 					and only allow scripts that have a specific nonce.
 					(See the 'webview-sample' extension sample for img-src content security policy examples)
 				-->
-				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
+				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource}; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 				<link href="${styleMainUri}" rel="stylesheet">
-				<link href="${styleFontAwesomeUri}" rel="stylesheet">
 				<title>Cat Colors</title>
 			</head>
 			<body> 

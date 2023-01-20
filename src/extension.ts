@@ -9,7 +9,7 @@ const { exec } = require('node:child_process');
 
 export function activate(context: vscode.ExtensionContext) {
 
-
+	console.log("extension : activating");
 
 	let disposable = vscode.commands.registerCommand('vkmask.helloWorld', () => {
 

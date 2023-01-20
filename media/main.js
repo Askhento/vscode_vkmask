@@ -6,17 +6,6 @@
 
     // const oldState = vscodeWeb.getState() || { effects: [] };
 
-    /** @type {Array<{ value: string }>} */
-    // let effects = oldState.effects;
-    let effects = [];
-
-    // updateColorList(colors);
-
-    // document.querySelector('.add-color-button').addEventListener('click', () => {
-    //     addColor();
-    // });
-
-    // document.querySelector('')
 
 
     // Handle messages sent from the extension to the webview
@@ -32,11 +21,17 @@
                     updateEffects(message.effects);
                     break;
                 }
+            case 'deselectEffects':
+                {
+                    deselecEffects();
+                    break;
+                }
+
 
         }
     });
 
-    function updateEffects(effects) {
+    function updateEffectsList(effects) {
         const ul = document.querySelector('.effectsList');
         ul.innerHTML = '';
         console.log("main.js update effects \n")
@@ -47,13 +42,20 @@
             const li = document.createElement('li');
             li.textContent = effect.name;
 
-            li.onclick = () => {
-                for (let i = 0; i < ul.childElementCount; i++) {
-                    ul.children[i].classList.remove("selected")
-                }
+            console.log(effect.selected)
 
+            if (effect.selected)
+                li.classList.add("selected")
+            else
+                li.classList.remove("selected")
+
+            li.onclick = () => {
                 onEffectSelected(effect.id);
-                li.classList.toggle("selected")
+                const selected = li.classList.contains("selected");
+                deselecEffects();
+                console.log("Seleced = " + selected);
+                if (!selected)
+                    li.classList.add("selected")
             }
 
             const span = document.createElement('span');
@@ -72,6 +74,28 @@
         }
     }
 
+    function deselecEffects() {
+        const ul = document.querySelector('.effectsList');
+        for (let i = 0; i < ul.childElementCount; i++) {
+            ul.children[i].classList.remove("selected")
+        }
+    }
+
+    function updateEffects(effects) {
+        // document.body.onclick = (e) => {
+        //     console.log("click on empty!");
+        //     e.stopPropagation();
+        //     onEffectDeselect();
+        // }
+
+        updateEffectsList(effects);
+
+    }
+
+
+    function onEffectDeselect() {
+        vscodeWeb.postMessage({ type: 'effectDeselected', value: undefined });
+    }
 
     function onEffectSelected(effectId) {
         vscodeWeb.postMessage({ type: 'effectSelected', value: effectId });
