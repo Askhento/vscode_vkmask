@@ -34,8 +34,10 @@ export class MaskConfig {
     public rawMaskJSON : string = "";
     private pathMaskJSON : string = "";
     public selectedEffectId : number | undefined;
-    public onConfigUpdate : () => void = ()=>{};
-    public deleteFromUILock : boolean = false;
+    public onConfigEdit : (() => void) | undefined= ()=>{};
+    public editLock : boolean = false;
+    public onConfigSelection : (() => void) | undefined= ()=>{};
+    public selectionLock : boolean = false;
 
     constructor() {
         vscode.window.showInformationMessage('Hello!');
@@ -51,8 +53,8 @@ export class MaskConfig {
                 const newChar = event.contentChanges[0].text;
                 console.log("MaskConfig : updated mask.json \n");
 
-                if (this.deleteFromUILock) {
-                    this.deleteFromUILock = false;
+                if (this.editLock) {
+                    this.editLock = false;
                     console.log("MaskConfig : undo lock");
                 } else {
                     console.log("MaskConfig : seems like undo or user typing in mask.json")
@@ -64,11 +66,30 @@ export class MaskConfig {
                 if (this.selectedEffectId !== undefined)
                     this.showEffect(this.selectedEffectId);
 
-                if (this.onConfigUpdate === undefined) return;
-                
-                this.onConfigUpdate();
+                if (this.onConfigEdit === undefined) return;
+                this.onConfigEdit();
+                // this.onConfigEdit = undefined;
             }
 
+        })
+
+
+        vscode.window.onDidChangeTextEditorSelection((event)=>{
+        	if (this.selectedEffectId === undefined) return;
+
+            if ( this.selectionLock ) {
+                this.selectionLock = false;
+                console.log("MaskConfig : undo select lock");
+                return;
+            }
+            console.log("MaskConfgi : change selection ");
+        	const editor = event.textEditor;
+        	if (this.isSameDocument(editor.document, "mask.json")) {
+                this.selectedEffectId = undefined;
+        		if (this.onConfigSelection === undefined) return;
+                this.onConfigSelection();
+                // this.onConfigSelection = undefined;
+        	}
         })
 
     }
@@ -90,6 +111,18 @@ export class MaskConfig {
 
         return this.showConfigAt(pointer).then((val)=>{
             return Promise.resolve(val)
+        });
+    }
+
+    public clearSelection() {
+        this.selectionLock = true;
+        
+        this.selectedEffectId = undefined;
+        return vscode.workspace.openTextDocument(this.pathMaskJSON).then( document => {
+            return vscode.window.showTextDocument(document)
+        }).then((editor)=> {
+            var postion = editor.selection.start; 
+            editor.selection = new vscode.Selection(postion, postion);
         });
     }
 
@@ -136,7 +169,8 @@ export class MaskConfig {
             // const newConfigString = this.prettyJson(this.maskJSON)
             const newConfigString = jsonPrettyArray(this.maskJSON)
             
-            this.deleteFromUILock = true;
+            this.selectionLock = true;
+            this.editLock = true;
             console.log("MaskConfig : setting lock");
 
             editor.edit((builder) => {

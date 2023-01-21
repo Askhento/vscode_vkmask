@@ -41,9 +41,11 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 				{
 					const id = data.value;
 					console.log("sidebar : delete effect " + id);
-					console.log("sidebar : delete effect selected " + this.maskConfig.selectedEffectId);
 
 					this.maskConfig.removeFromConfig(id);
+					this.maskConfig.onConfigEdit = ()=>{
+						this.sendEffects();
+					}
 
 					break;
 				}
@@ -52,19 +54,21 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 					const id = data.value;
 					console.log("sidebar : selected id = " + id);
 					this.maskConfig.selectedEffectId = id;
-					this.maskConfig.showEffect(id).then(()=>{
-						// this.sendEffects();
-					});
+					this.maskConfig.selectionLock = true;
+					this.maskConfig.showEffect(id);
+					this.maskConfig.onConfigSelection = ()=>{
+						this.sendEffects();
+					}
 
 					
 					break;
 				}
-				// case 'effectDeselected':
-				// {
-				// 	console.log("sidebar : deselect effect");
-				// 	this.maskConfig.selectedEffectId = undefined;
-				// 	break;
-				// }
+				case 'effectDeselected':
+				{
+					console.log("sidebar : deselect effect");
+					this.maskConfig.clearSelection()
+					break;
+				}
 			}
 		});
 
@@ -80,24 +84,11 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 		
 
 
-		// vscode.window.onDidChangeTextEditorSelection((event)=>{
-		// 	if (this.maskConfig.selectedEffectId === undefined) return;
-		// 	console.log("sidebar : " + this.maskConfig.selectedEffectId)
-
-		// 	const editor = event.textEditor;
-		// 	if (this.isSameDocument(editor.document, "mask.json")) {
-		// 		console.log("sidebar : deslect effects in mask.json");
-		// 		if (this._view) {
-		// 			this.maskConfig.selectedEffectId = undefined;
-		// 			this._view.webview.postMessage({ type: 'deselectEffects'});
-		// 		}
-		// 	}
-		// })
 
 
 		// triyng to fix not updating view
 		setTimeout(() => {
-			this.maskConfig.onConfigUpdate = ()=>{
+			this.maskConfig.onConfigEdit = ()=>{
 				this.sendEffects();
 			}
 			this.maskConfig.refreshEffects();

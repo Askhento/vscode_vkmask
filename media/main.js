@@ -50,12 +50,15 @@
                 li.classList.remove("selected")
 
             li.onclick = () => {
-                onEffectSelected(effect.id);
                 const selected = li.classList.contains("selected");
                 deselecEffects();
                 console.log("Seleced = " + selected);
-                if (!selected)
+                if (!selected) {
+                    onEffectSelected(effect.id);
                     li.classList.add("selected")
+                } else {
+                    onEffectDeselect();
+                }
             }
 
             const span = document.createElement('span');
