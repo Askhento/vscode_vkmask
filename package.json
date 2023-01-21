@@ -67,6 +67,7 @@
   "dependencies": {
     "io-ts": "^2.2.20",
     "io-ts-human-reporter": "^0.1.2",
-    "json-source-map": "github:ramonsnir/json-source-map#typescript-definitions"
+    "json-source-map": "github:ramonsnir/json-source-map#typescript-definitions",
+    "zod": "^3.20.2"
   }
 }

@@ -7,25 +7,6 @@ import * as jsonMap from "json-source-map";
 import { jsonPrettyArray } from "./utils/jsonStringify";
 import {report, reportOne} from "io-ts-human-reporter"
 
-// class MaskTreeItem extends tree_item{
-//     public pointer : Record<jsonMap.PointerProp, jsonMap.Location>;
-
-//     public constructor(label: string, pointer: Record<jsonMap.PointerProp, jsonMap.Location>) {
-//         super(label)
-//         this.pointer = pointer;
-//         // console.log(this.pointer)
-//         this.pointer = pointer;
-//     }
-
-// }
-
-// class MaskTreeView extends tree_view {
-//     public constructor((...args: tree_item[]) => any) {
-
-//     }
-// }
-
-
 export class MaskConfig {
 
     public maskJSON : t.TypeOf<typeof MaskJSON> | undefined;
@@ -34,10 +15,12 @@ export class MaskConfig {
     public rawMaskJSON : string = "";
     private pathMaskJSON : string = "";
     public selectedEffectId : number | undefined;
-    public onConfigEdit : (() => void) | undefined= ()=>{};
     public editLock : boolean = false;
-    public onConfigSelection : (() => void) | undefined= ()=>{};
     public selectionLock : boolean = false;
+    public onConfigEdit      : (() => void) | undefined = ()=>{};
+    public onConfigSelection : (() => void) | undefined = ()=>{};
+    public onTextEdit   : () => void = ()=>{};
+    public onTextSelect : () => void = ()=>{};
 
     constructor() {
         vscode.window.showInformationMessage('Hello!');
@@ -50,25 +33,19 @@ export class MaskConfig {
 
                 if (event.contentChanges === undefined || event.contentChanges.length === 0) return;
 
-                const newChar = event.contentChanges[0].text;
+                // const newChar = event.contentChanges[0].text;
                 console.log("MaskConfig : updated mask.json \n");
 
                 if (this.editLock) {
-                    this.editLock = false;
-                    console.log("MaskConfig : undo lock");
-                } else {
-                    console.log("MaskConfig : seems like undo or user typing in mask.json")
-                    this.selectedEffectId = undefined;
-                }
-
-                this.refreshEffects();
-
-                if (this.selectedEffectId !== undefined)
-                    this.showEffect(this.selectedEffectId);
-
-                if (this.onConfigEdit === undefined) return;
-                this.onConfigEdit();
-                // this.onConfigEdit = undefined;
+                    console.log("MaskConfig : edit lock return");
+                    if (this.onConfigEdit !== undefined) 
+                        this.onConfigEdit();
+                    return;
+                } 
+                
+                console.log("MaskConfig : seems like undo or user typing in mask.json")
+                
+                this.onTextEdit();
             }
 
         })
@@ -77,22 +54,26 @@ export class MaskConfig {
         vscode.window.onDidChangeTextEditorSelection((event)=>{
         	if (this.selectedEffectId === undefined) return;
 
-            if ( this.selectionLock ) {
-                this.selectionLock = false;
-                console.log("MaskConfig : undo select lock");
-                return;
-            }
-            console.log("MaskConfgi : change selection ");
         	const editor = event.textEditor;
         	if (this.isSameDocument(editor.document, "mask.json")) {
-                this.selectedEffectId = undefined;
-        		if (this.onConfigSelection === undefined) return;
-                this.onConfigSelection();
+                
+                if (this.selectionLock) {
+                    console.log("MaskConfig : selection lock return");
+                    if (this.onConfigSelection !== undefined) 
+                        this.onConfigSelection();
+                    return;
+                } 
+                
+                console.log("MaskConfig : change selection ");
+
+                console.log("MaskConfig : seems like undo or user typing in mask.json")
+                this.onTextSelect();
                 // this.onConfigSelection = undefined;
         	}
         })
 
     }
+
 
     private isSameDocument(document : vscode.TextDocument, baseName : string) {
         const activeUri = document.uri;
@@ -104,7 +85,8 @@ export class MaskConfig {
         return fsPath === vscode.Uri.joinPath(dir, baseName).fsPath;		
     }
 
-    public showEffect(id : number) {
+    public showEffect(id : number | undefined) {
+        if (id === undefined) return;
         const key = "/effects/" + id;
         const pointer = this.maskLinePointers[key]
         console.log("MaskConfig : select effect " + key);
@@ -134,8 +116,7 @@ export class MaskConfig {
             // and here we make use of the line property which makes imo the code easier to read
             return vscode.window.showTextDocument(document)
         }).then((editor)=> {
-            console.log("showing config at ");
-            console.log(pointer)
+            console.log("MaskConfig : showing config at ");
             let pos = new vscode.Position(pointer.value.line, 0);
             let posEnd = new vscode.Position(pointer.valueEnd.line + 1, 0);
             // here we set the cursor
@@ -169,10 +150,6 @@ export class MaskConfig {
             // const newConfigString = this.prettyJson(this.maskJSON)
             const newConfigString = jsonPrettyArray(this.maskJSON)
             
-            this.selectionLock = true;
-            this.editLock = true;
-            console.log("MaskConfig : setting lock");
-
             editor.edit((builder) => {
                 
                 builder.delete(new vscode.Range(0, 0, editor.document.lineCount , 0) )
@@ -186,7 +163,13 @@ export class MaskConfig {
 
                 if (id < this.selectedEffectId) {
                     this.selectedEffectId = Math.max(0, this.selectedEffectId - 1);
-                    console.log("MaskConfig : removing after selected " + this.selectedEffectId);
+                    console.log("MaskConfig : removing after selectedId " + this.selectedEffectId);
+
+                    if (this.selectedEffectId !== undefined) {
+                        this.parseConfig(); // need to refresh in order to have current pointers
+                        this.showEffect(this.selectedEffectId);
+                    }
+
                 } else if (id === this.selectedEffectId) {
                     console.log("MaskConfig : removing selected effect")
                     this.selectedEffectId = undefined;
@@ -209,7 +192,7 @@ export class MaskConfig {
 
     }
 
-    public refreshEffects() {
+    public parseConfig() {
         // ! need to check if mask.json opened in other tabs 
 
         if(!vscode.workspace.workspaceFolders) 

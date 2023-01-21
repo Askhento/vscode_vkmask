@@ -41,10 +41,20 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 				{
 					const id = data.value;
 					console.log("sidebar : delete effect " + id);
-
+					this.maskConfig.selectionLock = true;
+					this.maskConfig.editLock = true;
 					this.maskConfig.removeFromConfig(id);
 					this.maskConfig.onConfigEdit = ()=>{
-						this.sendEffects();
+						this.maskConfig.editLock = false;
+						
+
+					}
+					this.maskConfig.onConfigSelection = ()=>{
+						this.maskConfig.parseConfig();
+						this.maskConfig.showEffect(this.maskConfig.selectedEffectId);
+						this.maskConfig.onConfigSelection = ()=>{
+							this.maskConfig.selectionLock = false;
+						}
 					}
 
 					break;
@@ -57,7 +67,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 					this.maskConfig.selectionLock = true;
 					this.maskConfig.showEffect(id);
 					this.maskConfig.onConfigSelection = ()=>{
-						this.sendEffects();
+						this.maskConfig.selectionLock = false;
 					}
 
 					
@@ -66,7 +76,11 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 				case 'effectDeselected':
 				{
 					console.log("sidebar : deselect effect");
+					this.maskConfig.selectionLock = true;
 					this.maskConfig.clearSelection()
+					this.maskConfig.onConfigSelection = ()=>{
+						this.maskConfig.selectionLock = false;
+					}
 					break;
 				}
 			}
@@ -77,21 +91,25 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 			if (visible)
 			{
 				console.log("sidebar : webview visible update effects");
-				this.maskConfig.refreshEffects();
+				this.maskConfig.parseConfig();
 				this.sendEffects();
 			}
 		}, this);
 		
-
-
-
-
 		// triyng to fix not updating view
 		setTimeout(() => {
-			this.maskConfig.onConfigEdit = ()=>{
+			this.maskConfig.onTextEdit = ()=>{
+				this.maskConfig.selectedEffectId = undefined;
+				this.maskConfig.parseConfig();
 				this.sendEffects();
 			}
-			this.maskConfig.refreshEffects();
+
+			this.maskConfig.onTextSelect = ()=> {
+				// this.maskConfig.clearSelection();
+				this.maskConfig.selectedEffectId = undefined;
+				this.sendDeselect();
+			}
+			this.maskConfig.parseConfig();
 			this.sendEffects();
 		}, 1000);
 
@@ -101,7 +119,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 	public sendEffects() {
 		const effects = this.maskConfig.maskJSON?.effects.map((effect, index) => {
 			// console.log(index === this.maskConfig.selectedEffectId)
-			return {name : effect.name, id : index, selected : (index === this.maskConfig.selectedEffectId)}
+			return {name : effect.name, id : index}
 		});
 		
 		if (effects === undefined) return;
@@ -113,6 +131,11 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 		}
 	}
 
+	public sendDeselect() {
+		if (this._view) {
+			this._view.webview.postMessage({ type: 'deselectEffects'});
+		}
+	}
 
 	private _getHtmlForWebview(webview: vscode.Webview) {
 		// Get the local path to main script run in the webview, then convert it to a uri we can use in the webview.

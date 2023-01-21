@@ -44,20 +44,20 @@
 
             console.log(effect.selected)
 
-            if (effect.selected)
-                li.classList.add("selected")
-            else
-                li.classList.remove("selected")
+            // if (effect.selected)
+            //     li.classList.add("selected")
+            // else
+            //     li.classList.remove("selected")
 
             li.onclick = () => {
                 const selected = li.classList.contains("selected");
                 deselecEffects();
                 console.log("Seleced = " + selected);
                 if (!selected) {
-                    onEffectSelected(effect.id);
+                    sendEffectSelected(effect.id);
                     li.classList.add("selected")
                 } else {
-                    onEffectDeselect();
+                    sendEffectDeselect();
                 }
             }
 
@@ -66,7 +66,8 @@
 
             span.onclick = (e) => {
                 e.stopPropagation();
-                onEffectDelete(effect.id)
+                li.remove();
+                sendEffectDelete(effect.id)
             }
             const icon = document.createElement('i');
             icon.className = "fas fa-trash";
@@ -88,7 +89,7 @@
         // document.body.onclick = (e) => {
         //     console.log("click on empty!");
         //     e.stopPropagation();
-        //     onEffectDeselect();
+        //     sendEffectDeselect();
         // }
 
         updateEffectsList(effects);
@@ -96,15 +97,15 @@
     }
 
 
-    function onEffectDeselect() {
+    function sendEffectDeselect() {
         vscodeWeb.postMessage({ type: 'effectDeselected', value: undefined });
     }
 
-    function onEffectSelected(effectId) {
+    function sendEffectSelected(effectId) {
         vscodeWeb.postMessage({ type: 'effectSelected', value: effectId });
     }
 
-    function onEffectDelete(effectId) {
+    function sendEffectDelete(effectId) {
         vscodeWeb.postMessage({ type: 'effectDelete', value: effectId });
     }
 
