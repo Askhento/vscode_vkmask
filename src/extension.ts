@@ -4,6 +4,7 @@
 
 import * as vscode from 'vscode';
 import { SidebarProvider } from "./SidebarProvider";
+import { HotReload } from "./HotReload";
 const { exec } = require('node:child_process');
 
 
@@ -28,6 +29,9 @@ export function activate(context: vscode.ExtensionContext) {
 	);
 
 
+	const hotReloader = new HotReload(context.extensionUri);
+	// hotReloader.inject();
+	hotReloader.copyFilesToMask();
 
 }
 

@@ -169,10 +169,10 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 			</head>
 			<body> 
 				<div class="wrapper">
-					<!--<div class="field">
+					<div class="field">
 						<input type="text" required placeholder="Add effect">
 						<span class="add-btn">ADD</span>
-					</div>-->
+					</div>
 
 					<ul class="effectsList">
 					</ul>

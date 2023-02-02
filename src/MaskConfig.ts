@@ -7,6 +7,9 @@ import * as jsonMap from "json-source-map";
 import { jsonPrettyArray } from "./utils/jsonStringify";
 import {report, reportOne} from "io-ts-human-reporter"
 
+// import { res } from "./ztypes";
+// console.log(res);
+
 export class MaskConfig {
 
     public maskJSON : t.TypeOf<typeof MaskJSON> | undefined;
@@ -63,7 +66,7 @@ export class MaskConfig {
                         this.onConfigSelection();
                     return;
                 } 
-                
+
                 console.log("MaskConfig : change selection ");
 
                 console.log("MaskConfig : seems like undo or user typing in mask.json")
