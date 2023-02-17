@@ -18,20 +18,20 @@ export class HotReload {
             return false;
         }
 
-        const maskDir = vscode.workspace.workspaceFolders[0].uri.fsPath;
+        const maskDir = vscode.workspace.workspaceFolders[0].uri;
 
-        const scriptsDest = path.join(maskDir, "ScriptEngine");
+        const scriptsDest = vscode.Uri.joinPath(maskDir, 'ScriptEngine')
 
-        const scriptsDir = path.join(this._extensionUri.fsPath, "src", "angelscript");
+        const scriptsDir = vscode.Uri.joinPath(this._extensionUri, "res", "angelscript");
 
-        fs.mkdirSync(scriptsDest, { recursive: true });
+        fs.mkdirSync(scriptsDest.fsPath, { recursive: true });
 
-        fs.readdirSync(scriptsDir).forEach((file : string)=>{
+        fs.readdirSync(scriptsDir.fsPath).forEach((file : string)=>{
             console.log(file);
 
             fs.copyFile(
-                path.join(scriptsDir, file),
-                path.join(scriptsDest, file),
+                path.join(scriptsDir.fsPath, file),
+                path.join(scriptsDest.fsPath, file),
                 ()=>{console.log(`${file} is copied`)}
             )
         })

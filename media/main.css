@@ -86,9 +86,13 @@ body{
 
   border-radius: 3px;
   padding: 10px 10px;
-  cursor: default;
+  cursor: move;
   overflow: hidden;
   word-wrap: break-word;
+}
+
+.dragging {
+  opacity : 0.5
 }
 .effectsList li .icon{
   position: absolute;

@@ -37,7 +37,7 @@ export class MaskConfig {
                 if (event.contentChanges === undefined || event.contentChanges.length === 0) return;
 
                 // const newChar = event.contentChanges[0].text;
-                console.log("MaskConfig : updated mask.json \n");
+                console.log("MaskConfig : edit event mask.json \n");
 
                 if (this.editLock) {
                     console.log("MaskConfig : edit lock return");
@@ -60,6 +60,8 @@ export class MaskConfig {
         	const editor = event.textEditor;
         	if (this.isSameDocument(editor.document, "mask.json")) {
                 
+                console.log( "MaskConfig : selection event mask.json");
+
                 if (this.selectionLock) {
                     console.log("MaskConfig : selection lock return");
                     if (this.onConfigSelection !== undefined) 
@@ -92,7 +94,7 @@ export class MaskConfig {
         if (id === undefined) return;
         const key = "/effects/" + id;
         const pointer = this.maskLinePointers[key]
-        console.log("MaskConfig : select effect " + key);
+        console.log("MaskConfig : showing effect with key - " + key);
 
         return this.showConfigAt(pointer).then((val)=>{
             return Promise.resolve(val)
@@ -119,7 +121,7 @@ export class MaskConfig {
             // and here we make use of the line property which makes imo the code easier to read
             return vscode.window.showTextDocument(document)
         }).then((editor)=> {
-            console.log("MaskConfig : showing config at ");
+            console.log("MaskConfig : showing config at - " + pointer.value.line + ", " + pointer.valueEnd.line);
             let pos = new vscode.Position(pointer.value.line, 0);
             let posEnd = new vscode.Position(pointer.valueEnd.line + 1, 0);
             // here we set the cursor
@@ -190,9 +192,39 @@ export class MaskConfig {
             
             // this.refreshEffects();
         });
+    }
+
+    public swapEffects(idOld : number, idOther : number) {
+        vscode.workspace.openTextDocument(this.pathMaskJSON).then( document => {
+            return vscode.window.showTextDocument(document)
+        }).then((editor)=> {
+            if (!this.maskJSON) return;
+            // this.maskJSON?.effects.splice(id , 1);
+            const effect = this.maskJSON.effects[idOld];
+            this.maskJSON.effects.splice(idOld, 1);
+            
+            if (idOther == null) {
+                this.maskJSON.effects.push(effect)
+                if (idOld === this.selectedEffectId) this.selectedEffectId = this.maskJSON.effects.length - 1;
+            } else {
+                idOther = idOld < idOther ? idOther - 1 : idOther;
+                this.maskJSON.effects.splice(idOther, 0, effect);
+                if (idOld === this.selectedEffectId) this.selectedEffectId = idOther;
+            }
 
 
 
+            const newConfigString = jsonPrettyArray(this.maskJSON)
+
+            editor.edit((builder) => {
+
+                builder.delete(new vscode.Range(0, 0, editor.document.lineCount , 0) )
+                builder.insert(new vscode.Position(0, 0), newConfigString);
+
+            })
+
+        })
+    
     }
 
     public parseConfig() {

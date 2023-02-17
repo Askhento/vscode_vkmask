@@ -6,7 +6,7 @@
 
     // const oldState = vscodeWeb.getState() || { effects: [] };
 
-
+    let currentElementAfter;
 
     // Handle messages sent from the extension to the webview
     window.addEventListener('message', event => {
@@ -16,14 +16,14 @@
 
             case 'updateEffects':
                 {
-                    console.log("updatingEffects")
-                    effects = [];
+                    console.log("main.js : received updatingEffects");
                     updateEffects(message.effects);
                     break;
                 }
             case 'deselectEffects':
                 {
-                    deselecEffects();
+                    console.log("main.js : received deselect effects");
+                    // deselecEffects();
                     break;
                 }
 
@@ -41,36 +41,66 @@
 
             const li = document.createElement('li');
             li.textContent = effect.name;
+            li.setAttribute("effectId", effect.id);
 
-            console.log(effect.selected)
+            li.draggable = true;
+            li.addEventListener('dragstart', () => {
+                li.classList.add("dragging")
+            })
 
-            // if (effect.selected)
-            //     li.classList.add("selected")
-            // else
-            //     li.classList.remove("selected")
+            li.addEventListener('dragend', () => {
+                li.classList.remove("dragging")
+
+                sendEffectSwap(
+                    parseInt(li.getAttribute("effectId")),
+                    currentElementAfter ? parseInt(currentElementAfter.getAttribute("effectId")) : undefined
+                );
+            })
+
+            if (effect.selected)
+                li.classList.add("selected")
+
+            // ? add deselect  all on click in empty space
 
             li.onclick = () => {
                 const selected = li.classList.contains("selected");
-                deselecEffects();
-                console.log("Seleced = " + selected);
                 if (!selected) {
                     sendEffectSelected(effect.id);
-                    li.classList.add("selected")
                 } else {
-                    sendEffectDeselect();
+                    sendEffectDeselect(effect.id);
                 }
             }
+
 
             const span = document.createElement('span');
             span.className = 'icon';
 
             span.onclick = (e) => {
                 e.stopPropagation();
-                li.remove();
+                // li.remove();
+                console.log("main.js : send remove " + effect.id)
                 sendEffectDelete(effect.id)
             }
             const icon = document.createElement('i');
             icon.className = "fas fa-trash";
+
+            ul.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                const afterElement = getDragAfterElement(ul, e.clientY);
+                if (currentElementAfter !== afterElement) {
+                    currentElementAfter = afterElement;
+                } else {
+                    return;
+                }
+
+                const draggable = document.querySelector('.dragging');
+
+                if (afterElement == null) {
+                    ul.appendChild(draggable)
+                } else {
+                    ul.insertBefore(draggable, afterElement)
+                }
+            })
 
             span.appendChild(icon);
             li.appendChild(span);
@@ -78,11 +108,25 @@
         }
     }
 
-    function deselecEffects() {
-        const ul = document.querySelector('.effectsList');
-        for (let i = 0; i < ul.childElementCount; i++) {
-            ul.children[i].classList.remove("selected")
-        }
+    // function deselecEffects() {
+    //     const ul = document.querySelector('.effectsList');
+    //     for (let i = 0; i < ul.childElementCount; i++) {
+    //         ul.children[i].classList.remove("selected")
+    //     }
+    // }
+
+    function getDragAfterElement(container, y) {
+        const draggableElements = [...container.querySelectorAll('li:not(.dragging)')]
+
+        return draggableElements.reduce((closest, child) => {
+            const box = child.getBoundingClientRect()
+            const offset = y - box.top - box.height / 2
+            if (offset < 0 && offset > closest.offset) {
+                return { offset: offset, element: child }
+            } else {
+                return closest
+            }
+        }, { offset: Number.NEGATIVE_INFINITY }).element
     }
 
     function updateEffects(effects) {
@@ -96,9 +140,16 @@
 
     }
 
+    function sendEffectSwap(old, after) {
+        vscodeWeb.postMessage({ type: 'effectSwap', value: [old, after] });
+    }
 
-    function sendEffectDeselect() {
+    function sendAllEffectsDeselect() {
         vscodeWeb.postMessage({ type: 'effectDeselected', value: undefined });
+    }
+
+    function sendEffectDeselect(effectId) {
+        vscodeWeb.postMessage({ type: 'effectDeselected', value: effectId });
     }
 
     function sendEffectSelected(effectId) {
