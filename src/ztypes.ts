@@ -44,7 +44,7 @@ const ZEffects = z.union([
 ]);
 
 const EffectNames = ZEffects.options.map( val => val.shape.name.value);
-console.log(EffectNames);
+// console.log(EffectNames);
 
 
 export const res = ZEffects.safeParse({

@@ -17,6 +17,11 @@ body{
 
   /* background: linear-gradient(to bottom, #68EACC 0%, #497BE8 100%); */
 }
+
+button {
+  cursor : pointer;
+}
+
 .wrapper{
   background: rgb(106, 106, 106);
   /* max-width: 400px; */
@@ -30,7 +35,7 @@ body{
   font-size: 18px;
   font-weight: 600;
 }
-.wrapper .inputField{
+/* .wrapper .inputField{
   margin: 20px 0;
   width: 100%;
   display: flex;
@@ -71,7 +76,8 @@ body{
 .inputField button.active{
   opacity: 1;
   pointer-events: auto;
-}
+} */
+
 .wrapper .effectsList{
   /* max-height: 250px; */
   overflow-y: auto;
@@ -125,30 +131,55 @@ body{
   background:rgb(142, 73, 232)
 }
 
-/* .wrapper .footer{
-  display: flex;
-  width: 100%;
-  margin-top: 20px;
-  align-items: center;
-  justify-content: space-between;
+input.add-effect-input{
+  border : unset;
+  padding : 0.5em;
 }
-.footer button{
-  padding: 6px 10px;
-  border-radius: 3px;
-  border: none;
-  outline: none;
-  color: #fff;
-  font-weight: 400;
-  font-size: 16px;
-  margin-left: 5px;
-  background: #8E49E8;
-  cursor: pointer;
-  user-select: none;
-  opacity: 0.6;
-  pointer-events: none;
-  transition: all 0.3s ease;
+
+button.add-btn{
+  border : unset;
+  padding : 0.5em;
 }
-.footer button.active{
-  opacity: 1;
-  pointer-events: auto;
-} */
+
+div.add-effect-wrapper {
+  padding : 0.5em;
+  position : relative;
+}
+
+div.add-effect-input-wrapper{
+  display : inline-block;
+  position : relative;
+  z-index : 1;
+}
+
+.autocomplete-effects-list {
+  padding : unset;
+  margin : unset;
+  list-style : none;
+  position : absolute;
+  width : 100%;
+}
+
+
+.autocomplete-effects-list li {
+  border : 1px solid rgb(106, 106, 106);
+  border-top : unset;
+  /* background : white; */
+}
+
+.autocomplete-effects-list li:hover {
+  background : black;
+}
+
+.autocomplete-effects-list button{
+  background : white;
+  border : unset;
+  display : block;
+  width : 100%;
+  text-align : left;
+  padding : 0.5em;
+}
+
+.autocomplete-effects-list button:hover {
+  background : rgb(179, 179, 179);
+}

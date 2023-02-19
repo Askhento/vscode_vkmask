@@ -90,10 +90,44 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 					this.maskConfig.selectionLock = true;
 					this.maskConfig.editLock = true;
 					this.maskConfig.swapEffects(idOld, idOther);
+
 					this.maskConfig.onConfigEdit = () => {
 						this.maskConfig.parseConfig();
 						this.sendEffects();
 						this.maskConfig.editLock = false;
+						this.maskConfig.showEffect(this.maskConfig.selectedEffectId);
+						this.maskConfig.onConfigSelection = () => {
+							// resore on the second event
+							// ! not a great stuff here
+							this.maskConfig.onConfigSelection = () => {
+								this.maskConfig.selectionLock = false;
+							}
+						}
+					}
+
+					break;
+				}
+
+				case 'effectAdd':
+				{
+					console.log("sidebar : received add effect");
+					const newEffect = data.value;
+					this.maskConfig.selectionLock = true;
+					this.maskConfig.editLock = true;
+					this.maskConfig.addEffect(newEffect);
+
+					this.maskConfig.onConfigEdit = () => {
+						this.maskConfig.parseConfig();
+						this.sendEffects();
+						this.maskConfig.editLock = false;
+						this.maskConfig.showEffect(this.maskConfig.selectedEffectId);
+						this.maskConfig.onConfigSelection = () => {
+							// resore on the second event
+							// ! not a great stuff here
+							this.maskConfig.onConfigSelection = () => {
+								this.maskConfig.selectionLock = false;
+							}
+						}
 					}
 
 					break;
@@ -191,16 +225,30 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 			</head>
 			<body> 
 				<div class="wrapper">
-					<div class="field">
-						<input type="text" required placeholder="Add effect">
-						<span class="add-btn">ADD</span>
+					<div class="add-effect-wrapper">
+						<div id="add-effect-input-wrapper" class="add-effect-input-wrapper">
+							<input type="text" class="add-effect-input" required placeholder="Add effect">
+					
+						</div>
+						
 					</div>
 
 					<ul class="effectsList">
 					</ul>
 				</div>
-				<script nonce="${nonce}" src="${scriptUri}"></script>
+				<script type="module" nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
 			</html>`;
 	}
+
+	// <ul class="autocomplete-effects-list"> 
+	// 	<li>
+	// 		<button>patch</button>
+	// 	</li>
+	// 	<li>
+	// 		<button>facemodel</button>
+	// 	<li>
+	// 		<button>model3d</button>
+	// 	</li>
+	// </ul>
 }

@@ -1,12 +1,89 @@
 
 // This script will be run within the webview itself
 // It cannot access the main VS Code APIs directly.
+import { effectDefaults } from "./defaults.js";
+
 (function () {
+
     const vscodeWeb = acquireVsCodeApi();
 
     // const oldState = vscodeWeb.getState() || { effects: [] };
 
     let currentElementAfter;
+
+
+    let effectsList = Object.keys(effectDefaults);
+
+    const effectInputEl = document.querySelector(".add-effect-input");
+    effectInputEl.addEventListener("input", (e) => {
+        removeDropDownList();
+
+        const value = effectInputEl.value.toLowerCase();
+
+        if (value === "") return;
+
+        const filteredElements = effectsList.filter(effect => (effect.substring(0, value.length).toLowerCase() === value));
+        createEffectsDropDown(filteredElements);
+    });
+
+    effectInputEl.addEventListener("click", (e) => {
+        const value = effectInputEl.value.toLowerCase();
+
+        if (value !== "") return;
+
+        removeDropDownList();
+        createEffectsDropDown(effectsList);
+    });
+
+
+    function createEffectsDropDown(list) {
+        const wrapper = document.querySelector("#add-effect-input-wrapper");
+
+        const effectUL = document.createElement("ul");
+        effectUL.className = "autocomplete-effects-list";
+        effectUL.id = "autocomplete-effects-list";
+
+        list.forEach(effectName => {
+            const listItem = document.createElement("li");
+            const effectButton = document.createElement("button");
+            effectButton.innerHTML = effectName;
+            effectButton.addEventListener("click", onEffectDropDownClick)
+
+            listItem.appendChild(effectButton);
+            effectUL.appendChild(listItem);
+        })
+
+        wrapper.appendChild(effectUL);
+    }
+
+    function removeDropDownList() {
+        const effectUL = document.querySelector("#autocomplete-effects-list");
+        if (effectUL) effectUL.remove();
+    }
+
+    function onEffectDropDownClick(e) {
+
+        const value = e.target.innerHTML.toLowerCase();
+
+        if (!(value in effectDefaults)) return;
+
+        sendAddEffect(effectDefaults[value]);
+
+        effectInputEl.value = "";
+        removeDropDownList();
+    }
+
+    // const effectAddButton = document.querySelector("#add-effect-btn");
+    // effectAddButton.addEventListener("click", () => {
+    //     // ! should I remove add button ?
+    //     const value = effectInputEl.value.toLowerCase();
+
+    //     if (!(value in effectDefaults)) return;
+
+    //     sendAddEffect(effectDefaults[value]);
+
+    //     // console.log(effectDefaults[value])
+    // })
 
     // Handle messages sent from the extension to the webview
     window.addEventListener('message', event => {
@@ -44,13 +121,13 @@
             li.setAttribute("effectId", effect.id);
 
             li.draggable = true;
-            li.addEventListener('dragstart', () => {
+            li.addEventListener('dragstart', (e) => {
                 li.classList.add("dragging")
             })
 
-            li.addEventListener('dragend', () => {
+            li.addEventListener('dragend', (e) => {
                 li.classList.remove("dragging")
-
+                e.stopPropagation();
                 sendEffectSwap(
                     parseInt(li.getAttribute("effectId")),
                     currentElementAfter ? parseInt(currentElementAfter.getAttribute("effectId")) : undefined
@@ -138,6 +215,11 @@
 
         updateEffectsList(effects);
 
+    }
+
+    function sendAddEffect(object) {
+        console.log(object);
+        vscodeWeb.postMessage({ type: 'effectAdd', value: object });
     }
 
     function sendEffectSwap(old, after) {

@@ -1,7 +1,7 @@
 import * as vscode from "vscode";
 import * as fs from 'fs';
 import * as path from 'path';
-import { MaskJSON } from "./types"
+import { MaskJSON, Effect } from "./types"
 import * as t from "io-ts";
 import * as jsonMap from "json-source-map";
 import { jsonPrettyArray } from "./utils/jsonStringify";
@@ -71,7 +71,6 @@ export class MaskConfig {
 
                 console.log("MaskConfig : change selection ");
 
-                console.log("MaskConfig : seems like undo or user typing in mask.json")
                 this.onTextSelect();
                 // this.onConfigSelection = undefined;
         	}
@@ -212,7 +211,30 @@ export class MaskConfig {
                 if (idOld === this.selectedEffectId) this.selectedEffectId = idOther;
             }
 
+            const newConfigString = jsonPrettyArray(this.maskJSON)
 
+            editor.edit((builder) => {
+
+                builder.delete(new vscode.Range(0, 0, editor.document.lineCount , 0) )
+                builder.insert(new vscode.Position(0, 0), newConfigString);
+
+            })
+
+        })
+    }
+
+    public addEffect(effectObject : object) {
+        vscode.workspace.openTextDocument(this.pathMaskJSON).then( document => {
+            return vscode.window.showTextDocument(document)
+        }).then((editor)=> {
+            if (!this.maskJSON) return;
+            // this.maskJSON?.effects.splice(id , 1);
+            // this.maskJSON.effects[idOld];
+
+            const newEffect = effectObject as t.TypeOf<typeof Effect>
+            this.maskJSON.effects.unshift(newEffect);
+
+            if (this.selectedEffectId) this.selectedEffectId++; // add new always in front 
 
             const newConfigString = jsonPrettyArray(this.maskJSON)
 
@@ -224,7 +246,6 @@ export class MaskConfig {
             })
 
         })
-    
     }
 
     public parseConfig() {
