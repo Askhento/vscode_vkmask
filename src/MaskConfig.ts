@@ -112,6 +112,7 @@ export class MaskConfig {
         });
     }
 
+
     public showConfigAt(pointer : Record<jsonMap.PointerProp, jsonMap.Location>) {
 
         return vscode.workspace.openTextDocument(this.pathMaskJSON).then( document => {
