@@ -16,6 +16,7 @@ import { effectDefaults } from "./defaults.js";
 
     const effectInputEl = document.querySelector(".add-effect-input");
     effectInputEl.addEventListener("input", (e) => {
+
         removeDropDownList();
 
         const value = effectInputEl.value.toLowerCase();
@@ -27,6 +28,8 @@ import { effectDefaults } from "./defaults.js";
     });
 
     effectInputEl.addEventListener("click", (e) => {
+        e.stopPropagation();
+
         const value = effectInputEl.value.toLowerCase();
 
         if (value !== "") return;
@@ -62,6 +65,7 @@ import { effectDefaults } from "./defaults.js";
     }
 
     function onEffectDropDownClick(e) {
+        e.stopPropagation();
 
         const value = e.target.innerHTML.toLowerCase();
 
@@ -207,11 +211,12 @@ import { effectDefaults } from "./defaults.js";
     }
 
     function updateEffects(effects) {
-        // document.body.onclick = (e) => {
-        //     console.log("click on empty!");
-        //     e.stopPropagation();
-        //     sendEffectDeselect();
-        // }
+
+        document.querySelector(".add-effect-wrapper").onclick = (e) => {
+            e.stopPropagation();
+            console.log("click outside");
+            sendEffectDeselect();
+        }
 
         updateEffectsList(effects);
 
