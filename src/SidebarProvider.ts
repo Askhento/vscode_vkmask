@@ -35,76 +35,23 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
 		webviewView.webview.html = this._getHtmlForWebview(webviewView.webview);
 
-		webviewView.webview.onDidReceiveMessage(data => {
+		webviewView.webview.onDidReceiveMessage(async data => {
 			switch (data.type) {
 				case 'effectDelete':
 				{
 					const id = data.value;
 					console.log("sidebar : received delete effect " + id);
-					this.maskConfig.selectionLock = true;
-					this.maskConfig.editLock = true;
 					this.maskConfig.removeFromConfig(id);
-					this.maskConfig.onConfigEdit = () => {
-						this.maskConfig.parseConfig();
-						this.sendEffects();
-						this.maskConfig.editLock = false;
-					}
-					this.maskConfig.onConfigSelection = () => {
-						this.maskConfig.showEffect(this.maskConfig.selectedEffectId);
-						this.maskConfig.onConfigSelection = () => {
-							this.maskConfig.selectionLock = false;
-						}
-					}
+					this.setupEditLock();
+					break;
+				}
 
-					break;
-				}
-				case 'effectSelected':
-				{
-					const id = data.value;
-					console.log("sidebar : received selected id = " + id);
-					this.maskConfig.selectedEffectId = id;
-					this.maskConfig.selectionLock = true;
-					this.maskConfig.showEffect(id);
-					this.sendEffects();
-					this.maskConfig.onConfigSelection = ( )=> {
-						this.maskConfig.selectionLock = false;
-					}
-					
-					break;
-				}
-				case 'effectDeselected':
-				{
-					console.log("sidebar : received deselect effects");
-					this.maskConfig.selectionLock = true;
-					this.maskConfig.clearSelection()
-					this.sendEffects();
-					this.maskConfig.onConfigSelection = ()=>{
-						this.maskConfig.selectionLock = false;
-					}
-					break;
-				}
 				case 'effectSwap':
 				{
 					console.log("sidebar : received swap effects");
 					const [idOld, idOther] = data.value;
-					this.maskConfig.selectionLock = true;
-					this.maskConfig.editLock = true;
 					this.maskConfig.swapEffects(idOld, idOther);
-
-					this.maskConfig.onConfigEdit = () => {
-						this.maskConfig.parseConfig();
-						this.sendEffects();
-						this.maskConfig.editLock = false;
-						this.maskConfig.showEffect(this.maskConfig.selectedEffectId);
-						this.maskConfig.onConfigSelection = () => {
-							// resore on the second event
-							// ! not a great stuff here
-							this.maskConfig.onConfigSelection = () => {
-								this.maskConfig.selectionLock = false;
-							}
-						}
-					}
-
+					this.setupEditLock();
 					break;
 				}
 
@@ -112,26 +59,30 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 				{
 					console.log("sidebar : received add effect");
 					const newEffect = data.value;
-					this.maskConfig.selectionLock = true;
-					this.maskConfig.editLock = true;
 					this.maskConfig.addEffect(newEffect);
 
-					this.maskConfig.onConfigEdit = () => {
-						this.maskConfig.parseConfig();
-						this.sendEffects();
-						this.maskConfig.editLock = false;
-						this.maskConfig.showEffect(this.maskConfig.selectedEffectId);
-						this.maskConfig.onConfigSelection = () => {
-							// resore on the second event
-							// ! not a great stuff here
-							this.maskConfig.onConfigSelection = () => {
-								this.maskConfig.selectionLock = false;
-							}
-						}
-					}
-
+					this.setupEditLock();
 					break;
 				}
+
+				case 'effectSelected':
+				{
+					const id = data.value;
+					console.log("sidebar : received selected id = " + id);
+					// ? check id ?
+					this.maskConfig.selectedEffectId = id;
+					this.maskConfig.showEffect(id);
+					this.setupSelectLock();
+					break;
+				}
+				case 'effectDeselected':
+				{
+					console.log("sidebar : received deselect effects");
+					this.maskConfig.clearSelection()
+					this.setupSelectLock();
+					break;
+				}
+	
 
 
 			}
@@ -158,8 +109,11 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
 			this.maskConfig.onTextSelect = ()=> {
 				// this.maskConfig.clearSelection();
-				this.maskConfig.selectedEffectId = undefined;
-				this.sendDeselect();
+				if (this.maskConfig.selectedEffectId !== undefined) 
+				{
+					this.maskConfig.selectedEffectId = undefined;
+					this.sendEffects();
+				}
 			}
 			this.maskConfig.parseConfig();
 			this.sendEffects();
@@ -167,6 +121,29 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
 	}
 
+	private setupSelectLock() {
+		this.maskConfig.selectionLockCallback = () => {
+			this.sendEffects();
+			this.maskConfig.selectionLockCallback = undefined;
+		}
+	}
+
+	private setupEditLock() {
+		this.maskConfig.editLockCallback = () => {
+			this.maskConfig.parseConfig();
+			this.sendEffects();
+			this.maskConfig.editLockCallback = undefined;
+			this.maskConfig.showEffect(this.maskConfig.selectedEffectId);
+			this.maskConfig.selectionLockCallback = () => {
+				// resore on the second event
+				// ! first cb comes from removing whole json
+				// ! second one from selection
+				this.maskConfig.selectionLockCallback = () => {
+					this.maskConfig.selectionLockCallback = undefined;
+				}
+			}
+		}
+	}
 
 	public sendEffects() {
 		const effects = this.maskConfig.maskJSON?.effects.map((effect, index) => {

@@ -18,15 +18,13 @@ export class MaskConfig {
     public rawMaskJSON : string = "";
     private pathMaskJSON : string = "";
     public selectedEffectId : number | undefined;
-    public editLock : boolean = false;
-    public selectionLock : boolean = false;
-    public onConfigEdit      : (() => void) | undefined = ()=>{};
-    public onConfigSelection : (() => void) | undefined = ()=>{};
+    public editLockCallback      : (() => void) | undefined;
+    public selectionLockCallback : (() => void) | undefined;
     public onTextEdit   : () => void = ()=>{};
     public onTextSelect : () => void = ()=>{};
 
     constructor() {
-        vscode.window.showInformationMessage('Hello!');
+        vscode.window.showInformationMessage('Hello from vkmask!');
 
         // this.refreshEffects();
 
@@ -39,12 +37,12 @@ export class MaskConfig {
                 // const newChar = event.contentChanges[0].text;
                 console.log("MaskConfig : edit event mask.json \n");
 
-                if (this.editLock) {
+                // console.log(typeof this.editLockCallback);
+                if (this.editLockCallback) {
                     console.log("MaskConfig : edit lock return");
-                    if (this.onConfigEdit !== undefined) 
-                        this.onConfigEdit();
+                    this.editLockCallback();
                     return;
-                } 
+                }
                 
                 console.log("MaskConfig : seems like undo or user typing in mask.json")
                 
@@ -55,24 +53,23 @@ export class MaskConfig {
 
 
         vscode.window.onDidChangeTextEditorSelection((event)=>{
-        	if (this.selectedEffectId === undefined) return;
 
         	const editor = event.textEditor;
+            // console.log(event.selections.map(s => s.start))
+
         	if (this.isSameDocument(editor.document, "mask.json")) {
                 
                 console.log( "MaskConfig : selection event mask.json");
 
-                if (this.selectionLock) {
+                if (this.selectionLockCallback !== undefined) {
                     console.log("MaskConfig : selection lock return");
-                    if (this.onConfigSelection !== undefined) 
-                        this.onConfigSelection();
+                    this.selectionLockCallback();
                     return;
-                } 
+                }
 
-                console.log("MaskConfig : change selection ");
+                console.log("MaskConfig : change selection by user");
 
                 this.onTextSelect();
-                // this.onConfigSelection = undefined;
         	}
         })
 
@@ -101,8 +98,6 @@ export class MaskConfig {
     }
 
     public clearSelection() {
-        this.selectionLock = true;
-        
         this.selectedEffectId = undefined;
         return vscode.workspace.openTextDocument(this.pathMaskJSON).then( document => {
             return vscode.window.showTextDocument(document)
@@ -143,7 +138,7 @@ export class MaskConfig {
 
 
     public removeFromConfig(id : number) {
-        vscode.workspace.openTextDocument(this.pathMaskJSON).then( document => {
+        return vscode.workspace.openTextDocument(this.pathMaskJSON).then( document => {
             // console.log(document.uri);
             // after opening the document, we set the cursor 
             // and here we make use of the line property which makes imo the code easier to read
@@ -155,7 +150,7 @@ export class MaskConfig {
             // const newConfigString = this.prettyJson(this.maskJSON)
             const newConfigString = jsonPrettyArray(this.maskJSON)
             
-            editor.edit((builder) => {
+            return editor.edit((builder) => {
                 
                 builder.delete(new vscode.Range(0, 0, editor.document.lineCount , 0) )
                 builder.insert(new vscode.Position(0,0), newConfigString);
@@ -184,12 +179,8 @@ export class MaskConfig {
 
                 console.log("MaskConfig : selected after remove " + this.selectedEffectId);
 
-                
-
             })
 
-            return Promise.resolve(id);
-            
             // this.refreshEffects();
         });
     }
