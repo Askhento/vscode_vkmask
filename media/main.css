@@ -87,8 +87,8 @@ button {
   list-style: none;
   margin-bottom: 8px;
   color: black;
-  /* background: #f2f2f2; */
-  background: var(--vscode-button-foreground);
+  background: #f2f2f2;
+  /* background: var(--vscode-button-foreground); */
 
   border-radius: 3px;
   padding: 10px 10px;
@@ -97,39 +97,72 @@ button {
   word-wrap: break-word;
 }
 
-.dragging {
-  opacity : 0.5
-}
-.effectsList li .icon{
-  position: absolute;
-  right: -45px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: #e74c3c;
-  background-image: url(trash-svgrepo-com.svg);
-  width: 45px;
-  text-align: center;
-  color: #fff;
-  padding: 20px 20px;
-  border-radius: 0 3px 3px 0;
-  cursor: pointer;
-  /* background:  */
-  transition: all 0.2s ease;
-}
-
-.effectsList li:hover .icon{
-  right: 0px;
-
-}
-
 .effectsList li:hover{
 	background: var(--vscode-foreground);
 }
 
+.effectsList li.disabled{
+  /* color:rgb(34, 207, 175); */
+  background:rgb(115, 115, 115)
+}
+
 .effectsList li.selected{
-  color:rgb(34, 207, 175);
+  /* color:rgb(34, 207, 175); */
   background:rgb(142, 73, 232)
 }
+
+
+
+
+
+.dragging {
+  opacity : 0.5
+}
+
+
+/* .effectsList li:hover .icon{
+  right: 0px;
+} */
+.effectsList li > span {
+  position: absolute;
+  /* right: -45px; */
+  right : 0px;
+  top: 0px;
+  /* transform: translateY(-50%); */
+
+  /* padding: 20px 20px; */
+  /* border-radius: 0 3px 3px 0; */
+  cursor: pointer;
+}
+
+
+.effectsList li > span > span{
+  display : inline-block;
+  width: 40px;
+  height: 40px;
+}
+
+.effectsList li span.icon-effect-enabled{
+  background: #3ce77e;
+  background-image: url(eye.svg);
+  background-size: 40px 40px; /* size of svg */
+}
+
+.effectsList li span.icon-effect-disabled{
+  background: #5e7768;
+  background-image: url(eye-closed.svg);
+  background-size: 40px 40px; 
+}
+
+
+.effectsList li span.icon-effect-remove{
+  background: #e74c3c;
+  background-image: url(trash-svgrepo-com.svg);
+  background-size: 40px 40px; /* size of svg */
+}
+
+
+
 
 input.add-effect-input{
   border : unset;

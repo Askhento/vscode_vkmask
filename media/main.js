@@ -141,9 +141,13 @@ import { effectDefaults } from "./defaults.js";
             if (effect.selected)
                 li.classList.add("selected")
 
-            // ? add deselect  all on click in empty space
 
-            li.onclick = () => {
+
+
+            li.onclick = (e) => {
+                e.stopPropagation();
+                // li.classList.toggle("selected");
+                // return;
                 const selected = li.classList.contains("selected");
                 if (!selected) {
                     sendEffectSelected(effect.id);
@@ -152,18 +156,32 @@ import { effectDefaults } from "./defaults.js";
                 }
             }
 
+            const effectControlsSpan = document.createElement('span');
 
-            const span = document.createElement('span');
-            span.className = 'icon';
 
-            span.onclick = (e) => {
+            const iconRemove = document.createElement('span');
+            iconRemove.className = 'icon-effect-remove';
+            iconRemove.onclick = (e) => {
                 e.stopPropagation();
-                // li.remove();
                 console.log("main.js : send remove " + effect.id)
                 sendEffectDelete(effect.id)
             }
-            const icon = document.createElement('i');
-            icon.className = "fas fa-trash";
+
+            const iconVisibility = document.createElement('span');
+            iconVisibility.className = 'icon-effect-enabled';
+
+            iconVisibility.onclick = (e) => {
+                e.stopPropagation();
+                const disabled = li.classList.contains("disabled");
+                iconVisibility.classList.toggle("icon-effect-disabled");
+                li.classList.toggle("disabled");
+                sendEffectDisabled(effect.id, !disabled);
+            }
+
+            if (effect.disabled) {
+                li.classList.add("disabled")
+                iconVisibility.classList.add("icon-effect-disabled");
+            }
 
             ul.addEventListener('dragover', (e) => {
                 e.preventDefault();
@@ -183,8 +201,9 @@ import { effectDefaults } from "./defaults.js";
                 }
             })
 
-            span.appendChild(icon);
-            li.appendChild(span);
+            effectControlsSpan.appendChild(iconVisibility);
+            effectControlsSpan.appendChild(iconRemove);
+            li.appendChild(effectControlsSpan);
             ul.appendChild(li);
         }
     }
@@ -229,6 +248,15 @@ import { effectDefaults } from "./defaults.js";
 
     function sendEffectSwap(old, after) {
         vscodeWeb.postMessage({ type: 'effectSwap', value: [old, after] });
+    }
+
+    function sendEffectDisabled(effectId, disabled) {
+        vscodeWeb.postMessage({
+            type: 'effectDisabled', value: {
+                effectId: effectId,
+                disabled: disabled
+            }
+        });
     }
 
     function sendAllEffectsDeselect() {
