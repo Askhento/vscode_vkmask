@@ -5,12 +5,21 @@
 import * as vscode from 'vscode';
 import { SidebarProvider } from "./SidebarProvider";
 import { HotReload } from "./HotReload";
-const { exec } = require('node:child_process');
+// const { exec } = require('node:child_process');
+import { res } from "./ztypes";
+import { logger } from "./logger";
+const print = logger(__filename);
+
+/*
+	todo : logger separate
+	todo : 
+
+*/
 
 
 export function activate(context: vscode.ExtensionContext) {
 
-	console.log("extension : activating");
+	print("activating");
 
 	let disposable = vscode.commands.registerCommand('vkmask.helloWorld', () => {
 
@@ -36,4 +45,4 @@ export function activate(context: vscode.ExtensionContext) {
 }
 
 // This method is called when your extension is deactivated
-export function deactivate() {}
+export function deactivate() { }

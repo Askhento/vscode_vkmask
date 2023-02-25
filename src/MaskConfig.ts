@@ -7,8 +7,11 @@ import * as jsonMap from "json-source-map";
 import { jsonPrettyArray } from "./utils/jsonStringify";
 import { report, reportOne } from "io-ts-human-reporter"
 
+import { logger } from "./logger";
+const print = logger(__filename);
+
 // import { res } from "./ztypes";
-// console.log(res);
+// print(res);
 
 export class MaskConfig {
 
@@ -35,16 +38,16 @@ export class MaskConfig {
                 if (event.contentChanges === undefined || event.contentChanges.length === 0) return;
 
                 // const newChar = event.contentChanges[0].text;
-                console.log("MaskConfig : edit event mask.json \n");
+                print("edit event mask.json \n");
 
-                // console.log(typeof this.editLockCallback);
+                // print(typeof this.editLockCallback);
                 if (this.editLockCallback) {
-                    console.log("MaskConfig : edit lock return");
+                    print("edit lock return");
                     this.editLockCallback();
                     return;
                 }
 
-                console.log("MaskConfig : seems like undo or user typing in mask.json")
+                print("seems like undo or user typing in mask.json")
 
                 this.onTextEdit();
             }
@@ -55,19 +58,19 @@ export class MaskConfig {
         vscode.window.onDidChangeTextEditorSelection((event) => {
 
             const editor = event.textEditor;
-            // console.log(event.selections.map(s => s.start))
+            // print(event.selections.map(s => s.start))
 
             if (this.isSameDocument(editor.document, "mask.json")) {
 
-                console.log("MaskConfig : selection event mask.json");
+                print("selection event mask.json");
                 if (this.selectionLockCallback !== undefined) {
                     // ! if selected element already selected, then nothing happens
-                    console.log("MaskConfig : selection lock return");
+                    print("selection lock return");
                     this.selectionLockCallback();
                     return;
                 }
 
-                console.log("MaskConfig : change selection by user");
+                print("change selection by user");
 
                 this.onTextSelect();
             }
@@ -90,7 +93,7 @@ export class MaskConfig {
         if (id === undefined) return;
         const key = "/effects/" + id;
         const pointer = this.maskLinePointers[key]
-        console.log("MaskConfig : showing effect with key - " + key);
+        print("showing effect with key - " + key);
 
         return this.showConfigAt(pointer).then((val) => {
             return Promise.resolve(val)
@@ -111,7 +114,7 @@ export class MaskConfig {
         return vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
 
             document.save().then(saved => {
-                console.log(saved)
+                print("file saved : " + saved);
             })
 
         })
@@ -120,13 +123,13 @@ export class MaskConfig {
     public showConfigAt(pointer: Record<jsonMap.PointerProp, jsonMap.Location>) {
 
         return vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
-            // console.log(document.uri);
+            // print(document.uri);
             // after opening the document, we set the cursor 
             // and here we make use of the line property which makes imo the code easier to read
             return vscode.window.showTextDocument(document)
 
         }).then((editor) => {
-            console.log("MaskConfig : showing config at - " + pointer.value.line + ", " + pointer.valueEnd.line);
+            print("showing config at - " + pointer.value.line + ", " + pointer.valueEnd.line);
             let pos = new vscode.Position(pointer.value.line, 0);
             let posEnd = new vscode.Position(pointer.valueEnd.line + 1, 0);
             // here we set the cursor
@@ -141,7 +144,7 @@ export class MaskConfig {
                 return Promise.resolve("showed");
             },
             (err) => {
-                console.log(err);
+                print(err);
             });
     }
 
@@ -149,7 +152,7 @@ export class MaskConfig {
 
     public removeFromConfig(id: number) {
         return vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
-            // console.log(document.uri);
+            // print(document.uri);
             // after opening the document, we set the cursor 
             // and here we make use of the line property which makes imo the code easier to read
             return vscode.window.showTextDocument(document)
@@ -167,13 +170,13 @@ export class MaskConfig {
 
 
                 if (this.selectedEffectId === undefined) {
-                    console.log("MaskConfig : removing from config, but selected is undefined!");
+                    print("removing from config, but selected is undefined!");
                     return;
                 }
 
                 if (id < this.selectedEffectId) {
                     this.selectedEffectId = Math.max(0, this.selectedEffectId - 1);
-                    console.log("MaskConfig : removing after selectedId " + this.selectedEffectId);
+                    print("removing after selectedId " + this.selectedEffectId);
 
                     if (this.selectedEffectId !== undefined) {
                         this.parseConfig(); // need to refresh in order to have current pointers
@@ -181,13 +184,13 @@ export class MaskConfig {
                     }
 
                 } else if (id === this.selectedEffectId) {
-                    console.log("MaskConfig : removing selected effect")
+                    print("removing selected effect")
                     this.selectedEffectId = undefined;
                     // var postion = editor.selection.end; 
                     // editor.selection = new vscode.Selection(postion, postion);
                 }
 
-                console.log("MaskConfig : selected after remove " + this.selectedEffectId);
+                print("selected after remove " + this.selectedEffectId);
 
             })
 
@@ -276,7 +279,7 @@ export class MaskConfig {
         // ! need to check if mask.json opened in other tabs 
 
         if (!vscode.workspace.workspaceFolders) {
-            console.log("No folder opened!");
+            print("No folder opened!");
             return false;
         }
 
@@ -284,7 +287,7 @@ export class MaskConfig {
 
 
         this.pathMaskJSON = path.join(dir, "mask.json");
-        // console.log("mask.json path : " + this.pathMaskJSON);
+        // print("mask.json path : " + this.pathMaskJSON);
 
 
         const currentDocument = vscode.window.activeTextEditor?.document;
@@ -298,11 +301,11 @@ export class MaskConfig {
             this.sourceMaskJSON = jsonMap.parse(this.rawMaskJSON);
 
         } catch (error) {
-            console.log("MaskConfig : json parsing error");
-            console.log(error)
+            print("json parsing error");
+            print(error)
             return false;
             // vscode.window.showErrorMessage(error);
-            // console.log(error);
+            // print(error);
         }
 
         if (this.sourceMaskJSON === undefined) {
@@ -326,7 +329,7 @@ export class MaskConfig {
 
             errMsg = errMsg.slice(0, -2); // remove comma at the end
 
-            console.log(errors)
+            print(errors)
             vscode.window.showErrorMessage(errMsg);
             return;
         }

@@ -3,6 +3,8 @@ import { MaskConfig } from "./MaskConfig";
 import { getNonce } from "./utils/getNonce";
 import * as path from 'path';
 
+import { logger } from "./logger";
+const print = logger(__filename);
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
 
@@ -40,7 +42,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 				case 'effectDelete':
 					{
 						const id = data.value;
-						console.log("sidebar : received delete effect " + id);
+						print("received delete effect " + id);
 						this.maskConfig.removeFromConfig(id);
 						this.setupEditLock();
 						break;
@@ -48,7 +50,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
 				case 'effectSwap':
 					{
-						console.log("sidebar : received swap effects");
+						print("received swap effects");
 						const [idOld, idOther] = data.value;
 						this.maskConfig.swapEffects(idOld, idOther);
 						this.setupEditLock();
@@ -57,7 +59,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
 				case 'effectAdd':
 					{
-						console.log("sidebar : received add effect");
+						print("received add effect");
 						const newEffect = data.value;
 						this.maskConfig.addEffect(newEffect);
 
@@ -67,7 +69,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
 				case 'effectDisabled':
 					{
-						console.log("sidebar : received effect disabled");
+						print("received effect disabled");
 						const { effectId, disabled } = data.value;
 						this.maskConfig.addPropertyToEffect(effectId, { disabled: disabled });
 
@@ -78,7 +80,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 				case 'effectSelected':
 					{
 						const id = data.value;
-						console.log("sidebar : received selected id = " + id);
+						print("received selected id = " + id);
 						// ? check id ?
 						this.maskConfig.selectedEffectId = id;
 						this.maskConfig.showEffect(id);
@@ -87,7 +89,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 					}
 				case 'effectDeselected':
 					{
-						console.log("sidebar : received deselect effects");
+						print("received deselect effects");
 						this.maskConfig.clearSelection()
 						this.setupSelectLock();
 						break;
@@ -101,7 +103,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 		webviewView.onDidChangeVisibility(() => {
 			const visible = this._view?.visible
 			if (visible) {
-				console.log("sidebar : webview visible update effects");
+				print("webview visible update effects");
 				this.maskConfig.parseConfig();
 				this.sendEffects();
 			}
@@ -143,7 +145,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 			this.sendEffects();
 			this.maskConfig.editLockCallback = undefined;
 			this.maskConfig.showEffect(this.maskConfig.selectedEffectId);
-			this.maskConfig.saveConfig();
+			this.maskConfig.saveConfig(); // edits completed now need to save so HotReload does it's job
 			this.maskConfig.selectionLockCallback = () => {
 				// resore on the second event
 				// ! first cb comes from removing whole json
@@ -158,7 +160,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
 	public sendEffects() {
 		const effects = this.maskConfig.maskJSON?.effects.map((effect, index) => {
-			// console.log("sidebar : send effect selected = " + (index === this.maskConfig.selectedEffectId))
+			// print("send effect selected = " + (index === this.maskConfig.selectedEffectId))
 			return {
 				name: effect.name,
 				id: index,
@@ -169,7 +171,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
 		if (effects === undefined) return;
 
-		console.log("sidebar : sending effects to webview");
+		print("sending effects to webview");
 		if (this._view) {
 			this._view.webview.postMessage({ type: 'updateEffects', effects: effects });
 		}

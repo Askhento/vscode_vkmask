@@ -2,7 +2,8 @@ import * as vscode from "vscode";
 import * as fs from 'fs';
 import * as path from 'path';
 
-
+import { logger } from "./logger";
+const print = logger(__filename);
 
 export class HotReload {
 
@@ -12,9 +13,8 @@ export class HotReload {
     }
 
     copyFilesToMask() {
-        if(!vscode.workspace.workspaceFolders) 
-        {
-            console.log("No folder opened!");
+        if (!vscode.workspace.workspaceFolders) {
+            print("No folder opened!");
             return false;
         }
 
@@ -26,22 +26,21 @@ export class HotReload {
 
         fs.mkdirSync(scriptsDest.fsPath, { recursive: true });
 
-        fs.readdirSync(scriptsDir.fsPath).forEach((file : string)=>{
-            console.log(file);
+        fs.readdirSync(scriptsDir.fsPath).forEach((file: string) => {
+            print(file);
 
             fs.copyFile(
                 path.join(scriptsDir.fsPath, file),
                 path.join(scriptsDest.fsPath, file),
-                ()=>{console.log(`${file} is copied`)}
+                () => { print(`${file} is copied`) }
             )
         })
     }
 
     inject() {
 
-        if(!vscode.workspace.workspaceFolders) 
-        {
-            console.log("No folder opened!");
+        if (!vscode.workspace.workspaceFolders) {
+            print("No folder opened!");
             return false;
         }
         const dir = vscode.workspace.workspaceFolders[0].uri.fsPath;
@@ -51,7 +50,7 @@ export class HotReload {
 
         if (!fs.existsSync(filePath)) {
             // ? need to create here
-            console.log("Load.as does not exist ");
+            print("Load.as does not exist ");
             return;
         }
 
@@ -68,14 +67,14 @@ export class HotReload {
         }
 
         if (functionLine < 0) {
-            console.log("Func line not found in Load.as");
+            print("Func line not found in Load.as");
             return;
         }
 
 
-        
+
         // const functionLine = textLines.indexOf("void LoadMask(String filepath)");
-        console.log("function line = " + functionLine);
+        print("function line = " + functionLine);
 
         // let insertIndex = textLines[functionLine].indexOf("//");
         // insertIndex = insertIndex < 0 ? textLines[functionLine].length - 1 : insertIndex;
@@ -89,24 +88,24 @@ export class HotReload {
         // matching comment line on function declaration 
         let newLine = textLines[functionLine].replace(/\/\/.*/, testComment);
 
-        // console.log(newLine)
+        // print(newLine)
 
         if (newLine == textLines[functionLine]) {
             newLine = textLines[functionLine] + testComment;
-            console.log(newLine)
+            print(newLine)
         }
 
         // textLines[functionLine] = newLine; 
-        
+
         const [openBracketLine, closeBracketLine] = this.getBlockBorders(textLines, functionLine);
 
 
         if (closeBracketLine < 0) {
-            console.log("Function close bracket not found " + closeBracketLine)
+            print("Function close bracket not found " + closeBracketLine)
             return;
         }
 
-        console.log("found brackets open : " + openBracketLine + ", close : " + closeBracketLine);
+        print("found brackets open : " + openBracketLine + ", close : " + closeBracketLine);
 
         const indexLevelClone = textLines[closeBracketLine].replace(/}.*/, "");
         const injectLine = `\t${indexLevelClone}//injectStart\n\t${indexLevelClone}hotReloader.Attach();\n\t${indexLevelClone}//injectEnd`;
@@ -114,11 +113,11 @@ export class HotReload {
         textLines.splice(closeBracketLine, 0, injectLine);
 
         const newTextLines = textLines.join("\n")
-        fs.writeFileSync(filePath, newTextLines, {encoding : "utf8"})
+        fs.writeFileSync(filePath, newTextLines, { encoding: "utf8" })
 
     }
 
-    getBlockBorders(textLines : string[], functionLine : number) : [number, number] {
+    getBlockBorders(textLines: string[], functionLine: number): [number, number] {
         let openedBracketsCount = 0;
         let closeBracketLine = -1;
         let openBracketLine = -1;
@@ -133,10 +132,10 @@ export class HotReload {
                         openBracketLine = index;
                     }
                     openedBracketsCount++;
-                    // console.log("open " + index);
-                } 
+                    // print("open " + index);
+                }
                 if (char === "}") {
-                    // console.log("close " + index);
+                    // print("close " + index);
                     openedBracketsCount--;
                     if (openedBracketsCount === 0) {
                         closeBracketLine = index;
