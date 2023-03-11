@@ -1,9 +1,9 @@
 import * as vscode from "vscode";
-import { MaskConfig } from "./MaskConfig";
-import { getNonce } from "./utils/getNonce";
+import { MaskConfig } from "../MaskConfig";
+import { getNonce } from "../utils/getNonce";
 import * as path from 'path';
 
-import { logger } from "./logger";
+import { logger } from "../logger";
 const print = logger(__filename);
 
 export class SidebarProvider implements vscode.WebviewViewProvider {
@@ -199,9 +199,10 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 		// <link href="${styleVSCodeUri}" rel="stylesheet">
 		// <link href="${styleResetUri}" rel="stylesheet">
 
-		return `<!DOCTYPE html>
+		return /*html*/ `<!DOCTYPE html>
 			<html lang="en">
 			<head>
+				
 				<meta charset="UTF-8">
 				<!--
 					Use a content security policy to only allow loading styles from our extension directory,
@@ -211,23 +212,21 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 				<meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource}; style-src ${webview.cspSource}; script-src 'nonce-${nonce}';">
 				<meta name="viewport" content="width=device-width, initial-scale=1.0">
 				<link href="${styleMainUri}" rel="stylesheet">
-				<title>Cat Colors</title>
 			</head>
 			<body> 
 				<div class="wrapper">
 					<div class="add-effect-wrapper">
 						<div id="add-effect-input-wrapper" class="add-effect-input-wrapper">
 							<input type="text" class="add-effect-input" required placeholder="Add effect">
-					
 						</div>
-						
 					</div>
-
+					
 					<ul class="effectsList">
 					</ul>
 				</div>
 				<script type="module" nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
+
 			</html>`;
 	}
 

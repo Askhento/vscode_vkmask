@@ -3,18 +3,13 @@
 
 
 import * as vscode from 'vscode';
-import { SidebarProvider } from "./SidebarProvider";
+import { MainSidebarProvider } from './panels/MainSidebar'
 import { HotReload } from "./HotReload";
 // const { exec } = require('node:child_process');
-import { res } from "./ztypes";
+import * as path from "path"
+import { watch } from "chokidar";
 import { logger } from "./logger";
 const print = logger(__filename);
-
-/*
-	todo : logger separate
-	todo : 
-
-*/
 
 
 export function activate(context: vscode.ExtensionContext) {
@@ -23,25 +18,41 @@ export function activate(context: vscode.ExtensionContext) {
 
 	let disposable = vscode.commands.registerCommand('vkmask.helloWorld', () => {
 
-		vscode.window.showInformationMessage('Hello World  Sk');
+		vscode.window.showInformationMessage('Hello World!');
 	});
 
 	context.subscriptions.push(disposable);
 
 
-
-
-	const sidebar = new SidebarProvider(context.extensionUri);
+	const sidebar = new MainSidebarProvider(context.extensionUri);
 
 	context.subscriptions.push(
-		vscode.window.registerWebviewViewProvider(SidebarProvider.viewId, sidebar)
+		vscode.window.registerWebviewViewProvider(MainSidebarProvider.viewId, sidebar)
 	);
 
 
 	const hotReloader = new HotReload(context.extensionUri);
-	// hotReloader.inject();
 	hotReloader.copyFilesToMask();
 
+
+	let watchLock = false;
+	let watchTimeout: NodeJS.Timeout;
+	watch(path.join(context.extensionPath, "webview-ui", "public", "build")).on('change', (filename: string) => {
+		if (watchLock) {
+			return;
+		}
+		print("\nThe file " + filename + " was modified!");
+
+		if (watchTimeout) clearTimeout(watchTimeout)
+		watchTimeout = setTimeout(() => {
+			watchLock = false;
+		}, 1000)
+		watchLock = true;
+
+		vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction").then(() => {
+			sidebar.sendEffects();
+		});
+	});
 }
 
 // This method is called when your extension is deactivated

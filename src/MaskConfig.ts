@@ -13,6 +13,8 @@ const print = logger(__filename);
 // import { res } from "./ztypes";
 // print(res);
 
+
+
 export class MaskConfig {
 
     public maskJSON: t.TypeOf<typeof MaskJSON> | undefined;
@@ -133,6 +135,7 @@ export class MaskConfig {
             let pos = new vscode.Position(pointer.value.line, 0);
             let posEnd = new vscode.Position(pointer.valueEnd.line + 1, 0);
             // here we set the cursor
+            // !!! changed here 
             editor.selection = new vscode.Selection(posEnd, pos);
             // here we set the focus of the opened editor
             editor.revealRange(new vscode.Range(posEnd, pos));
@@ -197,23 +200,35 @@ export class MaskConfig {
         });
     }
 
-    public swapEffects(idOld: number, idOther: number) {
+    public swapEffects(start: number, target: number) {
         vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
             return vscode.window.showTextDocument(document)
         }).then((editor) => {
             if (!this.maskJSON) return;
             // this.maskJSON?.effects.splice(id , 1);
-            const effect = this.maskJSON.effects[idOld];
-            this.maskJSON.effects.splice(idOld, 1);
+            // const effect = this.maskJSON.effects[idOld];
+            // this.maskJSON.effects.splice(idOld, 1);
+            const newEffects = this.maskJSON.effects;
 
-            if (idOther == null) {
-                this.maskJSON.effects.push(effect)
-                if (idOld === this.selectedEffectId) this.selectedEffectId = this.maskJSON.effects.length - 1;
+            if (start < target) {
+                newEffects.splice(target + 1, 0, newEffects[start]);
+                newEffects.splice(start, 1);
             } else {
-                idOther = idOld < idOther ? idOther - 1 : idOther;
-                this.maskJSON.effects.splice(idOther, 0, effect);
-                if (idOld === this.selectedEffectId) this.selectedEffectId = idOther;
+                newEffects.splice(target, 0, newEffects[start]);
+                newEffects.splice(start + 1, 1);
             }
+
+            this.maskJSON.effects = newEffects;
+
+            // if (idOther == null) {
+            //     this.maskJSON.effects.push(effect)
+            //     if (idOld === this.selectedEffectId) this.selectedEffectId = this.maskJSON.effects.length - 1;
+            // } else {
+            //     idOther = idOld < idOther ? idOther - 1 : idOther;
+            //     this.maskJSON.effects.splice(idOther, 0, effect);
+            //     if (idOld === this.selectedEffectId) this.selectedEffectId = idOther;
+            // }
+
 
             const newConfigString = jsonPrettyArray(this.maskJSON)
 
@@ -228,25 +243,32 @@ export class MaskConfig {
     }
 
     public addPropertyToEffect(effectId: number, prop: object) {
-        vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
-            return vscode.window.showTextDocument(document)
-        }).then((editor) => {
-            if (!this.maskJSON) return;
+        if (!this.maskJSON) return;
 
-            //! need to check object
+        //! need to check object
 
-            this.maskJSON.effects[effectId] = { ...this.maskJSON.effects[effectId], ...prop }
+        this.maskJSON.effects[effectId] = { ...this.maskJSON.effects[effectId], ...prop }
 
-            const newConfigString = jsonPrettyArray(this.maskJSON)
+        this.updateEffectsFS(this.maskJSON.effects);
+        // vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
+        //     return vscode.window.showTextDocument(document)
+        // }).then((editor) => {
+        //     if (!this.maskJSON) return;
 
-            editor.edit((builder) => {
+        //     //! need to check object
 
-                builder.delete(new vscode.Range(0, 0, editor.document.lineCount, 0))
-                builder.insert(new vscode.Position(0, 0), newConfigString);
+        //     this.maskJSON.effects[effectId] = { ...this.maskJSON.effects[effectId], ...prop }
 
-            })
+        //     const newConfigString = jsonPrettyArray(this.maskJSON)
 
-        })
+        //     editor.edit((builder) => {
+
+        //         builder.delete(new vscode.Range(0, 0, editor.document.lineCount, 0))
+        //         builder.insert(new vscode.Position(0, 0), newConfigString);
+
+        //     })
+
+        // })
     }
 
     public addEffect(effectObject: object) {
@@ -274,6 +296,47 @@ export class MaskConfig {
         })
     }
 
+    public updateEffectsFS(effectsObject: object[]) {
+        if (!this.maskJSON) return;
+
+        const newEffect = effectsObject as t.TypeOf<typeof Effect>[];
+        this.maskJSON.effects = newEffect;
+
+        const newConfigString = jsonPrettyArray(this.maskJSON);
+
+        fs.writeFileSync(this.pathMaskJSON, newConfigString, { encoding: 'utf-8' })
+    }
+
+    public updateEffects(effectsObject: object[]) {
+
+        vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
+            if (vscode.window.activeTextEditor) {
+                const currentDoc = vscode.window.activeTextEditor.document;
+                print(vscode.window.activeTextEditor)
+                if (currentDoc === document) {
+                    return vscode.window.activeTextEditor;
+                }
+            }
+            return vscode.window.showTextDocument(document)
+        }).then((editor) => {
+            if (!this.maskJSON) return;
+            // this.maskJSON?.effects.splice(id , 1);
+            // this.maskJSON.effects[idOld];
+
+            const newEffect = effectsObject as t.TypeOf<typeof Effect>[];
+            this.maskJSON.effects = newEffect;
+
+            const newConfigString = jsonPrettyArray(this.maskJSON)
+
+            editor.edit((builder) => {
+
+                builder.delete(new vscode.Range(0, 0, editor.document.lineCount, 0))
+                builder.insert(new vscode.Position(0, 0), newConfigString);
+
+            })
+
+        })
+    }
 
     public parseConfig() {
         // ! need to check if mask.json opened in other tabs 
