@@ -1,17 +1,25 @@
 <script lang="ts">
   export let label = "empty",
     value = 0,
-    min = 0,
-    max = 100;
+    params;
 
+  let step = 0.01;
   // $: console.log(value);
+  $: step = (params.max - params.min) / 20.0;
 </script>
 
 <div class="number-control-wrapper">
   {#if label}
     <span class="label">{label}</span>
     <span class="number">{value}</span>
-    <input class="slider" type="range" bind:value {min} {max} />
+    <input
+      class="slider"
+      type="range"
+      bind:value
+      min={params.min || 0}
+      max={params.max || 1}
+      {step}
+    />
   {/if}
 </div>
 

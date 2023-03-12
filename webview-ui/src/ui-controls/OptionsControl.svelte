@@ -1,8 +1,6 @@
 <script lang="ts">
-  export let label = "empty",
-    options = ["one", "two", "three"],
-    value = options[0];
-
+  export let label, value, params;
+  let options = params.options;
   //   $: console.log(text);
 </script>
 

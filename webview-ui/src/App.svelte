@@ -13,7 +13,6 @@
 
 <Effects />
 <vscode-divider role="presentation" />
-
 <Inspector />
 
 <style>

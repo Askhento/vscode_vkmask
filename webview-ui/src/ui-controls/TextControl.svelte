@@ -14,7 +14,7 @@
 
 <style>
   * {
-    padding: 5px;
+    margin: 5px;
   }
   .text-control-wrapper {
     position: relative;

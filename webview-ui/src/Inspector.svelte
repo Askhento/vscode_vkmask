@@ -1,10 +1,18 @@
 <script lang="ts">
-  //test
+  /*
+
+    todo : need to add filepicker
+    todo : texture preview
+
+    todo : find bug when use slider and sending update effects from maskconfig
+
+
+  */
   import { effectDefaults } from "../../src/ztypes.js";
   import { effects } from "./stores.js";
   import { vscode } from "./utils/vscode";
   //
-  import { uiControlsMap, uiControls } from "./ui-controls/Controls.js";
+  import { uiControls } from "./ui-controls/Controls.js";
 </script>
 
 <div class="inspector-wrapper">
@@ -17,10 +25,9 @@
           <svelte:component
             this={element}
             bind:label={key}
-            options={Object.keys(
-              effectDefaults[effect.data.name].type.shape[key].removeDefault()
-                .Values || {}
-            )}
+            params={effectDefaults[effect.data.name].type.shape[
+              key
+            ].removeDefault().description || {}}
             bind:value={effect.data[key]}
           />
         {/each}

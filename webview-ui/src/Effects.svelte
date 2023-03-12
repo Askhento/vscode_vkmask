@@ -21,12 +21,7 @@
     }
   }
 
-  import {
-    effectNames,
-    effectDefaults,
-    EffectsMap,
-    ZEffects,
-  } from "../../src/ztypes.js";
+  import { effectNames, effectDefaults, ZEffects } from "../../src/ztypes.js";
   import { flip } from "svelte/animate";
 
   let hovering: any = false;

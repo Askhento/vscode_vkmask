@@ -17,6 +17,9 @@ const print = logger(__filename);
 
 export class MaskConfig {
 
+    private saveDelayMS: number = 200;
+    private saveDelayTimeout: NodeJS.Timeout | undefined;
+
     public maskJSON: t.TypeOf<typeof MaskJSON> | undefined;
     private sourceMaskJSON: jsonMap.ParseResult | undefined;
     public maskLinePointers: jsonMap.Pointers = {};
@@ -302,9 +305,12 @@ export class MaskConfig {
         const newEffect = effectsObject as t.TypeOf<typeof Effect>[];
         this.maskJSON.effects = newEffect;
 
-        const newConfigString = jsonPrettyArray(this.maskJSON);
+        if (this.saveDelayTimeout) clearTimeout(this.saveDelayTimeout)
 
-        fs.writeFileSync(this.pathMaskJSON, newConfigString, { encoding: 'utf-8' })
+        this.saveDelayTimeout = setTimeout(() => {
+            const newConfigString = jsonPrettyArray(this.maskJSON);
+            fs.writeFileSync(this.pathMaskJSON, newConfigString, { encoding: 'utf-8' })
+        }, this.saveDelayMS);
     }
 
     public updateEffects(effectsObject: object[]) {

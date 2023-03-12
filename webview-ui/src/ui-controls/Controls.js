@@ -8,11 +8,11 @@ import OptionsControl from "./OptionsControl.svelte";
 
 
 export const uiControlsMap = {
-    [uiDescriptions.bool]: SwitchControl,
-    [uiDescriptions.number]: NumberSliderControl,
-    [uiDescriptions.filepath]: TextControl,
-    [uiDescriptions.text]: TextControl,
-    [uiDescriptions.enum]: OptionsControl
+    [uiDescriptions.bool({}).name]: SwitchControl,
+    [uiDescriptions.numberSlider({}).name]: NumberSliderControl,
+    [uiDescriptions.filepath({}).name]: TextControl,
+    [uiDescriptions.text({}).name]: TextControl,
+    [uiDescriptions.enum({}).name]: OptionsControl
 }
 
 export let uiControls = {};
@@ -26,11 +26,9 @@ for (const effectName in effectDefaults) {
         let element = shape[field].removeDefault ? shape[field].removeDefault() : shape[field];
 
         if (!element.description) continue;
-        const desc = element.description;
-        // console.log(desc)
-        if (desc in uiControlsMap) {
-            uiControls[effectName][field] = uiControlsMap[desc];
-            console.log(field, desc)
+        const key = element.description.name;
+        if (key in uiControlsMap) {
+            uiControls[effectName][field] = uiControlsMap[key];
         }
         // console.log(`${field} : ${element.description}`);
 

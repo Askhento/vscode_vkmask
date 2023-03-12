@@ -94,9 +94,9 @@ export class MainSidebarProvider implements WebviewViewProvider {
           {
             print("received update effect");
 
+            this.setupEditLock();
             this.maskConfig.updateEffectsFS(data.value);
 
-            this.setupEditLock();
 
             break;
           }
@@ -165,11 +165,11 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
   private setupEditLock() {
     this.maskConfig.editLockCallback = () => {
-      this.maskConfig.parseConfig();
+      // this.maskConfig.parseConfig();
       // this.sendEffects();
       this.maskConfig.editLockCallback = undefined;
       // this.maskConfig.showEffect(this.maskConfig.selectedEffectId);
-      this.maskConfig.saveConfig(); // edits completed now need to save so HotReload does it's job
+      // this.maskConfig.saveConfig(); // edits completed now need to save so HotReload does it's job
       this.maskConfig.selectionLockCallback = () => {
         // resore on the second event
         // ! first cb comes from removing whole json
