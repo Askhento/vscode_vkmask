@@ -11,6 +11,9 @@ import { watch } from "chokidar";
 import { logger } from "./logger";
 const print = logger(__filename);
 
+/*
+	todo : angelscript intellisence
+*/
 
 export function activate(context: vscode.ExtensionContext) {
 

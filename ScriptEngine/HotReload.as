@@ -25,51 +25,42 @@ namespace MaskEngine
 
         void CheckFilesUpdated(StringHash eventType, VariantMap &eventData)
         {
+            // log.Error("HI");
             // return;
-            /*
-                todo : add all dirs = done
-                todo : respect priority of dirs
-                todo : add detatch
-                todo : check which file fired event
 
-            */
+            Array<String> files = fileSystem.ScanDir(cache.resourceDirs[0], "*", SCAN_FILES, true);
             bool needReload = false;
-            for (uint dirIndex = 0; dirIndex < cache.resourceDirs.length; dirIndex++)
+            for (uint index = 0; index < files.length; index++)
             {
-                String resourceDir = cache.resourceDirs[dirIndex];
-                Array<String> files = fileSystem.ScanDir(resourceDir, "*", SCAN_FILES, true);
-                for (uint index = 0; index < files.length; index++)
+
+                String fileName = files[index];
+                String fileNameFull = cache.resourceDirs[0] + fileName;
+                uint modifiedTime = fileSystem.GetLastModifiedTime(fileNameFull);
+
+                if (lastModifiedMap.Contains(fileName))
                 {
 
-                    String fileName = files[index];
-                    String fileNameFull = resourceDir + fileName;
-                    uint modifiedTime = fileSystem.GetLastModifiedTime(fileNameFull);
-
-                    if (lastModifiedMap.Contains(fileNameFull))
+                    bool changed = (lastModifiedMap[fileName].GetUInt() != modifiedTime);
+                    if (changed && !fileName.EndsWith("HotReload.as"))
                     {
+                        log.Error("File updated : " + fileName);
 
-                        bool changed = (lastModifiedMap[fileNameFull].GetUInt() != modifiedTime);
-                        if (changed && !fileName.EndsWith("HotReload.as"))
+                        if (fileName.EndsWith(".as") || fileName.EndsWith(".json"))
                         {
-                            log.Error("File updated : " + fileName);
+                            needReload = true;
+                            // ScriptFile @mainScript = cache.GetResource("ScriptFile", fileName);
+                            // SendEvent("ReloadMask");
+                            // lastModifiedMap[fileName] = Variant(modifiedTime);
+                            lastModifiedMap[fileName] = Variant(modifiedTime);
 
-                            if (fileName.EndsWith(".as") || fileName.EndsWith(".json"))
-                            {
-                                needReload = true;
-                                // ScriptFile @mainScript = cache.GetResource("ScriptFile", fileName);
-                                // SendEvent("ReloadMask");
-                                // lastModifiedMap[fileName] = Variant(modifiedTime);
-                                lastModifiedMap[fileNameFull] = Variant(modifiedTime);
-
-                                continue;
-                            }
-
-                            cache.ReloadResourceWithDependencies(fileName);
+                            continue;
                         }
-                    }
 
-                    lastModifiedMap[fileNameFull] = Variant(modifiedTime);
+                        cache.ReloadResourceWithDependencies(fileName);
+                    }
                 }
+
+                lastModifiedMap[fileName] = Variant(modifiedTime);
             }
 
             if (needReload)
@@ -81,14 +72,44 @@ namespace MaskEngine
 
             // UnloadMask();
             // maskScene = null;
+            log.Error("load.as handle file changed");
 
-            log.Error("HotReload.as : handle file changed");
             log.Error(scriptFile.name);
-
             // bool res = scriptFile.Execute("void UnloadMask()");
             UnloadMask();
 
+            // const Array<String> keepNodesArray = {
+            //     "Face1",
+            //     "Face",
+            //     "Zone",
+            //     "Camera"
+            // };
+
+            // Array<Node @> children = scene.GetChildren(false);
+            // for (int i = children.length - 1; i >= 0; --i)
+            // {
+            //     Node@ child = children[i];
+            //     child.RemoveAllChildren();
+            //     // child.RemoveAllComponents();
+            //     log.Error("remove children from : " + child.name);
+
+            //     if (keepNodesArray.Find(child.name) < 0) {
+            //         child.Remove();
+            //     }
+            // }
+
+            // RenderPath initRenderPath;
+            // if (!initRenderPath.Load(initRenderPathXML))
+            // {
+            //     log.Error("Failed to load RP file " + INIT_RENDER_PASS_FILE);
+            //     return;
+            // }
+
             CreateDefaultScene();
+
+            // renderer.numViewports = 1;
+            // renderer.SetDefaultRenderPath(initRenderPathXML);
+            // renderer.viewports[0].renderPath = renderer.defaultRenderPath;
 
             @mask = Mask();
 
@@ -99,9 +120,6 @@ namespace MaskEngine
 
         void CreateDefaultScene()
         {
-
-            // !!! not 100% complete cleanup !!!
-
             scene.Clear();
 
             // Create the Octree component to the scene so that drawable objects can be rendered. Use default volume
@@ -130,6 +148,8 @@ namespace MaskEngine
             {
                 scene.CreateChild(FACE_NODE_NAME(faceIdx));
             }
+
+            // BFS(scene.GetChildren());
 
             // // Disable fog for
             // renderer.GetDefaultZone().SetFogStart(100000);
@@ -183,6 +203,61 @@ namespace MaskEngine
             }
             log.Error(" ");
         }
+
+        // void C(StringHash eventType, VariantMap &eventData)
+        // {
+        //     log.Error("Lol");
+        //     CheckFilesUpdated();
+        // }
     }
 
 }
+
+// Array<Component @> instances = scene.GetComponents("ScriptInstance");
+// for (uint i = 0; i < 1; i++)
+// {
+//     ScriptInstance @instance = cast<ScriptInstance>(instances[i]);
+//     String fileName = "main.as";// instance.scriptFile.name;
+//     File@ file = cache.GetFile(fileName);
+//     VectorBuffer file_vb = file.ReadVectorBuffer(file.size);
+
+//     int hash = sdbm(file_vb);
+//     if (checkSumMap.Contains(fileName))
+//     {
+//         bool changed = (checkSumMap[fileName].GetInt() != hash);
+//         if (changed)
+//         {
+//             log.Error(changed);
+//             cache.ReloadResourceWithDependencies("Shaders/GLSL/color.glsl");
+//             cache.ReloadResourceWithDependencies(fileName);
+//             ScriptFile@ mainScript = cache.GetResource("ScriptFile", fileName);
+//             mainScript.Execute("void Init()");
+
+//             log.Error(scriptFile.name);
+//             // checkSumMap = VariantMap();
+
+//         }
+//         // log.Error(hash);
+//     }
+
+//     checkSumMap[fileName] = Variant(hash);
+
+//     file.Close();
+
+// }
+
+// int sdbm(VectorBuffer vb)
+// {
+//     // """
+//     // Function implements sdbm hash, easy to use, great for bits scrambling.
+//     // iterates over each character in the given string and applies function to each of
+//     // them.
+
+//     int hash = 0;
+//     for (uint i = 0; i < vb.size; i += 4)
+//     {
+//         vb.Seek(i);
+//         hash = vb.ReadInt() + (hash << 6) + (hash << 16) - hash;
+//     }
+//     return hash;
+// }

@@ -1,5 +1,13 @@
 // !!! changed to js so that i dont get errors with rollup
 
+/*
+    to get values stored in checks  
+    ```
+    const minValue = schema.shape.name._def.checks.find(({ kind }) => kind === "min").value;
+    
+    ```
+
+*/
 
 import { z } from "zod";
 import { fromZodError } from 'zod-validation-error';
@@ -35,19 +43,23 @@ export const uiDescriptions = {
     text: ({ }) => ({
         name: 'text'
     }),
-    color3d: ({ min, max }) => ({
-        name: 'color3d',
+    color: ({ min, max }) => ({
+        name: 'color',
         min: min,
         max: max
     }),
-    color4d: ({ min, max }) => ({
-        name: 'color4d',
+    colorAlpha: ({ min, max }) => ({
+        name: 'colorAlpha',
+        alpha: true,
         min: min,
         max: max
     }),
     bool: () => ({
         name: 'bool'
-    })
+    }),
+    object: ({ }) => ({
+        name: 'object'
+    }),
 }
 
 
@@ -58,8 +70,8 @@ const ZBool = z.boolean().describe(uiDescriptions.bool({}));
 const ZArray2D = z.number().array().length(2, { message: "Array size must be 2" }).describe(uiDescriptions.array2d({}));
 const ZArray3D = z.number().array().length(3, { message: "Array size must be 3" }).describe(uiDescriptions.array3d({}));
 const ZArray4D = z.number().array().length(4, { message: "Array size must be 4" }).describe(uiDescriptions.array4d({}));
-const ZColor3D = z.number().array().length(3, { message: "Color size must be 3" }).describe(uiDescriptions.color3d({ min: 0, max: 1 }));
-const ZColor4D = z.number().array().length(4, { message: "Color size must be 4" }).describe(uiDescriptions.color4d({ min: 0, max: 1 }));
+const ZColor = z.number().array().length(3, { message: "Color size must be 3" }).describe(uiDescriptions.color({ min: 0, max: 1 }));
+const ZColorAlpha = z.number().array().length(4, { message: "Color size must be 4" }).describe(uiDescriptions.colorAlpha({ min: 0, max: 1, alpha: true }));
 
 const ZFaceAnchor = z.enum([
     "face", "right_eye", "left_eye", "middle_eyes", "forehead", "nose", "mouth", "right_cheek", "left_cheek", "lower_lip", "upper_lip"
@@ -70,13 +82,27 @@ const ZLightType = z.enum(["point", "ambient", "direct"])
 const ZFilePath = z.string().describe(uiDescriptions.filepath({}));
 const ZText = z.string().describe(uiDescriptions.text({}))
 
-export const TextureObject = z.object({
-    diffuse: ZFilePath.optional(),
-    texture: ZFilePath.optional(),
-    normal: ZFilePath.optional(),
-    color: ZColor4D.optional()
-}).describe(() => ({ name: 'texture_object' }))
+// export const TextureObject = z.union(
+//     [
+//         z.string().describe(uiDescriptions.text({})),
+//         z.object({
 
+//             diffuse: ZFilePath.default("empty.png"),
+//             texture: ZFilePath.default("empty.png"),
+//             normal: ZFilePath.default("empty.png"),
+//             color: ZColorAlpha.default[1.0, 1.0, 1.0, 1.0]
+//         }).describe(uiDescriptions.object({}))
+//     ]
+// ).describe(() => ({ name: "somehting_stupid" }))
+
+
+export const TextureObject =
+    z.object({
+        diffuse: ZFilePath.default("empty.png"),
+        texture: ZFilePath.default("empty.png"),
+        normal: ZFilePath.default("empty.png"),
+        color: ZColorAlpha.default([1.0, 1.0, 1.0, 1.0])
+    }).describe(uiDescriptions.object({}))
 
 
 export const ZBaseEffect = z.object({
@@ -88,7 +114,7 @@ export const ZBaseEffect = z.object({
 const ZPatchEffect = ZBaseEffect.extend(
     {
         name: z.literal("patch"),
-        anchor: ZFaceAnchor.default(ZFaceAnchor.Values.forehead),
+        anchor: ZFaceAnchor.describe(uiDescriptions.enum({ options: Object.keys(ZFaceAnchor.Values) })).default(ZFaceAnchor.Values.forehead),
         size: ZArray2D.default([0, 0]),
         offset: ZArray3D.default([0, 0, 0])
     }
@@ -103,8 +129,8 @@ const ZFacemodelEffect = ZBaseEffect.extend(
         rotation: ZArray3D.default([0, 0, 0]),
         scale: ZArray3D.default([0, 0, 0]),
         texture: TextureObject.default({
-            diffuse: "empty.png",
-            color: [1, 1, 1, 1]
+            diffuse: "Textures/Spot.png",
+            color: [1.0, 1.0, 1.0, 1.0]
         })
     }
 )
@@ -114,7 +140,7 @@ const ZFacemodelEffect = ZBaseEffect.extend(
 const ZBaseLightEffect = ZBaseEffect.extend(
     {
         name: z.literal("light"),
-        color: ZArray3D.default([1, 1, 1]),
+        color: ZColor.default([1, 1, 1]),
         brightness: ZNumberSlider.default(1.0),
         specular_intensity: ZNumberSlider.default(1.0),
 
@@ -196,7 +222,10 @@ export const effectNames = ZEffects.options.map(val => {
 export const effectDefaults = {};
 effectNames.forEach((name, i) => {
     const result = ZEffects.safeParse({ name: name });
+
     if (result.success) {
+        // console.log("ztypes data");
+        // console.log(result.data)
         effectDefaults[name] = {
             data: result.data,
             type: EffectsList[i]

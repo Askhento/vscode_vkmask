@@ -6,6 +6,8 @@
 <div class="switch-control-wrapper">
   <div class="label">{label}</div>
 
+  <!-- <vscode-checkbox bind:checked={value}>Label</vscode-checkbox> -->
+
   <label class="switch">
     <input type="checkbox" bind:checked={value} />
     <span class="slider round" />

@@ -1,6 +1,5 @@
 <script lang="ts">
   import { vscode } from "./utils/vscode";
-  // import { z, ZodEffects } from "zod";
   import { effects } from "./stores.js";
 
   // ? do not send effects back on user input events

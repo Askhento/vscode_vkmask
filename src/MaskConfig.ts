@@ -10,10 +10,6 @@ import { report, reportOne } from "io-ts-human-reporter"
 import { logger } from "./logger";
 const print = logger(__filename);
 
-// import { res } from "./ztypes";
-// print(res);
-
-
 
 export class MaskConfig {
 
