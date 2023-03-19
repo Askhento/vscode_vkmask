@@ -8,7 +8,7 @@ import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
 
 const production = !process.env.ROLLUP_WATCH;
-
+// ! added sourcemaps
 function serve() {
     let server;
 
@@ -46,7 +46,8 @@ export default {
             preprocess: sveltePreprocess({ sourceMap: true }),
             compilerOptions: {
                 // enable run-time checks when not in production
-                dev: !production
+                dev: !production,
+                enableSourcemap: true
             }
         }),
         // we'll extract any component CSS out into

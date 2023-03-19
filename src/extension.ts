@@ -9,53 +9,60 @@ import { HotReload } from "./HotReload";
 import * as path from "path"
 import { watch } from "chokidar";
 import { logger } from "./logger";
+import { assetWatcher } from './AssetWatcher';
 const print = logger(__filename);
 
 /*
-	todo : angelscript intellisence
+    todo : angelscript intellisence
 */
 
 export function activate(context: vscode.ExtensionContext) {
 
-	print("activating");
+    print("activating");
 
-	let disposable = vscode.commands.registerCommand('vkmask.helloWorld', () => {
+    let disposable = vscode.commands.registerCommand('vkmask.helloWorld', () => {
 
-		vscode.window.showInformationMessage('Hello World!');
-	});
+        vscode.window.showInformationMessage('Hello World!');
+    });
 
-	context.subscriptions.push(disposable);
-
-
-	const sidebar = new MainSidebarProvider(context.extensionUri);
-
-	context.subscriptions.push(
-		vscode.window.registerWebviewViewProvider(MainSidebarProvider.viewId, sidebar)
-	);
+    context.subscriptions.push(disposable);
 
 
-	const hotReloader = new HotReload(context.extensionUri);
-	hotReloader.copyFilesToMask();
+    const sidebar = new MainSidebarProvider(context.extensionUri);
+
+    context.subscriptions.push(
+        vscode.window.registerWebviewViewProvider(MainSidebarProvider.viewId, sidebar)
+    );
 
 
-	let watchLock = false;
-	let watchTimeout: NodeJS.Timeout;
-	watch(path.join(context.extensionPath, "webview-ui", "public", "build")).on('change', (filename: string) => {
-		if (watchLock) {
-			return;
-		}
-		print("\nThe file " + filename + " was modified!");
+    const hotReloader = new HotReload(context.extensionUri);
+    hotReloader.copyFilesToMask();
 
-		if (watchTimeout) clearTimeout(watchTimeout)
-		watchTimeout = setTimeout(() => {
-			watchLock = false;
-		}, 1000)
-		watchLock = true;
 
-		vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction").then(() => {
-			sidebar.sendEffects();
-		});
-	});
+
+    // !!!! add check on dev disabled
+    let watchLock = false;
+    let watchTimeout: NodeJS.Timeout;
+    watch(path.join(context.extensionPath, "webview-ui", "public", "build")).on('change', (filename: string) => {
+        if (watchLock) {
+            return;
+        }
+        print("\nThe file " + filename + " was modified!");
+
+        if (watchTimeout) clearTimeout(watchTimeout)
+        watchTimeout = setTimeout(() => {
+            watchLock = false;
+        }, 1000)
+        watchLock = true;
+
+        vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction").then(() => {
+            sidebar.sendEffects();
+            assetWatcher.searchAssets();
+
+        });
+    });
+
+
 }
 
 // This method is called when your extension is deactivated

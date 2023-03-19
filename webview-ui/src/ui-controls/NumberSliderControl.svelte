@@ -3,19 +3,24 @@
     value = 0,
     params;
 
-  let step = 0.01;
+  let step = 0.01,
+    sliderValue = value;
   // $: console.log(value);
+  function onSliderUp() {
+    value = sliderValue;
+  }
   $: step = (params.max - params.min) / 20.0;
 </script>
 
 <div class="number-control-wrapper">
   {#if label}
     <span class="label">{label}</span>
-    <span class="number">{value}</span>
+    <span class="number">{sliderValue}</span>
     <input
       class="slider"
       type="range"
-      bind:value
+      bind:value={sliderValue}
+      on:mouseup={onSliderUp}
       min={params.min || 0}
       max={params.max || 1}
       {step}

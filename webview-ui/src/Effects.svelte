@@ -1,22 +1,25 @@
 <script lang="ts">
   import { vscode } from "./utils/vscode";
-  import { effects } from "./stores.js";
+  import { effects, selection } from "./stores.js";
 
-  // ? do not send effects back on user input events
-  let updateLock = false;
+  //   ? do not send effects back on user input events
+  // i use lock because i need to track changes made in inspector
+  let updateLock = true;
   $: {
     if (updateLock) {
       updateLock = false;
+      //   console.log("lock");
     } else {
-      const newData = $effects.map((effect) => effect.data);
+      //   const newData = $effects.map((effect) => effect.data);
       // console.log(newData);
       // console.log($effects[0]?.data);
-      if (newData.length) {
-        vscode.postMessage({
-          type: "effectsUpdate",
-          value: newData,
-        });
-      }
+      //   if (newData.length) {
+      //   console.log($effects);
+      vscode.postMessage({
+        type: "effectsUpdate",
+        value: $effects,
+      });
+      //   }
     }
   }
 
@@ -35,7 +38,11 @@
       case "updateEffects": {
         console.log("main.js : received updatingEffects");
         updateLock = true;
-        effects.set(message.effects);
+        $effects = message.effects;
+        break;
+      }
+      case "deselect": {
+        $selection = undefined;
         break;
       }
     }
@@ -47,7 +54,7 @@
     hovering = null;
     if (start === target) return;
     const newEffects = $effects;
-    console.log(start, target);
+    // console.log(start, target);
 
     if (start < target) {
       newEffects.splice(target + 1, 0, newEffects[start]);
@@ -57,14 +64,14 @@
       newEffects.splice(start + 1, 1);
     }
 
-    // reset id's
-    newEffects.forEach((effect, i) => {
-      effect.id = i;
-    });
+    // // reset id's
+    // newEffects.forEach((effect, i) => {
+    //   effect.id = i;
+    // });
 
     $effects = newEffects;
     // effects.set(newEffects);
-    sendEffectSwap(start, target);
+    sendEffects();
   };
 
   const dragstart = (event, i) => {
@@ -75,47 +82,53 @@
     event.dataTransfer.setData("text/plain", start);
   };
 
-  function onVisibleClick(id) {
-    $effects[id].data.disabled = !$effects[id].data.disabled;
+  function checkSelected(id) {
+    if ($selection === undefined) return false;
+    return $selection.type === "effect" && $selection.id === id;
+  }
+  function toggleSelection(id) {
+    if (checkSelected(id)) {
+      $selection = undefined;
+      vscode.postMessage({ type: "effectDeselected", value: id });
+    } else {
+      $selection = {
+        type: "effect",
+        id: id,
+      };
+      vscode.postMessage({ type: "effectSelected", value: id });
+    }
+  }
 
-    vscode.postMessage({
-      type: "effectDisabled",
-      value: {
-        effectId: id,
-        disabled: $effects[id].data.disabled,
-      },
-    });
+  function onVisibleClick(id) {
+    $effects[id].disabled = !$effects[id].disabled;
+    $effects = $effects;
+    // vscode.postMessage({
+    //   type: "effectDisabled",
+    //   value: {
+    //     effectId: id,
+    //     disabled: $effects[id].data.disabled,
+    //   },
+    // });
   }
 
   function onClickRemove(id) {
     $effects.splice(id, 1);
-    vscode.postMessage({ type: "effectDelete", value: id });
-  }
-
-  function onCickSelect(id) {
-    $effects = $effects.map((eff, index) => {
-      eff.selected = id === index;
-      return eff;
-    });
-    // $effects[id].selected = true;
-    vscode.postMessage({ type: "effectSelected", value: id });
-  }
-
-  function onClickDeselect(id) {
-    $effects[id].selected = false;
-    vscode.postMessage({ type: "effectDeselected", value: id });
-  }
-
-  function sendEffectSwap(start, target) {
-    vscode.postMessage({ type: "effectSwap", value: [start, target] });
-  }
-
-  function sendEffects() {
-    vscode.postMessage({ type: "updateEffects", value: effects });
+    $effects = $effects;
+    console.log($effects);
+    // vscode.postMessage({ type: "effectDelete", value: id });
   }
 
   function sendAddEffect(object) {
-    vscode.postMessage({ type: "effectAdd", value: object });
+    $effects.unshift(object);
+    $effects = $effects;
+    // vscode.postMessage({ type: "effectAdd", value: object });
+  }
+
+  function sendEffects() {
+    // vscode.postMessage({
+    //   type: "updateEffects",
+    //   value: $effects,
+    // });
   }
 </script>
 
@@ -131,7 +144,7 @@
       on:change={(e) => {
         const effectName = e.target.value;
         if (effectName === "Add Effect") return;
-        const newEffect = effectDefaults[effectName].data;
+        const newEffect = effectDefaults[effectName];
         sendAddEffect(newEffect);
         e.target.value = "Add Effect";
       }}
@@ -147,7 +160,7 @@
   <div class="effect-list-wrapper">
     {#if $effects}
       <ul class="effectsList">
-        {#each $effects as effect, index (effect.id)}
+        {#each $effects as effect, index (index)}
           <!-- <div class="effect-wrapper {effect.disabled ? 'disabled' : ''}"> -->
           <vscode-option
             animate:flip={{ duration: 200 }}
@@ -161,10 +174,10 @@
             on:dragover={(e) => {
               e.preventDefault();
             }}
-            on:click|stopPropagation={effect.selected
-              ? onClickDeselect(index)
-              : onCickSelect(index)}
-            selected={effect.selected}
+            on:click|stopPropagation={toggleSelection(index)}
+            selected={$selection &&
+              $selection.type === "effect" &&
+              $selection.id === index}
             >{effect.name}
             <span class="effect-btn-wrapper">
               <vscode-button
@@ -173,7 +186,7 @@
                 on:click|stopPropagation={onVisibleClick(index)}
               >
                 <span
-                  class="codicon {effect.data.disabled
+                  class="codicon {effect.disabled
                     ? 'codicon-eye-closed'
                     : 'codicon-eye'}"
                 />

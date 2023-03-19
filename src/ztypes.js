@@ -37,8 +37,9 @@ export const uiDescriptions = {
         name: 'enum',
         options: options
     }),
-    filepath: ({ }) => ({
-        name: 'filepath'
+    filepath: ({ extensions }) => ({
+        name: 'filepath',
+        extensions: extensions
     }),
     text: ({ }) => ({
         name: 'text'
@@ -74,12 +75,43 @@ const ZColor = z.number().array().length(3, { message: "Color size must be 3" })
 const ZColorAlpha = z.number().array().length(4, { message: "Color size must be 4" }).describe(uiDescriptions.colorAlpha({ min: 0, max: 1, alpha: true }));
 
 const ZFaceAnchor = z.enum([
-    "face", "right_eye", "left_eye", "middle_eyes", "forehead", "nose", "mouth", "right_cheek", "left_cheek", "lower_lip", "upper_lip"
+    "free", "face", "right_eye", "left_eye", "middle_eyes", "forehead", "nose", "mouth", "right_cheek", "left_cheek", "lower_lip", "upper_lip"
 ])
 const ZLightType = z.enum(["point", "ambient", "direct"])
 
+const AssetTypes = {
+    texture: {
+        default: "Textures/Spot.png",
+        extensions: ["png", "jpg"]
+    },
+    material: {
+        default: "Materials/DefaultGrey.xml",
+        extensions: ["xml", "json"]
+    },
+    technique: {
+        default: "Techniques/DiffUnlit.xml",
+        extensions: ["xml"]
+    },
+    renderPath: {
+        default: undefined,
+        extensions: ["xml"]
+    },
+    animationClip: {
+        default: undefined,
+        extensions: ["ani"]
+    },
+    model3d: {
+        default: "Models/DefaultPlane.mdl",
+        extensions: ["mdl"]
+    }
+}
 
-const ZFilePath = z.string().describe(uiDescriptions.filepath({}));
+
+
+
+
+const ZAsset = z.string().describe(uiDescriptions.filepath({}));
+
 const ZText = z.string().describe(uiDescriptions.text({}))
 
 // export const TextureObject = z.union(
@@ -98,9 +130,9 @@ const ZText = z.string().describe(uiDescriptions.text({}))
 
 export const TextureObject =
     z.object({
-        diffuse: ZFilePath.default("empty.png"),
-        texture: ZFilePath.default("empty.png"),
-        normal: ZFilePath.default("empty.png"),
+        diffuse: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
+        texture: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
+        normal: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
         color: ZColorAlpha.default([1.0, 1.0, 1.0, 1.0])
     }).describe(uiDescriptions.object({}))
 
@@ -128,10 +160,7 @@ const ZFacemodelEffect = ZBaseEffect.extend(
         position: ZArray3D.default([0, 0, 0]),
         rotation: ZArray3D.default([0, 0, 0]),
         scale: ZArray3D.default([0, 0, 0]),
-        texture: TextureObject.default({
-            diffuse: "Textures/Spot.png",
-            color: [1.0, 1.0, 1.0, 1.0]
-        })
+        texture: TextureObject
     }
 )
 
@@ -155,7 +184,6 @@ const ZBaseLightEffect = ZBaseEffect.extend(
 
 // ZBaseLightEffect.shape.type.removeDefault().Values
 
-
 const ZBeautifyEffect = ZBaseEffect.extend(
     {
         name: z.literal("beautify"),
@@ -171,9 +199,38 @@ const ZColorfilterEffect = ZBaseEffect.extend(
     {
         name: z.literal("colorfilter"),
         intensity: ZNumberSlider.default(0.75),
-        lookup: ZFilePath.default("ColorFilter/lookup.png")
+        lookup: ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })).default(AssetTypes.texture.default)
     }
 );
+
+
+// {
+//     "name": "model3d",
+//     "anchor": "forehead",
+//     "model": "Models/Cap.mdl",
+//     "material": {
+//         "technique": "Techniques/DiffUnlit.xml",
+//         "textures": {
+//             "diffuse": "Textures/Cap_diffuse.png"
+//         }
+//     },
+//     "position": [0, 45, 10],
+//     "rotation": [10, 0, 0],
+//     "scale": [28, 28, 28]
+// }
+
+const ZModel3dEffect = ZBaseEffect.extend(
+    {
+        name: z.literal("model3d"),
+        anchor: ZFaceAnchor.describe(uiDescriptions.enum({ options: Object.keys(ZFaceAnchor.Values) })).default(ZFaceAnchor.Values.forehead),
+        model: ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.model3d.extensions })).default(AssetTypes.model3d.default),
+        material: ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.material.extensions })).default(AssetTypes.material.default),
+        position: ZArray3D.default([0, 0, 0]),
+        rotation: ZArray3D.default([0, 0, 0]),
+        scale: ZArray3D.default([0, 0, 0]),
+    }
+)
+
 
 // const ZLightEffect = z.union([z.discriminatedUnion("type", [
 //     z.object({
@@ -206,7 +263,7 @@ const ZColorfilterEffect = ZBaseEffect.extend(
 // }
 
 const EffectsList = [
-    ZFacemodelEffect, ZPatchEffect, ZBaseLightEffect, ZBeautifyEffect, ZColorfilterEffect
+    ZFacemodelEffect, ZPatchEffect, ZBaseLightEffect, ZBeautifyEffect, ZColorfilterEffect, ZModel3dEffect
 ]
 
 export const ZEffects = z.discriminatedUnion("name", [...EffectsList]);
@@ -221,18 +278,21 @@ export const effectNames = ZEffects.options.map(val => {
 // console.log(effectNames);
 export const effectDefaults = {};
 effectNames.forEach((name, i) => {
-    const result = ZEffects.safeParse({ name: name });
+    const result = ZEffects.safeParse({ name: name, texture: {} });
 
     if (result.success) {
         // console.log("ztypes data");
-        // console.log(result.data)
+        console.log(result.data)
         effectDefaults[name] = {
             data: result.data,
             type: EffectsList[i]
         };
+    } else {
+        console.log(result.error)
     }
 });
-// console.log(effectDefaults);
+
+
 
 
 

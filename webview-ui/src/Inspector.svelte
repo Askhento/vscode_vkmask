@@ -1,15 +1,15 @@
 <script lang="ts">
   /*
 
-    todo : need to add filepicker
+    todo : need to add file picker
     todo : texture preview
 
-    todo : find bug when use slider and sending update effects from maskconfig
+    todo : find bug when use slider and sending update effects from maskConfig
 
 
   */
   import { effectDefaults } from "../../src/ztypes.js";
-  import { effects } from "./stores.js";
+  import { effects, selection } from "./stores.js";
   import { vscode } from "./utils/vscode";
   //
   import { uiControls } from "./ui-controls/Controls.js";
@@ -17,21 +17,21 @@
 
 <div class="inspector-wrapper">
   <div class="inspector-name">Inspector Panel</div>
-  {#each $effects as effect, i}
-    {#if effect.selected}
-      <div>{effect.data.name}</div>
-      {#if effect.data.name in uiControls}
-        {#each Object.entries(uiControls[effect.data.name]) as [key, element]}
+  {#if $selection}
+    {#if $selection.type === "effect"}
+      <div>{$effects[$selection.id].name}</div>
+      {#if $effects[$selection.id].name in uiControls}
+        {#each Object.entries(uiControls[$effects[$selection.id].name]) as [key, element]}
           <svelte:component
             this={element}
             bind:label={key}
-            params={effectDefaults[effect.data.name].type.shape[
+            params={effectDefaults[$effects[$selection.id].name].type.shape[
               key
             ].removeDefault().description || {}}
-            bind:value={effect.data[key]}
+            bind:value={$effects[$selection.id][key]}
           />
         {/each}
       {/if}
     {/if}
-  {/each}
+  {/if}
 </div>

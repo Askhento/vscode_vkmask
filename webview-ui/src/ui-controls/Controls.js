@@ -11,7 +11,7 @@ import ColorPickerControl from './ColorPickerControl.svelte'
 export const uiControlsMap = {
     [uiDescriptions.bool({}).name]: SwitchControl,
     [uiDescriptions.numberSlider({}).name]: NumberSliderControl,
-    [uiDescriptions.filepath({}).name]: TextControl,
+    [uiDescriptions.filepath({}).name]: FilePickerControl,
     [uiDescriptions.text({}).name]: TextControl,
     [uiDescriptions.enum({}).name]: OptionsControl,
     [uiDescriptions.color({}).name]: ColorPickerControl,
@@ -27,7 +27,7 @@ for (const effectName in effectDefaults) {
 
     for (const field in shape) {
         let element = shape[field].removeDefault ? shape[field].removeDefault() : shape[field];
-        console.log(`${field} : ${element.description}`);
+        // console.log(`${field} : ${element.description}`);
 
         if (!element.description) continue;
         const key = element.description.name;
@@ -39,4 +39,4 @@ for (const effectName in effectDefaults) {
 
 
 
-console.log(uiControls)
+// console.log(uiControls)
