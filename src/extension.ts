@@ -34,9 +34,12 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.registerWebviewViewProvider(MainSidebarProvider.viewId, sidebar)
     );
 
+    // "workbench.action.movePanelToSecondarySideBar",
+    // workbench.action.openView
 
     const hotReloader = new HotReload(context.extensionUri);
     hotReloader.copyFilesToMask();
+
 
 
 
@@ -47,6 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
         if (watchLock) {
             return;
         }
+
         print("\nThe file " + filename + " was modified!");
 
         if (watchTimeout) clearTimeout(watchTimeout)
@@ -61,6 +65,12 @@ export function activate(context: vscode.ExtensionContext) {
 
         });
     });
+
+    // vscode.commands.executeCommand('vkmask.inspector.focus').then(() => {
+    //     vscode.commands.executeCommand('workbench.action.moveFocusedView');
+
+    // })
+
 
 
 }

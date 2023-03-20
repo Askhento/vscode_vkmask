@@ -2,7 +2,7 @@
   import { vscode } from "./utils/vscode";
   import { effects, selection } from "./stores.js";
 
-  //   ? do not send effects back on user input events
+  //   ? do not send effects back on user input events, will cause loop
   // i use lock because i need to track changes made in inspector
   let updateLock = true;
   $: {
@@ -71,7 +71,7 @@
 
     $effects = newEffects;
     // effects.set(newEffects);
-    sendEffects();
+    // sendEffects();
   };
 
   const dragstart = (event, i) => {
@@ -114,7 +114,7 @@
   function onClickRemove(id) {
     $effects.splice(id, 1);
     $effects = $effects;
-    console.log($effects);
+    // console.log($effects);
     // vscode.postMessage({ type: "effectDelete", value: id });
   }
 
@@ -143,9 +143,11 @@
     <vscode-dropdown
       on:change={(e) => {
         const effectName = e.target.value;
+        console.log("new effect " + effectName);
         if (effectName === "Add Effect") return;
         const newEffect = effectDefaults[effectName];
-        sendAddEffect(newEffect);
+        console.log(newEffect);
+        sendAddEffect(newEffect.data);
         e.target.value = "Add Effect";
       }}
     >

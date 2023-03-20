@@ -29,6 +29,7 @@
       ]
     },
     "views": {
+    
       "vkmask_primary_bar": [
         {
           "type": "webview",

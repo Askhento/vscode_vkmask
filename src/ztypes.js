@@ -7,6 +7,7 @@
     
     ```
 
+    biggest issue is parameters with 2 and more options 
 */
 
 import { z } from "zod";
@@ -44,6 +45,9 @@ export const uiDescriptions = {
     text: ({ }) => ({
         name: 'text'
     }),
+    tags: ({ }) => ({
+        name: 'tags'
+    }),
     color: ({ min, max }) => ({
         name: 'color',
         min: min,
@@ -60,6 +64,10 @@ export const uiDescriptions = {
     }),
     object: ({ }) => ({
         name: 'object'
+    }),
+    array: ({ type }) => ({
+        name: 'array',
+        type: type
     }),
 }
 
@@ -113,33 +121,50 @@ const AssetTypes = {
 const ZAsset = z.string().describe(uiDescriptions.filepath({}));
 
 const ZText = z.string().describe(uiDescriptions.text({}))
-
-// export const TextureObject = z.union(
-//     [
-//         z.string().describe(uiDescriptions.text({})),
-//         z.object({
-
-//             diffuse: ZFilePath.default("empty.png"),
-//             texture: ZFilePath.default("empty.png"),
-//             normal: ZFilePath.default("empty.png"),
-//             color: ZColorAlpha.default[1.0, 1.0, 1.0, 1.0]
-//         }).describe(uiDescriptions.object({}))
-//     ]
-// ).describe(() => ({ name: "somehting_stupid" }))
+const ZTags = z.string().describe(uiDescriptions.tags({}))
 
 
-export const TextureObject =
-    z.object({
-        diffuse: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
-        texture: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
-        normal: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
-        color: ZColorAlpha.default([1.0, 1.0, 1.0, 1.0])
-    }).describe(uiDescriptions.object({}))
+export const ZTextureObject = z.union(
+    [
+        ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })).transform(val => ({
+            diffuse: val,
+            color: [1.0, 1.0, 1.0, 1.0]
+        })),
+        z.object({
+            diffuse: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
+            // !!! probably will miss texture property
+            // texture: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
+            normal: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
+            color: ZColorAlpha.default([1.0, 1.0, 1.0, 1.0])
+        })
+    ]
+).describe(uiDescriptions.object({}))
+
+
+export const ZMaterialArray = z.union(
+    [
+        ZAsset.default(AssetTypes.material.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.material.extensions })).transform(val => ([
+            val
+        ])),
+        ZAsset.array().default([AssetTypes.material.default]).describe(uiDescriptions.filepath({ extensions: AssetTypes.material.extensions }))
+    ]
+).describe(uiDescriptions.array({ type: "material" }))
+
+// TextureObject.options[1].shape.
+
+
+// export const TextureObject =
+//     z.object({
+//         diffuse: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
+//         texture: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
+//         normal: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
+//         color: ZColorAlpha.default([1.0, 1.0, 1.0, 1.0])
+//     }).describe(uiDescriptions.object({}))
 
 
 export const ZBaseEffect = z.object({
     name: ZText,
-    tag: ZText.default(""),
+    tag: ZTags.default(""),
     disabled: ZBool.default(false)
 })
 
@@ -160,7 +185,7 @@ const ZFacemodelEffect = ZBaseEffect.extend(
         position: ZArray3D.default([0, 0, 0]),
         rotation: ZArray3D.default([0, 0, 0]),
         scale: ZArray3D.default([0, 0, 0]),
-        texture: TextureObject
+        texture: ZTextureObject
     }
 )
 
@@ -224,7 +249,7 @@ const ZModel3dEffect = ZBaseEffect.extend(
         name: z.literal("model3d"),
         anchor: ZFaceAnchor.describe(uiDescriptions.enum({ options: Object.keys(ZFaceAnchor.Values) })).default(ZFaceAnchor.Values.forehead),
         model: ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.model3d.extensions })).default(AssetTypes.model3d.default),
-        material: ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.material.extensions })).default(AssetTypes.material.default),
+        material: ZMaterialArray,
         position: ZArray3D.default([0, 0, 0]),
         rotation: ZArray3D.default([0, 0, 0]),
         scale: ZArray3D.default([0, 0, 0]),
@@ -278,7 +303,7 @@ export const effectNames = ZEffects.options.map(val => {
 // console.log(effectNames);
 export const effectDefaults = {};
 effectNames.forEach((name, i) => {
-    const result = ZEffects.safeParse({ name: name, texture: {} });
+    const result = ZEffects.safeParse({ name: name });
 
     if (result.success) {
         // console.log("ztypes data");

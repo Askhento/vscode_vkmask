@@ -6,6 +6,8 @@ import SwitchControl from "./SwitchControl.svelte";
 import FilePickerControl from './FilePickerControl.svelte'
 import OptionsControl from "./OptionsControl.svelte";
 import ColorPickerControl from './ColorPickerControl.svelte'
+import TagsControl from './TagsControl.svelte'
+import VectorControl from './VectorControl.svelte'
 
 
 export const uiControlsMap = {
@@ -15,7 +17,13 @@ export const uiControlsMap = {
     [uiDescriptions.text({}).name]: TextControl,
     [uiDescriptions.enum({}).name]: OptionsControl,
     [uiDescriptions.color({}).name]: ColorPickerControl,
-    [uiDescriptions.colorAlpha({}).name]: ColorPickerControl
+    [uiDescriptions.colorAlpha({}).name]: ColorPickerControl,
+    [uiDescriptions.tags({}).name]: TagsControl,
+    [uiDescriptions.array2d({}).name]: VectorControl,
+    [uiDescriptions.array3d({}).name]: VectorControl,
+    [uiDescriptions.array4d({}).name]: VectorControl,
+
+
 }
 
 export let uiControls = {};
@@ -26,6 +34,7 @@ for (const effectName in effectDefaults) {
     uiControls[effectName] = {};
 
     for (const field in shape) {
+        // ? default value in zod hides shape property for some reason
         let element = shape[field].removeDefault ? shape[field].removeDefault() : shape[field];
         // console.log(`${field} : ${element.description}`);
 
