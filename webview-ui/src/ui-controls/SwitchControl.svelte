@@ -1,17 +1,21 @@
 <script lang="ts">
   export let label = "empty",
     value;
+
+  function onChange(e) {
+    // console.log();
+    value = e.target.checked;
+  }
 </script>
 
 <div class="switch-control-wrapper">
   <div class="label">{label}</div>
 
-  <!-- <vscode-checkbox bind:checked={value}>Label</vscode-checkbox> -->
-
-  <label class="switch">
+  <vscode-checkbox checked={value} on:change={onChange} />
+  <!-- <label class="switch">
     <input type="checkbox" bind:checked={value} />
     <span class="slider round" />
-  </label>
+  </label> -->
 </div>
 
 <style>

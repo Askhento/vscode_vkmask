@@ -3,6 +3,8 @@
 
   let color, alpha;
 
+  if (value === undefined) value = params.default;
+
   // console.log(TextureObject._def.typeName);
 
   function roundColor(num) {
@@ -63,7 +65,12 @@
 
   input.color {
     display: inline-block;
-    flex: 1 0 0px;
+    background-color: var(--input-background);
+    border: none;
+    border-radius: 5px;
+    height: 40px;
+    width: 40px;
+    /* flex: 1 0 0px; */
   }
 
   input.alpha {

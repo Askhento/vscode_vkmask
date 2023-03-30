@@ -19,14 +19,20 @@
   {#if label}
     <span class="label">{label}</span>
     <!-- <input class="value" type="text" bind:value /> -->
-    <select class="options" name="" id="" bind:value>
+
+    <vscode-dropdown
+      {value}
+      on:change={(e) => {
+        value = e.target.value;
+      }}
+    >
       {#each $assets as asset, i}
         <!-- will not work with more that 3 char extensions -->
         {#if extensions.has(asset.path.slice(-3))}
-          <option>{asset.path}</option>
+          <vscode-option>{asset.path}</vscode-option>
         {/if}
       {/each}
-    </select>
+    </vscode-dropdown>
   {/if}
 </div>
 

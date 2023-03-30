@@ -8,14 +8,22 @@
   <span class="label">
     {label}
   </span>
-  <select class="options" name="" id="" bind:value>
+  <!-- <select class="options" name="" id="" bind:value>
     {#each options as option, i}
       <option>{option}</option>
     {/each}
-  </select>
-  <!-- {#if label}
-    <span>{label}</span><input type="text" bind:value={text} />
-  {/if} -->
+  </select> -->
+
+  <vscode-dropdown
+    {value}
+    on:change={(e) => {
+      value = e.target.value;
+    }}
+  >
+    {#each options as option, i}
+      <vscode-option>{option}</vscode-option>
+    {/each}
+  </vscode-dropdown>
 </div>
 
 <style>

@@ -6,7 +6,8 @@ import * as t from "io-ts";
 import * as jsonMap from "json-source-map";
 import { jsonPrettyArray } from "./utils/jsonStringify";
 import { report, reportOne } from "io-ts-human-reporter"
-
+import { ZEffects, ZBaseEffect, ZMaskConfig } from "./ztypes.js"
+import { z } from "zod";
 import { logger } from "./logger";
 const print = logger(__filename);
 
@@ -16,7 +17,7 @@ export class MaskConfig {
     private saveDelayMS: number = 200;
     private saveDelayTimeout: NodeJS.Timeout | undefined;
 
-    public maskJSON: t.TypeOf<typeof MaskJSON> | undefined;
+    public maskJSON: z.infer<typeof ZMaskConfig> | undefined;
     private sourceMaskJSON: jsonMap.ParseResult | undefined;
     public maskLinePointers: jsonMap.Pointers = {};
     public rawMaskJSON: string = "";
@@ -413,26 +414,29 @@ export class MaskConfig {
             return false;
         }
 
-        this.maskJSON = this.sourceMaskJSON.data as t.TypeOf<typeof MaskJSON>;
+        // this.maskJSON = this.sourceMaskJSON.data;
 
-        const maskDecode = MaskJSON.decode(this.maskJSON);
-        if (maskDecode._tag === "Left") {
-            let errMsg = "mask.json require keys : \n"
-            const errors = report(maskDecode, {
-                messages: {
-                    missing: (keys, path) => {
-                        errMsg += (path.join('/') + "/" + keys + ", ");
-                        return `YOINKS! You forgot to add "${keys.join(',')}" at "${path.join('/')}".`;
-                    }
-                }
-            });
+        this.maskJSON = ZMaskConfig.parse(this.sourceMaskJSON.data) as z.infer<typeof ZMaskConfig>
 
-            errMsg = errMsg.slice(0, -2); // remove comma at the end
+        console.log(this.maskJSON)
+        // const maskDecode = MaskJSON.decode(this.maskJSON);
+        // if (maskDecode._tag === "Left") {
+        //     let errMsg = "mask.json require keys : \n"
+        //     const errors = report(maskDecode, {
+        //         messages: {
+        //             missing: (keys, path) => {
+        //                 errMsg += (path.join('/') + "/" + keys + ", ");
+        //                 return `YOINKS! You forgot to add "${keys.join(',')}" at "${path.join('/')}".`;
+        //             }
+        //         }
+        //     });
 
-            print(errors)
-            vscode.window.showErrorMessage(errMsg);
-            return;
-        }
+        //     errMsg = errMsg.slice(0, -2); // remove comma at the end
+
+        //     print(errors)
+        //     vscode.window.showErrorMessage(errMsg);
+        //     return;
+        // }
 
 
         if (this.sourceMaskJSON?.pointers === undefined) {

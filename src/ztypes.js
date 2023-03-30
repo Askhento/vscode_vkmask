@@ -65,9 +65,8 @@ export const uiDescriptions = {
     object: ({ }) => ({
         name: 'object'
     }),
-    array: ({ type }) => ({
-        name: 'array',
-        type: type
+    array: ({ }) => ({
+        name: 'array'
     }),
 }
 
@@ -123,32 +122,121 @@ const ZAsset = z.string().describe(uiDescriptions.filepath({}));
 const ZText = z.string().describe(uiDescriptions.text({}))
 const ZTags = z.string().describe(uiDescriptions.tags({}))
 
+const ZTextureAsset = ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions }))
 
-export const ZTextureObject = z.union(
-    [
-        ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })).transform(val => ({
-            diffuse: val,
-            color: [1.0, 1.0, 1.0, 1.0]
-        })),
-        z.object({
-            diffuse: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
-            // !!! probably will miss texture property
-            // texture: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
-            normal: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
-            color: ZColorAlpha.default([1.0, 1.0, 1.0, 1.0])
-        })
-    ]
-).describe(uiDescriptions.object({}))
+// export const ZTextureObject = z.union(
+//     [
+//         ZTextureAsset.default(AssetTypes.texture.default).transform(val => ({
+//             diffuse: val,
+//             color: [1.0, 1.0, 1.0, 1.0]
+//         })),
+//         z.object({
+//             diffuse: ZTextureAsset.default(AssetTypes.texture.default),
+//             // !!! probably will miss texture property
+//             // texture: ZTextureAsset,
+//             normal: ZTextureAsset.optional(),
+//             color: ZColorAlpha.default([1.0, 1.0, 1.0, 1.0])
+//         })
+//     ]
+// ).describe(uiDescriptions.object({}))
+
+function isObject(val) {
+    return (typeof val === 'object' &&
+        !Array.isArray(val) &&
+        val !== null);
+}
+
+export const ZTextureObject = z.preprocess(
+    (val) => {
+        if (isObject(val)) {
+            if (val.hasOwnProperty("texture")) {
+                val["diffuse"] = val["texture"];
+                delete val["texture"];
+                return val;
+            } else {
+                return val;
+            }
+        }
+        return {
+            diffuse: val
+        }
+    },
+    z.object({
+        diffuse: ZTextureAsset.default(AssetTypes.texture.default),
+        // !!! probably will miss texture property
+        // texture: ZTextureAsset,
+        normal: ZTextureAsset.optional(),
+        color: ZColorAlpha.default([1.0, 1.0, 1.0, 1.0])
+    }).describe(uiDescriptions.object({}))
+)
 
 
-export const ZMaterialArray = z.union(
-    [
-        ZAsset.default(AssetTypes.material.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.material.extensions })).transform(val => ([
-            val
-        ])),
-        ZAsset.array().default([AssetTypes.material.default]).describe(uiDescriptions.filepath({ extensions: AssetTypes.material.extensions }))
-    ]
-).describe(uiDescriptions.array({ type: "material" }))
+// const testObj = { diffuse: "diff", normal: "somenormal" };
+// console.log(isObject(testObj))
+// const parseResult = ZTextureObject.safeParse(testObj);
+
+// if (parseResult.success) {
+//     console.log(parseResult.data);
+// } else {
+//     console.log(parseResult.error)
+// }
+
+
+const ZMaterialAsset = ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.material.extensions })).default(AssetTypes.material.default)
+
+// "textures": {
+//     "normal": "Textures/Normal.jpg"
+// },
+// "parameters": {
+//     "MatDiffColor": [1.0, 1.0, 1.0, 1.0],
+//     "MatSpecColor": [0.0, 0.0, 0.0, 0.0],
+//     "MatEmissiveColor": [0.0, 0.0, 0.0],
+//     "MatEnvMapColor": [1.0, 1.0, 1.0]
+// },
+const ZMaterialObject = z.object({
+    textures: ZTextureAsset.default(AssetTypes.texture.default),
+    parameters: ZArray4D.default([0.0, 0.0, 0.0, 0.0])
+}).describe(uiDescriptions.object({}))
+
+export const ZMaterialArray = z.preprocess(
+    (val) => {
+        if (!Array.isArray(val)) return [val];
+        return val;
+    },
+    z.array(z.union([
+        ZMaterialAsset,
+        ZMaterialObject
+    ])).describe(uiDescriptions.array({}))
+);
+
+
+
+// console.log(ZMaterialArray.innerType().element.options[1].description)
+
+// const testType = z.union([
+//     z.string().transform((val) => {
+
+//         return {
+//             value: val,
+//             type: 'string'
+//         };
+//     }).default(),
+//     z.number().superRefine((val, ctx) => {
+
+//     })
+// ]).array()
+
+// const testArray = [1, "string", 2, 3];
+
+// const parseResult = testType.safeParse(testArray);
+
+// if (parseResult.success) {
+//     console.log(parseResult.data);
+// } else {
+//     console.log(parseResult.error)
+// }
+
+
 
 // TextureObject.options[1].shape.
 
@@ -172,10 +260,13 @@ const ZPatchEffect = ZBaseEffect.extend(
     {
         name: z.literal("patch"),
         anchor: ZFaceAnchor.describe(uiDescriptions.enum({ options: Object.keys(ZFaceAnchor.Values) })).default(ZFaceAnchor.Values.forehead),
-        size: ZArray2D.default([0, 0]),
+        size: ZArray2D.default([1, 1]),
         offset: ZArray3D.default([0, 0, 0])
     }
-)
+).describe(uiDescriptions.object({}))
+
+
+
 
 const ZFacemodelEffect = ZBaseEffect.extend(
     {
@@ -184,28 +275,27 @@ const ZFacemodelEffect = ZBaseEffect.extend(
         eyes: ZBool.default(true),
         position: ZArray3D.default([0, 0, 0]),
         rotation: ZArray3D.default([0, 0, 0]),
-        scale: ZArray3D.default([0, 0, 0]),
+        scale: ZArray3D.default([1, 1, 1]),
         texture: ZTextureObject
     }
-)
+).describe(uiDescriptions.object({}))
 
 
 
 const ZBaseLightEffect = ZBaseEffect.extend(
     {
         name: z.literal("light"),
+        anchor: ZFaceAnchor.describe(uiDescriptions.enum({ options: Object.keys(ZFaceAnchor.Values) })).default(ZFaceAnchor.Values.forehead),
+        type: ZLightType.describe(uiDescriptions.enum({ options: Object.keys(ZLightType.Values) })).default(ZLightType.Values.direct),
         color: ZColor.default([1, 1, 1]),
         brightness: ZNumberSlider.default(1.0),
         specular_intensity: ZNumberSlider.default(1.0),
-
-        type: ZLightType.describe(uiDescriptions.enum({ options: Object.keys(ZLightType.Values) })).default(ZLightType.Values.direct),
+        range: ZNumberSlider.describe(uiDescriptions.numberSlider({ min: 0.0, max: 2000.0 })).default(500.0),
         position: ZArray3D.default([0, 0, 0]),
         direction: ZArray3D.default([0, 0, 1]),
         rotation: ZArray3D.default([0, 0, 0]),
-        anchor: ZFaceAnchor.describe(uiDescriptions.enum({ options: Object.keys(ZFaceAnchor.Values) })).default(ZFaceAnchor.Values.forehead),
-        range: ZNumberSlider.describe(uiDescriptions.numberSlider({ min: 0.0, max: 2000.0 })).default(500.0),
     }
-)
+).describe(uiDescriptions.object({}))
 
 // ZBaseLightEffect.shape.type.removeDefault().Values
 
@@ -214,7 +304,7 @@ const ZBeautifyEffect = ZBaseEffect.extend(
         name: z.literal("beautify"),
         mix: ZNumberSlider.default(0.65)
     }
-);
+).describe(uiDescriptions.object({}))
 
 // "lookup": "ColorFilter/lookup.png",
 // "intensity": 
@@ -226,7 +316,7 @@ const ZColorfilterEffect = ZBaseEffect.extend(
         intensity: ZNumberSlider.default(0.75),
         lookup: ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })).default(AssetTypes.texture.default)
     }
-);
+).describe(uiDescriptions.object({}))
 
 
 // {
@@ -244,6 +334,7 @@ const ZColorfilterEffect = ZBaseEffect.extend(
 //     "scale": [28, 28, 28]
 // }
 
+
 const ZModel3dEffect = ZBaseEffect.extend(
     {
         name: z.literal("model3d"),
@@ -252,10 +343,9 @@ const ZModel3dEffect = ZBaseEffect.extend(
         material: ZMaterialArray,
         position: ZArray3D.default([0, 0, 0]),
         rotation: ZArray3D.default([0, 0, 0]),
-        scale: ZArray3D.default([0, 0, 0]),
+        scale: ZArray3D.default([1, 1, 1]),
     }
-)
-
+).describe(uiDescriptions.object({}))
 
 // const ZLightEffect = z.union([z.discriminatedUnion("type", [
 //     z.object({
@@ -287,9 +377,12 @@ const ZModel3dEffect = ZBaseEffect.extend(
 //     "light": ZBaseLightEffect
 // }
 
-const EffectsList = [
+export const EffectsList = [
     ZFacemodelEffect, ZPatchEffect, ZBaseLightEffect, ZBeautifyEffect, ZColorfilterEffect, ZModel3dEffect
 ]
+
+
+
 
 export const ZEffects = z.discriminatedUnion("name", [...EffectsList]);
 // console.log(ZEffects.safeParse({ name: "facemodel" }))
@@ -316,6 +409,42 @@ effectNames.forEach((name, i) => {
         console.log(result.error)
     }
 });
+
+
+// t.type({
+//     script: t.string,
+//     effects: t.array(Effect)
+// }),
+// t.union([
+//     t.type({
+//         preview: t.string
+//     }),
+//     t.type({
+//         icon: t.string,
+//     })
+// ]),
+// t.partial({
+//     name: t.string,
+//     user_hint: t.string,
+//     facemodel_version: t.number,
+//     mouse_input: t.boolean,
+//     plugins: t.array(Plugin)
+// })
+
+export const ZMaskConfig = z.object({
+    name: z.string(),
+    user_hint: z.string().default(""),
+    facemodel_version: z.number().default(0),
+    mouse_input: z.boolean().default(false),
+    preview: z.string().default(""),
+    script: z.string().default("main.as"),
+    effects: ZEffects,
+    plugins: z.array(z.object({})).default([])
+})
+
+// ZTextureObject.innerType().shape.
+
+
 
 
 
