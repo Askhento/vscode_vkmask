@@ -6,7 +6,7 @@
     "url": "https://github.com/Askhento/vscode_vkmask"
   },
   "description": "UI for vkontakte AR development ",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -29,7 +29,6 @@
       ]
     },
     "views": {
-    
       "vkmask_primary_bar": [
         {
           "type": "webview",
