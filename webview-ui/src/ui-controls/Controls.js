@@ -59,9 +59,17 @@ function parseUIElement(schema) {
     let res;
     switch (uiTypeName) {
         case "object":
+            // res = Object.fromEntries(
+            //     Object.entries(cleanSchema.shape).map(
+            //         ([k, v]) => [k, parseUIElement(v)]
+            //     )
+            // )
             res = Object.fromEntries(
-                Object.entries(cleanSchema.shape).map(
-                    ([k, v]) => [k, parseUIElement(v)]
+                Object.entries(cleanSchema.shape).flatMap(
+                    ([k, v]) => {
+                        if (k === "disabled") return [];
+                        return [[k, parseUIElement(v)]]
+                    }
                 )
             )
             break;

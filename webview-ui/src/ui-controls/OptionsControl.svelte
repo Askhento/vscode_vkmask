@@ -15,6 +15,7 @@
   </select> -->
 
   <vscode-dropdown
+    position="above"
     {value}
     on:change={(e) => {
       value = e.target.value;

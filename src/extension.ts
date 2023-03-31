@@ -66,6 +66,7 @@ export function activate(context: vscode.ExtensionContext) {
         });
     });
 
+
     // vscode.commands.executeCommand('vkmask.inspector.focus').then(() => {
     //     vscode.commands.executeCommand('workbench.action.moveFocusedView');
 

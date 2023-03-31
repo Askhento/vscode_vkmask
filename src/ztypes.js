@@ -146,6 +146,11 @@ function isObject(val) {
         val !== null);
 }
 
+
+
+
+
+
 export const ZTextureObject = z.preprocess(
     (val) => {
         if (isObject(val)) {
@@ -261,7 +266,9 @@ const ZPatchEffect = ZBaseEffect.extend(
         name: z.literal("patch"),
         anchor: ZFaceAnchor.describe(uiDescriptions.enum({ options: Object.keys(ZFaceAnchor.Values) })).default(ZFaceAnchor.Values.forehead),
         size: ZArray2D.default([1, 1]),
-        offset: ZArray3D.default([0, 0, 0])
+        offset: ZArray3D.default([0, 0, 0]),
+        texture: ZTextureObject
+
     }
 ).describe(uiDescriptions.object({}))
 
@@ -438,8 +445,8 @@ export const ZMaskConfig = z.object({
     mouse_input: z.boolean().default(false),
     preview: z.string().default(""),
     script: z.string().default("main.as"),
-    effects: ZEffects,
-    plugins: z.array(z.object({})).default([])
+    effects: ZEffects.array(),
+    plugins: z.array(z.object({}).passthrough()).default([])
 })
 
 // ZTextureObject.innerType().shape.

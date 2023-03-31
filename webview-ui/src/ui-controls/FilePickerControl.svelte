@@ -21,6 +21,7 @@
     <!-- <input class="value" type="text" bind:value /> -->
 
     <vscode-dropdown
+      position="above"
       {value}
       on:change={(e) => {
         value = e.target.value;

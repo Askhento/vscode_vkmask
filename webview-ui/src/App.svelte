@@ -21,8 +21,6 @@
     }
   }
 
-  console.log("wzp!!!");
-
   provideVSCodeDesignSystem().register(allComponents);
 </script>
 

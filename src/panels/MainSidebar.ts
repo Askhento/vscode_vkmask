@@ -158,6 +158,7 @@ export class MainSidebarProvider implements WebviewViewProvider {
             });
             assetWatcher.searchAssets();
 
+            console.log("parsing main!");
             this.maskConfig.parseConfig();
             this.sendEffects();
         }, 1000);
@@ -185,10 +186,12 @@ export class MainSidebarProvider implements WebviewViewProvider {
                 // restore on the second event
                 // ! first cb comes from removing whole json
                 // ! second one from selection
-                this.maskConfig.selectionLockCallback = () => {
-                    this.maskConfig.selectionLockCallback = undefined;
+                this.maskConfig.selectionLockCallback = undefined;
 
-                }
+                // this.maskConfig.selectionLockCallback = () => {
+                //     this.maskConfig.selectionLockCallback = undefined;
+
+                // }
             }
         }
     }
@@ -208,7 +211,7 @@ export class MainSidebarProvider implements WebviewViewProvider {
         if (effects === undefined) return;
 
         if (this._view) {
-            print("sending effects to webview");
+            print("sending effects to webview test");
             this._view.webview.postMessage({ type: 'updateEffects', effects: this.maskConfig.maskJSON?.effects });
         }
     }
@@ -219,6 +222,8 @@ export class MainSidebarProvider implements WebviewViewProvider {
             this._view.webview.postMessage({ type: 'deselect' });
         }
     }
+
+
 
     public sendAssets(e: any) {
         print(e)

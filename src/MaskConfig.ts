@@ -8,6 +8,8 @@ import { jsonPrettyArray } from "./utils/jsonStringify";
 import { report, reportOne } from "io-ts-human-reporter"
 import { ZEffects, ZBaseEffect, ZMaskConfig } from "./ztypes.js"
 import { z } from "zod";
+import { fromZodError } from 'zod-validation-error';
+
 import { logger } from "./logger";
 const print = logger(__filename);
 
@@ -376,6 +378,7 @@ export class MaskConfig {
 
     public parseConfig() {
         // ! need to check if mask.json opened in other tabs 
+        print("parsing !")
 
         if (!vscode.workspace.workspaceFolders) {
             print("No folder opened!");
@@ -393,7 +396,7 @@ export class MaskConfig {
         // if (currentDocument?.uri.fsPath === this.pathMaskJSON) {
         //     this.rawMaskJSON = currentDocument.getText();
         // } else {
-        // }   
+        // }    
 
         this.rawMaskJSON = fs.readFileSync(this.pathMaskJSON, 'utf8');
 
@@ -415,10 +418,18 @@ export class MaskConfig {
         }
 
         // this.maskJSON = this.sourceMaskJSON.data;
+        print(this.sourceMaskJSON.data);
+        const parseResult = ZMaskConfig.safeParse(this.sourceMaskJSON.data);
 
-        this.maskJSON = ZMaskConfig.parse(this.sourceMaskJSON.data) as z.infer<typeof ZMaskConfig>
+        if (parseResult.success) {
+            this.maskJSON = parseResult.data as z.infer<typeof ZMaskConfig>;
+        } else {
+            print((parseResult));
+        }
 
-        console.log(this.maskJSON)
+
+        // print(this.maskJSON)
+
         // const maskDecode = MaskJSON.decode(this.maskJSON);
         // if (maskDecode._tag === "Left") {
         //     let errMsg = "mask.json require keys : \n"

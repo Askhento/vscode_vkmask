@@ -11,12 +11,13 @@
     return Math.round((num + Number.EPSILON) * 100) / 100;
   }
   function hexToRGB(hex, alpha) {
+    console.log(hex);
     if (!hex) return;
     var r = parseFloat((parseInt(hex.slice(1, 3), 16) / 255).toFixed(2)),
       g = parseFloat((parseInt(hex.slice(3, 5), 16) / 255).toFixed(2)),
       b = parseFloat((parseInt(hex.slice(5, 7), 16) / 255).toFixed(2));
 
-    if (alpha) {
+    if (alpha !== undefined) {
       return [r, g, b, alpha];
     } else {
       return [r, g, b];
