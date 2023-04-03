@@ -328,7 +328,7 @@ export class MaskConfig {
     public updateEffects(effectsObject: object[]) {
         if (!this.maskJSON) return;
 
-        const newEffect = effectsObject as t.TypeOf<typeof Effect>[];
+        const newEffect = effectsObject as z.infer<typeof ZBaseEffect>[];
         this.maskJSON.effects = newEffect;
 
         this.writeConfig();
@@ -418,7 +418,7 @@ export class MaskConfig {
         }
 
         // this.maskJSON = this.sourceMaskJSON.data;
-        print(this.sourceMaskJSON.data);
+        // print(this.sourceMaskJSON.data);
         const parseResult = ZMaskConfig.safeParse(this.sourceMaskJSON.data);
 
         if (parseResult.success) {

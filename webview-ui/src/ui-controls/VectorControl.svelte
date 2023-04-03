@@ -7,7 +7,6 @@
 
   // !!! just a hack
   onMount(() => {
-    console.log("vector", value);
     if (value === undefined || value.length === 0) value = params.default;
   });
 

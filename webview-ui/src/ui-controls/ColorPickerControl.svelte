@@ -1,30 +1,57 @@
 <script lang="ts">
+  import { onMount } from "svelte";
+
   export let label, value, params;
 
   let color, alpha;
 
-  if (value === undefined) value = params.default;
-
   // console.log(TextureObject._def.typeName);
-
-  function roundColor(num) {
-    return Math.round((num + Number.EPSILON) * 100) / 100;
+  function componentToHex(c) {
+    var hex = Math.round(c * 255).toString(16);
+    return hex.length == 1 ? "0" + hex : hex;
   }
-  function hexToRGB(hex, alpha) {
-    console.log(hex);
-    if (!hex) return;
-    var r = parseFloat((parseInt(hex.slice(1, 3), 16) / 255).toFixed(2)),
-      g = parseFloat((parseInt(hex.slice(3, 5), 16) / 255).toFixed(2)),
-      b = parseFloat((parseInt(hex.slice(5, 7), 16) / 255).toFixed(2));
 
-    if (alpha !== undefined) {
-      return [r, g, b, alpha];
+  function rgbToHex() {
+    //! have to limit 0 - 1 range
+    color =
+      "#" +
+      componentToHex(value[0]) +
+      componentToHex(value[1]) +
+      componentToHex(value[2]);
+    if (params.alpha !== undefined) alpha = value[3];
+  }
+
+  //   function roundColor(num) {
+  //     return Math.round((num + Number.EPSILON) * 100) / 100;
+  //   }
+  function hexToRGB() {
+    // if (!color) {
+    //     return params.default;
+    // }
+
+    var r = parseFloat((parseInt(color.slice(1, 3), 16) / 255).toFixed(2)),
+      g = parseFloat((parseInt(color.slice(3, 5), 16) / 255).toFixed(2)),
+      b = parseFloat((parseInt(color.slice(5, 7), 16) / 255).toFixed(2));
+
+    console.log("h2rgb", color);
+    if (params.alpha !== undefined && alpha !== undefined) {
+      value = [r, g, b, alpha];
     } else {
-      return [r, g, b];
+      value = [r, g, b];
     }
   }
 
-  $: value = hexToRGB(color, alpha);
+  //
+  //   $: console.log(color, alpha);
+  //   $: console.log(value);
+  $: if (color !== undefined) hexToRGB();
+  $: if (alpha !== undefined) hexToRGB();
+
+  onMount(() => {
+    console.log("mount", value);
+    if (value === undefined || value.length === 0) value = params.default;
+    rgbToHex();
+  });
 </script>
 
 <div class="color-control-wrapper">
