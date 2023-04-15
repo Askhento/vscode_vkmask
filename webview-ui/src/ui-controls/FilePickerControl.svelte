@@ -19,7 +19,7 @@
   {#if label}
     <span class="label">{label}</span>
     <!-- <input class="value" type="text" bind:value /> -->
-
+    <!-- add REd color if file not found in options -->
     <vscode-dropdown
       position="above"
       {value}

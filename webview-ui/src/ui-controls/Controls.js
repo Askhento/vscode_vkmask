@@ -42,28 +42,34 @@ function getCleanedSchema(schema) {
     return schema;
 }
 
-function addType(schema, description) {
-    return schema.transform(value => ({ value, type: description }))
+
+function getInnerZType(schema) {
+    let schemaType = schema._def.typeName;
+    if (schemaType === "ZodDefault" || schemaType === "ZodOptional") {
+        return getInnerZType(schema._def.innerType);
+    } else if (schemaType === "ZodEffects") {     // this should be preprocess, but also transoform and refine
+        return getInnerZType(schema._def.schema);
+    }
+    return schema;
 }
 
 
 
 function parseUIElement(schema) {
-    if (schema._def.typeName === "ZodLiteral") return null; // maybe will add other things to skip
+    if (schema._def.typeName === "ZodLiteral") return null;
 
     const defValue = schema._def.defaultValue ? schema._def.defaultValue() : null;
-    const cleanSchema = getCleanedSchema(schema);
-
+    const cleanSchema = getInnerZType(schema);
+    // console.log(schema)
     const uiTypeName = cleanSchema.description.name;
-    schema = schema.transform(value => ({ value, type: cleanSchema.description.name }))
+    // schema = schema.transform(value => ({ value, type: cleanSchema.description.name })) // ? does it make anything
     let res;
     switch (uiTypeName) {
+        case "union":
+
+            break;
+
         case "object":
-            // res = Object.fromEntries(
-            //     Object.entries(cleanSchema.shape).map(
-            //         ([k, v]) => [k, parseUIElement(v)]
-            //     )
-            // )
             res = Object.fromEntries(
                 Object.entries(cleanSchema.shape).flatMap(
                     ([k, v]) => {

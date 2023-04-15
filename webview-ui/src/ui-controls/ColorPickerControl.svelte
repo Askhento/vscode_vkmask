@@ -1,4 +1,6 @@
 <script lang="ts">
+  // https://github.com/EugeneDae/vscode-mac-color-picker - native color picker for macos
+
   import { onMount } from "svelte";
 
   export let label, value, params;

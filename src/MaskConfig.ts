@@ -6,7 +6,7 @@ import * as t from "io-ts";
 import * as jsonMap from "json-source-map";
 import { jsonPrettyArray } from "./utils/jsonStringify";
 import { report, reportOne } from "io-ts-human-reporter"
-import { ZEffects, ZBaseEffect, ZMaskConfig } from "./ztypes.js"
+import { ZBaseEffect, ZMaskConfig } from "./ztypes.js"
 import { z } from "zod";
 import { fromZodError } from 'zod-validation-error';
 
@@ -23,7 +23,7 @@ export class MaskConfig {
     private sourceMaskJSON: jsonMap.ParseResult | undefined;
     public maskLinePointers: jsonMap.Pointers = {};
     public rawMaskJSON: string = "";
-    private pathMaskJSON: string = "";
+    public pathMaskJSON: string = "";
     public selectedEffectId: number | undefined;
     public editLockCallback: (() => void) | undefined;
     public selectionLockCallback: (() => void) | undefined;
@@ -31,7 +31,6 @@ export class MaskConfig {
     public onTextSelect: () => void = () => { };
 
     constructor() {
-        vscode.window.showInformationMessage('Hello from vkmask!');
 
         // this.refreshEffects();
 
@@ -120,10 +119,16 @@ export class MaskConfig {
     //         document.save().then(saved => {
     //             print("file saved : " + saved);
     //         })
-
     //     })
     // }
 
+    public showConfig() {
+
+        return vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
+            return vscode.window.showTextDocument(document)
+        })
+
+    }
     public showConfigAt(pointer: Record<jsonMap.PointerProp, jsonMap.Location>) {
 
         return vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
@@ -376,27 +381,45 @@ export class MaskConfig {
     //     })
     // }
 
-    public parseConfig() {
-        // ! need to check if mask.json opened in other tabs 
-        print("parsing !")
+    public checkConfigAtPath(dir) {
+        const configPath = path.join(dir, "mask.json");
+        return fs.existsSync(configPath)
+    }
+
+
+    public searchConfigFile() {
+
+        // ? what if more that one folder opened ???
 
         if (!vscode.workspace.workspaceFolders) {
             print("No folder opened!");
-            return false;
+
+            return undefined;
         }
 
         const dir = vscode.workspace.workspaceFolders[0].uri.fsPath;
 
+        if (!this.checkConfigAtPath(dir)) {
+            print("No mask.json at " + dir)
+            vscode.window.showErrorMessage("No mask.json at " + dir)
 
-        this.pathMaskJSON = path.join(dir, "mask.json");
+            return undefined;
+        }
+
+        return path.join(dir, "mask.json");
+    }
+
+    public parseConfig() {
+        print("parsing mask.json")
+
+        this.pathMaskJSON = this.searchConfigFile();
+
+        if (this.pathMaskJSON === undefined) return;
+
         // print("mask.json path : " + this.pathMaskJSON);
 
 
-        // const currentDocument = vscode.window.activeTextEditor?.document;
-        // if (currentDocument?.uri.fsPath === this.pathMaskJSON) {
-        //     this.rawMaskJSON = currentDocument.getText();
-        // } else {
-        // }    
+
 
         this.rawMaskJSON = fs.readFileSync(this.pathMaskJSON, 'utf8');
 
@@ -428,7 +451,7 @@ export class MaskConfig {
         }
 
 
-        // print(this.maskJSON)
+        print(this.maskJSON)
 
         // const maskDecode = MaskJSON.decode(this.maskJSON);
         // if (maskDecode._tag === "Left") {

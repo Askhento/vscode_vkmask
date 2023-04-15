@@ -6,6 +6,8 @@ const print = logger(__filename);
 import { assetWatcher } from "../AssetWatcher";
 import { getUri } from "../utils/getUri";
 import { getNonce } from "../utils/getNonce";
+import { copyRecursiveSync } from "../utils/copyFilesRecursive"
+import path from "path";
 
 /**
  * This class manages the state and behavior of HelloWorld webview panels.
@@ -119,6 +121,19 @@ export class MainSidebarProvider implements WebviewViewProvider {
                         break;
                     }
 
+                case 'openProject':
+                    {
+                        print("received open project command")
+                        this.openProject();
+                        break;
+                    }
+
+                case "createNewProject":
+                    {
+                        print("received create new project")
+                        this.createNewProject();
+                        break;
+                    }
 
             }
         });
@@ -160,12 +175,73 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
             console.log("parsing main!");
             this.maskConfig.parseConfig();
-            this.sendEffects();
+
+            // on init need to show mask.json only!
+            const tabsToClose = vscode.window.tabGroups.all.map(tg => tg.tabs).flat();
+            // ? maybe close only files that are in old project, could be usefull for opened api reference 
+            vscode.window.tabGroups.close(tabsToClose).then(() => {
+                this.maskConfig.showConfig();
+            })
+
+            if (this.maskConfig.pathMaskJSON === undefined) {
+                this.sendShowWelcome();
+            } else {
+                this.sendEffects();
+            }
+
         }, 1000);
 
 
     }
 
+    // this should be moved to extesnion.ts i guess
+    private createNewProject() {
+        // ! need to check if project already there !!!
+
+        const options: vscode.SaveDialogOptions = {
+            saveLabel: 'Create',
+            title: "Create mew vkmask project"
+        };
+
+        vscode.window.showSaveDialog(options).then(async fileUri => {
+            if (fileUri) {
+                console.log("new project folder", fileUri.fsPath)
+                const newProjectDir = fileUri;
+                const sampleProjectDir = vscode.Uri.joinPath(this._extensionUri, "res", "empty-project");
+                // console.log(sampleProjectDir)
+
+                copyRecursiveSync(sampleProjectDir.fsPath, newProjectDir.fsPath);
+                this.changeWorkspaceFolder(newProjectDir)
+            }
+        })
+    }
+
+    private openProject() {
+        // ? need to check if new folder have mask.json
+        const options: vscode.OpenDialogOptions = {
+            canSelectMany: false,
+            openLabel: 'Open',
+            canSelectFiles: false,
+            canSelectFolders: true,
+            title: "Open existing vkmask project"
+        };
+
+        vscode.window.showOpenDialog(options).then(async fileUri => {
+            if (fileUri && fileUri[0]) {
+                print('Selected file: ' + fileUri[0].fsPath);
+                this.changeWorkspaceFolder(fileUri[0])
+            }
+        });
+    }
+
+    private changeWorkspaceFolder(newFolderURI: Uri) {
+        // will close all other workspace folders, but should anyways have only one at a time
+        // ? maybe should call this on init so it is clean which folder I am working on 
+
+        const numFoldersToClose = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders.length : 0;
+        const workspaceName = newFolderURI.fsPath.split(path.sep).pop();
+        vscode.workspace.updateWorkspaceFolders(0, numFoldersToClose, { name: workspaceName, uri: newFolderURI });
+    }
 
     private setupSelectLock() {
         this.maskConfig.selectionLockCallback = () => {
@@ -197,24 +273,19 @@ export class MainSidebarProvider implements WebviewViewProvider {
     }
 
     public sendEffects() {
-        const effects = this.maskConfig.maskJSON?.effects.map((effect, index) => {
-            // print("send effect selected = " + (index === this.maskConfig.selectedEffectId))
-            return {
-                name: effect.name,
-                id: index,
-                disabled: effect.disabled === undefined ? false : effect.disabled,
-                selected: index === this.maskConfig.selectedEffectId,
-                data: effect
-            }
-        });
-
-        if (effects === undefined) return;
-
         if (this._view) {
             print("sending effects to webview test");
             this._view.webview.postMessage({ type: 'updateEffects', effects: this.maskConfig.maskJSON?.effects });
         }
     }
+
+    public sendShowWelcome() {
+        if (this._view) {
+            print("sending show welcome to webview");
+            this._view.webview.postMessage({ type: 'showWelcome' });
+        }
+    }
+
 
     public sendDeselect() {
         if (this._view) {

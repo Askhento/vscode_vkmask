@@ -1,0 +1,20 @@
+{
+  "name": "empty",
+  "preview": "icon.png",
+  "script": "main.as",
+
+  "mouse_input": true,
+
+  "effects": [
+    {
+      "name": "patch",
+      "anchor": "free",
+      "texture": {
+        "color": [1, 1, 1, 1]
+      },
+      "size": [1.0, 2.0]
+    }
+  ],
+
+  "plugins": []
+}

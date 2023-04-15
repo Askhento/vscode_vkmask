@@ -23,30 +23,41 @@
     }
   }
 
-  import { effectNames, effectDefaults, ZEffects } from "../../src/ztypes.js";
+  import { fromZodError } from "zod-validation-error";
+
+  import {
+    effectNames,
+    effectDefaults,
+    ZEffects,
+    EffectParserForUI,
+  } from "../../src/ztypes.js";
   import { flip } from "svelte/animate";
 
   let hovering: any = false;
+  let uiElements;
 
   // console.log(effectNames);
 
-  // Handle messages sent from the extension to the webview
-  function handleMessage(event) {
-    const message = event.data; // The json data that the extension sent
-    console.log(message);
-    switch (message.type) {
-      case "updateEffects": {
-        console.log("main.js : received updatingEffects");
-        updateLock = true;
-        $effects = message.effects;
-        break;
-      }
-      case "deselect": {
-        $selection = undefined;
-        break;
-      }
-    }
-  }
+  //   function handleMessage(event) {
+  //     const message = event.data; // The json data that the extension sent
+  //     console.log(message);
+  //     switch (message.type) {
+  //       case "updateEffects": {
+  //         console.log("main.js : received updatingEffects");
+  //         updateLock = true;
+  //         $effects = message.effects;
+  //         console.log("new effects!", $effects);
+  //         uiElements = EffectParserForUI.safeParse($effects);
+  //         if (!uiElements.success) console.log(fromZodError(uiElements.error));
+  //         console.log("wzp frontend!", uiElements);
+  //         break;
+  //       }
+  //       case "deselect": {
+  //         $selection = undefined;
+  //         break;
+  //       }
+  //     }
+  //   }
 
   const drop = (event, target) => {
     event.dataTransfer.dropEffect = "move";
@@ -132,38 +143,33 @@
   }
 </script>
 
-<svelte:window on:message={handleMessage} />
+<!-- <svelte:window on:message={handleMessage} /> -->
 
 <main>
-  <div class="effect-add-wrapper">
-    <!-- <vscode-button>
-      Add Effect
-      <span slot="start" class="codicon codicon-add" />
-    </vscode-button> -->
-    <vscode-dropdown
-      on:change={(e) => {
-        const effectName = e.target.value;
-        console.log("new effect " + effectName);
-        if (effectName === "Add Effect") return;
-        const newEffect = effectDefaults[effectName];
-        console.log(newEffect);
-        sendAddEffect(newEffect.data);
-        e.target.value = "Add Effect";
-      }}
-    >
-      <vscode-option />
-      {#each effectNames as effectName}
-        <vscode-option>{effectName}</vscode-option>
-      {/each}
-    </vscode-dropdown>
-  </div>
-  <vscode-divider role="presentation" />
+  {#if $effects}
+    <div class="effect-add-wrapper">
+      <vscode-dropdown
+        on:change={(e) => {
+          const effectName = e.target.value;
+          console.log("new effect " + effectName);
+          if (effectName === "Add Effect") return;
+          const newEffect = effectDefaults[effectName];
+          console.log(newEffect);
+          sendAddEffect(newEffect.data);
+          e.target.value = "Add Effect";
+        }}
+      >
+        <vscode-option />
+        {#each effectNames as effectName}
+          <vscode-option>{effectName}</vscode-option>
+        {/each}
+      </vscode-dropdown>
+    </div>
+    <vscode-divider role="presentation" />
 
-  <div class="effect-list-wrapper">
-    {#if $effects}
+    <div class="effect-list-wrapper">
       <ul class="effectsList">
         {#each $effects as effect, index (index)}
-          <!-- <div class="effect-wrapper {effect.disabled ? 'disabled' : ''}"> -->
           <vscode-option
             animate:flip={{ duration: 200 }}
             draggable={true}
@@ -202,13 +208,14 @@
               </vscode-button>
             </span>
           </vscode-option>
-          <!-- </div> -->
         {/each}
       </ul>
-    {:else}
-      <div>Parsing...</div>
-    {/if}
-  </div>
+    </div>
+  {:else}
+    <!-- add copy debug info button -->
+    <div>Something wrong...</div>
+    <vscode-progress-ring />
+  {/if}
 </main>
 
 <style>

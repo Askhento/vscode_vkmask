@@ -14,6 +14,9 @@ import { z } from "zod";
 import { fromZodError } from 'zod-validation-error';
 
 export const uiDescriptions = {
+    none: ({ }) => ({
+        name: 'none'
+    }),
     numberSlider: ({ min, max }) => ({
         name: 'numberSlider',
         min: min,
@@ -67,6 +70,12 @@ export const uiDescriptions = {
     }),
     array: ({ }) => ({
         name: 'array'
+    }),
+    union: ({ }) => ({
+        name: 'union',
+    }),
+    discriminatedUnion: ({ }) => ({
+        name: 'discriminatedUnion',
     }),
 }
 
@@ -211,9 +220,9 @@ export const ZMaterialArray = z.preprocess(
     z.array(z.union([
         ZMaterialAsset,
         ZMaterialObject
-    ])).describe(uiDescriptions.array({}))
+    ]).describe(uiDescriptions.union({}))
+    ).describe(uiDescriptions.array({}))
 );
-
 
 
 // console.log(ZMaterialArray.innerType().element.options[1].description)
@@ -256,28 +265,18 @@ export const ZMaterialArray = z.preprocess(
 
 
 export const ZBaseEffect = z.object({
-    name: ZText,
+    name: ZText.describe(uiDescriptions.none({})),
     tag: ZTags.default(""),
     disabled: ZBool.default(false)
-})
+}).describe(uiDescriptions.object({}))
 
-const ZPatchEffect = ZBaseEffect.extend(
-    {
-        name: z.literal("patch"),
-        anchor: ZFaceAnchor.describe(uiDescriptions.enum({ options: Object.keys(ZFaceAnchor.Values) })).default(ZFaceAnchor.Values.forehead),
-        size: ZArray2D.default([1, 1]),
-        offset: ZArray3D.default([0, 0, 0]),
-        texture: ZTextureObject
-
-    }
-).describe(uiDescriptions.object({}))
 
 
 
 
 const ZFacemodelEffect = ZBaseEffect.extend(
     {
-        name: z.literal("facemodel"),
+        name: z.literal("facemodel").describe(uiDescriptions.none({})),
         mouth: ZBool.default(true),
         eyes: ZBool.default(true),
         position: ZArray3D.default([0, 0, 0]),
@@ -288,10 +287,21 @@ const ZFacemodelEffect = ZBaseEffect.extend(
 ).describe(uiDescriptions.object({}))
 
 
+const ZPatchEffect = ZBaseEffect.extend(
+    {
+        name: z.literal("patch").describe(uiDescriptions.none({})),
+        anchor: ZFaceAnchor.describe(uiDescriptions.enum({ options: Object.keys(ZFaceAnchor.Values) })).default(ZFaceAnchor.Values.forehead),
+        size: ZArray2D.default([1, 1]),
+        offset: ZArray3D.default([0, 0, 0]),
+        texture: ZTextureObject
+
+    }
+).describe(uiDescriptions.object({}))
+
 
 const ZBaseLightEffect = ZBaseEffect.extend(
     {
-        name: z.literal("light"),
+        name: z.literal("light").describe(uiDescriptions.none({})),
         anchor: ZFaceAnchor.describe(uiDescriptions.enum({ options: Object.keys(ZFaceAnchor.Values) })).default(ZFaceAnchor.Values.forehead),
         type: ZLightType.describe(uiDescriptions.enum({ options: Object.keys(ZLightType.Values) })).default(ZLightType.Values.direct),
         color: ZColor.default([1, 1, 1]),
@@ -308,7 +318,7 @@ const ZBaseLightEffect = ZBaseEffect.extend(
 
 const ZBeautifyEffect = ZBaseEffect.extend(
     {
-        name: z.literal("beautify"),
+        name: z.literal("beautify").describe(uiDescriptions.none({})),
         mix: ZNumberSlider.default(0.65)
     }
 ).describe(uiDescriptions.object({}))
@@ -319,7 +329,7 @@ const ZBeautifyEffect = ZBaseEffect.extend(
 
 const ZColorfilterEffect = ZBaseEffect.extend(
     {
-        name: z.literal("colorfilter"),
+        name: z.literal("colorfilter").describe(uiDescriptions.none({})),
         intensity: ZNumberSlider.default(0.75),
         lookup: ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })).default(AssetTypes.texture.default)
     }
@@ -344,36 +354,83 @@ const ZColorfilterEffect = ZBaseEffect.extend(
 
 const ZModel3dEffect = ZBaseEffect.extend(
     {
-        name: z.literal("model3d"),
+        name: z.literal("model3d").describe(uiDescriptions.none({})),
         anchor: ZFaceAnchor.describe(uiDescriptions.enum({ options: Object.keys(ZFaceAnchor.Values) })).default(ZFaceAnchor.Values.forehead),
         model: ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.model3d.extensions })).default(AssetTypes.model3d.default),
-        material: ZMaterialArray,
+        material: ZMaterialArray.default([AssetTypes.material.default]),
         position: ZArray3D.default([0, 0, 0]),
         rotation: ZArray3D.default([0, 0, 0]),
         scale: ZArray3D.default([1, 1, 1]),
     }
 ).describe(uiDescriptions.object({}))
 
-// const ZLightEffect = z.union([z.discriminatedUnion("type", [
-//     z.object({
-//         type: z.literal("point"),
-//         position: Array3D.default([0, 0, 0]),
-//         anchor: ZFaceAnchor.default(ZFaceAnchor.Values.forehead),
-//         range: z.number().default(500.0)
 
-//     }),
 
-//     z.object({
-//         type: z.literal("direct"),
-//         direction: Array3D.default([0, 0, 1]),
-//         rotation: Array3D.default([0, 0, 0])
-//     }),
+// const ZBaseTest = ZBaseEffect.extend(
+//     {
+//         name: z.literal("light"),
+//         color: ZColor.default([1, 1, 1]),
+//         brightness: ZNumberSlider.default(1.0),
+//         specular_intensity: ZNumberSlider.default(1.0)
+//     }
+// )
 
-//     z.object({
-//         type: z.literal("ambient"),
-//     })
-// ]), ZBaseLightEffect
-// ])
+const ZLightEffect = (z.union([
+    z.object({
+        name: z.literal("light"),
+        color: ZColor.default([1, 1, 1]),
+        brightness: ZNumberSlider.default(1.0),
+        specular_intensity: ZNumberSlider.default(1.0),
+        type: z.literal("point"),
+        position: ZArray3D.default([0, 0, 0]),
+        anchor: ZFaceAnchor.describe(uiDescriptions.enum({ options: Object.keys(ZFaceAnchor.Values) })).default(ZFaceAnchor.Values.forehead),
+        range: z.number().default(500.0)
+    }).describe(uiDescriptions.object({})),
+
+    z.object({
+        name: z.literal("light"),
+        color: ZColor.default([1, 1, 1]),
+        brightness: ZNumberSlider.default(1.0),
+        specular_intensity: ZNumberSlider.default(1.0),
+        type: z.literal("direct"),
+        direction: ZArray3D.default([0, 0, 1]),
+        rotation: ZArray3D.default([0, 0, 0])
+    }).describe(uiDescriptions.object({})),
+
+    z.object({
+        name: z.literal("light"),
+        color: ZColor.default([1, 1, 1]),
+        brightness: ZNumberSlider.default(1.0),
+        specular_intensity: ZNumberSlider.default(1.0),
+        type: z.literal("ambient"),
+    }).describe(uiDescriptions.object({}))
+])
+).describe(uiDescriptions.union({}))
+
+
+// console.log(ZLightEffect.parse({ name: "light", type: "point" }))
+
+// console.log(ZLightEffect.description)
+
+const testLight = {
+    "name": "light",
+    "tag": "1233",
+    "disabled": true,
+    "anchor": "right_eye",
+    "type": "ambient",
+    "color": [0.88, 0.14, 0.14],
+    "brightness": 0.45,
+    "specular_intensity": 0.25,
+    "range": 1500,
+    "position": [0.0, 0.0, 13.0],
+    "direction": [0.0, 0.0, 1.0],
+    "rotation": [0.0, 0.0, 0.0]
+}
+
+
+// console.log(ZLightEffect.parse(testLight))
+
+
 
 
 // const EffectTypes =
@@ -391,19 +448,22 @@ export const EffectsList = [
 
 
 
-export const ZEffects = z.discriminatedUnion("name", [...EffectsList]);
+export const ZEffect = z.discriminatedUnion("name", [...EffectsList]).describe(uiDescriptions.discriminatedUnion({}))
+export const ZEffects = ZEffect.array().describe(uiDescriptions.array({}))
 // console.log(ZEffects.safeParse({ name: "facemodel" }))
 
 
 
-export const effectNames = ZEffects.options.map(val => {
+export const effectNames = ZEffect.options.map(val => {
+    // if (val.options) val = val.options[0]
+    // console.log(val)
     const name = val.shape.name;
     return name.value
 });
 // console.log(effectNames);
 export const effectDefaults = {};
 effectNames.forEach((name, i) => {
-    const result = ZEffects.safeParse({ name: name });
+    const result = ZEffect.safeParse({ name: name });
 
     if (result.success) {
         // console.log("ztypes data");
@@ -439,49 +499,135 @@ effectNames.forEach((name, i) => {
 // })
 
 export const ZMaskConfig = z.object({
-    name: z.string(),
+    name: z.string().default("defaultName"),
     user_hint: z.string().default(""),
     facemodel_version: z.number().default(0),
     mouse_input: z.boolean().default(false),
     preview: z.string().default(""),
     script: z.string().default("main.as"),
-    effects: ZEffects.array(),
+    effects: ZEffects.default([]),
     plugins: z.array(z.object({}).passthrough()).default([])
 })
 
-// ZTextureObject.innerType().shape.
+
+// I don't know the order of zod calls so i use recursive calls
+function getInnerZType(schema) {
+    let schemaType = schema._def.typeName;
+    if (schemaType === "ZodDefault" || schemaType === "ZodOptional") {
+        return getInnerZType(schema._def.innerType);
+    } else if (schemaType === "ZodEffects") {     // this should be preprocess, but also transoform and refine
+        return getInnerZType(schema._def.schema);
+    }
+    return schema;
+}
 
 
 
+function addTypeToSchema(schema) {
+    // console.log("schema ", schema)
+
+    // peal off defaults, transforms etc so that I care only about ui 
+    schema = getInnerZType(schema);
+
+    let description = schema._def.description;
+
+    // console.log("schema2 ", schema)
+    // console.log("desc", description)
+    let res = schema;
+    switch (description.name) {
+        case "object":
+            // if (k === "disabled") return [];
+            // console.log("in object")
+            res = z.object(
+                Object.fromEntries(
+                    Object.entries(schema.shape).flatMap(
+                        ([k, v]) => {
+                            return [[k, addTypeToSchema(v)]]
+                        }
+                    )
+                )).transform(value => ({ value, uiData: description }))
+            break;
+
+        case "array":
+            // schema.element is inner type for arrays
+            res = z.array(addTypeToSchema(schema.element)).transform(value => ({ value, uiData: description }))
+            break;
+
+        case "union":
+        case "discriminatedUnion":
+            // seems like unions are different and should not be included in ui
+            res = z.union(schema.options.map(elem => addTypeToSchema(elem)))
+            break;
+
+        // case "discriminatedUnion":
+        //     // seems like unions are different and should not be included in ui
+        //     console.log("in desc union", schema.discriminator)
+        //     // res = z.discriminatedUnion(schema.discriminator, schema.options.map(elem => addTypeToSchema(elem)))
+        //     // schema.options = schema.options.map(elem => addTypeToSchema(elem))
+        //     for (let i = 0; i < schema.options.length; i++) {
+        //         const name = schema.options[i].shape.name
+        //         schema.options[i] = addTypeToSchema(schema.options[i]);
+        //         schema.optionsMap[name] = schema.options[i]
+        //     }
+        //     // res = schema
+        //     break;
+
+
+        default:
+            res = res.transform(value => ({ value, uiData: description }))
+            break;
+    }
+    return res;
+}
+
+
+const testModel3d = {
+    "name": "model3d",
+    "tag": "12312;free",
+    "disabled": false,
+    "anchor": "forehead",
+    "model": "Models/Shine.mdl",
+    "material": [
+        "Materials/DefaultGrey.xml",
+        {
+            "textures": "Sometexire.png",
+            parameters: [1, 0, 0, 0]
+        }
+    ],
+    "position": [0.0, 0.0, 0.0],
+    "rotation": [0.0, 0.0, 0.0],
+    "scale": [1.0, 1.0, 1.0]
+}
+
+
+// console.log("mat array", ZMaterialArray._def)
+// console.log("desc", ZModel3dEffect.shape.rotation)
+// console.log(ZModel3dEffect.shape.anchor)
 
 
 
+console.log(ZEffects)
+export const EffectParserForUI = addTypeToSchema(ZEffects) //z.discriminatedUnion("name", EffectsList.map(effect => addTypeToSchema(effect))).array()
 
+// console.log(EffectParseForUI)
 
-// Object.keys(ZEffects.options[0].shape).map(val => { console.log(val) })
+console.log(EffectParserForUI.parse(ZEffects.parse(
+    [{
+        "name": "facemodel",
+        "tag": "1231",
+        "disabled": true,
+        "mouth": true,
+        "eyes": true,
+        "position": [58.0, 10.0, 0.0],
+        "rotation": [0.0, 0.0, 0.0],
+        "scale": [1.0, 1.0, 1.0],
+        "texture": {
+            "diffuse": "Textures/Box.png",
+            "normal": "Textures/Beautify/FaceBlurMask1.png",
+            "color": [0.48, 0.14, 0.14, 0.82]
+        }
 
-// export const res = ZEffects.safeParse({
-//     name: "facemodel",
-//     size: [1, 1],
-//     position: [1, 2, 3],
-//     texture: {
-//         diffuse: "someTex",
-//         color: [1, 2, 3, 4]
-//     }
-// })
+    }]
+)))
 
-
-
-// if (!res.success) {
-//     // handle error then return
-//     console.log("Error ")
-//     console.log(fromZodError(res.error));
-
-// } else {
-//     // do something
-//     console.log("success");
-//     res.data
-//     console.log(res.data);
-
-// }
 

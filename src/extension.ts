@@ -37,6 +37,7 @@ export function activate(context: vscode.ExtensionContext) {
     // "workbench.action.movePanelToSecondarySideBar",
     // workbench.action.openView
 
+    // ! does this thing still required???
     const hotReloader = new HotReload(context.extensionUri);
     hotReloader.copyFilesToMask();
 

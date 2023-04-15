@@ -17,8 +17,8 @@
 </script>
 
 <div class="inspector-wrapper">
-  <div class="inspector-name">Inspector Panel</div>
   {#if $selection}
+    <div class="inspector-name">Inspector Panel</div>
     {#if $selection.type === "effect"}
       <!-- <div>{console.log("controls from inspector")}</div>
       <div>
