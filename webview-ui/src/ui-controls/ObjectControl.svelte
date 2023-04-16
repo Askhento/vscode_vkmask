@@ -1,26 +1,4 @@
 <script context="module">
-  //   import {
-  //     effectNames,
-  //     effectDefaults,
-  //     uiDescriptions,
-  //   } from "../../../src/ztypes.js";
-
-  //   import TextControl from "./TextControl.svelte";
-  //   import NumberSliderControl from "./NumberSliderControl.svelte";
-  //   import SwitchControl from "./SwitchControl.svelte";
-  //   import FilePickerControl from "./FilePickerControl.svelte";
-  //   import OptionsControl from "./OptionsControl.svelte";
-  //   import ColorPickerControl from "./ColorPickerControl.svelte";
-
-  //   const uiControlsMap = {
-  //     [uiDescriptions.bool({}).name]: SwitchControl,
-  //     [uiDescriptions.numberSlider({}).name]: NumberSliderControl,
-  //     [uiDescriptions.filepath({}).name]: TextControl,
-  //     [uiDescriptions.text({}).name]: TextControl,
-  //     [uiDescriptions.enum({}).name]: OptionsControl,
-  //     [uiDescriptions.color({}).name]: ColorPickerControl,
-  //     [uiDescriptions.colorAlpha({}).name]: ColorPickerControl,
-  //   };
 </script>
 
 <script>
@@ -35,30 +13,29 @@
   }
 </script>
 
-<span class:expanded on:click={toggle}>{label}</span>
-{#if expanded}
-  {#each Object.entries(uiElements) as [key, data]}
-    <div>
-      {#if data !== null}
-        {#if data._type === "object"}
-          <svelte:self
+<div class="constrol-wrapper">
+  <!-- <span class:expanded on:click={toggle}>{label}</span> -->
+  <span class:expanded on:click={toggle}
+    >{label}
+    <i class="codicon codicon-triangle-{expanded ? 'down' : 'right'}" />
+  </span>
+  {#if expanded}
+    {#each Object.entries(uiElements) as [key, data]}
+      <div>
+        {#if data !== null}
+          <svelte:component
+            this={data.uiElement}
             expanded={true}
             bind:value={value[key]}
             bind:label={key}
-            uiElements={uiElements[key].uiData}
-          />
-        {:else if data.uiData !== null}
-          <svelte:component
-            this={data.uiData.uiElement}
-            bind:label={key}
-            params={data.uiData.params || {}}
-            bind:value={value[key]}
+            params={data.uiData}
+            uiElements={data.value}
           />
         {/if}
-      {/if}
-    </div>
-  {/each}
-{/if}
+      </div>
+    {/each}
+  {/if}
+</div>
 
 <style>
   /* span {

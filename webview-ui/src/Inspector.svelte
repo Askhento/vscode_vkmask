@@ -13,7 +13,10 @@
   import { vscode } from "./utils/vscode";
 
   import ObjectControl from "./ui-controls/ObjectControl.svelte";
-  import { uiControls } from "./ui-controls/Controls.js";
+  import { uiControls, EffectParserForUI } from "./ui-controls/Controls.js";
+
+  let uiElements = EffectParserForUI.parse($effects);
+  $: console.log("inspector tried!", uiElements);
 </script>
 
 <div class="inspector-wrapper">
@@ -28,8 +31,9 @@
         expanded={true}
         bind:value={$effects[$selection.id]}
         label={$effects[$selection.id].name}
-        uiElements={uiControls[$effects[$selection.id].name].uiData}
+        uiElements={uiElements.value[$selection.id].value}
       />
+      <!-- uiElements={uiControls[$effects[$selection.id].name].uiData} -->
     {/if}
   {/if}
 </div>

@@ -8,16 +8,14 @@
     params;
 
   let extensions;
-  // ,
-  // type,
-  // files;
   $: extensions = new Set(params.extensions);
-  //   $: console.log(text);
+  //   $: console.log("files to show ", extensions, $assets);
 </script>
 
-<div class="text-control-wrapper">
-  {#if label}
+<div class="control-wrapper">
+  {#if label !== undefined}
     <span class="label">{label}</span>
+
     <!-- <input class="value" type="text" bind:value /> -->
     <!-- add REd color if file not found in options -->
     <vscode-dropdown
@@ -41,14 +39,14 @@
   * {
     margin: 5px;
   }
-  .text-control-wrapper {
+  .control-wrapper {
     position: relative;
     display: flex;
   }
 
-  select.options {
+  /* select.options {
     flex-grow: 1;
-  }
+  } */
   span.label {
     flex-grow: 1;
   }

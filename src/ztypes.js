@@ -109,11 +109,11 @@ const AssetTypes = {
         extensions: ["xml"]
     },
     renderPath: {
-        default: undefined,
+        default: "",
         extensions: ["xml"]
     },
     animationClip: {
-        default: undefined,
+        default: "",
         extensions: ["ani"]
     },
     model3d: {
@@ -132,6 +132,7 @@ const ZText = z.string().describe(uiDescriptions.text({}))
 const ZTags = z.string().describe(uiDescriptions.tags({}))
 
 const ZTextureAsset = ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions }))
+const ZRenderPath = ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.renderPath.extensions }))
 
 // export const ZTextureObject = z.union(
 //     [
@@ -156,13 +157,10 @@ function isObject(val) {
 }
 
 
-
-
-
-
 export const ZTextureObject = z.preprocess(
     (val) => {
         if (isObject(val)) {
+            // keep only diffuse not texture in object
             if (val.hasOwnProperty("texture")) {
                 val["diffuse"] = val["texture"];
                 delete val["texture"];
@@ -179,8 +177,8 @@ export const ZTextureObject = z.preprocess(
         diffuse: ZTextureAsset.default(AssetTypes.texture.default),
         // !!! probably will miss texture property
         // texture: ZTextureAsset,
-        normal: ZTextureAsset.optional(),
-        color: ZColorAlpha.default([1.0, 1.0, 1.0, 1.0])
+        normal: ZTextureAsset.default(""),
+        color: ZColorAlpha.default([1.0, 1.0, 1.0, 1.0]),
     }).describe(uiDescriptions.object({}))
 )
 
@@ -293,8 +291,8 @@ const ZPatchEffect = ZBaseEffect.extend(
         anchor: ZFaceAnchor.describe(uiDescriptions.enum({ options: Object.keys(ZFaceAnchor.Values) })).default(ZFaceAnchor.Values.forehead),
         size: ZArray2D.default([1, 1]),
         offset: ZArray3D.default([0, 0, 0]),
-        texture: ZTextureObject
-
+        texture: ZTextureObject,
+        pass: ZRenderPath.default(AssetTypes.renderPath.default)
     }
 ).describe(uiDescriptions.object({}))
 
@@ -539,126 +537,5 @@ export const ZMaskConfig = z.object({
     effects: ZEffects.default([]),
     plugins: z.array(z.object({}).passthrough()).default([])
 })
-
-
-// I don't know the order of zod calls so i use recursive calls
-function getInnerZType(schema) {
-    let schemaType = schema._def.typeName;
-    if (schemaType === "ZodDefault" || schemaType === "ZodOptional") {
-        return getInnerZType(schema._def.innerType);
-    } else if (schemaType === "ZodEffects") {     // this should be preprocess, but also transoform and refine
-        return getInnerZType(schema._def.schema);
-    }
-    return schema;
-}
-
-
-
-function addTypeToSchema(schema) {
-    // console.log("schema ", schema)
-
-    // peal off defaults, transforms etc so that I care only about ui 
-    schema = getInnerZType(schema);
-
-    let description = schema._def.description;
-
-    // console.log("schema2 ", schema)
-    // console.log("desc", description)
-    let res = schema;
-    switch (description.name) {
-        case "object":
-            // if (k === "disabled") return [];
-            // console.log("in object")
-            res = z.object(
-                Object.fromEntries(
-                    Object.entries(schema.shape).flatMap(
-                        ([k, v]) => {
-                            return [[k, addTypeToSchema(v)]]
-                        }
-                    )
-                )).transform(value => ({ value, uiData: description }))
-            break;
-
-        case "array":
-            // schema.element is inner type for arrays
-            res = z.array(addTypeToSchema(schema.element)).transform(value => ({ value, uiData: description }))
-            break;
-
-        case "union":
-        case "discriminatedUnion":
-            // seems like unions are different and should not be included in ui
-            res = z.union(schema.options.map(elem => addTypeToSchema(elem)))
-            break;
-
-        // case "discriminatedUnion":
-        //     // seems like unions are different and should not be included in ui
-        //     console.log("in desc union", schema.discriminator)
-        //     // res = z.discriminatedUnion(schema.discriminator, schema.options.map(elem => addTypeToSchema(elem)))
-        //     // schema.options = schema.options.map(elem => addTypeToSchema(elem))
-        //     for (let i = 0; i < schema.options.length; i++) {
-        //         const name = schema.options[i].shape.name
-        //         schema.options[i] = addTypeToSchema(schema.options[i]);
-        //         schema.optionsMap[name] = schema.options[i]
-        //     }
-        //     // res = schema
-        //     break;
-
-
-        default:
-            res = res.transform(value => ({ value, uiData: description }))
-            break;
-    }
-    return res;
-}
-
-
-const testModel3d = {
-    "name": "model3d",
-    "tag": "12312;free",
-    "disabled": false,
-    "anchor": "forehead",
-    "model": "Models/Shine.mdl",
-    "material": [
-        "Materials/DefaultGrey.xml",
-        {
-            "textures": "Sometexire.png",
-            parameters: [1, 0, 0, 0]
-        }
-    ],
-    "position": [0.0, 0.0, 0.0],
-    "rotation": [0.0, 0.0, 0.0],
-    "scale": [1.0, 1.0, 1.0]
-}
-
-
-// console.log("mat array", ZMaterialArray._def)
-// console.log("desc", ZModel3dEffect.shape.rotation)
-// console.log(ZModel3dEffect.shape.anchor)
-
-
-
-console.log(ZEffects)
-export const EffectParserForUI = addTypeToSchema(ZEffects) //z.discriminatedUnion("name", EffectsList.map(effect => addTypeToSchema(effect))).array()
-
-// console.log(EffectParseForUI)
-
-console.log(EffectParserForUI.parse(ZEffects.parse(
-    [{
-        "name": "facemodel",
-        "tag": "1231",
-        "disabled": true,
-        "mouth": true,
-        "eyes": true,
-        "position": [58.0, 10.0, 0.0],
-        "rotation": [0.0, 0.0, 0.0],
-        "scale": [1.0, 1.0, 1.0],
-        "texture": {
-            "diffuse": "Textures/Box.png",
-            "normal": "Textures/Beautify/FaceBlurMask1.png",
-            "color": [0.48, 0.14, 0.14, 0.82]
-        }
-
-    }]
-)))
 
 

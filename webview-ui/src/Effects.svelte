@@ -29,7 +29,6 @@
     effectNames,
     effectDefaults,
     ZEffects,
-    EffectParserForUI,
   } from "../../src/ztypes.js";
   import { flip } from "svelte/animate";
 

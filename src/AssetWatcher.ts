@@ -32,7 +32,7 @@ class AssetWatcher extends EventEmitter {
         await vscode.workspace.findFiles("**").then((res) => {
             this.assets = res.map(obj => ({
                 path: this.getRelative(obj.fsPath),
-                type: "empty"
+                type: "empty_just_testing"
             }))
 
             print(this.assets);
