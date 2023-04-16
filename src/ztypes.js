@@ -336,20 +336,6 @@ const ZColorfilterEffect = ZBaseEffect.extend(
 ).describe(uiDescriptions.object({}))
 
 
-// {
-//     "name": "model3d",
-//     "anchor": "forehead",
-//     "model": "Models/Cap.mdl",
-//     "material": {
-//         "technique": "Techniques/DiffUnlit.xml",
-//         "textures": {
-//             "diffuse": "Textures/Cap_diffuse.png"
-//         }
-//     },
-//     "position": [0, 45, 10],
-//     "rotation": [10, 0, 0],
-//     "scale": [28, 28, 28]
-// }
 
 
 const ZModel3dEffect = ZBaseEffect.extend(
@@ -357,6 +343,19 @@ const ZModel3dEffect = ZBaseEffect.extend(
         name: z.literal("model3d").describe(uiDescriptions.none({})),
         anchor: ZFaceAnchor.describe(uiDescriptions.enum({ options: Object.keys(ZFaceAnchor.Values) })).default(ZFaceAnchor.Values.forehead),
         model: ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.model3d.extensions })).default(AssetTypes.model3d.default),
+        material: ZMaterialArray.default([AssetTypes.material.default]),
+        position: ZArray3D.default([0, 0, 0]),
+        rotation: ZArray3D.default([0, 0, 0]),
+        scale: ZArray3D.default([1, 1, 1]),
+    }
+).describe(uiDescriptions.object({}))
+
+
+
+const ZPlaneEffect = ZBaseEffect.extend(
+    {
+        name: z.literal("plane").describe(uiDescriptions.none({})),
+        anchor: ZFaceAnchor.describe(uiDescriptions.enum({ options: Object.keys(ZFaceAnchor.Values) })).default(ZFaceAnchor.Values.forehead),
         material: ZMaterialArray.default([AssetTypes.material.default]),
         position: ZArray3D.default([0, 0, 0]),
         rotation: ZArray3D.default([0, 0, 0]),
@@ -408,6 +407,8 @@ const ZLightEffect = (z.union([
 ).describe(uiDescriptions.union({}))
 
 
+
+
 // console.log(ZLightEffect.parse({ name: "light", type: "point" }))
 
 // console.log(ZLightEffect.description)
@@ -432,17 +433,47 @@ const testLight = {
 
 
 
+const ZLiquifiedWarpEffect = ZBaseEffect.extend(
+    {
+        name: z.literal("liquifiedwarp").describe(uiDescriptions.none({})),
+        progress: ZNumberSlider.default(1.0)
+    }
+).describe(uiDescriptions.object({}))
 
-// const EffectTypes =
 
-// export const EffectsMap = {
-//     "facemodel": ZFacemodelEffect,
-//     "patch": ZPatchEffect,
-//     "light": ZBaseLightEffect
-// }
+
+
+const ZPostEffectType = z.enum([
+    "blur",
+    "dispersion",
+    "glow",
+    "noise",
+    "sharpen"
+])
+
+const ZPostEffectEffect = ZBaseEffect.extend(
+    {
+        name: z.literal("posteffect").describe(uiDescriptions.none({})),
+        intensity: ZNumberSlider.default(1.0),
+        type: ZPostEffectType.describe(uiDescriptions.enum({ options: Object.keys(ZPostEffectType.Values) })).default(ZPostEffectType.Values.sharpen),
+
+    }
+).describe(uiDescriptions.object({}))
+
+
+// "name": "liquifiedwarp",
+// "progress": 0.8,
 
 export const EffectsList = [
-    ZFacemodelEffect, ZPatchEffect, ZBaseLightEffect, ZBeautifyEffect, ZColorfilterEffect, ZModel3dEffect
+    ZFacemodelEffect,
+    ZPlaneEffect,
+    ZModel3dEffect,
+    ZPatchEffect,
+    ZBaseLightEffect,
+    ZBeautifyEffect,
+    ZLiquifiedWarpEffect,
+    ZColorfilterEffect,
+    ZPostEffectEffect
 ]
 
 
