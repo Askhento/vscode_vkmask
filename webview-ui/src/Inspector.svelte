@@ -15,7 +15,8 @@
   import ObjectControl from "./ui-controls/ObjectControl.svelte";
   import { uiControls, EffectParserForUI } from "./ui-controls/Controls.js";
 
-  let uiElements = EffectParserForUI.parse($effects);
+  let uiElements; //= EffectParserForUI.parse($effects);
+  $: uiElements = EffectParserForUI.parse($effects);
   $: console.log("inspector tried!", uiElements);
 </script>
 

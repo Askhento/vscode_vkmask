@@ -19,33 +19,38 @@
       Create new project
       <span slot="start" class="codicon codicon-add" />
     </vscode-button> -->
-  {#if expanded}
-    {#if uiElements}
-      {#each uiElements as data, index}
-        <!-- {@debug data, value} -->
-        <!-- <svelte:component
-                this={data.uiElement}
-                expanded={true}
-                bind:value={value[index]}
-                bind:label={index}
-                params={data.uiData}
-                uiElements={data.value}
-              /> -->
-
-        <svelte:component
-          this={data.uiElement}
-          expanded={true}
-          bind:value={value[index]}
-          label={"index" + index}
-          params={data.uiData}
-          uiElements={data.value}
-        />
-      {/each}
+  <div class="elements-wrapper">
+    {#if expanded}
+      {#if uiElements}
+        {#each uiElements as data, index}
+          <!-- {@debug data, value} -->
+          <!-- <svelte:component
+                    this={data.uiElement}
+                    expanded={true}
+                    bind:value={value[index]}
+                    bind:label={index}
+                    params={data.uiData}
+                    uiElements={data.value}
+                  /> -->
+          <svelte:component
+            this={data.uiElement}
+            expanded={true}
+            bind:value={value[index]}
+            label={"index" + index}
+            params={data.uiData}
+            uiElements={data.value}
+          />
+        {/each}
+      {/if}
     {/if}
-  {/if}
+  </div>
 </div>
 
 <style>
+  .elements-wrapper {
+    padding: 0.2em 0 0 0.5em;
+    margin: 0 0 0 0.5em;
+  }
   /* span {
     padding: 0 0 0 1.5em;
     background: url(tutorial/icons/folder.svg) 0 0.1em no-repeat;

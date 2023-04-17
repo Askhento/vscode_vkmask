@@ -2,6 +2,7 @@
   // https://github.com/EugeneDae/vscode-mac-color-picker - native color picker for macos
 
   import { onMount } from "svelte";
+  import NumberSliderControl from "./NumberSliderControl.svelte";
 
   export let label, value, params;
 
@@ -62,14 +63,19 @@
     <!-- <span class="color">{value}</span> -->
     <input class="color" type="color" bind:value={color} />
     {#if params.alpha}
-      <input
+      <NumberSliderControl
+        label={"alpha"}
+        bind:value={alpha}
+        params={{ min: 0, max: 1 }}
+      />
+      <!-- <input
         class="alpha"
         type="range"
         bind:value={alpha}
         min="0"
         max="1"
         step="0.02"
-      />
+      /> -->
     {/if}
   {/if}
 </div>

@@ -25,38 +25,11 @@
 
   import { fromZodError } from "zod-validation-error";
 
-  import {
-    effectNames,
-    effectDefaults,
-    ZEffects,
-  } from "../../src/ztypes.js";
+  import { effectNames, effectDefaults, ZEffects } from "../../src/ztypes.js";
   import { flip } from "svelte/animate";
 
   let hovering: any = false;
   let uiElements;
-
-  // console.log(effectNames);
-
-  //   function handleMessage(event) {
-  //     const message = event.data; // The json data that the extension sent
-  //     console.log(message);
-  //     switch (message.type) {
-  //       case "updateEffects": {
-  //         console.log("main.js : received updatingEffects");
-  //         updateLock = true;
-  //         $effects = message.effects;
-  //         console.log("new effects!", $effects);
-  //         uiElements = EffectParserForUI.safeParse($effects);
-  //         if (!uiElements.success) console.log(fromZodError(uiElements.error));
-  //         console.log("wzp frontend!", uiElements);
-  //         break;
-  //       }
-  //       case "deselect": {
-  //         $selection = undefined;
-  //         break;
-  //       }
-  //     }
-  //   }
 
   const drop = (event, target) => {
     event.dataTransfer.dropEffect = "move";
@@ -130,6 +103,7 @@
 
   function sendAddEffect(object) {
     $effects.unshift(object);
+
     $effects = $effects;
     // vscode.postMessage({ type: "effectAdd", value: object });
   }

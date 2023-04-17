@@ -5,10 +5,23 @@
 
   let step = 0.01,
     sliderValue = value;
-  // $: console.log(value);
+  $: console.log("from slider", params);
   function onSliderUp() {
     value = sliderValue;
   }
+
+  function onEdit(target) {
+    const newValue = target.innerText;
+    target.blur();
+
+    if (isNaN(newValue)) {
+      value = sliderValue;
+      return;
+    }
+    value = parseFloat(newValue);
+    sliderValue = value;
+  }
+  // !!! check if min max exist
   $: step = (params.max - params.min) / 20.0;
 </script>
 
@@ -16,7 +29,15 @@
   {#if label}
     <span class="label">{label}</span>
     <span class="control-wrapper">
-      <span class="number">{sliderValue}</span>
+      <span
+        class="number"
+        contenteditable
+        on:keydown={(e) => {
+          if (e.key === "Enter") {
+            onEdit(e.target);
+          }
+        }}>{value}</span
+      >
       <input
         class="slider"
         type="range"
@@ -49,6 +70,7 @@
   span.number {
     display: block;
     /* margin-left: auto; */
+    max-height: 1em;
     text-align: end;
   }
   span.label {

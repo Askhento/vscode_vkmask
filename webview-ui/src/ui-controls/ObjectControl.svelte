@@ -19,25 +19,32 @@
     >{label}
     <i class="codicon codicon-triangle-{expanded ? 'down' : 'right'}" />
   </span>
-  {#if expanded}
-    {#each Object.entries(uiElements) as [key, data]}
-      <div>
-        {#if data !== null}
-          <svelte:component
-            this={data.uiElement}
-            expanded={true}
-            bind:value={value[key]}
-            bind:label={key}
-            params={data.uiData}
-            uiElements={data.value}
-          />
-        {/if}
-      </div>
-    {/each}
-  {/if}
+  <div class="elements-wrapper">
+    {#if expanded}
+      {#each Object.entries(uiElements) as [key, data]}
+        <div>
+          {#if data !== null}
+            <svelte:component
+              this={data.uiElement}
+              expanded={true}
+              bind:value={value[key]}
+              bind:label={key}
+              params={data.uiData}
+              uiElements={data.value}
+            />
+          {/if}
+        </div>
+      {/each}
+    {/if}
+  </div>
 </div>
 
 <style>
+  .elements-wrapper {
+    padding: 0.2em 0 0 0.5em;
+    margin: 0 0 0 0.5em;
+  }
+
   /* span {
     padding: 0 0 0 1.5em;
     background: url(tutorial/icons/folder.svg) 0 0.1em no-repeat;
@@ -47,6 +54,7 @@
     min-height: 1em;
     display: inline-block;
   }
+
 
   .expanded {
     background-image: url(tutorial/icons/folder-open.svg);

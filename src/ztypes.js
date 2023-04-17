@@ -81,7 +81,7 @@ export const uiDescriptions = {
 
 
 
-const ZNumberSlider = z.number().describe({ name: 'numberSlider', min: 0, max: 1 });
+const ZNumberSlider = z.number().describe(uiDescriptions.numberSlider({ min: 0, max: 100 }));
 
 const ZBool = z.boolean().describe(uiDescriptions.bool({}));
 const ZArray2D = z.number().array().length(2, { message: "Array size must be 2" }).describe(uiDescriptions.array2d({}));
@@ -131,6 +131,20 @@ const ZAsset = z.string().describe(uiDescriptions.filepath({}));
 const ZText = z.string().describe(uiDescriptions.text({}))
 const ZTags = z.string().describe(uiDescriptions.tags({}))
 
+const ZVisibleType = z.enum([
+    "always",
+
+    "face",
+    "animation",
+    "mouth_open"
+]);
+
+const ZPatchFitMode = z.enum([
+    "none",
+    "crop",
+    "pad"
+])
+
 const ZTextureAsset = ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions }))
 const ZRenderPath = ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.renderPath.extensions }))
 
@@ -156,6 +170,32 @@ function isObject(val) {
         val !== null);
 }
 
+const ZBlendModes = z.enum([
+    "replace",
+    "alpha",
+    "add",
+    "addalpha",
+    "Multiply",
+    "Lighten",
+    "Darken",
+    "LinearLight",
+    "Screen",
+    "Overlay",
+    "SoftLight",
+    "SoftLight2",
+    "ColorDodge",
+    "ColorBurn",
+    "VividLight",
+    "PinLight",
+    "HardMix",
+    "Difference",
+    "Exclusion",
+    "Hue",
+    "Saturаtion",
+    "Color",
+    "Luminosity"
+])
+
 
 export const ZTextureObject = z.preprocess(
     (val) => {
@@ -179,6 +219,11 @@ export const ZTextureObject = z.preprocess(
         // texture: ZTextureAsset,
         normal: ZTextureAsset.default(""),
         color: ZColorAlpha.default([1.0, 1.0, 1.0, 1.0]),
+        lit: ZBool.default(false),
+        blend_mode: ZBlendModes.describe(uiDescriptions.enum({ options: Object.keys(ZBlendModes.Values) })).default(ZBlendModes.Values.replace),
+        u_transform: ZArray3D.default([1, 0, 0]),
+        v_transform: ZArray3D.default([0, 1, 0]),
+        render_order: ZNumberSlider.describe(uiDescriptions.numberSlider({ max: 100, min: -100 })).default(0)
     }).describe(uiDescriptions.object({}))
 )
 
@@ -289,8 +334,12 @@ const ZPatchEffect = ZBaseEffect.extend(
     {
         name: z.literal("patch").describe(uiDescriptions.none({})),
         anchor: ZFaceAnchor.describe(uiDescriptions.enum({ options: Object.keys(ZFaceAnchor.Values) })).default(ZFaceAnchor.Values.forehead),
+        visible: ZVisibleType.describe(uiDescriptions.enum({ options: Object.keys(ZVisibleType.Values) })).default(ZVisibleType.Values.always),
+        fit: ZPatchFitMode.describe(uiDescriptions.enum({ options: Object.keys(ZPatchFitMode.Values) })).default(ZPatchFitMode.Values.none),
         size: ZArray2D.default([1, 1]),
         offset: ZArray3D.default([0, 0, 0]),
+        rotation: ZArray3D.default([0, 0, 0]),
+        allow_rotation: ZBool.default(false),
         texture: ZTextureObject,
         pass: ZRenderPath.default(AssetTypes.renderPath.default)
     }
