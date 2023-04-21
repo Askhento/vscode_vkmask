@@ -8,31 +8,47 @@
 
 
   */
+  import { logger } from "./logger";
+  const print = logger("Inspector.svelte");
+
   import { effectDefaults } from "../../src/ztypes.js";
   import { effects, selection } from "./stores.js";
   import { vscode } from "./utils/vscode";
 
   import ObjectControl from "./ui-controls/ObjectControl.svelte";
   import { uiControls, EffectParserForUI } from "./ui-controls/Controls.js";
+  import { onMount } from "svelte";
 
   let uiElements; //= EffectParserForUI.parse($effects);
-  $: uiElements = EffectParserForUI.parse($effects);
-  $: console.log("inspector tried!", uiElements);
+  //   $: uiElements = EffectParserForUI.parse($effects);
+
+  let selectedId;
+
+  onMount(() => {
+    uiElements = EffectParserForUI.parse($effects);
+    // print("inspector tried!", uiElements); // !!!!! ERROROROROROROROR
+  });
+
+  $: if ($selection) selectedId = $selection.id;
+  else selectedId = undefined;
+
+  $: print("selection changes : ", $selection);
+  $: print("effects changes : ", $effects);
 </script>
 
 <div class="inspector-wrapper">
-  {#if $selection}
+  {#if selectedId !== undefined}
     <div class="inspector-name">Inspector Panel</div>
     {#if $selection.type === "effect"}
-      <!-- <div>{console.log("controls from inspector")}</div>
+      <!-- <div>{print("controls from inspector")}</div>
       <div>
-        {console.log($selection)}
+        {print($selection)}
       </div> -->
       <ObjectControl
         expanded={true}
-        bind:value={$effects[$selection.id]}
-        label={$effects[$selection.id].name}
-        uiElements={uiElements.value[$selection.id].value}
+        bind:value={$effects[selectedId]}
+        label={$effects[selectedId].name}
+        uiElements={uiElements.value[selectedId].value}
       />
       <!-- uiElements={uiControls[$effects[$selection.id].name].uiData} -->
     {/if}

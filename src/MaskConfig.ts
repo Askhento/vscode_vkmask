@@ -16,19 +16,24 @@ const print = logger(__filename);
 
 export class MaskConfig {
 
-    private saveDelayMS: number = 200;
-    private saveDelayTimeout: NodeJS.Timeout | undefined;
+    // private saveDelayMS: number = 200;
+    // private saveDelayTimeout: NodeJS.Timeout | undefined;
+    // private saveDelayPromise: { promise: Promise<any>, cancel: Function } | undefined;
+
 
     public maskJSON: z.infer<typeof ZMaskConfig> | undefined;
     private sourceMaskJSON: jsonMap.ParseResult | undefined;
     public maskLinePointers: jsonMap.Pointers = {};
     public rawMaskJSON: string = "";
-    public pathMaskJSON: string = "";
+    public pathMaskJSON: string | undefined;
+    public currentConfigDir: string | undefined;
     public selectedEffectId: number | undefined;
     public editLockCallback: (() => void) | undefined;
     public selectionLockCallback: (() => void) | undefined;
     public onTextEdit: () => void = () => { };
     public onTextSelect: () => void = () => { };
+    public onFileSave: () => void = () => { };
+
 
     constructor() {
 
@@ -36,7 +41,7 @@ export class MaskConfig {
 
         vscode.workspace.onDidChangeTextDocument((event) => {
 
-            if (this.isSameDocument(event.document, "mask.json")) {
+            if (this.isSameDocument(event.document.uri, "mask.json")) {
 
                 if (event.contentChanges === undefined || event.contentChanges.length === 0) return;
 
@@ -63,7 +68,7 @@ export class MaskConfig {
             const editor = event.textEditor;
             // print(event.selections.map(s => s.start))
 
-            if (this.isSameDocument(editor.document, "mask.json")) {
+            if (this.isSameDocument(editor.document.uri, "mask.json")) {
 
                 print("selection event mask.json");
                 if (this.selectionLockCallback !== undefined) {
@@ -79,12 +84,20 @@ export class MaskConfig {
             }
         })
 
+        vscode.workspace.onDidSaveTextDocument((event) => {
+
+            if (this.isSameDocument(event.uri, "mask.json")) {
+                print("hey I mask.json")
+
+            }
+        })
+
     }
 
 
-    private isSameDocument(document: vscode.TextDocument, baseName: string) {
-        const activeUri = document.uri;
-        const fsPath = activeUri?.fsPath;
+    private isSameDocument(uri: vscode.Uri, baseName: string) {
+        // const activeUri = document.uri;
+        const fsPath = uri?.fsPath;
 
         if (vscode.workspace.workspaceFolders === undefined) return false;
 
@@ -337,17 +350,50 @@ export class MaskConfig {
         this.maskJSON.effects = newEffect;
 
         this.writeConfig();
+        this.parseConfig();
+
+        // if (this.saveDelayPromise !== undefined) this.saveDelayPromise.cancel();
+
+        // this.saveDelayPromise = delay(this.saveDelayMS, "");
+        // this.saveDelayPromise.promise.then(() => {
+        // }).then(() => {
+        // })
+        //     .catch((err) => {
+        //         print("some error writing config ", err)
+        //     })
+
+        // this.saveDelayTimeout = setTimeout(() => {
+        //     this.writeConfig();
+        // }, this.saveDelayMS);
 
     }
 
     public writeConfig() {
-        if (this.saveDelayTimeout) clearTimeout(this.saveDelayTimeout)
-
-        this.saveDelayTimeout = setTimeout(() => {
+        return new Promise(() => {
             const newConfigString = jsonPrettyArray(this.maskJSON);
             fs.writeFileSync(this.pathMaskJSON, newConfigString, { encoding: 'utf-8' })
-            this.parseConfig();
-        }, this.saveDelayMS);
+            // this.parseConfig();
+
+        })
+
+
+        // return vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
+        //     // after opening the document, we set the cursor 
+        //     // and here we make use of the line property which makes imo the code easier to read
+        //     return vscode.window.showTextDocument(document)
+        // }).then((editor) => {
+
+        //     const newConfigString = jsonPrettyArray(this.maskJSON);
+        //     // fs.writeFileSync(this.pathMaskJSON, newConfigString, { encoding: 'utf-8' })
+        //     // this.parseConfig();
+
+        //     return editor.edit((builder) => {
+
+        //         builder.delete(new vscode.Range(0, 0, editor.document.lineCount, 0))
+        //         builder.insert(new vscode.Position(0, 0), newConfigString);
+        //     })
+
+        // });
     }
 
     // public updateEffects(effectsObject: object[]) {
@@ -390,6 +436,7 @@ export class MaskConfig {
     public searchConfigFile() {
 
         // ? what if more that one folder opened ???
+        this.currentConfigDir = undefined;
 
         if (!vscode.workspace.workspaceFolders) {
             print("No folder opened!");
@@ -406,10 +453,14 @@ export class MaskConfig {
             return undefined;
         }
 
-        return path.join(dir, "mask.json");
+        this.currentConfigDir = dir;
+
+        return path.join(this.currentConfigDir, "mask.json");
     }
 
     public parseConfig() {
+
+        // ? maybe split to parse locations and actual object
         print("parsing mask.json")
 
         this.pathMaskJSON = this.searchConfigFile();
@@ -428,8 +479,7 @@ export class MaskConfig {
             this.sourceMaskJSON = jsonMap.parse(this.rawMaskJSON);
 
         } catch (error) {
-            print("json parsing error");
-            print(error)
+            print("json parsing error", error);
             return false;
             // vscode.window.showErrorMessage(error);
             // print(error);
@@ -447,11 +497,11 @@ export class MaskConfig {
         if (parseResult.success) {
             this.maskJSON = parseResult.data as z.infer<typeof ZMaskConfig>;
         } else {
-            print((parseResult));
+            print("parse error ! ", (parseResult));
         }
 
 
-        print(this.maskJSON)
+        print("mask.json parsed", this.maskJSON)
 
         // const maskDecode = MaskJSON.decode(this.maskJSON);
         // if (maskDecode._tag === "Left") {

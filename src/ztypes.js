@@ -81,7 +81,7 @@ export const uiDescriptions = {
 
 
 
-const ZNumberSlider = z.number().describe(uiDescriptions.numberSlider({ min: 0, max: 100 }));
+const ZNumberSlider = z.number().describe(uiDescriptions.numberSlider({ min: 0, max: 1 }));
 
 const ZBool = z.boolean().describe(uiDescriptions.bool({}));
 const ZArray2D = z.number().array().length(2, { message: "Array size must be 2" }).describe(uiDescriptions.array2d({}));
@@ -146,7 +146,8 @@ const ZPatchFitMode = z.enum([
 ])
 
 const ZTextureAsset = ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions }))
-const ZRenderPath = ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.renderPath.extensions }))
+const ZRenderPathAsset = ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.renderPath.extensions }))
+const ZTechniqueAsset = ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.technique.extensions }))
 
 // export const ZTextureObject = z.union(
 //     [
@@ -191,7 +192,7 @@ const ZBlendModes = z.enum([
     "Difference",
     "Exclusion",
     "Hue",
-    "Saturаtion",
+    "Saturation",
     "Color",
     "Luminosity"
 ])
@@ -241,18 +242,68 @@ export const ZTextureObject = z.preprocess(
 
 const ZMaterialAsset = ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.material.extensions })).default(AssetTypes.material.default)
 
-// "textures": {
-//     "normal": "Textures/Normal.jpg"
-// },
-// "parameters": {
-//     "MatDiffColor": [1.0, 1.0, 1.0, 1.0],
-//     "MatSpecColor": [0.0, 0.0, 0.0, 0.0],
-//     "MatEmissiveColor": [0.0, 0.0, 0.0],
-//     "MatEnvMapColor": [1.0, 1.0, 1.0]
-// },
+// {
+// 	"techniques": [{"name": "Techniques/Diff.xml"}],
+// 	"textures": {
+// 		"normal" : "Textures/Normal.png"
+// 	},
+// 	"shaderParameters": {
+// 		"UOffset": "1 0 0 0",
+// 		"VOffset": "0 1 0 0",
+// 		"MatDiffColor": "1 1 1 1",
+// 		"MatEmissiveColor": "0 0 0",
+// 		"MatEnvMapColor": "1 1 1",
+// 		"MatSpecColor": "0 0 0 1",
+// 		"Roughness": "0.5",
+// 		"Metallic": "0"
+// 	},
+// 	"shaderParameterAnimations": null,
+// 	"cull": "ccw",
+// 	"shadowcull": "ccw",
+// 	"fill": "solid",
+// 	"depthbias": {
+// 		"constant": 0.0,
+// 		"slopescaled": 0.0
+// 	},
+// 	"alphatocoverage": false,
+// 	"lineantialias": false,
+// 	"renderorder": 128,
+// 	"occlusion": true
+// }
+
+const ZCullMode = z.enum(["none",
+    "ccw",
+    "cw"])
+
+const ZFillMode = z.enum(["solid",
+    "wireframe",
+    "point",])
+
+
+
+
+
 const ZMaterialObject = z.object({
-    textures: ZTextureAsset.default(AssetTypes.texture.default),
-    parameters: ZArray4D.default([0.0, 0.0, 0.0, 0.0])
+    techniques: ZTechniqueAsset.default(AssetTypes.technique.default),
+    textures: z.object({
+        diffuse: ZTextureAsset.default(AssetTypes.texture.default),
+        normal: ZTextureAsset.default(AssetTypes.texture.default),
+        specular: ZTextureAsset.default(AssetTypes.texture.default),
+        emissive: ZTextureAsset.default(AssetTypes.texture.default),
+        environment: ZTextureAsset.default(AssetTypes.texture.default),
+    }).describe(uiDescriptions.object({})).default({}),
+    // parameters: z.object({
+    //     UOffset: ZArray4D.default([1.0, 0.0, 0.0, 0.0]),
+    //     VOffset: ZArray4D.default([0.0, 1.0, 0.0, 0.0]),
+    //     MatDiffColor: ZArray4D.default([1.0, 1.0, 1.0, 1.0]),
+    //     MatEmissiveColor: ZArray3D.default([0.0, 0.0, 0.0]),
+    //     MatEnvMapColor: ZArray3D.default([1.0, 1.0, 1.0]),
+    //     MatSpecColor: ZArray4D.default([0.0, 0.0, 0.0, 1.0]),
+    //     Roughness: ZNumberSlider.default(0.5),
+    //     Metallic: ZNumberSlider.default(0.5)
+    // }).describe(uiDescriptions.object({})).passthrough(),
+    cull: ZCullMode.describe(uiDescriptions.enum({ options: Object.keys(ZCullMode.Values) })).default(ZCullMode.Values.ccw),
+    fill: ZFillMode.describe(uiDescriptions.enum({ options: Object.keys(ZFillMode.Values) })).default(ZFillMode.Values.solid)
 }).describe(uiDescriptions.object({}))
 
 export const ZMaterialArray = z.preprocess(
@@ -341,7 +392,7 @@ const ZPatchEffect = ZBaseEffect.extend(
         rotation: ZArray3D.default([0, 0, 0]),
         allow_rotation: ZBool.default(false),
         texture: ZTextureObject,
-        pass: ZRenderPath.default(AssetTypes.renderPath.default)
+        pass: ZRenderPathAsset.default(AssetTypes.renderPath.default)
     }
 ).describe(uiDescriptions.object({}))
 
@@ -378,7 +429,8 @@ const ZColorfilterEffect = ZBaseEffect.extend(
     {
         name: z.literal("colorfilter").describe(uiDescriptions.none({})),
         intensity: ZNumberSlider.default(0.75),
-        lookup: ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })).default(AssetTypes.texture.default)
+        lookup: ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })).default(AssetTypes.texture.default),
+
     }
 ).describe(uiDescriptions.object({}))
 
@@ -545,7 +597,7 @@ effectNames.forEach((name, i) => {
 
     if (result.success) {
         // console.log("ztypes data");
-        console.log(result.data)
+        // console.log(result.data)
         effectDefaults[name] = {
             data: result.data,
             type: EffectsList[i]

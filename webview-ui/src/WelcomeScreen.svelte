@@ -1,5 +1,7 @@
 <script lang="ts">
   import { vscode } from "./utils/vscode";
+  //   import { logger } from "./logger";
+  //   const print = logger("WelcomeScreen.svelte");
 
   function sendOpenProject() {
     vscode.postMessage({

@@ -54,43 +54,43 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
         webviewView.webview.onDidReceiveMessage(async data => {
             switch (data.type) {
-                case 'effectDelete':
-                    {
-                        const id = data.value;
-                        print("received delete effect " + id);
-                        this.maskConfig.removeFromConfig(id);
-                        this.setupEditLock();
-                        break;
-                    }
+                // case 'effectDelete':
+                //     {
+                //         const id = data.value;
+                //         print("received delete effect " + id);
+                //         this.maskConfig.removeFromConfig(id);
+                //         this.setupEditLock();
+                //         break;
+                //     }
 
-                case 'effectSwap':
-                    {
-                        print("received swap effects");
-                        const [idOld, idOther] = data.value;
-                        this.maskConfig.swapEffects(idOld, idOther);
-                        this.setupEditLock();
-                        break;
-                    }
+                // case 'effectSwap':
+                //     {
+                //         print("received swap effects");
+                //         const [idOld, idOther] = data.value;
+                //         this.maskConfig.swapEffects(idOld, idOther);
+                //         this.setupEditLock();
+                //         break;
+                //     }
 
-                case 'effectAdd':
-                    {
-                        print("received add effect");
-                        const newEffect = data.value;
-                        this.maskConfig.addEffect(newEffect);
+                // case 'effectAdd':
+                //     {
+                //         print("received add effect");
+                //         const newEffect = data.value;
+                //         this.maskConfig.addEffect(newEffect);
 
-                        this.setupEditLock();
-                        break;
-                    }
+                //         this.setupEditLock();
+                //         break;
+                //     }
 
-                case 'effectDisabled':
-                    {
-                        print("received effect disabled");
-                        const { effectId, disabled } = data.value;
-                        this.maskConfig.addPropertyToEffect(effectId, { disabled: disabled });
+                // case 'effectDisabled':
+                //     {
+                //         print("received effect disabled");
+                //         const { effectId, disabled } = data.value;
+                //         this.maskConfig.addPropertyToEffect(effectId, { disabled: disabled });
 
-                        this.setupEditLock();
-                        break;
-                    }
+                //         this.setupEditLock();
+                //         break;
+                //     }
 
 
                 case 'effectsUpdate':
@@ -99,8 +99,6 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
                         this.setupEditLock();
                         this.maskConfig.updateEffects(data.value);
-
-
                         break;
                     }
                 case 'effectSelected':
@@ -135,6 +133,12 @@ export class MainSidebarProvider implements WebviewViewProvider {
                         break;
                     }
 
+                case "returnLogs":
+                    {
+                        print("recieved logs", data.value)
+                        break;
+                    }
+
             }
         });
 
@@ -149,50 +153,89 @@ export class MainSidebarProvider implements WebviewViewProvider {
             }
         }, this);
 
-        // !trying to fix not updating view
-        // !document should be ready
+        // !   trying to fix not updating view
+        // !   document should be ready
+
         setTimeout(() => {
-            this.maskConfig.onTextEdit = () => {
-                // ! if error, then need to send error
-                this.maskConfig.selectedEffectId = undefined;
-                this.maskConfig.parseConfig();
-                this.sendEffects();
-            }
-
-            this.maskConfig.onTextSelect = () => {
-                // this.maskConfig.clearSelection();
-                this.sendDeselect();
-                // if (this.maskConfig.selectedEffectId !== undefined) {
-                //     this.maskConfig.selectedEffectId = undefined;
-                //     this.sendEffects();
-                // }
-            }
-
-            assetWatcher.on("assetsChanged", (e) => {
-                this.sendAssets(e);
-            });
-            assetWatcher.searchAssets();
-
-            console.log("parsing main!");
-            this.maskConfig.parseConfig();
-
-            // on init need to show mask.json only!
-            const tabsToClose = vscode.window.tabGroups.all.map(tg => tg.tabs).flat();
-            // ? maybe close only files that are in old project, could be usefull for opened api reference 
-            vscode.window.tabGroups.close(tabsToClose).then(() => {
-                this.maskConfig.showConfig();
-            })
-
-            if (this.maskConfig.pathMaskJSON === undefined) {
-                this.sendShowWelcome();
-            } else {
-                this.sendEffects();
-            }
-
+            this.init();
         }, 1000);
 
 
     }
+
+
+    private init() {
+        this.maskConfig.onTextEdit = () => {
+            // ! if error, then need to send error
+            this.maskConfig.selectedEffectId = undefined;
+            this.maskConfig.parseConfig();
+            this.sendEffects();
+        }
+
+        this.maskConfig.onTextSelect = () => {
+            // this.maskConfig.clearSelection();
+            this.sendDeselect();
+            // if (this.maskConfig.selectedEffectId !== undefined) {
+            //     this.maskConfig.selectedEffectId = undefined;
+            //     this.sendEffects();
+            // }
+        }
+
+        assetWatcher.on("assetsChanged", (e) => {
+            this.sendAssets(e);
+        });
+        assetWatcher.searchAssets();
+
+        print("parsing main!");
+        this.maskConfig.parseConfig();
+
+        // on init need to show mask.json only!
+        const tabsToClose = vscode.window.tabGroups.all.map(tg => tg.tabs).flat();
+        // ? maybe close only files that are in old project, could be usefull for opened api reference 
+        vscode.window.tabGroups.close(tabsToClose).then(() => {
+            this.maskConfig.showConfig();
+        })
+
+        if (this.maskConfig.pathMaskJSON === undefined) {
+            this.sendShowWelcome();
+        } else {
+            this.sendEffects();
+        }
+    }
+
+    private setupSelectLock() {
+        this.maskConfig.selectionLockCallback = () => {
+            // this.sendEffects();
+            this.maskConfig.selectionLockCallback = undefined;
+            //   this.maskConfig.saveConfig();
+        }
+    }
+
+    private setupEditLock() {
+        this.maskConfig.editLockCallback = () => {
+            print("h1");
+            // this.maskConfig.parseConfig();
+            // this.sendEffects();
+            this.maskConfig.editLockCallback = undefined;
+            // this.maskConfig.showEffect(this.maskConfig.selectedEffectId);
+            // this.maskConfig.saveConfig(); // edits completed now need to save so HotReload does it's job
+
+            this.maskConfig.selectionLockCallback = () => {
+                print("h2");
+
+                // restore on the second event
+                // ! first cb comes from removing whole json
+                // ! second one from selection
+                this.maskConfig.selectionLockCallback = undefined;
+
+                // this.maskConfig.selectionLockCallback = () => {
+                //     this.maskConfig.selectionLockCallback = undefined;
+
+                // }
+            }
+        }
+    }
+
 
     // this should be moved to extesnion.ts i guess
     private createNewProject() {
@@ -205,13 +248,13 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
         vscode.window.showSaveDialog(options).then(async fileUri => {
             if (fileUri) {
-                console.log("new project folder", fileUri.fsPath)
+                print("new project folder", fileUri.fsPath)
                 const newProjectDir = fileUri;
                 const sampleProjectDir = vscode.Uri.joinPath(this._extensionUri, "res", "empty-project");
-                // console.log(sampleProjectDir)
+                // print(sampleProjectDir)
 
                 copyRecursiveSync(sampleProjectDir.fsPath, newProjectDir.fsPath);
-                this.changeWorkspaceFolder(newProjectDir)
+                this.openProjectFolder(newProjectDir)
             }
         })
     }
@@ -229,47 +272,20 @@ export class MainSidebarProvider implements WebviewViewProvider {
         vscode.window.showOpenDialog(options).then(async fileUri => {
             if (fileUri && fileUri[0]) {
                 print('Selected file: ' + fileUri[0].fsPath);
-                this.changeWorkspaceFolder(fileUri[0])
+                this.openProjectFolder(fileUri[0])
             }
         });
     }
 
-    private changeWorkspaceFolder(newFolderURI: Uri) {
+    private async openProjectFolder(newFolderURI: Uri) {
         // will close all other workspace folders, but should anyways have only one at a time
         // ? maybe should call this on init so it is clean which folder I am working on 
 
-        const numFoldersToClose = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders.length : 0;
-        const workspaceName = newFolderURI.fsPath.split(path.sep).pop();
-        vscode.workspace.updateWorkspaceFolders(0, numFoldersToClose, { name: workspaceName, uri: newFolderURI });
-    }
+        // const numFoldersToClose = vscode.workspace.workspaceFolders ? vscode.workspace.workspaceFolders.length : 0;
+        // const workspaceName = newFolderURI.fsPath.split(path.sep).pop();
+        // vscode.workspace.updateWorkspaceFolders(0, numFoldersToClose, { name: workspaceName, uri: newFolderURI });
 
-    private setupSelectLock() {
-        this.maskConfig.selectionLockCallback = () => {
-            // this.sendEffects();
-            this.maskConfig.selectionLockCallback = undefined;
-            //   this.maskConfig.saveConfig();
-        }
-    }
-
-    private setupEditLock() {
-        this.maskConfig.editLockCallback = () => {
-            // this.maskConfig.parseConfig();
-            // this.sendEffects();
-            this.maskConfig.editLockCallback = undefined;
-            // this.maskConfig.showEffect(this.maskConfig.selectedEffectId);
-            // this.maskConfig.saveConfig(); // edits completed now need to save so HotReload does it's job
-            this.maskConfig.selectionLockCallback = () => {
-                // restore on the second event
-                // ! first cb comes from removing whole json
-                // ! second one from selection
-                this.maskConfig.selectionLockCallback = undefined;
-
-                // this.maskConfig.selectionLockCallback = () => {
-                //     this.maskConfig.selectionLockCallback = undefined;
-
-                // }
-            }
-        }
+        await vscode.commands.executeCommand(`vscode.openFolder`, newFolderURI)
     }
 
     public sendEffects() {
@@ -297,14 +313,36 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
 
     public sendAssets(e: any) {
-        print(e)
         if (this._view) {
-            print("sending assets to webview");
+            print("sending assets to webview", e);
             this._view.webview.postMessage({ type: 'assetsChanged', assets: e.assets });
         } else {
             print("send view is null ")
         }
     }
+
+    public requestLogs() {
+        if (this._view) {
+            print("requesting logs");
+            this._view.webview.postMessage({ type: 'requestLogs' });
+            //!!! need to usubscribe !!!
+
+            return new Promise(resolve => {
+                return this._view.webview.onDidReceiveMessage(
+                    function (message) {
+                        resolve(message);
+                    }
+                )
+            })
+
+
+        } else {
+            print("view is null ")
+            return Promise.resolve("view is null")
+        }
+
+    }
+
 
     /**
      * Cleans up and disposes of webview resources when the webview panel is closed.
@@ -368,30 +406,4 @@ export class MainSidebarProvider implements WebviewViewProvider {
     `;
     }
 
-    // /**
-    //  * Sets up an event listener to listen for messages passed from the webview context and
-    //  * executes code based on the message that is recieved.
-    //  *
-    //  * @param webview A reference to the extension webview
-    //  * @param context A reference to the extension context
-    //  */
-    // private _setWebviewMessageListener(webview: Webview) {
-    //   webview.onDidReceiveMessage(
-    //     (message: any) => {
-    //       const command = message.command;
-    //       const text = message.text;
-
-    //       switch (command) {
-    //         case "hello":
-    //           // Code that should run in response to the hello message command
-    //           window.showInformationMessage(text);
-    //           return;
-    //         // Add more switch case statements here as more webview message commands
-    //         // are created within the webview context (i.e. inside media/main.js)
-    //       }
-    //     },
-    //     undefined,
-    //     this._disposables
-    //   );
-    // }
 }

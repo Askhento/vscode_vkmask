@@ -14,7 +14,6 @@
 </script>
 
 <div class="constrol-wrapper">
-  <!-- <span class:expanded on:click={toggle}>{label}</span> -->
   <span class:expanded on:click={toggle}
     >{label}
     <i class="codicon codicon-triangle-{expanded ? 'down' : 'right'}" />
@@ -32,6 +31,8 @@
               params={data.uiData}
               uiElements={data.value}
             />
+          {:else}
+            <pre>Null data for {key}</pre>
           {/if}
         </div>
       {/each}

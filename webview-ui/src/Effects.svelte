@@ -1,27 +1,12 @@
 <script lang="ts">
+  import { logger } from "./logger";
+  const print = logger("Effects.svelte");
+
   import { vscode } from "./utils/vscode";
   import { effects, selection } from "./stores.js";
 
   //   ? do not send effects back on user input events, will cause loop
   // i use lock because i need to track changes made in inspector
-  let updateLock = true;
-  $: {
-    if (updateLock) {
-      updateLock = false;
-      //   console.log("lock");
-    } else {
-      //   const newData = $effects.map((effect) => effect.data);
-      // console.log(newData);
-      // console.log($effects[0]?.data);
-      //   if (newData.length) {
-      //   console.log($effects);
-      vscode.postMessage({
-        type: "effectsUpdate",
-        value: $effects,
-      });
-      //   }
-    }
-  }
 
   import { fromZodError } from "zod-validation-error";
 
@@ -37,7 +22,7 @@
     hovering = null;
     if (start === target) return;
     const newEffects = $effects;
-    // console.log(start, target);
+    // print(start, target);
 
     if (start < target) {
       newEffects.splice(target + 1, 0, newEffects[start]);
@@ -58,7 +43,7 @@
   };
 
   const dragstart = (event, i) => {
-    console.log("start drag");
+    print("start drag");
     event.dataTransfer.effectAllowed = "move";
     event.dataTransfer.dropEffect = "move";
     const start = i;
@@ -72,12 +57,14 @@
   function toggleSelection(id) {
     if (checkSelected(id)) {
       $selection = undefined;
+      print("sending deselect ", id);
       vscode.postMessage({ type: "effectDeselected", value: id });
     } else {
       $selection = {
         type: "effect",
         id: id,
       };
+      print("sending select", id);
       vscode.postMessage({ type: "effectSelected", value: id });
     }
   }
@@ -95,9 +82,23 @@
   }
 
   function onClickRemove(id) {
+    print("effects.svelte remove", id);
     $effects.splice(id, 1);
+    print("effects.svelte remove", $effects);
     $effects = $effects;
-    // console.log($effects);
+
+    if ($selection !== undefined && $selection.type === "effect") {
+      if ($selection.id === id) {
+        $selection = undefined;
+        print("sending deselect", id);
+        vscode.postMessage({ type: "effectDeselected", value: 0 });
+      } else if ($selection.id > id) {
+        print("sending select", id);
+        vscode.postMessage({ type: "effectSelected", value: $selection.id });
+        $selection.id--;
+      }
+    }
+    // print($effects);
     // vscode.postMessage({ type: "effectDelete", value: id });
   }
 
@@ -105,6 +106,11 @@
     $effects.unshift(object);
 
     $effects = $effects;
+
+    if ($selection !== undefined && $selection.type === "effect") {
+      vscode.postMessage({ type: "effectSelected", value: $selection.id });
+      $selection.id++;
+    }
     // vscode.postMessage({ type: "effectAdd", value: object });
   }
 
@@ -124,10 +130,10 @@
       <vscode-dropdown
         on:change={(e) => {
           const effectName = e.target.value;
-          console.log("new effect " + effectName);
+          print("new effect ", effectName);
           if (effectName === "Add Effect") return;
           const newEffect = effectDefaults[effectName];
-          console.log(newEffect);
+          print(newEffect);
           sendAddEffect(newEffect.data);
           e.target.value = "Add Effect";
         }}
@@ -175,7 +181,7 @@
               <vscode-button
                 class="effect-btn"
                 appearance="icon"
-                on:click|stopPropagation={onClickRemove(effect.id)}
+                on:click|stopPropagation={onClickRemove(index)}
               >
                 <span class="codicon codicon-trash" />
               </vscode-button>

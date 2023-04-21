@@ -1,11 +1,11 @@
 <script lang="ts">
   export let label = "empty",
-    value = 0,
+    value,
     params;
 
   let step = 0.01,
     sliderValue = value;
-  $: console.log("from slider", params);
+  //   $: console.log("from slider", params);
   function onSliderUp() {
     value = sliderValue;
   }

@@ -36,7 +36,7 @@
       g = parseFloat((parseInt(color.slice(3, 5), 16) / 255).toFixed(2)),
       b = parseFloat((parseInt(color.slice(5, 7), 16) / 255).toFixed(2));
 
-    console.log("h2rgb", color);
+    // console.log("h2rgb", color);
     if (params.alpha !== undefined && alpha !== undefined) {
       value = [r, g, b, alpha];
     } else {
@@ -51,7 +51,7 @@
   $: if (alpha !== undefined) hexToRGB();
 
   onMount(() => {
-    console.log("mount", value);
+    // console.log("mount", value);
     if (value === undefined || value.length === 0) value = params.default;
     rgbToHex();
   });
@@ -109,8 +109,8 @@
     /* flex: 1 0 0px; */
   }
 
-  input.alpha {
+  /* input.alpha {
     display: inline-block;
     flex: 1 0 0px;
-  }
+  } */
 </style>

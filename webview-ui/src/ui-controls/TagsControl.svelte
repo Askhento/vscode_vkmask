@@ -6,6 +6,7 @@
   //   $: console.log(value);
   function joinTags(e = null) {
     value = tags.join(";");
+
     // console.log("joined! " + value);
   }
 

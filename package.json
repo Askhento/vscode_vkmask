@@ -14,11 +14,18 @@
     "Other"
   ],
   "activationEvents": [
-    "onWebviewPanel:vkmask.sidepanel"
+    "onWebviewPanel:vkmask.sidepanel",
+    "workspaceContains:mask.json"
   ],
   "main": "./out/extension.js",
   "contributes": {
-    "commands": [],
+    "commands": [
+      {
+        "command": "vkmask.dumpLogs",
+        "title": "Dump vkmask logs to logsDump.json file",
+        "shortTitle": "Dump vkmask logs"
+      }
+    ],
     "viewsContainers": {
       "activitybar": [
         {

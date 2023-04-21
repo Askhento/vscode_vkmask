@@ -92,10 +92,10 @@ function parseUIElement(schema) {
     }
 }
 
-effectNames.forEach((name, i) => {
-    const obj = EffectsList[i];
-    uiControls[name] = parseUIElement(obj);
-})
+// effectNames.forEach((name, i) => {
+//     const obj = EffectsList[i];
+//     uiControls[name] = parseUIElement(obj);
+// })
 
 console.log("old controls!", uiControls)
 
@@ -203,22 +203,22 @@ export const EffectParserForUI = addTypeToSchema(ZEffects) //z.discriminatedUnio
 
 // console.log(EffectParseForUI)
 
-console.log(EffectParserForUI.parse(ZEffects.parse(
-    [{
-        "name": "facemodel",
-        "tag": "1231",
-        "disabled": true,
-        "mouth": true,
-        "eyes": true,
-        "position": [58.0, 10.0, 0.0],
-        "rotation": [0.0, 0.0, 0.0],
-        "scale": [1.0, 1.0, 1.0],
-        "texture": {
-            "diffuse": "Textures/Box.png",
-            "normal": "Textures/Beautify/FaceBlurMask1.png",
-            "color": [0.48, 0.14, 0.14, 0.82]
-        }
+// console.log(EffectParserForUI.parse(ZEffects.parse(
+//     [{
+//         "name": "facemodel",
+//         "tag": "1231",
+//         "disabled": true,
+//         "mouth": true,
+//         "eyes": true,
+//         "position": [58.0, 10.0, 0.0],
+//         "rotation": [0.0, 0.0, 0.0],
+//         "scale": [1.0, 1.0, 1.0],
+//         "texture": {
+//             "diffuse": "Textures/Box.png",
+//             "normal": "Textures/Beautify/FaceBlurMask1.png",
+//             "color": [0.48, 0.14, 0.14, 0.82]
+//         }
 
-    }]
-)))
+//     }]
+// )))
 

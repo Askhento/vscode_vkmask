@@ -1,6 +1,9 @@
 <!-- https://microsoft.github.io/vscode-codicons/dist/codicon.html -->
 
 <script lang="ts">
+  import { logDump, logger } from "./logger";
+  const print = logger("App.svelte");
+
   import {
     provideVSCodeDesignSystem,
     vsCodeButton,
@@ -12,7 +15,6 @@
   import { assets, effects, selection } from "./stores";
   import WelcomeScreen from "./WelcomeScreen.svelte";
 
-  let showingWelcome = true;
   let appStates = {
     LOADING: 0,
     RUNNING: 1,
@@ -20,11 +22,51 @@
   };
   let appState = appStates.LOADING;
 
+  let updateLock = true;
+  //   $: {
+
+  //   }
+
+  $: print("selection changes : ", $selection);
+  $: print("effects changes : ", $effects);
+
+  effects.subscribe((newEffects) => {
+    if (updateLock) {
+      updateLock = false;
+      print("lock return ");
+    } else {
+      //   print($effects);
+      sendEffects(newEffects);
+    }
+  });
+
+  const sendDelay = 500;
+  let sendTimeout;
+  // here trying to accumulate changes and send them once ui settled down
+  function sendEffects(newEffects) {
+    if (sendTimeout) clearTimeout(sendTimeout);
+
+    sendTimeout = setTimeout(() => {
+      print("sending effects");
+      vscode.postMessage({
+        type: "effectsUpdate",
+        value: newEffects,
+      });
+    }, sendDelay);
+  }
+
   // Handle messages sent from the extension to the webview
   function handleMessageApp(event) {
     const message = event.data; // The json data that the extension sent
-    // console.log("app.svelte " + message);
+    // print("app.svelte " + message);
     switch (message.type) {
+      case "requestLogs": {
+        vscode.postMessage({
+          type: "returnLogs",
+          value: logDump,
+        });
+        break;
+      }
       case "assetsChanged": {
         $assets = message.assets;
         break;
@@ -34,16 +76,16 @@
         break;
       }
       case "updateEffects": {
-        console.log("main.js : received updatingEffects");
-        // updateLock = true;
+        print("received updatingEffects");
+        updateLock = true;
         if (message.effects === undefined) return;
         appState = appStates.RUNNING;
         $effects = message.effects;
-        console.log("new effects!", $effects);
+        print("new effects!", $effects);
 
         // uiElements = EffectParserForUI.safeParse($effects);
-        // if (!uiElements.success) console.log(fromZodError(uiElements.error));
-        // console.log("wzp frontend!", uiElements);
+        // if (!uiElements.success) print(fromZodError(uiElements.error));
+        // print("wzp frontend!", uiElements);
         break;
       }
       case "deselect": {
