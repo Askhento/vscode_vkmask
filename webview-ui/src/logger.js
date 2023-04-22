@@ -11,7 +11,7 @@ export const logger = (baseName) => {
         var args = Array.prototype.slice.call(params);
 
         // 2. Prepend log prefix log string
-        args.unshift(baseName + ": ");
+        args.unshift(baseName.toUpperCase() + ": ");
 
         console.log.apply(console, args);
 

@@ -28,8 +28,12 @@ export class MaskConfig {
     public pathMaskJSON: string | undefined;
     public currentConfigDir: string | undefined;
     public selectedEffectId: number | undefined;
+    // these  will try to deal with changes made programmatically
     public editLockCallback: (() => void) | undefined;
     public selectionLockCallback: (() => void) | undefined;
+    public saveLockCallback: (() => void) | undefined;
+
+    // these delegates are for user input reactions 
     public onTextEdit: () => void = () => { };
     public onTextSelect: () => void = () => { };
     public onFileSave: () => void = () => { };
@@ -84,17 +88,63 @@ export class MaskConfig {
             }
         })
 
-        vscode.workspace.onDidSaveTextDocument((event) => {
-
-            if (this.isSameDocument(event.uri, "mask.json")) {
+        // !!!!! need a lock also !!!!
+        vscode.workspace.onDidSaveTextDocument((document) => {
+            print("saving event")
+            if (this.saveLockCallback !== undefined) {
+                print("save lock return");
+                this.saveLockCallback();
+                return;
+            }
+            if (this.isSameDocument(document.uri, "mask.json")) {
                 print("hey I mask.json")
-
+                this.onFileSave();
             }
         })
 
     }
 
+    // todo : add clear locks methods 
+    public setupSelectLock() {
+        this.selectionLockCallback = () => {
+            print("selection lock ")
+            // this.sendEffects();
+            this.selectionLockCallback = undefined;
+            //   this.saveConfig();
+        }
+    }
 
+    public setupEditLock() {
+        this.editLockCallback = () => {
+            print("edit lock ");
+            // this.parseConfig();
+            // this.sendEffects();
+            this.editLockCallback = undefined;
+            // this.showEffect(this.selectedEffectId);
+            // this.saveConfig(); // edits completed now need to save so HotReload does it's job
+
+            this.selectionLockCallback = () => {
+                print("edit lock -> selection");
+
+                // restore on the second event
+                // ! first cb comes from removing whole json
+                // ! second one from selection
+                this.selectionLockCallback = undefined;
+
+                // this.selectionLockCallback = () => {
+                //     this.selectionLockCallback = undefined;
+
+                // }
+            }
+        }
+    }
+
+    public setupSaveLock() {
+        this.saveLockCallback = () => {
+            print("save lock")
+            this.saveLockCallback = undefined;
+        }
+    }
     private isSameDocument(uri: vscode.Uri, baseName: string) {
         // const activeUri = document.uri;
         const fsPath = uri?.fsPath;
@@ -105,120 +155,124 @@ export class MaskConfig {
         return fsPath === vscode.Uri.joinPath(dir, baseName).fsPath;
     }
 
-    public showEffect(id: number | undefined) {
+    public showEffect(id: number | undefined, editor?: vscode.TextEditor) {
         if (id === undefined) return;
         const key = "/effects/" + id;
         const pointer = this.maskLinePointers[key]
         print("showing effect with key - " + key);
 
-        return this.showConfigAt(pointer).then((val) => {
-            return Promise.resolve(val)
-        });
+        return this.showConfigAt(pointer, editor)
     }
 
-    public clearSelection() {
+    public async clearSelection(editor?: vscode.TextEditor) {
+        if (editor === undefined) editor = await this.showConfig();
+
+        this.setupSelectLock();
+
         this.selectedEffectId = undefined;
-        return vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
-            return vscode.window.showTextDocument(document)
-        }).then((editor) => {
-            var position = editor.selection.start;
-            editor.selection = new vscode.Selection(position, position);
-        });
+        var position = editor.selection.start;
+        editor.selection = new vscode.Selection(position, position);
+        return editor;
     }
 
-    // public saveConfig() {
-    //     return vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
-
-    //         document.save().then(saved => {
-    //             print("file saved : " + saved);
-    //         })
-    //     })
-    // }
 
     public showConfig() {
+        // ? check if it is already shwoing 
+
+        // ? check if exist config ???
+
+
+        // ? do need selection lock here ?? 
+        //     vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
+        //         if (vscode.window.activeTextEditor) {
+        //             const currentDoc = vscode.window.activeTextEditor.document;
+        //             print(vscode.window.activeTextEditor)
+        //             if (currentDoc === document) {
+        //                 return vscode.window.activeTextEditor;
+        //             }
+        //         }
+        //         return vscode.window.showTextDocument(document)
+        //     }).then((editor) => {
 
         return vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
             return vscode.window.showTextDocument(document)
         })
 
     }
-    public showConfigAt(pointer: Record<jsonMap.PointerProp, jsonMap.Location>) {
+    public async saveConfig(editor?: vscode.TextEditor) {
+        if (editor === undefined) editor = await this.showConfig();
 
-        return vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
-            // print(document.uri);
-            // after opening the document, we set the cursor 
-            // and here we make use of the line property which makes imo the code easier to read
-            return vscode.window.showTextDocument(document)
+        const saved = await editor.document.save();
+        print("config saved : " + saved);
 
-        }).then((editor) => {
-            print("showing config at - " + pointer.value.line + ", " + pointer.valueEnd.line);
-            let pos = new vscode.Position(pointer.value.line, 0);
-            let posEnd = new vscode.Position(pointer.valueEnd.line + 1, 0);
-            // here we set the cursor
-            // !!! changed here 
-            editor.selection = new vscode.Selection(posEnd, pos);
-            // here we set the focus of the opened editor
-            editor.revealRange(new vscode.Range(posEnd, pos));
+        return editor;
+    }
 
+    public async showConfigAt(pointer: Record<jsonMap.PointerProp, jsonMap.Location>, editor?: vscode.TextEditor) {
+        if (editor === undefined) editor = await this.showConfig();
 
-            // return Promise.resolve(editor);
-        }).then(
-            () => {
-                return Promise.resolve("showed");
-            },
-            (err) => {
-                print(err);
-            });
+        this.setupSelectLock();
+
+        print("showing config at - " + pointer.value.line + ", " + pointer.valueEnd.line);
+        let pos = new vscode.Position(pointer.value.line, 0);
+        let posEnd = new vscode.Position(pointer.valueEnd.line + 1, 0);
+        // here we set the cursor
+        // !!! changed here 
+        editor.selection = new vscode.Selection(posEnd, pos);
+        // here we set the focus of the opened editor
+        editor.revealRange(new vscode.Range(posEnd, pos));
+
+        return editor;
     }
 
 
+    // public setSelection(pointer: Record<jsonMap.PointerProp, jsonMap.Location>) {
 
-    public removeFromConfig(id: number) {
-        return vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
-            // print(document.uri);
-            // after opening the document, we set the cursor 
-            // and here we make use of the line property which makes imo the code easier to read
-            return vscode.window.showTextDocument(document)
-        }).then((editor) => {
-
-            this.maskJSON?.effects.splice(id, 1);
-
-            // const newConfigString = this.prettyJson(this.maskJSON)
-            const newConfigString = jsonPrettyArray(this.maskJSON)
-
-            return editor.edit((builder) => {
-
-                builder.delete(new vscode.Range(0, 0, editor.document.lineCount, 0))
-                builder.insert(new vscode.Position(0, 0), newConfigString);
+    // }
 
 
-                if (this.selectedEffectId === undefined) {
-                    print("removing from config, but selected is undefined!");
-                    return;
-                }
+    // public removeFromConfig(id: number) {
 
-                if (id < this.selectedEffectId) {
-                    this.selectedEffectId = Math.max(0, this.selectedEffectId - 1);
-                    print("removing after selectedId " + this.selectedEffectId);
+    //     return this.showConfig().then((editor) => {
 
-                    if (this.selectedEffectId !== undefined) {
-                        this.parseConfig(); // need to refresh in order to have current pointers
-                        this.showEffect(this.selectedEffectId);
-                    }
+    //         this.maskJSON?.effects.splice(id, 1);
 
-                } else if (id === this.selectedEffectId) {
-                    print("removing selected effect")
-                    this.selectedEffectId = undefined;
-                    // var postion = editor.selection.end; 
-                    // editor.selection = new vscode.Selection(postion, postion);
-                }
+    //         // const newConfigString = this.prettyJson(this.maskJSON)
+    //         const newConfigString = jsonPrettyArray(this.maskJSON)
 
-                print("selected after remove " + this.selectedEffectId);
+    //         return editor.edit((builder) => {
 
-            })
+    //             builder.delete(new vscode.Range(0, 0, editor.document.lineCount, 0))
+    //             builder.insert(new vscode.Position(0, 0), newConfigString);
 
-        });
-    }
+
+    //             if (this.selectedEffectId === undefined) {
+    //                 print("removing from config, but selected is undefined!");
+    //                 return;
+    //             }
+
+    //             if (id < this.selectedEffectId) {
+    //                 this.selectedEffectId = Math.max(0, this.selectedEffectId - 1);
+    //                 print("removing after selectedId " + this.selectedEffectId);
+
+    //                 if (this.selectedEffectId !== undefined) {
+    //                     this.parseConfig(); // need to refresh in order to have current pointers
+    //                     this.showEffect(this.selectedEffectId);
+    //                 }
+
+    //             } else if (id === this.selectedEffectId) {
+    //                 print("removing selected effect")
+    //                 this.selectedEffectId = undefined;
+    //                 // var postion = editor.selection.end; 
+    //                 // editor.selection = new vscode.Selection(postion, postion);
+    //             }
+
+    //             print("selected after remove " + this.selectedEffectId);
+
+    //         })
+
+    //     });
+    // }
 
     public swapEffects(start: number, target: number) {
 
@@ -237,45 +291,7 @@ export class MaskConfig {
         this.maskJSON.effects = newEffects;
 
         this.writeConfig();
-        // vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
-        //     return vscode.window.showTextDocument(document)
-        // }).then((editor) => {
-        //     if (!this.maskJSON) return;
-        //     // this.maskJSON?.effects.splice(id , 1);
-        //     // const effect = this.maskJSON.effects[idOld];
-        //     // this.maskJSON.effects.splice(idOld, 1);
-        //     const newEffects = this.maskJSON.effects;
 
-        //     if (start < target) {
-        //         newEffects.splice(target + 1, 0, newEffects[start]);
-        //         newEffects.splice(start, 1);
-        //     } else {
-        //         newEffects.splice(target, 0, newEffects[start]);
-        //         newEffects.splice(start + 1, 1);
-        //     }
-
-        //     this.maskJSON.effects = newEffects;
-
-        //     // if (idOther == null) {
-        //     //     this.maskJSON.effects.push(effect)
-        //     //     if (idOld === this.selectedEffectId) this.selectedEffectId = this.maskJSON.effects.length - 1;
-        //     // } else {
-        //     //     idOther = idOld < idOther ? idOther - 1 : idOther;
-        //     //     this.maskJSON.effects.splice(idOther, 0, effect);
-        //     //     if (idOld === this.selectedEffectId) this.selectedEffectId = idOther;
-        //     // }
-
-
-        //     const newConfigString = jsonPrettyArray(this.maskJSON)
-
-        //     editor.edit((builder) => {
-
-        //         builder.delete(new vscode.Range(0, 0, editor.document.lineCount, 0))
-        //         builder.insert(new vscode.Position(0, 0), newConfigString);
-
-        //     })
-
-        // })
     }
 
     public addPropertyToEffect(effectId: number, prop: object) {
@@ -287,24 +303,7 @@ export class MaskConfig {
 
         this.writeConfig();
 
-        // vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
-        //     return vscode.window.showTextDocument(document)
-        // }).then((editor) => {
-        //     if (!this.maskJSON) return;
 
-
-        //     this.maskJSON.effects[effectId] = { ...this.maskJSON.effects[effectId], ...prop }
-
-        //     const newConfigString = jsonPrettyArray(this.maskJSON)
-
-        //     editor.edit((builder) => {
-
-        //         builder.delete(new vscode.Range(0, 0, editor.document.lineCount, 0))
-        //         builder.insert(new vscode.Position(0, 0), newConfigString);
-
-        //     })
-
-        // })
     }
 
     public addEffect(effectObject: object) {
@@ -319,37 +318,17 @@ export class MaskConfig {
         if (this.selectedEffectId) this.selectedEffectId++; // add new always in front 
 
         this.writeConfig();
-        // vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
-        //     return vscode.window.showTextDocument(document)
-        // }).then((editor) => {
-        //     if (!this.maskJSON) return;
-        //     // this.maskJSON?.effects.splice(id , 1);
-        //     // this.maskJSON.effects[idOld];
 
-        //     const newEffect = effectObject as t.TypeOf<typeof Effect>
-        //     this.maskJSON.effects.unshift(newEffect);
-
-        //     if (this.selectedEffectId) this.selectedEffectId++; // add new always in front 
-
-        //     const newConfigString = jsonPrettyArray(this.maskJSON)
-
-        //     editor.edit((builder) => {
-
-        //         builder.delete(new vscode.Range(0, 0, editor.document.lineCount, 0))
-        //         builder.insert(new vscode.Position(0, 0), newConfigString);
-
-        //     })
-
-        // })
     }
 
-    public updateEffects(effectsObject: object[]) {
+    public async updateEffects(effectsObject: object[]) {
         if (!this.maskJSON) return;
+
 
         const newEffect = effectsObject as z.infer<typeof ZBaseEffect>[];
         this.maskJSON.effects = newEffect;
 
-        this.writeConfig();
+        await this.writeConfig();
         this.parseConfig();
 
         // if (this.saveDelayPromise !== undefined) this.saveDelayPromise.cancel();
@@ -368,64 +347,45 @@ export class MaskConfig {
 
     }
 
-    public writeConfig() {
-        return new Promise(() => {
-            const newConfigString = jsonPrettyArray(this.maskJSON);
-            fs.writeFileSync(this.pathMaskJSON, newConfigString, { encoding: 'utf-8' })
-            // this.parseConfig();
+    public async writeConfig(editor?: vscode.TextEditor) {
+        this.setupEditLock();
+
+        // return new Promise(() => {
+        //     const newConfigString = jsonPrettyArray(this.maskJSON);
+        //     fs.writeFileSync(this.pathMaskJSON, newConfigString, { encoding: 'utf-8' })
+        //     // this.parseConfig();
+
+        // })
+
+        if (editor === undefined) editor = await this.showConfig();
+
+
+        const newConfigString = jsonPrettyArray(this.maskJSON);
+        // fs.writeFileSync(this.pathMaskJSON, newConfigString, { encoding: 'utf-8' })
+        // this.parseConfig();
+
+        await editor.edit((builder) => {
+
+            builder.delete(new vscode.Range(0, 0, editor.document.lineCount, 0))
+            builder.insert(new vscode.Position(0, 0), newConfigString);
 
         })
 
+        this.setupSaveLock(); // everything fine don't fire event 
 
-        // return vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
-        //     // after opening the document, we set the cursor 
-        //     // and here we make use of the line property which makes imo the code easier to read
-        //     return vscode.window.showTextDocument(document)
-        // }).then((editor) => {
+        await this.saveConfig(editor);
 
-        //     const newConfigString = jsonPrettyArray(this.maskJSON);
-        //     // fs.writeFileSync(this.pathMaskJSON, newConfigString, { encoding: 'utf-8' })
-        //     // this.parseConfig();
+        this.parseConfig();
 
-        //     return editor.edit((builder) => {
+        // todo  select again without event firing
 
-        //         builder.delete(new vscode.Range(0, 0, editor.document.lineCount, 0))
-        //         builder.insert(new vscode.Position(0, 0), newConfigString);
-        //     })
+        await this.showEffect(this.selectedEffectId, editor)
 
-        // });
+        return editor;
+
     }
 
-    // public updateEffects(effectsObject: object[]) {
 
-    //     vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
-    //         if (vscode.window.activeTextEditor) {
-    //             const currentDoc = vscode.window.activeTextEditor.document;
-    //             print(vscode.window.activeTextEditor)
-    //             if (currentDoc === document) {
-    //                 return vscode.window.activeTextEditor;
-    //             }
-    //         }
-    //         return vscode.window.showTextDocument(document)
-    //     }).then((editor) => {
-    //         if (!this.maskJSON) return;
-    //         // this.maskJSON?.effects.splice(id , 1);
-    //         // this.maskJSON.effects[idOld];
-
-    //         const newEffect = effectsObject as t.TypeOf<typeof Effect>[];
-    //         this.maskJSON.effects = newEffect;
-
-    //         const newConfigString = jsonPrettyArray(this.maskJSON)
-
-    //         editor.edit((builder) => {
-
-    //             builder.delete(new vscode.Range(0, 0, editor.document.lineCount, 0))
-    //             builder.insert(new vscode.Position(0, 0), newConfigString);
-
-    //         })
-
-    //     })
-    // }
 
     public checkConfigAtPath(dir) {
         const configPath = path.join(dir, "mask.json");
@@ -448,8 +408,6 @@ export class MaskConfig {
 
         if (!this.checkConfigAtPath(dir)) {
             print("No mask.json at " + dir)
-            vscode.window.showErrorMessage("No mask.json at " + dir)
-
             return undefined;
         }
 
@@ -462,14 +420,11 @@ export class MaskConfig {
 
         // ? maybe split to parse locations and actual object
         print("parsing mask.json")
+        this.maskJSON = undefined;
 
         this.pathMaskJSON = this.searchConfigFile();
 
-        if (this.pathMaskJSON === undefined) return;
-
-        // print("mask.json path : " + this.pathMaskJSON);
-
-
+        if (this.pathMaskJSON === undefined) return false;
 
 
         this.rawMaskJSON = fs.readFileSync(this.pathMaskJSON, 'utf8');
@@ -479,14 +434,13 @@ export class MaskConfig {
             this.sourceMaskJSON = jsonMap.parse(this.rawMaskJSON);
 
         } catch (error) {
-            print("json parsing error", error);
+            print("json parsing error, source maps", error);
+            print("raw mask.json ", this.sourceMaskJSON.data)
             return false;
-            // vscode.window.showErrorMessage(error);
-            // print(error);
         }
 
         if (this.sourceMaskJSON === undefined) {
-            vscode.window.showErrorMessage("mask json source is undefined")
+            print("mask json source is undefined")
             return false;
         }
 
@@ -498,6 +452,9 @@ export class MaskConfig {
             this.maskJSON = parseResult.data as z.infer<typeof ZMaskConfig>;
         } else {
             print("parse error ! ", (parseResult));
+            print("raw mask.json ", this.sourceMaskJSON.data)
+            print(this.maskJSON)
+            return false;
         }
 
 
@@ -524,7 +481,7 @@ export class MaskConfig {
 
 
         if (this.sourceMaskJSON?.pointers === undefined) {
-            vscode.window.showErrorMessage("source map pointers is undefined")
+            print("source map pointers is undefined")
             return false;
         }
 

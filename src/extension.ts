@@ -32,26 +32,10 @@ export function activate(context: vscode.ExtensionContext) {
 
         const message: any = (await sidebar.requestLogs());
         // console.log(message)
-        const webviewLogDump = message.value; // :D
-        // return;
+        const webviewLogDump = message.value;
         // combining multiple dumps into one, based on timestamp
         const dumps = [logDump, webviewLogDump]
         const fullLogDump = [].concat(...dumps).sort((a, b) => a.timestamp - b.timestamp);
-        // while (current !== undefined) {
-        //     fullLogDump.push(current);
-        //     current = undefined;
-        //     let index;
-        //     for (let i = 0; i < dumps.length; i++) {
-        //         if (!dumps[i].length) continue;
-        //         if (current === undefined || current.timestamp > dumps[i][0].timestamp) {
-        //             current = dumps[i][0];
-        //             index = i;
-        //             console.log(i)
-        //         }
-        //     }
-
-        //     current = index || dumps[index].shift();
-        // }
 
         const dumpPath = sidebar.maskConfig.currentConfigDir;
         if (dumpPath === undefined) {
@@ -63,8 +47,6 @@ export function activate(context: vscode.ExtensionContext) {
         const jsonDump = jsonPrettyArray(fullLogDump, "\t");
         const jsonDumpPath = path.join(dumpPath, "logDump.json");
         fs.writeFileSync(jsonDumpPath, jsonDump, { encoding: 'utf-8' })
-        vscode.window.showInformationMessage('Complete check : ' + jsonDumpPath);
-
 
         vscode.workspace.openTextDocument(jsonDumpPath).then(document => {
             return vscode.window.showTextDocument(document)

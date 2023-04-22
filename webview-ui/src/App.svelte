@@ -6,7 +6,6 @@
 
   import {
     provideVSCodeDesignSystem,
-    vsCodeButton,
     allComponents,
   } from "@vscode/webview-ui-toolkit";
   import Effects from "./Effects.svelte";
@@ -40,7 +39,7 @@
     }
   });
 
-  const sendDelay = 500;
+  const sendDelay = 500; // move to prefernces
   let sendTimeout;
   // here trying to accumulate changes and send them once ui settled down
   function sendEffects(newEffects) {
@@ -105,7 +104,9 @@
 {:else if appState === appStates.RUNNING}
   <Effects />
   <vscode-divider role="presentation" />
-  <Inspector />
+  {#if $selection}
+    <Inspector />
+  {/if}
 {:else if appState === appStates.LOADING}
   <div>Loading...</div>
   <vscode-progress-ring />

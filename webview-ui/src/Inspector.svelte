@@ -18,15 +18,17 @@
   import ObjectControl from "./ui-controls/ObjectControl.svelte";
   import { uiControls, EffectParserForUI } from "./ui-controls/Controls.js";
   import { onMount } from "svelte";
+  import NumberSliderControl from "./ui-controls/NumberSliderControl.svelte";
 
   let uiElements; //= EffectParserForUI.parse($effects);
   //   $: uiElements = EffectParserForUI.parse($effects);
 
   let selectedId;
 
+  uiElements = EffectParserForUI.parse($effects);
+  $: print("ui elements", uiElements);
   onMount(() => {
-    uiElements = EffectParserForUI.parse($effects);
-    // print("inspector tried!", uiElements); // !!!!! ERROROROROROROROR
+    // for some reason this does not fire
   });
 
   $: if ($selection) selectedId = $selection.id;
@@ -50,6 +52,11 @@
         label={$effects[selectedId].name}
         uiElements={uiElements.value[selectedId].value}
       />
+      <!-- <NumberSliderControl
+        bind:value={$effects[selectedId].mix}
+        label={"TEST"}
+        params={uiElements.value[selectedId].value.mix.uiData}
+      /> -->
       <!-- uiElements={uiControls[$effects[$selection.id].name].uiData} -->
     {/if}
   {/if}

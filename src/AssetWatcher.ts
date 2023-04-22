@@ -6,7 +6,7 @@ import { EventEmitter } from "events";
 const print = logger(__filename);
 
 /*
-    add exlude 
+    add exclude 
     add types of assets
 
 

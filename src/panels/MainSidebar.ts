@@ -96,9 +96,8 @@ export class MainSidebarProvider implements WebviewViewProvider {
                 case 'effectsUpdate':
                     {
                         print("received update effect");
+                        await this.maskConfig.updateEffects(data.value);
 
-                        this.setupEditLock();
-                        this.maskConfig.updateEffects(data.value);
                         break;
                     }
                 case 'effectSelected':
@@ -108,14 +107,12 @@ export class MainSidebarProvider implements WebviewViewProvider {
                         // ? check id ?
                         this.maskConfig.selectedEffectId = id;
                         this.maskConfig.showEffect(id);
-                        this.setupSelectLock();
                         break;
                     }
                 case 'effectDeselected':
                     {
                         print("received deselect effects");
                         this.maskConfig.clearSelection()
-                        this.setupSelectLock();
                         break;
                     }
 
@@ -133,11 +130,11 @@ export class MainSidebarProvider implements WebviewViewProvider {
                         break;
                     }
 
-                case "returnLogs":
-                    {
-                        print("recieved logs", data.value)
-                        break;
-                    }
+                // case "returnLogs":
+                //     {
+                //         print("recieved logs)
+                //         break;
+                //     }
 
             }
         });
@@ -147,8 +144,8 @@ export class MainSidebarProvider implements WebviewViewProvider {
             if (visible) {
                 print("webview visible update effects");
                 this.maskConfig.parseConfig();
-                this.sendEffects();
                 assetWatcher.searchAssets();
+                this.sendEffects();
 
             }
         }, this);
@@ -165,11 +162,16 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
 
     private init() {
+
+        // when opening selection fires without doing anything
+        // this will not do any harm, just to keep clean the logs
+        this.maskConfig.setupSelectLock();
+
         this.maskConfig.onTextEdit = () => {
             // ! if error, then need to send error
             this.maskConfig.selectedEffectId = undefined;
-            this.maskConfig.parseConfig();
-            this.sendEffects();
+            if (this.maskConfig.parseConfig())
+                this.sendEffects();
         }
 
         this.maskConfig.onTextSelect = () => {
@@ -181,58 +183,34 @@ export class MainSidebarProvider implements WebviewViewProvider {
             // }
         }
 
+        this.maskConfig.onFileSave = () => {
+            // !!! seems like also require lock 
+            this.maskConfig.selectedEffectId = undefined;
+            if (this.maskConfig.parseConfig())
+                this.sendEffects();
+        }
+
         assetWatcher.on("assetsChanged", (e) => {
             this.sendAssets(e);
         });
         assetWatcher.searchAssets();
 
-        print("parsing main!");
-        this.maskConfig.parseConfig();
-
-        // on init need to show mask.json only!
+        // on init need to show mask.json only! so there is no misatakes working in a wrong file
         const tabsToClose = vscode.window.tabGroups.all.map(tg => tg.tabs).flat();
         // ? maybe close only files that are in old project, could be usefull for opened api reference 
         vscode.window.tabGroups.close(tabsToClose).then(() => {
             this.maskConfig.showConfig();
         })
 
+        print("parsing init!");
+        this.maskConfig.parseConfig();
+
+
         if (this.maskConfig.pathMaskJSON === undefined) {
+            print("mask.json not found, show welcome")
             this.sendShowWelcome();
         } else {
             this.sendEffects();
-        }
-    }
-
-    private setupSelectLock() {
-        this.maskConfig.selectionLockCallback = () => {
-            // this.sendEffects();
-            this.maskConfig.selectionLockCallback = undefined;
-            //   this.maskConfig.saveConfig();
-        }
-    }
-
-    private setupEditLock() {
-        this.maskConfig.editLockCallback = () => {
-            print("h1");
-            // this.maskConfig.parseConfig();
-            // this.sendEffects();
-            this.maskConfig.editLockCallback = undefined;
-            // this.maskConfig.showEffect(this.maskConfig.selectedEffectId);
-            // this.maskConfig.saveConfig(); // edits completed now need to save so HotReload does it's job
-
-            this.maskConfig.selectionLockCallback = () => {
-                print("h2");
-
-                // restore on the second event
-                // ! first cb comes from removing whole json
-                // ! second one from selection
-                this.maskConfig.selectionLockCallback = undefined;
-
-                // this.maskConfig.selectionLockCallback = () => {
-                //     this.maskConfig.selectionLockCallback = undefined;
-
-                // }
-            }
         }
     }
 
@@ -290,8 +268,13 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
     public sendEffects() {
         if (this._view) {
-            print("sending effects to webview test");
-            this._view.webview.postMessage({ type: 'updateEffects', effects: this.maskConfig.maskJSON?.effects });
+            if (this.maskConfig.maskJSON !== undefined) {
+                print("sending effects to webview test");
+                this._view.webview.postMessage({ type: 'updateEffects', effects: this.maskConfig.maskJSON?.effects });
+            } else {
+                print("Undefined is not good maskJSON!");
+                print("TODO : SEND ERROR TO WEBVIEW, PARSE FALIURE")
+            }
         }
     }
 
@@ -330,7 +313,8 @@ export class MainSidebarProvider implements WebviewViewProvider {
             return new Promise(resolve => {
                 return this._view.webview.onDidReceiveMessage(
                     function (message) {
-                        resolve(message);
+                        if (message.type === "returnLogs")
+                            resolve(message);
                     }
                 )
             })
