@@ -130,12 +130,6 @@ export class MainSidebarProvider implements WebviewViewProvider {
                         break;
                     }
 
-                // case "returnLogs":
-                //     {
-                //         print("recieved logs)
-                //         break;
-                //     }
-
             }
         });
 
@@ -170,8 +164,12 @@ export class MainSidebarProvider implements WebviewViewProvider {
         this.maskConfig.onTextEdit = () => {
             // ! if error, then need to send error
             this.maskConfig.selectedEffectId = undefined;
-            if (this.maskConfig.parseConfig())
+            const parseResult = this.maskConfig.parseConfig()
+            if (parseResult.success)
                 this.sendEffects();
+            else {
+                this.sendError(parseResult.message)
+            }
         }
 
         this.maskConfig.onTextSelect = () => {
@@ -186,8 +184,12 @@ export class MainSidebarProvider implements WebviewViewProvider {
         this.maskConfig.onFileSave = () => {
             // !!! seems like also require lock 
             this.maskConfig.selectedEffectId = undefined;
-            if (this.maskConfig.parseConfig())
+            const parseResult = this.maskConfig.parseConfig()
+            if (parseResult.success)
                 this.sendEffects();
+            else {
+                this.sendError(parseResult.message)
+            }
         }
 
         assetWatcher.on("assetsChanged", (e) => {
@@ -203,8 +205,18 @@ export class MainSidebarProvider implements WebviewViewProvider {
         })
 
         print("parsing init!");
-        this.maskConfig.parseConfig();
-
+        //?  there will be the case when user deletes mask.json and i should cover it also 
+        const parseResult = this.maskConfig.parseConfig()
+        if (parseResult.success)
+            this.sendEffects();
+        else {
+            if (this.maskConfig.pathMaskJSON === undefined) {
+                print("mask.json not found, show welcome")
+                this.sendShowWelcome();
+            } else {
+                this.sendError(parseResult.message)
+            }
+        }
 
         if (this.maskConfig.pathMaskJSON === undefined) {
             print("mask.json not found, show welcome")
@@ -318,13 +330,22 @@ export class MainSidebarProvider implements WebviewViewProvider {
                     }
                 )
             })
-
-
         } else {
             print("view is null ")
             return Promise.resolve("view is null")
         }
 
+    }
+
+    public sendError(message) {
+        if (this._view) {
+            print("sending error");
+            print("error itself", message)
+            this._view.webview.postMessage({ type: 'error', error: message });
+        } else {
+            print("view is null ")
+            return Promise.resolve("view is null")
+        }
     }
 
 

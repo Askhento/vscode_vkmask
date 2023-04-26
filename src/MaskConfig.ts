@@ -9,6 +9,7 @@ import { report, reportOne } from "io-ts-human-reporter"
 import { ZBaseEffect, ZMaskConfig } from "./ztypes.js"
 import { z } from "zod";
 import { fromZodError } from 'zod-validation-error';
+import { delayPromise } from "./utils/delayPromise";
 
 import { logger } from "./logger";
 const print = logger(__filename);
@@ -28,6 +29,10 @@ export class MaskConfig {
     public pathMaskJSON: string | undefined;
     public currentConfigDir: string | undefined;
     public selectedEffectId: number | undefined;
+
+    private selectionDelay: { promise: Promise<any>, cancel: Function } | undefined;
+    private editDelay: { promise: Promise<any>, cancel: Function } | undefined;
+
     // these  will try to deal with changes made programmatically
     public editLockCallback: (() => void) | undefined;
     public selectionLockCallback: (() => void) | undefined;
@@ -61,7 +66,13 @@ export class MaskConfig {
 
                 print("seems like undo or user typing in mask.json")
 
-                this.onTextEdit();
+                if (this.editDelay !== undefined) this.editDelay.cancel();
+                // !!!! addd 500 to variable !!!!
+                this.editDelay = delayPromise(500)
+                this.editDelay.promise.then(() => {
+                    this.onTextEdit();
+                })
+
             }
 
         })
@@ -84,7 +95,11 @@ export class MaskConfig {
 
                 print("change selection by user");
 
-                this.onTextSelect();
+                if (this.selectionDelay !== undefined) this.selectionDelay.cancel();
+                this.selectionDelay = delayPromise(500)
+                this.selectionDelay.promise.then(() => {
+                    this.onTextSelect();
+                })
             }
         })
 
@@ -377,8 +392,6 @@ export class MaskConfig {
 
         this.parseConfig();
 
-        // todo  select again without event firing
-
         await this.showEffect(this.selectedEffectId, editor)
 
         return editor;
@@ -424,7 +437,12 @@ export class MaskConfig {
 
         this.pathMaskJSON = this.searchConfigFile();
 
-        if (this.pathMaskJSON === undefined) return false;
+        if (this.pathMaskJSON === undefined) {
+            return {
+                success: false,
+                message: "mask.json not seems to exist"
+            }
+        }
 
 
         this.rawMaskJSON = fs.readFileSync(this.pathMaskJSON, 'utf8');
@@ -435,18 +453,24 @@ export class MaskConfig {
 
         } catch (error) {
             print("json parsing error, source maps", error);
-            print("raw mask.json ", this.sourceMaskJSON.data)
-            return false;
+            print("raw mask.json ", this.rawMaskJSON)
+            return {
+                success: false,
+                message: error.toString()
+            }
         }
 
-        if (this.sourceMaskJSON === undefined) {
-            print("mask json source is undefined")
-            return false;
-        }
+        // if (this.sourceMaskJSON === undefined) {
+        //     print("mask json source is undefined")
+        //     return {
+        //         success : false,
+        //         message : 
+        //     }
+        // }
 
         // this.maskJSON = this.sourceMaskJSON.data;
         // print(this.sourceMaskJSON.data);
-        const parseResult = ZMaskConfig.safeParse(this.sourceMaskJSON.data);
+        const parseResult: any = ZMaskConfig.safeParse(this.sourceMaskJSON.data);
 
         if (parseResult.success) {
             this.maskJSON = parseResult.data as z.infer<typeof ZMaskConfig>;
@@ -454,7 +478,11 @@ export class MaskConfig {
             print("parse error ! ", (parseResult));
             print("raw mask.json ", this.sourceMaskJSON.data)
             print(this.maskJSON)
-            return false;
+            return {
+                success: false,
+                message: fromZodError(parseResult.error)
+            }
+            // return false;
         }
 
 
@@ -481,13 +509,18 @@ export class MaskConfig {
 
 
         if (this.sourceMaskJSON?.pointers === undefined) {
-            print("source map pointers is undefined")
-            return false;
+            print("could not parse mask.json sourcemap")
+            return {
+                success: false,
+                message: "could not parse mask.json sourcemap"
+            }
         }
 
         this.maskLinePointers = this.sourceMaskJSON?.pointers;
 
-        return true;
+        return { success: true }
+
+
 
     }
 

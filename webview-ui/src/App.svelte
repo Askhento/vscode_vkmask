@@ -10,6 +10,8 @@
   } from "@vscode/webview-ui-toolkit";
   import Effects from "./Effects.svelte";
   import Inspector from "./Inspector.svelte";
+  import ErrorMessage from "./ErrorMessage.svelte";
+
   import { vscode } from "./utils/vscode";
   import { assets, effects, selection } from "./stores";
   import WelcomeScreen from "./WelcomeScreen.svelte";
@@ -18,9 +20,10 @@
     LOADING: 0,
     RUNNING: 1,
     WELCOME: 2,
+    ERROR: 3,
   };
   let appState = appStates.LOADING;
-
+  let errorMessage = "";
   let updateLock = true;
   //   $: {
 
@@ -57,7 +60,6 @@
   // Handle messages sent from the extension to the webview
   function handleMessageApp(event) {
     const message = event.data; // The json data that the extension sent
-    // print("app.svelte " + message);
     switch (message.type) {
       case "requestLogs": {
         vscode.postMessage({
@@ -72,6 +74,13 @@
       }
       case "showWelcome": {
         appState = appStates.WELCOME;
+        break;
+      }
+      case "error": {
+        appState = appStates.ERROR;
+        print("error received", message.error);
+        print("message", message);
+        errorMessage = message.error;
         break;
       }
       case "updateEffects": {
@@ -110,6 +119,9 @@
 {:else if appState === appStates.LOADING}
   <div>Loading...</div>
   <vscode-progress-ring />
+{:else if appState === appStates.ERROR}
+  <!-- <ErrorMessage bind:this={errorMessage} /> -->
+  <ErrorMessage bind:message={errorMessage} />
 {/if}
 
 <style>

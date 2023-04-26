@@ -1,5 +1,5 @@
 
-export const delay = (delay: number, value: unknown): { promise: Promise<any>, cancel: Function } => {
+export const delayPromise = (delay: number, value?: unknown): { promise: Promise<any>, cancel: Function } => {
     let timeout;
     let _reject;
     const promise = new Promise((resolve, reject) => {
