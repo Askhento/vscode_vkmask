@@ -62,7 +62,8 @@
     "test": "node ./out/test/runTest.js",
     "install:all": "npm install && cd webview-ui && npm install",
     "start:webview": "cd webview-ui && npm run dev",
-    "build:webview": "cd webview-ui && npm run build"
+    "build:webview": "cd webview-ui && npm run build",
+    "publish-patch": "vsce publish patch && vsce package"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
