@@ -103,14 +103,16 @@
   }
 
   function sendAddEffect(object) {
-    $effects.unshift(object);
+    if ($selection !== undefined && $selection.type === "effect") {
+      //   vscode.postMessage({ type: "effectSelected", value: $selection.id });
+      //   $selection.id++;
+      $effects.splice($selection.id + 1, 0, object);
+    } else {
+      $effects.push(object);
+    }
 
     $effects = $effects;
 
-    if ($selection !== undefined && $selection.type === "effect") {
-      vscode.postMessage({ type: "effectSelected", value: $selection.id });
-      $selection.id++;
-    }
     // vscode.postMessage({ type: "effectAdd", value: object });
   }
 
@@ -125,27 +127,26 @@
 <!-- <svelte:window on:message={handleMessage} /> -->
 
 <main>
-  {#if $effects}
-    <div class="effect-add-wrapper">
-      <vscode-dropdown
-        on:change={(e) => {
-          const effectName = e.target.value;
-          print("new effect ", effectName);
-          if (effectName === "Add Effect") return;
-          const newEffect = effectDefaults[effectName];
-          print(newEffect);
-          sendAddEffect(newEffect.data);
-          e.target.value = "Add Effect";
-        }}
-      >
-        <vscode-option />
-        {#each effectNames as effectName}
-          <vscode-option>{effectName}</vscode-option>
-        {/each}
-      </vscode-dropdown>
-    </div>
+  <div class="effect-add-wrapper">
+    <vscode-dropdown
+      on:change={(e) => {
+        const effectName = e.target.value;
+        print("new effect ", effectName);
+        if (effectName === "Add Effect") return;
+        const newEffect = effectDefaults[effectName];
+        print(newEffect);
+        sendAddEffect(newEffect.data);
+        e.target.value = "Add Effect";
+      }}
+    >
+      <vscode-option />
+      {#each effectNames as effectName}
+        <vscode-option>{effectName}</vscode-option>
+      {/each}
+    </vscode-dropdown>
     <vscode-divider role="presentation" />
-
+  </div>
+  {#if $effects.length}
     <div class="effect-list-wrapper">
       <ul class="effectsList">
         {#each $effects as effect, index (index)}
@@ -192,8 +193,8 @@
     </div>
   {:else}
     <!-- add copy debug info button -->
-    <div>Something wrong...</div>
-    <vscode-progress-ring />
+    <div>Create your first effect!</div>
+    <!-- <vscode-progress-ring /> -->
   {/if}
 </main>
 

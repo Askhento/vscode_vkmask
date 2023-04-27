@@ -43,6 +43,8 @@ export class MaskConfig {
     public onTextSelect: () => void = () => { };
     public onFileSave: () => void = () => { };
 
+    public selectionDelayMS = 200;
+    public editDelayMS = 500;
 
     constructor() {
 
@@ -67,8 +69,7 @@ export class MaskConfig {
                 print("seems like undo or user typing in mask.json")
 
                 if (this.editDelay !== undefined) this.editDelay.cancel();
-                // !!!! addd 500 to variable !!!!
-                this.editDelay = delayPromise(500)
+                this.editDelay = delayPromise(this.editDelayMS)
                 this.editDelay.promise.then(() => {
                     this.onTextEdit();
                 })
@@ -96,7 +97,7 @@ export class MaskConfig {
                 print("change selection by user");
 
                 if (this.selectionDelay !== undefined) this.selectionDelay.cancel();
-                this.selectionDelay = delayPromise(500)
+                this.selectionDelay = delayPromise(this.selectionDelayMS)
                 this.selectionDelay.promise.then(() => {
                     this.onTextSelect();
                 })
