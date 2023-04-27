@@ -1,5 +1,6 @@
 
 import * as path from "path"
+import * as fs from 'fs';
 import * as vscode from 'vscode';
 import { logger } from "./logger";
 import { EventEmitter } from "events";
@@ -15,6 +16,8 @@ const print = logger(__filename);
 class AssetWatcher extends EventEmitter {
 
     public assets: Array<Record<string, string>> = [];
+    public builtInAssets: Array<Record<string, string>> = [];
+
     directory: string = "";
     public onAssetsChange: (() => void) | undefined;
 
@@ -28,12 +31,23 @@ class AssetWatcher extends EventEmitter {
         this.attach();
     }
 
+    getBuiltinAssets(extensionUri: vscode.Uri) {
+        const builtinPath = path.join(extensionUri.fsPath, "res", "build-in-assets.json")
+        const builtInRaw = fs.readFileSync(builtinPath, 'utf8');
+        const builtInJSON = JSON.parse(builtInRaw);
+
+        // ? add error check ? ?
+        this.builtInAssets = builtInJSON.assets
+
+    }
+
+
     async searchAssets() {
         await vscode.workspace.findFiles("**").then((res) => {
-            this.assets = res.map(obj => ({
+            this.assets = [...this.builtInAssets, ...res.map(obj => ({
                 path: this.getRelative(obj.fsPath),
                 type: "empty_just_testing"
-            }))
+            }))]
 
             print(this.assets);
 
@@ -80,5 +94,5 @@ class AssetWatcher extends EventEmitter {
 
 }
 
-// Exports class singleton to prevent multiple invocations of acquireVsCodeApi.
+// Exports class singleton to prevent multiple 
 export const assetWatcher = new AssetWatcher();

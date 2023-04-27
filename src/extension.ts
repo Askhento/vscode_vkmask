@@ -22,6 +22,8 @@ export function activate(context: vscode.ExtensionContext) {
 
     print("activating");
 
+    assetWatcher.getBuiltinAssets(context.extensionUri)
+
     const sidebar = new MainSidebarProvider(context.extensionUri);
 
     context.subscriptions.push(
@@ -53,7 +55,6 @@ export function activate(context: vscode.ExtensionContext) {
         })
 
     }))
-
 
 
     // "workbench.action.movePanelToSecondarySideBar",
@@ -100,6 +101,15 @@ export function activate(context: vscode.ExtensionContext) {
     //     vscode.commands.executeCommand('workbench.action.moveFocusedView');
 
     // })
+    if (false) {
+        assetWatcher.on("assetsChanged", (e) => {
+            // const dir = vscode.workspace.workspaceFolders[0].uri.fsPath;
+            const dir = context.extensionUri.fsPath;
+
+            const jsonDump = jsonPrettyArray(e, "\t");
+            fs.writeFileSync(dir + "/res/build-in-assets.json", jsonDump, { encoding: 'utf-8' })
+        });
+    }
 
 
 

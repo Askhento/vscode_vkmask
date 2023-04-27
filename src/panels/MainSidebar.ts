@@ -193,9 +193,11 @@ export class MainSidebarProvider implements WebviewViewProvider {
         }
 
         assetWatcher.on("assetsChanged", (e) => {
+
             this.sendAssets(e);
         });
         assetWatcher.searchAssets();
+
 
         // on init need to show mask.json only! so there is no misatakes working in a wrong file
         const tabsToClose = vscode.window.tabGroups.all.map(tg => tg.tabs).flat();
