@@ -344,8 +344,11 @@ export class MaskConfig {
         const newEffect = effectsObject as z.infer<typeof ZBaseEffect>[];
         this.maskJSON.effects = newEffect;
 
-        await this.writeConfig();
+        const editor = await this.writeConfig();
+
         this.parseConfig();
+
+        await this.showEffect(this.selectedEffectId, editor)
 
         // if (this.saveDelayPromise !== undefined) this.saveDelayPromise.cancel();
 
@@ -391,9 +394,7 @@ export class MaskConfig {
 
         await this.saveConfig(editor);
 
-        this.parseConfig();
 
-        await this.showEffect(this.selectedEffectId, editor)
 
         return editor;
 
