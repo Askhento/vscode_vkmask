@@ -36,7 +36,7 @@
   $: print("selection changes : ", $selection);
   $: {
     print("effects changes : ", $effects);
-    uiElements = EffectParserForUI.parse($effects);
+    uiElements = EffectParserForUI.parse($effects); // this seems to help !!!
   }
 </script>
 

@@ -38,6 +38,10 @@
     // });
 
     $effects = newEffects;
+    $selection = {
+      type: "effect",
+      id: target,
+    };
     // effects.set(newEffects);
     // sendEffects();
   };
@@ -57,15 +61,15 @@
   function toggleSelection(id) {
     if (checkSelected(id)) {
       $selection = undefined;
-      print("sending deselect ", id);
-      vscode.postMessage({ type: "effectDeselected", value: id });
+      //   print("sending deselect ", id);
+      //   vscode.postMessage({ type: "effectDeselected", value: id });
     } else {
       $selection = {
         type: "effect",
         id: id,
       };
-      print("sending select", id);
-      vscode.postMessage({ type: "effectSelected", value: id });
+      //   print("sending select", id);
+      //   vscode.postMessage({ type: "effectSelected", value: id });
     }
   }
 
@@ -90,11 +94,11 @@
     if ($selection !== undefined && $selection.type === "effect") {
       if ($selection.id === id) {
         $selection = undefined;
-        print("sending deselect", id);
-        vscode.postMessage({ type: "effectDeselected", value: 0 });
+        // print("sending deselect", id);
+        // vscode.postMessage({ type: "effectDeselected", value: 0 });
       } else if ($selection.id > id) {
-        print("sending select", id);
-        vscode.postMessage({ type: "effectSelected", value: $selection.id });
+        // print("sending select", id);
+        // vscode.postMessage({ type: "effectSelected", value: $selection.id });
         $selection.id--;
       }
     }

@@ -42,6 +42,13 @@
     }
   });
 
+  selection.subscribe((newSelection) => {
+    vscode.postMessage({
+      type: "selectionUpdate",
+      value: newSelection,
+    });
+  });
+
   const sendDelay = 500; // move to prefernces
   let sendTimeout;
   // here trying to accumulate changes and send them once ui settled down

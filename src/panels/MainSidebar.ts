@@ -100,6 +100,21 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
                         break;
                     }
+                case 'selectionUpdate':
+                    {
+                        print("received selection update")
+                        const newSelection = data.value;
+                        if (newSelection === undefined) {
+                            this.maskConfig.selectedEffectId = undefined;
+                            this.maskConfig.clearSelection();
+                        } else {
+                            // ?add type check 
+                            const id = newSelection.id;
+                            this.maskConfig.selectedEffectId = id;
+                            this.maskConfig.showEffect(id);
+                        }
+                        break;
+                    }
                 case 'effectSelected':
                     {
                         const id = data.value;
