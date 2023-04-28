@@ -25,7 +25,6 @@
 
   let selectedId;
 
-  uiElements = EffectParserForUI.parse($effects);
   $: print("ui elements", uiElements);
   onMount(() => {
     // for some reason this does not fire
@@ -35,7 +34,10 @@
   else selectedId = undefined;
 
   $: print("selection changes : ", $selection);
-  $: print("effects changes : ", $effects);
+  $: {
+    print("effects changes : ", $effects);
+    uiElements = EffectParserForUI.parse($effects);
+  }
 </script>
 
 <div class="inspector-wrapper">

@@ -68,8 +68,10 @@ export const uiDescriptions = {
     object: ({ }) => ({
         name: 'object'
     }),
-    array: ({ }) => ({
-        name: 'array'
+    array: ({ elementName, defaultElement }) => ({
+        name: 'array',
+        elementName: elementName,
+        defaultElement: defaultElement
     }),
     union: ({ }) => ({
         name: 'union',
@@ -315,7 +317,7 @@ export const ZMaterialArray = z.preprocess(
         ZMaterialAsset,
         ZMaterialObject
     ]).describe(uiDescriptions.union({}))
-    ).describe(uiDescriptions.array({}))
+    ).describe(uiDescriptions.array({ elementName: "material", defaultElement: AssetTypes.material.default }))
 );
 
 

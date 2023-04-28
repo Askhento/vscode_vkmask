@@ -1,12 +1,28 @@
 <script>
+  import { logDump, logger } from "../logger";
+  const print = logger("ArrayControl.svelte");
+
   export let expanded = false;
 
   export let value;
   export let label;
   export let uiElements;
+  export let params;
 
   function toggle() {
     expanded = !expanded;
+  }
+
+  function addElement() {
+    // print(params);
+    const { defaultElement } = params;
+    value.push(defaultElement);
+    value = value;
+  }
+
+  function removeElement() {
+    value.pop();
+    value = value;
   }
 </script>
 
@@ -15,10 +31,7 @@
     >{label}
     <i class="codicon codicon-triangle-{expanded ? 'down' : 'right'}" />
   </span>
-  <!-- <vscode-button on:click={sendCreateNewProject}>
-      Create new project
-      <span slot="start" class="codicon codicon-add" />
-    </vscode-button> -->
+
   <div class="elements-wrapper">
     {#if expanded}
       {#if uiElements}
@@ -41,6 +54,14 @@
             uiElements={data.value}
           />
         {/each}
+      {/if}
+      <vscode-button on:click={addElement}>
+        <span slot="start" class="codicon codicon-add" />
+      </vscode-button>
+      {#if value.length}
+        <vscode-button on:click={removeElement}>
+          <span slot="start" class="codicon codicon-remove" />
+        </vscode-button>
       {/if}
     {/if}
   </div>
