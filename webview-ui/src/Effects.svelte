@@ -14,6 +14,7 @@
   import { flip } from "svelte/animate";
 
   let hovering: any = false;
+  let addListOpened = false;
   //   let uiElements;
 
   const drop = (event, target) => {
@@ -136,15 +137,27 @@
 
 <main>
   <div class="effect-add-wrapper">
+    <vscode-button
+      class="add-effect-btn"
+      on:click={() => {
+        // addListOpened = !addListOpened;
+      }}
+    >
+      <span slot="start" class="codicon codicon-add" />
+      Add Effect
+    </vscode-button>
     <vscode-dropdown
+      class="add-effect-dropdown"
+      open={addListOpened}
+      on:blur={() => {
+        // addListOpened = false // edge case when hitting outside element
+      }}
       on:change={(e) => {
         const effectName = e.target.value;
         print("new effect ", effectName);
-        if (effectName === "Add Effect") return;
         const newEffect = effectDefaults[effectName];
         print(newEffect);
         sendAddEffect(newEffect.data);
-        e.target.value = "Add Effect";
       }}
     >
       <vscode-option />
@@ -243,7 +256,18 @@
     right: 0px;
     top: 0px;
   }
-
+  .effect-add-wrapper {
+    position: relative;
+  }
+  .add-effect-dropdown {
+    width: 120px;
+  }
+  .add-effect-btn {
+    pointer-events: none;
+    width: 120px;
+    position: absolute;
+    z-index: 1;
+  }
   .effect-btn {
     display: inline-block;
   }
