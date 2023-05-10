@@ -153,8 +153,13 @@ export class MainSidebarProvider implements WebviewViewProvider {
             if (visible) {
                 print("webview visible update effects");
                 this.maskConfig.parseConfig();
-                assetWatcher.searchAssets();
-                this.sendEffects();
+                if (this.maskConfig.pathMaskJSON === undefined) {
+                    print("mask.json not found, show welcome")
+                    this.sendShowWelcome();
+                } else {
+                    assetWatcher.searchAssets();
+                    this.sendEffects();
+                }
 
             }
         }, this);

@@ -2,1515 +2,1511 @@
 	"assets": [
 		{
 			"path": "Techniques/DiffSpecAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalSpecAOAlphaMask.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffVColAddAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffSpecAlphaMask.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTextureAO.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalAlphaMaskTranslucent.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffLightMap.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTextureEnvCubeAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTextureEnvCubeAOAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffAddAlpha.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/PBR/PBRDiffNormal.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/PBR/PBRDiffNormalEmissiveAlpha.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/PBR/PBRDiffNormalAlpha.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/PBR/PBRMetallicRoughDiffSpecAlpha.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/PBR/PBRMetallicRoughDiffNormalSpecEmissiveAlpha.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/PBR/PBRNoTextureAlpha.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/PBR/PBRMetallicRoughDiffNormalSpecEmissive.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/PBR/DiffNormalSpecEmissive.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/PBR/PBRMetallicRoughDiffNormalSpec.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/PBR/PBRMetallicRoughDiffSpec.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/PBR/PBRDiffNormalEmissive.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/PBR/PBRNoTexture.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/PBR/PBRDiffAlpha.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/PBR/PBRDiff.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/PBR/DiffNormalSpecEmissiveAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPackedSpecAOAlphaMask.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/DiffUnlitAlpha.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/DiffNormalEnvCube.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/NoTextureOverlay.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPackedAlphaMask.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTextureNormal.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffMultiply.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffSkyboxHDRScale.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTextureAOAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalAlphaMask.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPacked.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
+		},
+		{
+			"path": "Techniques/DiffUnlitAlpha.xml",
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalEmissiveAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPackedSpec.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffVColMultiply.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/BasicVColUnlitAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffEnvCube.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormal.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffEnvCubeAOAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffEmissive.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
+		},
+		{
+			"path": "Techniques/NoTextureOverlay.xml",
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffAOAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffAOAlphaMask.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/NoTextureUnlitAlpha.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedAO.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/Water.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/TerrainBlend.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTextureMultiply.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTextureEnvCube.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/VegetationDiffAlphaMask.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffAO.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalAOAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/TextureEffect.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffSpec.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
+		},
+		{
+			"path": "Techniques/DiffNormalPackedAO.xml",
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTextureAddAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTextureAdd.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPackedEmissiveAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
+		},
+		{
+			"path": "Techniques/DiffNormalEnvCube.xml",
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPackedEmissive.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/VegetationDiff.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTextureEnvCubeAO.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTextureUnlitVCol.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffOverlay.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
+		},
+		{
+			"path": "Techniques/NoTextureUnlitAlpha.xml",
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffLightMapAlpha.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/NoTextureVColAddAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffLitParticleAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPackedSpecAO.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPackedAOAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffUnlitAlphaMask.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPackedAlphaMaskTranslucent.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalEmissive.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPackedSpecAlphaMask.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffEnvCubeAO.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalSpecAO.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffAlphaMask.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffEnvCubeAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/VegetationDiffUnlit.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPackedSpecAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/VegetationDiffUnlitAlphaMask.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
+		},
+		{
+			"path": "Techniques/NoTextureVColAddAlpha.xml",
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPackedAlphaTranslucent.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPackedEnvCubeAlpha.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/DiffNormalSpecEmissive.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalSpecAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTextureVColAdd.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffUnlit.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/InvisibleOccluder.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTextureNormalPacked.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
+		},
+		{
+			"path": "Techniques/DiffNormalSpecEmissive.xml",
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalSpecAOAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTextureVColMultiply.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalAO.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffAlphaMaskTranslucent.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedSpecAOAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffAdd.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
-			"path": "Techniques/NoTextureUnlit.xml",
-			"type": "empty_just_testing"
+			"path": "Techniques/DiffNormalPackedSpecAOAlpha.xml",
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalAOAlphaMask.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffVColAdd.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffSkybox.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffVColUnlitAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffSkyplane.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTexture.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPackedSpecEmissive.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalSpecAlphaMask.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/Diff.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalAlphaTranslucent.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
-			"path": "Techniques/DiffAlphaTranslucent.xml",
-			"type": "empty_just_testing"
+			"path": "Techniques/Diff.xml",
+			"type": "xml_technique"
+		},
+		{
+			"path": "Techniques/NoTextureUnlit.xml",
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPackedAOAlphaMask.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/DiffNormalSpec.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Techniques/NoTextureVCol.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPackedAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffSkydome.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTextureNormalPackedAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTextureAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
+		},
+		{
+			"path": "Techniques/DiffNormalSpec.xml",
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalEnvCubeAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/NoTextureNormalAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalSpecEmissiveAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffEmissiveAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/GlassesDiffEnvAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/YuvUnlit.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPackedSpecEmissiveAlpha.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffNormalPackedEnvCube.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
 			"path": "Techniques/DiffVCol.xml",
-			"type": "empty_just_testing"
+			"type": "xml_technique"
 		},
 		{
-			"path": "Facemodel/sym_left_eye_poly.bin",
-			"type": "empty_just_testing"
+			"path": "Techniques/PBR/DiffNormalSpecEmissiveAlpha.xml",
+			"type": "xml_technique"
 		},
 		{
-			"path": "Facemodel/GENERATED_decimated_patched_hole_indices.bin",
-			"type": "empty_just_testing"
+			"path": "Techniques/DiffAlphaTranslucent.xml",
+			"type": "xml_technique"
 		},
 		{
-			"path": "Facemodel/sym_right_eye_poly.bin",
-			"type": "empty_just_testing"
+			"path": "Techniques/NoTextureVCol.xml",
+			"type": "xml_technique"
 		},
 		{
-			"path": "Facemodel/eye1_indices_decimated.bin",
-			"type": "empty_just_testing"
+			"path": "Techniques/PBR/PBRDiffNormalEmissive.xml",
+			"type": "xml_technique"
 		},
 		{
-			"path": "Facemodel/default_mapping.bin",
-			"type": "empty_just_testing"
+			"path": "Techniques/PBR/PBRNoTexture.xml",
+			"type": "xml_technique"
 		},
 		{
-			"path": "Facemodel/sym_mouth_poly.bin",
-			"type": "empty_just_testing"
+			"path": "Techniques/PBR/PBRDiffAlpha.xml",
+			"type": "xml_technique"
 		},
 		{
-			"path": "Facemodel/fm_render_ind.bin",
-			"type": "empty_just_testing"
+			"path": "Techniques/PBR/PBRDiff.xml",
+			"type": "xml_technique"
 		},
 		{
-			"path": "Facemodel/sym_tex_coords_compatible.bin",
-			"type": "empty_just_testing"
+			"path": "Techniques/PBR/PBRMetallicRoughDiffSpecAlpha.xml",
+			"type": "xml_technique"
 		},
 		{
-			"path": "Facemodel/eye2_indices_decimated.bin",
-			"type": "empty_just_testing"
+			"path": "Techniques/PBR/PBRMetallicRoughDiffNormalSpecEmissiveAlpha.xml",
+			"type": "xml_technique"
 		},
 		{
-			"path": "Facemodel/mouth_indices_decimated.bin",
-			"type": "empty_just_testing"
+			"path": "Techniques/PBR/PBRNoTextureAlpha.xml",
+			"type": "xml_technique"
 		},
 		{
-			"path": "PostProcess/GreyScale.xml",
-			"type": "empty_just_testing"
+			"path": "Techniques/PBR/PBRMetallicRoughDiffNormalSpecEmissive.xml",
+			"type": "xml_technique"
 		},
 		{
-			"path": "PostProcess/Bloom.xml",
-			"type": "empty_just_testing"
+			"path": "Techniques/PBR/DiffNormalSpecEmissive.xml",
+			"type": "xml_technique"
 		},
 		{
-			"path": "PostProcess/ColorCorrection.xml",
-			"type": "empty_just_testing"
+			"path": "Techniques/PBR/PBRDiffNormalAlpha.xml",
+			"type": "xml_technique"
 		},
 		{
-			"path": "PostProcess/FXAA3.xml",
-			"type": "empty_just_testing"
+			"path": "Techniques/PBR/PBRMetallicRoughDiffNormalSpec.xml",
+			"type": "xml_technique"
+		},
+		{
+			"path": "Techniques/PBR/PBRMetallicRoughDiffSpec.xml",
+			"type": "xml_technique"
+		},
+		{
+			"path": "Techniques/PBR/PBRDiffNormal.xml",
+			"type": "xml_technique"
+		},
+		{
+			"path": "Techniques/PBR/PBRDiffNormalEmissiveAlpha.xml",
+			"type": "xml_technique"
 		},
 		{
 			"path": "PostProcess/FXAA2.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "PostProcess/AutoExposure.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "PostProcess/Blur.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "PostProcess/GammaCorrection.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "PostProcess/BloomHDR.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "PostProcess/Tonemap.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Stencil.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/ComplexBlend.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/BloomHDR.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/PostProcess.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/MirrorQuad.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/ShadowBlur.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/TextureEffectBase.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Urho2D.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Liquify.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/PBR.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/GlassesLitSolid.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Pixelize.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/GreyScale.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Depth.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/PrepassLight.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/BilateralFilter2.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Blur.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Bloom.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Skydome.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Shadow.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/VegetationDepth.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Yuv2Rgb.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Unlit.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Transform.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Vegetation.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Samplers.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/DeferredLight.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Text.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Basic.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Yuv2Rgb_orig.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Fog.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Uniforms.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/BlendMath.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Tonemap.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/GammaCorrection.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Constants.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/BRDF.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Skybox.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/pe_sharpen.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Copyface.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/FXAA2.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/FXAA3.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/VegetationShadow.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/ClearFramebuffer.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/pe_blur.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/AutoExposure.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Beautify.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/PBRDeferred.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/ScreenPos.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/BilateralFilter.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/TerrainBlend.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/pe_zoom.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/LitSolid.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/ColorFilter.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/LitParticle.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/pe_chromatic.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/PBRLitSolid.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/LiquifiedWarp.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/ColorCorrection.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Water.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/Lighting.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/pe_noise.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/IBL.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/HLSL/CopyFramebuffer.hlsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Samplers.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/DeferredLight.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Vegetation.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Text.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Basic.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Yuv2Rgb.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/VegetationDepth.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Shadow.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Transform.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Unlit.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/GreyScale.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Pixelize.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/GlassesLitSolid.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/BilateralFilter2.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/PrepassLight.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Depth.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Bloom.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Blur.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Skydome.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Stencil.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/ShadowBlur.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/MirrorQuad.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/PostProcess.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/BloomHDR.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/ComplexBlend.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/PBR.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Liquify.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Urho2D.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/TextureEffectBase.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/LiquifiedWarp.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/ColorCorrection.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/pe_noise.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Lighting.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Water.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/CopyFramebuffer.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/IBL.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/LitSolid.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/pe_zoom.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/TerrainBlend.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/LitParticle.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/ColorFilter.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/PBRLitSolid.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/pe_chromatic.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/VegetationShadow.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/FXAA3.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/pe_blur.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/ScreenPos.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/PBRDeferred.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Beautify.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/AutoExposure.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/BilateralFilter.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/BlendMath.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Uniforms.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Fog.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/BRDF.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Constants.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/GammaCorrection.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Tonemap.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/FXAA2.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Copyface.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/pe_sharpen.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Shaders/GLSL/Skybox.glsl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "RenderPaths/init_pass.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "RenderPaths/unlit_pass.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "RenderPaths/main_pass.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "RenderPaths/Forward.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "RenderPaths/glasses_pass.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "RenderPaths/copy_texture.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "RenderPaths/start_ar.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "RenderPaths/saveViewport.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "RenderPaths/clear.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "RenderPaths/restoreViewport.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "RenderPaths/viewport_pass.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "RenderPaths/finish_ar.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "RenderPaths/copy_texture_to_viewport.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "RenderPaths/copy_viewport_to_texture.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Models/DefaultPlane.mdl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Models/head_occluder_noears.mdl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Models/head_occluder.mdl",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "build-in-assets.json",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Src/Mask.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Src/MaskScene.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Src/Triggers/MouthOpenTrigger.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/HotReload.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/mouth_open.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseAnimationAction.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseEffect.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseVisibleAction.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseFaceEvent.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseAction.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseAnimation.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseAr.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseEvent.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseMouthEvent.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/liquifiedwarp.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/facemodel.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/patch_copy.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/ar_object.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/postprocess.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/face_lost.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/occluder.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/nod.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/face_found.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/stop_animation.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/patch.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/animation_visible.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/light.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/copyface.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/model3d.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/hide_action.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/color_filter.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/ar_background.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/plane.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/show_action.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/posteffect.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/tap.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/mouth_close.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/colorfilter.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/switch_animation.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/animation.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/beautify.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/start_animation.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/pasteface.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/text.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/texture.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Effects/mirror_texture.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/log.txt",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Load.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Plugins/readconfiguration.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Plugins/spinner3d.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Plugins/parallax.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Plugins/mirror.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Plugins/BasePlugin.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Plugins/perspective.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Plugins/fixeddetection.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Plugins/customhint.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Plugins/randomtest.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Plugins/maskswitching.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Plugins/particles.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Plugins/template.as",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "ScriptEngine/Utils.as",
-			"type": "empty_just_testing"
+			"type": "xml_renderpath"
 		},
 		{
 			"path": "Materials/GreenTransparent.xml",
-			"type": "empty_just_testing"
+			"type": "xml_material"
+		},
+		{
+			"path": "Facemodel/default_mapping.bin",
+			"type": "unknown"
+		},
+		{
+			"path": "Facemodel/GENERATED_decimated_patched_hole_indices.bin",
+			"type": "unknown"
+		},
+		{
+			"path": "Facemodel/eye1_indices_decimated.bin",
+			"type": "unknown"
 		},
 		{
 			"path": "Materials/DefaultGrey.xml",
-			"type": "empty_just_testing"
+			"type": "xml_material"
+		},
+		{
+			"path": "PostProcess/GreyScale.xml",
+			"type": "xml_renderpath"
 		},
 		{
 			"path": "Materials/GreyTransparent.xml",
-			"type": "empty_just_testing"
+			"type": "xml_material"
+		},
+		{
+			"path": "PostProcess/Bloom.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "Facemodel/sym_left_eye_poly.bin",
+			"type": "unknown"
+		},
+		{
+			"path": "Facemodel/sym_right_eye_poly.bin",
+			"type": "unknown"
+		},
+		{
+			"path": "PostProcess/ColorCorrection.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "Facemodel/sym_mouth_poly.bin",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/HotReload.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Facemodel/fm_render_ind.bin",
+			"type": "unknown"
+		},
+		{
+			"path": "PostProcess/FXAA3.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "RenderPaths/copy_viewport_to_texture.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "ScriptEngine/log.txt",
+			"type": "unknown"
+		},
+		{
+			"path": "PostProcess/AutoExposure.xml",
+			"type": "xml_renderpath"
 		},
 		{
 			"path": "Materials/LitSmoke.xml",
-			"type": "empty_just_testing"
+			"type": "xml_material"
+		},
+		{
+			"path": "ScriptEngine/Load.as",
+			"type": "unknown"
+		},
+		{
+			"path": "PostProcess/Blur.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "Facemodel/sym_tex_coords_compatible.bin",
+			"type": "unknown"
+		},
+		{
+			"path": "Models/DefaultPlane.mdl",
+			"type": "unknown"
+		},
+		{
+			"path": "PostProcess/GammaCorrection.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "PostProcess/BloomHDR.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "Facemodel/eye2_indices_decimated.bin",
+			"type": "unknown"
+		},
+		{
+			"path": "Models/head_occluder_noears.mdl",
+			"type": "unknown"
+		},
+		{
+			"path": "PostProcess/Tonemap.xml",
+			"type": "xml_renderpath"
 		},
 		{
 			"path": "Materials/InvisibleOccluder.xml",
-			"type": "empty_just_testing"
+			"type": "xml_material"
+		},
+		{
+			"path": "ScriptEngine/Utils.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Facemodel/mouth_indices_decimated.bin",
+			"type": "unknown"
 		},
 		{
 			"path": "Materials/VideoFrame.xml",
-			"type": "empty_just_testing"
+			"type": "xml_material"
+		},
+		{
+			"path": "Models/head_occluder.mdl",
+			"type": "unknown"
+		},
+		{
+			"path": "RenderPaths/init_pass.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "RenderPaths/unlit_pass.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "RenderPaths/main_pass.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "RenderPaths/Forward.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "RenderPaths/glasses_pass.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "RenderPaths/copy_texture.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "RenderPaths/start_ar.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "RenderPaths/saveViewport.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "RenderPaths/clear.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "RenderPaths/restoreViewport.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "RenderPaths/viewport_pass.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "RenderPaths/finish_ar.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "RenderPaths/copy_texture_to_viewport.xml",
+			"type": "xml_renderpath"
+		},
+		{
+			"path": "ScriptEngine/Effects/start_animation.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/animation.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/beautify.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/pasteface.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/ar_object.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Fog.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/BRDF.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/postprocess.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Constants.glsl",
+			"type": "unknown"
 		},
 		{
 			"path": "Textures/Beautify/SoftIntensity.png",
-			"type": "empty_just_testing"
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/face_lost.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/GammaCorrection.glsl",
+			"type": "unknown"
 		},
 		{
 			"path": "Textures/Beautify/FaceBlurMask.png",
-			"type": "empty_just_testing"
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/occluder.as",
+			"type": "unknown"
 		},
 		{
 			"path": "Textures/Beautify/FaceBlurMask1.png",
-			"type": "empty_just_testing"
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Tonemap.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/nod.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/FXAA2.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/face_found.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Copyface.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/stop_animation.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/pe_sharpen.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/patch.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/animation_visible.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Skybox.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/light.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/copyface.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/model3d.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/hide_action.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/color_filter.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/ar_background.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/plane.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/show_action.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/patch_copy.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/posteffect.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/tap.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/mouth_close.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/colorfilter.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/switch_animation.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/text.as",
+			"type": "unknown"
 		},
 		{
 			"path": "Textures/default.xml",
-			"type": "empty_just_testing"
+			"type": "xml_texture"
+		},
+		{
+			"path": "ScriptEngine/Effects/texture.as",
+			"type": "unknown"
 		},
 		{
 			"path": "Textures/RampExtreme.png",
-			"type": "empty_just_testing"
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/mirror_texture.as",
+			"type": "unknown"
 		},
 		{
 			"path": "Textures/RampExtreme.xml",
-			"type": "empty_just_testing"
+			"type": "xml_texture"
+		},
+		{
+			"path": "ScriptEngine/Effects/facemodel.as",
+			"type": "unknown"
 		},
 		{
 			"path": "Textures/vignette.png",
-			"type": "empty_just_testing"
+			"type": "unknown"
 		},
 		{
 			"path": "Textures/noise.png",
-			"type": "empty_just_testing"
+			"type": "unknown"
 		},
 		{
 			"path": "Textures/Ramp.png",
-			"type": "empty_just_testing"
+			"type": "unknown"
 		},
 		{
 			"path": "Textures/Ramp.xml",
-			"type": "empty_just_testing"
+			"type": "xml_texture"
 		},
 		{
-			"path": "Textures/Copyface/FaceMaskNose.png",
-			"type": "empty_just_testing"
+			"path": "Shaders/GLSL/VegetationShadow.glsl",
+			"type": "unknown"
 		},
 		{
-			"path": "Textures/Copyface/FaceMask.png",
-			"type": "empty_just_testing"
+			"path": "Shaders/GLSL/pe_chromatic.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/FXAA3.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Src/Mask.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/pe_blur.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Src/MaskScene.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/ScreenPos.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/PBRLitSolid.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/PBRDeferred.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Beautify.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/AutoExposure.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/BilateralFilter.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/ColorFilter.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/mouth_open.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/BlendMath.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/PBR.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/ComplexBlend.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/BloomHDR.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Liquify.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Plugins/readconfiguration.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Plugins/spinner3d.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Urho2D.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Plugins/parallax.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/TextureEffectBase.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Plugins/mirror.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/LiquifiedWarp.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/PostProcess.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Plugins/BasePlugin.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/ColorCorrection.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Plugins/perspective.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/pe_noise.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Plugins/fixeddetection.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Lighting.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Src/Triggers/MouthOpenTrigger.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Plugins/customhint.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Water.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Plugins/randomtest.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/CopyFramebuffer.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Plugins/maskswitching.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/MirrorQuad.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/IBL.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Plugins/particles.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/LitSolid.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Plugins/template.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/pe_zoom.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/TerrainBlend.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/LitParticle.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Uniforms.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/ShadowBlur.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/liquifiedwarp.as",
+			"type": "unknown"
 		},
 		{
 			"path": "Textures/Flare.dds",
-			"type": "empty_just_testing"
+			"type": "unknown"
 		},
 		{
 			"path": "Textures/RampWide.xml",
-			"type": "empty_just_testing"
+			"type": "xml_texture"
 		},
 		{
 			"path": "Textures/RampWide.png",
-			"type": "empty_just_testing"
+			"type": "unknown"
 		},
 		{
 			"path": "Textures/bilateral_lut_3.png",
-			"type": "empty_just_testing"
+			"type": "unknown"
+		},
+		{
+			"path": "Textures/Copyface/FaceMask.png",
+			"type": "unknown"
 		},
 		{
 			"path": "Textures/bilateral_lut_3.xml",
-			"type": "empty_just_testing"
-		},
-		{
-			"path": "Textures/Spot.xml",
-			"type": "empty_just_testing"
+			"type": "xml_texture"
 		},
 		{
 			"path": "Textures/Smoke.dds",
-			"type": "empty_just_testing"
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Stencil.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Textures/Copyface/FaceMaskNose.png",
+			"type": "unknown"
 		},
 		{
 			"path": "Textures/SpotWide.png",
-			"type": "empty_just_testing"
+			"type": "unknown"
 		},
 		{
 			"path": "Textures/Spot.png",
-			"type": "empty_just_testing"
+			"type": "unknown"
 		},
 		{
 			"path": "Textures/SpotWide.xml",
-			"type": "empty_just_testing"
+			"type": "xml_texture"
+		},
+		{
+			"path": "Textures/Spot.xml",
+			"type": "xml_texture"
+		},
+		{
+			"path": "Shaders/GLSL/Skydome.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Blur.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Bloom.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Samplers.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/DeferredLight.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Vegetation.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Text.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Basic.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Yuv2Rgb.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/VegetationDepth.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Shadow.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Transform.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Unlit.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/GreyScale.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Pixelize.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/GlassesLitSolid.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/BilateralFilter2.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/PrepassLight.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/GLSL/Depth.glsl",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/Base/BaseAnimationAction.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/Base/BaseEffect.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/Base/BaseVisibleAction.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/Base/BaseFaceEvent.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/Base/BaseAction.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/Base/BaseAnimation.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/Base/BaseAr.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/Base/BaseEvent.as",
+			"type": "unknown"
+		},
+		{
+			"path": "ScriptEngine/Effects/Base/BaseMouthEvent.as",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Stencil.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/ComplexBlend.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/BloomHDR.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/PostProcess.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/MirrorQuad.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/ShadowBlur.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/TextureEffectBase.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Urho2D.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Liquify.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/PBR.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/GlassesLitSolid.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Pixelize.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/GreyScale.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Depth.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/PrepassLight.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/BilateralFilter2.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Blur.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Bloom.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Skydome.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Shadow.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/VegetationDepth.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Yuv2Rgb.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Unlit.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Transform.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Vegetation.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Samplers.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/DeferredLight.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Text.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Basic.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Yuv2Rgb_orig.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Fog.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Uniforms.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/BlendMath.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Tonemap.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/GammaCorrection.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Constants.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/BRDF.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Skybox.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/pe_sharpen.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Copyface.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/FXAA2.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/FXAA3.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/VegetationShadow.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/ClearFramebuffer.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/pe_blur.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/AutoExposure.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Beautify.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/PBRDeferred.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/ScreenPos.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/BilateralFilter.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/TerrainBlend.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/pe_zoom.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/LitSolid.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/ColorFilter.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/LitParticle.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/pe_chromatic.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/PBRLitSolid.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/LiquifiedWarp.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/ColorCorrection.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Water.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/Lighting.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/pe_noise.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/IBL.hlsl",
+			"type": "unknown"
+		},
+		{
+			"path": "Shaders/HLSL/CopyFramebuffer.hlsl",
+			"type": "unknown"
 		}
 	]
 }

@@ -41,9 +41,10 @@ export const uiDescriptions = {
         name: 'enum',
         options: options
     }),
-    filepath: ({ extensions }) => ({
+    filepath: ({ extensions, types }) => ({
         name: 'filepath',
-        extensions: extensions
+        extensions: extensions,
+        types: types
     }),
     text: ({ }) => ({
         name: 'text'
@@ -104,15 +105,18 @@ const AssetTypes = {
     },
     material: {
         default: "Materials/DefaultGrey.xml",
-        extensions: ["xml", "json"]
+        extensions: ["xml", "json"],
+        types: ["xml_material", "json_material"]
     },
     technique: {
         default: "Techniques/DiffUnlit.xml",
-        extensions: ["xml"]
+        extensions: ["xml"],
+        types: ["xml_technique"]
     },
     renderPath: {
         default: "",
-        extensions: ["xml"]
+        extensions: ["xml"],
+        types: ["xml_renderpath"]
     },
     animationClip: {
         default: "",
@@ -147,9 +151,9 @@ const ZPatchFitMode = z.enum([
     "pad"
 ])
 
-const ZTextureAsset = ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions }))
-const ZRenderPathAsset = ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.renderPath.extensions }))
-const ZTechniqueAsset = ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.technique.extensions }))
+const ZTextureAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.texture))
+const ZRenderPathAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.renderPath))
+const ZTechniqueAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.technique))
 
 // export const ZTextureObject = z.union(
 //     [
@@ -242,7 +246,7 @@ export const ZTextureObject = z.preprocess(
 // }
 
 
-const ZMaterialAsset = ZAsset.describe(uiDescriptions.filepath({ extensions: AssetTypes.material.extensions })).default(AssetTypes.material.default)
+const ZMaterialAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.material)).default(AssetTypes.material.default)
 
 // {
 // 	"techniques": [{"name": "Techniques/Diff.xml"}],

@@ -8,8 +8,20 @@
     params;
 
   let extensions;
-  $: extensions = new Set(params.extensions);
-  //   $: console.log("files to show ", extensions, $assets);
+  let fileTypes;
+  $: {
+    extensions = new Set(params.extensions);
+    fileTypes = params.types ? new Set(params.types) : undefined;
+  }
+
+  function filterAsset(asset) {
+    if (fileTypes !== undefined) {
+      return fileTypes.has(asset.type);
+    } else {
+      // <!-- will not work with more that 3 char extensions --
+      return extensions.has(asset.path.slice(-3));
+    }
+  }
 </script>
 
 <div class="control-wrapper">
@@ -26,8 +38,7 @@
       }}
     >
       {#each $assets as asset, i}
-        <!-- will not work with more that 3 char extensions -->
-        {#if extensions.has(asset.path.slice(-3))}
+        {#if filterAsset(asset)}
           <vscode-option>{asset.path}</vscode-option>
         {/if}
       {/each}

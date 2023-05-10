@@ -14,7 +14,7 @@
   import { flip } from "svelte/animate";
 
   let hovering: any = false;
-  let uiElements;
+  //   let uiElements;
 
   const drop = (event, target) => {
     event.dataTransfer.dropEffect = "move";
@@ -86,9 +86,9 @@
   }
 
   function onClickRemove(id) {
-    print("effects.svelte remove", id);
+    print("remove", id);
     $effects.splice(id, 1);
-    print("effects.svelte remove", $effects);
+    print("remove", $effects);
     $effects = $effects;
 
     if ($selection !== undefined && $selection.type === "effect") {
@@ -113,6 +113,10 @@
       $effects.splice($selection.id + 1, 0, object);
     } else {
       $effects.push(object);
+      $selection = {
+        type: "effect",
+        id: $effects.length - 1,
+      };
     }
 
     $effects = $effects;

@@ -10,12 +10,13 @@ import { ZBaseEffect, ZMaskConfig } from "./ztypes.js"
 import { z } from "zod";
 import { fromZodError } from 'zod-validation-error';
 import { delayPromise } from "./utils/delayPromise";
+import { EventEmitter } from "events";
 
 import { logger } from "./logger";
 const print = logger(__filename);
 
 
-export class MaskConfig {
+export class MaskConfig extends EventEmitter {
 
     // private saveDelayMS: number = 200;
     // private saveDelayTimeout: NodeJS.Timeout | undefined;
@@ -47,6 +48,7 @@ export class MaskConfig {
     public editDelayMS = 500;
 
     constructor() {
+        super();
 
         // this.refreshEffects();
 
@@ -104,7 +106,6 @@ export class MaskConfig {
             }
         })
 
-        // !!!!! need a lock also !!!!
         vscode.workspace.onDidSaveTextDocument((document) => {
             print("saving event")
             if (this.saveLockCallback !== undefined) {
@@ -199,17 +200,15 @@ export class MaskConfig {
 
 
         // ? do need selection lock here ?? 
-        //     vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
-        //         if (vscode.window.activeTextEditor) {
-        //             const currentDoc = vscode.window.activeTextEditor.document;
-        //             print(vscode.window.activeTextEditor)
-        //             if (currentDoc === document) {
-        //                 return vscode.window.activeTextEditor;
-        //             }
-        //         }
-        //         return vscode.window.showTextDocument(document)
-        //     }).then((editor) => {
 
+        if (vscode.window.activeTextEditor) {
+            const currentDoc = vscode.window.activeTextEditor.document;
+            print("active document", currentDoc)
+            if (currentDoc.uri.fsPath === this.pathMaskJSON) {
+                print("active is same")
+                return vscode.window.activeTextEditor;
+            }
+        }
         return vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
             return vscode.window.showTextDocument(document)
         })
@@ -408,7 +407,8 @@ export class MaskConfig {
     }
 
 
-    public searchConfigFile() {
+
+    public getConfigPath() {
 
         // ? what if more that one folder opened ???
         this.currentConfigDir = undefined;
@@ -437,7 +437,7 @@ export class MaskConfig {
         print("parsing mask.json")
         this.maskJSON = undefined;
 
-        this.pathMaskJSON = this.searchConfigFile();
+        this.pathMaskJSON = this.getConfigPath();
 
         if (this.pathMaskJSON === undefined) {
             return {
@@ -447,8 +447,16 @@ export class MaskConfig {
         }
 
 
-        this.rawMaskJSON = fs.readFileSync(this.pathMaskJSON, 'utf8');
-
+        // use unsaved version of config if possible
+        if (vscode.window.activeTextEditor) {
+            const currentDoc = vscode.window.activeTextEditor.document;
+            if (currentDoc.uri.fsPath === this.pathMaskJSON) {
+                const editor = vscode.window.activeTextEditor;
+                this.rawMaskJSON = editor.document.getText()
+            } else {
+                this.rawMaskJSON = fs.readFileSync(this.pathMaskJSON, 'utf8');
+            }
+        }
 
         try {
             this.sourceMaskJSON = jsonMap.parse(this.rawMaskJSON);

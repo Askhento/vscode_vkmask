@@ -6,6 +6,9 @@ import { logger } from "./logger";
 import { EventEmitter } from "events";
 const print = logger(__filename);
 
+import { XMLParser } from "fast-xml-parser" // https://github.com/NaturalIntelligence/fast-xml-parser/blob/c7b3cea4ead020c21d39e135a50348208829e971/docs/v4/2.XMLparseOptions.md
+
+
 /*
     add exclude 
     add types of assets
@@ -17,7 +20,9 @@ class AssetWatcher extends EventEmitter {
 
     public assets: Array<Record<string, string>> = [];
     public builtInAssets: Array<Record<string, string>> = [];
-
+    private xmlParser = new XMLParser({
+        ignoreDeclaration: true
+    });
     directory: string = "";
     public onAssetsChange: (() => void) | undefined;
 
@@ -43,17 +48,35 @@ class AssetWatcher extends EventEmitter {
 
 
     async searchAssets() {
-        await vscode.workspace.findFiles("**").then((res) => {
-            this.assets = [...this.builtInAssets, ...res.map(obj => ({
-                path: this.getRelative(obj.fsPath),
-                type: "empty_just_testing"
-            }))]
+        print("Searching assets")
+        await vscode.workspace.findFiles("**").then(files => {
+            const newAssets = files.map(file => {
+                // ? add check if file already exists
+                let assetType = "unknown"
 
-            print(this.assets);
+                if (file.fsPath.endsWith("xml")) {
+                    print(file.fsPath)
+                    const rawXML = fs.readFileSync(file.fsPath)
+                    let xmlObject = this.xmlParser.parse(rawXML);
+                    const xmlType = Object.keys(xmlObject)[0]
+                    assetType = "xml_" + xmlType;
+                }
+                return {
+                    path: this.getRelative(file.fsPath),
+                    type: assetType
+                }
+            }
+            )
+
+            print(newAssets)
+
+            this.assets = [...this.builtInAssets, ...newAssets]
 
             this.fireChangedEvent()
 
         })
+
+
     }
 
     attach() {

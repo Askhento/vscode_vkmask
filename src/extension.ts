@@ -22,7 +22,18 @@ export function activate(context: vscode.ExtensionContext) {
 
     print("activating");
 
-    assetWatcher.getBuiltinAssets(context.extensionUri)
+    const createBuiltinAssets = false;
+    if (createBuiltinAssets) {
+        assetWatcher.on("assetsChanged", (e) => {
+            // const dir = vscode.workspace.workspaceFolders[0].uri.fsPath;
+            const dir = context.extensionUri.fsPath;
+
+            const jsonDump = jsonPrettyArray(e, "\t");
+            fs.writeFileSync(dir + "/res/build-in-assets.json", jsonDump, { encoding: 'utf-8' })
+        });
+    } else {
+        assetWatcher.getBuiltinAssets(context.extensionUri)
+    }
 
     const sidebar = new MainSidebarProvider(context.extensionUri);
 
@@ -100,16 +111,7 @@ export function activate(context: vscode.ExtensionContext) {
     // vscode.commands.executeCommand('vkmask.inspector.focus').then(() => {
     //     vscode.commands.executeCommand('workbench.action.moveFocusedView');
 
-    // })
-    if (false) {
-        assetWatcher.on("assetsChanged", (e) => {
-            // const dir = vscode.workspace.workspaceFolders[0].uri.fsPath;
-            const dir = context.extensionUri.fsPath;
 
-            const jsonDump = jsonPrettyArray(e, "\t");
-            fs.writeFileSync(dir + "/res/build-in-assets.json", jsonDump, { encoding: 'utf-8' })
-        });
-    }
 
 
 

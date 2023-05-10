@@ -23,6 +23,7 @@
     ERROR: 3,
   };
   let appState = appStates.LOADING;
+  $: print("state change : ", appState);
   let errorMessage = "";
   let updateLock = true;
   //   $: {
@@ -127,7 +128,6 @@
   <div>Loading...</div>
   <vscode-progress-ring />
 {:else if appState === appStates.ERROR}
-  <!-- <ErrorMessage bind:this={errorMessage} /> -->
   <ErrorMessage bind:message={errorMessage} />
 {/if}
 

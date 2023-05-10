@@ -20,8 +20,10 @@
     value = value;
   }
 
-  function removeElement() {
-    value.pop();
+  function removeElement(index) {
+    if (index === undefined) return;
+    // value.pop();
+    value.splice(index, 1);
     value = value;
   }
 </script>
@@ -45,6 +47,7 @@
                     params={data.uiData}
                     uiElements={data.value}
                   /> -->
+
           <svelte:component
             this={data.uiElement}
             expanded={true}
@@ -53,16 +56,25 @@
             params={data.uiData}
             uiElements={data.value}
           />
+          <vscode-button
+            class="remove-btn"
+            appearance="icon"
+            on:click={() => {
+              removeElement(index);
+            }}
+          >
+            <span slot="start" class="codicon codicon-remove" />
+          </vscode-button>
         {/each}
       {/if}
-      <vscode-button on:click={addElement}>
+      <vscode-button appearance="icon" on:click={addElement}>
         <span slot="start" class="codicon codicon-add" />
       </vscode-button>
-      {#if value.length}
+      <!-- {#if value.length}
         <vscode-button on:click={removeElement}>
           <span slot="start" class="codicon codicon-remove" />
         </vscode-button>
-      {/if}
+      {/if} -->
     {/if}
   </div>
 </div>
@@ -72,6 +84,12 @@
     padding: 0.2em 0 0 0.5em;
     margin: 0 0 0 0.5em;
   }
+
+  .remove-btn {
+    flex-grow: 1;
+    display: inline-block;
+  }
+
   /* span {
     padding: 0 0 0 1.5em;
     background: url(tutorial/icons/folder.svg) 0 0.1em no-repeat;
