@@ -17,17 +17,22 @@
 
   import ObjectControl from "./ui-controls/ObjectControl.svelte";
   import { uiControls, EffectParserForUI } from "./ui-controls/Controls.js";
-  import { onMount } from "svelte";
+  import { onMount, tick } from "svelte";
   import NumberSliderControl from "./ui-controls/NumberSliderControl.svelte";
 
+  export let mountLock = true;
   let uiElements; //= EffectParserForUI.parse($effects);
   //   $: uiElements = EffectParserForUI.parse($effects);
 
   let selectedId;
 
   $: print("ui elements", uiElements);
-  onMount(() => {
-    // for some reason this does not fire
+  onMount(async () => {
+    mountLock = true;
+    // print("mounted");
+    await tick();
+    mountLock = false;
+    // print("mount tick");
   });
 
   $: if ($selection) selectedId = $selection.id;

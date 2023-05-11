@@ -2,6 +2,8 @@
 </script>
 
 <script>
+  import { onMount } from "svelte";
+
   export let expanded = false;
 
   export let value;

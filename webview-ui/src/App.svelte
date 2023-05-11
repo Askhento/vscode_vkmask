@@ -26,15 +26,24 @@
   $: print("state change : ", appState);
   let errorMessage = "";
   let updateLock = true;
+  let inspectorMountLock = true;
   //   $: {
 
   //   }
 
-  $: print("selection changes : ", $selection);
-  $: print("effects changes : ", $effects);
+  $: {
+    print("selection changes : ", $selection);
+    if (!$selection) inspectorMountLock = true;
+  }
+
+  $: {
+    // print("mount lock ", inspectorMountLock);
+    print("effects changes : ", $effects);
+  }
 
   effects.subscribe((newEffects) => {
-    if (updateLock) {
+    print("effects mount lock", inspectorMountLock);
+    if (updateLock || inspectorMountLock) {
       updateLock = false;
       print("lock return ");
     } else {
@@ -132,7 +141,7 @@
   <Effects />
   <vscode-divider role="presentation" />
   {#if $selection}
-    <Inspector />
+    <Inspector bind:mountLock={inspectorMountLock} />
   {/if}
 {:else if appState === appStates.LOADING}
   <div>Loading...</div>

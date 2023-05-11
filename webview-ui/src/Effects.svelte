@@ -12,6 +12,7 @@
 
   import { effectNames, effectDefaults, ZEffects } from "../../src/ztypes.js";
   import { flip } from "svelte/animate";
+  import { onMount } from "svelte";
 
   let hovering: any = false;
   let addListOpened = false;
@@ -105,6 +106,7 @@
     }
     $effects = $effects;
   }
+
 </script>
 
 <!-- <svelte:window on:message={handleMessage} /> -->
