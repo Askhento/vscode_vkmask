@@ -42,12 +42,6 @@
           "contextualTitle": "vkmask sidepanel",
           "id": "vkmask.sidepanel",
           "name": "Sidepanel"
-        },
-        {
-          "type": "webview",
-          "contextualTitle": "vkmask inspector",
-          "id": "vkmask.inspector",
-          "name": "Inspector"
         }
       ]
     }

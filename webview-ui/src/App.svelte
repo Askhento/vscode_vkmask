@@ -111,6 +111,11 @@
     }
   }
 
+  function sendMoveView() {
+    vscode.postMessage({
+      type: "moveView",
+    });
+  }
   provideVSCodeDesignSystem().register(allComponents);
 </script>
 
@@ -119,6 +124,11 @@
 {#if appState === appStates.WELCOME}
   <WelcomeScreen />
 {:else if appState === appStates.RUNNING}
+  <vscode-button class="move-view-btn" on:click={sendMoveView}>
+    <span slot="start" class="codicon codicon-move" />
+    Move View
+  </vscode-button>
+  <vscode-divider role="presentation" />
   <Effects />
   <vscode-divider role="presentation" />
   {#if $selection}
@@ -132,7 +142,4 @@
 {/if}
 
 <style>
-  /* .done {
-    opacity: 0.4;
-  } */
 </style>

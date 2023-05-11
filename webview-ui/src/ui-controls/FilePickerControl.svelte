@@ -18,11 +18,13 @@
   let focused;
   $: {
     extensions = new Set(params.extensions);
+    print("new extensions", extensions);
     fileTypes = params.types ? new Set(params.types) : undefined;
-  }
-  $: {
     searchValue = searchValue;
     filteredAssets = $assets.filter(filterAsset);
+  }
+  $: {
+    // print("filterd", filteredAssets);
   }
 
   $: {
@@ -101,7 +103,6 @@
         }}
       >
         {#each filteredAssets as asset, i}
-          <!-- svelte-ignore a11y-mouse-events-have-key-events -->
           <vscode-option>{asset.path}</vscode-option>
         {/each}
       </vscode-dropdown>
@@ -130,7 +131,7 @@
   .dropdown-wrapper {
     position: relative;
   }
-  vscode-text-field {
+  /* vscode-text-field {
     margin: unset;
     position: absolute;
     width: 200px;
@@ -146,7 +147,7 @@
   }
   .dropdown-btn {
     display: inline-block;
-  }
+  } */
   span.label {
     flex-grow: 1;
   }

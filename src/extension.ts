@@ -103,17 +103,23 @@ export function activate(context: vscode.ExtensionContext) {
 
 
     // show sidebar 
-    vscode.commands.executeCommand(`workbench.view.extension.vkmask_primary_bar`)
+    // vscode.commands.executeCommand(`workbench.view.extension.vkmask_primary_bar`)
+    // vscode.commands.executeCommand(`workbench.action.focusAuxiliaryBar`)
+
     // await vscode.commands.executeCommand(`vkmask_primary_bar.focus`)
     // await vscode.commands.executeCommand(`vkmask.sidepanel.focus`)
 
+    // vscode.commands.executeCommand('workbench.action.moveFocusedView');
+    // vscode.commands.executeCommand('vkmask.sidepanel.focus').then(() => {
 
-    // vscode.commands.executeCommand('vkmask.inspector.focus').then(() => {
-    //     vscode.commands.executeCommand('workbench.action.moveFocusedView');
+    // })
 
-
-
-
+    // {
+    //   "type": "webview",
+    //   "contextualTitle": "vkmask inspector",
+    //   "id": "vkmask.inspector",
+    //   "name": "Inspector"
+    // }
 
 }
 

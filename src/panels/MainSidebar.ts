@@ -144,7 +144,12 @@ export class MainSidebarProvider implements WebviewViewProvider {
                         this.createNewProject();
                         break;
                     }
-
+                case "moveView": {
+                    print("received moveView");
+                    vscode.commands.executeCommand('vkmask.sidepanel.focus').then(() => {
+                        vscode.commands.executeCommand('workbench.action.moveFocusedView');
+                    })
+                }
             }
         });
 
