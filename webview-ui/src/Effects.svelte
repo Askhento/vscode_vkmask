@@ -33,18 +33,11 @@
       newEffects.splice(start + 1, 1);
     }
 
-    // // reset id's
-    // newEffects.forEach((effect, i) => {
-    //   effect.id = i;
-    // });
-
     $effects = newEffects;
     $selection = {
       type: "effect",
       id: target,
     };
-    // effects.set(newEffects);
-    // sendEffects();
   };
 
   const dragstart = (event, i) => {
@@ -77,13 +70,6 @@
   function onVisibleClick(id) {
     $effects[id].disabled = !$effects[id].disabled;
     $effects = $effects;
-    // vscode.postMessage({
-    //   type: "effectDisabled",
-    //   value: {
-    //     effectId: id,
-    //     disabled: $effects[id].data.disabled,
-    //   },
-    // });
   }
 
   function onClickRemove(id) {
@@ -107,10 +93,8 @@
     // vscode.postMessage({ type: "effectDelete", value: id });
   }
 
-  function sendAddEffect(object) {
+  function AddEffect(object) {
     if ($selection !== undefined && $selection.type === "effect") {
-      //   vscode.postMessage({ type: "effectSelected", value: $selection.id });
-      //   $selection.id++;
       $effects.splice($selection.id + 1, 0, object);
     } else {
       $effects.push(object);
@@ -119,17 +103,7 @@
         id: $effects.length - 1,
       };
     }
-
     $effects = $effects;
-
-    // vscode.postMessage({ type: "effectAdd", value: object });
-  }
-
-  function sendEffects() {
-    // vscode.postMessage({
-    //   type: "updateEffects",
-    //   value: $effects,
-    // });
   }
 </script>
 
@@ -157,7 +131,7 @@
         print("new effect ", effectName);
         const newEffect = effectDefaults[effectName];
         print(newEffect);
-        sendAddEffect(newEffect.data);
+        AddEffect(newEffect.data);
       }}
     >
       <vscode-option />

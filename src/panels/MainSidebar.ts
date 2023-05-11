@@ -92,6 +92,21 @@ export class MainSidebarProvider implements WebviewViewProvider {
                 //         break;
                 //     }
 
+                // case 'effectSelected':
+                //     {
+                //         const id = data.value;
+                //         print("received selected id = " + id);
+                //         // ? check id ?
+                //         this.maskConfig.selectedEffectId = id;
+                //         this.maskConfig.showEffect(id);
+                //         break;
+                //     }
+                // case 'effectDeselected':
+                //     {
+                //         print("received deselect effects");
+                //         this.maskConfig.clearSelection()
+                //         break;
+                //     }
 
                 case 'effectsUpdate':
                     {
@@ -113,21 +128,6 @@ export class MainSidebarProvider implements WebviewViewProvider {
                             this.maskConfig.selectedEffectId = id;
                             this.maskConfig.showEffect(id);
                         }
-                        break;
-                    }
-                case 'effectSelected':
-                    {
-                        const id = data.value;
-                        print("received selected id = " + id);
-                        // ? check id ?
-                        this.maskConfig.selectedEffectId = id;
-                        this.maskConfig.showEffect(id);
-                        break;
-                    }
-                case 'effectDeselected':
-                    {
-                        print("received deselect effects");
-                        this.maskConfig.clearSelection()
                         break;
                     }
 

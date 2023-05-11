@@ -367,8 +367,8 @@ export const ZMaterialArray = z.preprocess(
 export const ZBaseEffect = z.object({
     name: ZText.describe(uiDescriptions.none({})),
     tag: ZTags.default(""),
-    disabled: ZBool.default(false)
-}).describe(uiDescriptions.object({}))
+    // disabled: ZBool.default(false)
+}).describe(uiDescriptions.object({})).passthrough()
 
 
 
