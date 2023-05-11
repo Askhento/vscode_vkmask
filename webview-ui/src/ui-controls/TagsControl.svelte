@@ -1,22 +1,28 @@
 <script lang="ts">
   export let label = "empty",
     value = "";
-
+  let tagElems = [];
   $: tags = value?.split(";");
   //   $: console.log(value);
-  function joinTags(e = null) {
+  function joinTags() {
+    // .filter((tag) => tag.length)
     value = tags.join(";");
 
-    // console.log("joined! " + value);
+    console.log("joined! " + value);
   }
 
   function addTag() {
+    tagElems = [];
+    // if()
     tags.push("");
     tags = tags;
     joinTags();
   }
   function removeTag(index) {
+    tagElems = [];
+    console.log("removeing tag", index);
     tags.splice(index, 1);
+    console.log("new tags", tags);
     tags = tags;
     joinTags();
   }
@@ -30,9 +36,32 @@
         <vscode-text-field
           size="10"
           value={tags[index]}
+          bind:this={tagElems[index]}
+          on:keydown={(e) => {
+            switch (e.key) {
+              case "Backspace":
+                if (e.target) {
+                  const newValue = e.target.value;
+
+                  if (newValue === "" && index > 0) {
+                    removeTag(index);
+                  }
+                }
+                break;
+              case "Escape":
+                e.target.value = tag;
+                e.target.blur();
+                break;
+              default:
+                break;
+            }
+          }}
           on:change={(e) => {
-            tags[index] = e.target.value;
-            joinTags();
+            if (e.target) {
+              tags[index] = e.target.value;
+              console.log("changed tag", tags[index]);
+              joinTags();
+            }
           }}
         >
           <section slot="end">
