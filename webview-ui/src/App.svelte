@@ -1,7 +1,7 @@
 <!-- https://microsoft.github.io/vscode-codicons/dist/codicon.html -->
 
 <script lang="ts">
-  import { logDump, logger } from "./logger";
+  import { logger } from "./logger";
   const print = logger("App.svelte");
 
   import {
@@ -13,7 +13,7 @@
   import ErrorMessage from "./ErrorMessage.svelte";
 
   import { vscode } from "./utils/vscode";
-  import { assets, effects, selection } from "./stores";
+  import { assets, effects, selection, logDump } from "./stores";
   import WelcomeScreen from "./WelcomeScreen.svelte";
 
   let appStates = {
@@ -79,9 +79,10 @@
     const message = event.data; // The json data that the extension sent
     switch (message.type) {
       case "requestLogs": {
+        print("trying to send logs");
         vscode.postMessage({
           type: "returnLogs",
-          value: logDump,
+          value: $logDump,
         });
         break;
       }

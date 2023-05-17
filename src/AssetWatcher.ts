@@ -55,7 +55,7 @@ class AssetWatcher extends EventEmitter {
                 let assetType = "unknown"
 
                 if (file.fsPath.endsWith("xml")) {
-                    print(file.fsPath)
+                    // print(file.fsPath)
                     const rawXML = fs.readFileSync(file.fsPath)
                     let xmlObject = this.xmlParser.parse(rawXML);
                     const xmlType = Object.keys(xmlObject)[0]

@@ -1,5 +1,5 @@
 <script>
-  import { logDump, logger } from "../logger";
+  import { logger } from "../logger";
   const print = logger("ArrayControl.svelte");
 
   export let expanded = false;

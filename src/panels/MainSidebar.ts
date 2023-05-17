@@ -23,6 +23,7 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
     public static readonly viewId = 'vkmask.sidepanel';
     public maskConfig = new MaskConfig();
+    private logEvent: Disposable | undefined;
 
     private _view?: WebviewView;
 
@@ -336,7 +337,7 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
     public sendAssets(e: any) {
         if (this._view) {
-            print("sending assets to webview", e);
+            print("sending assets to webview");
             this._view.webview.postMessage({ type: 'assetsChanged', assets: e.assets });
         } else {
             print("send view is null ")
@@ -350,13 +351,16 @@ export class MainSidebarProvider implements WebviewViewProvider {
             //!!! need to usubscribe !!!
 
             return new Promise(resolve => {
-                return this._view.webview.onDidReceiveMessage(
-                    function (message) {
+
+                this.logEvent = this._view.webview.onDidReceiveMessage(
+                    (message) => {
+                        this.logEvent.dispose();
                         print("receivening logs")
                         if (message.type === "returnLogs")
                             resolve(message);
                     }
                 )
+
             })
         } else {
             print("view is null ")

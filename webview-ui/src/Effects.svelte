@@ -117,6 +117,7 @@
   $: {
     // !!!! fix for add button showing behind dropdown
     if (addEffectButtonElem) {
+      // have to get computed value
       const btnColor = window
         .getComputedStyle(addEffectButtonElem, null)
         .getPropertyValue("background-color");
@@ -125,10 +126,8 @@
       console.log("parts", parts);
       // If alpha is not there, add it:
       if (parts.length === 4) {
-        // parts.push("1");
         parts[3] = "1";
       }
-      // Modify alpha:
       // Apply new value:
       addEffectButtonElem.style.backgroundColor = `rgba(${parts.join(",")})`;
     }
@@ -251,7 +250,7 @@
   }
 
   vscode-option.effect-name.is-active {
-    background-color: cornflowerblue;
+    background-color: var(--button-primary-hover-background);
   }
 
   .effect-btn-wrapper {

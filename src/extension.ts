@@ -55,7 +55,7 @@ export async function activate(context: vscode.ExtensionContext) {
             vscode.window.showErrorMessage("Seems like no folder opened to save logs.")
             return;
         }
-        vscode.window.showInformationMessage('Dumping logs to ');
+        vscode.window.showInformationMessage('Dumping logs to ' + dumpPath);
 
         const jsonDump = jsonPrettyArray(fullLogDump, "\t");
         const jsonDumpPath = path.join(dumpPath, "logDump.json");

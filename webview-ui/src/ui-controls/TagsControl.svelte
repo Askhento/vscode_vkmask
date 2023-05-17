@@ -1,4 +1,4 @@
-<script lang="ts">
+<script lang="js">
   export let label = "empty",
     value = "";
   let tagElems = [];
@@ -124,27 +124,4 @@
     display: inline-block;
     /* flex-grow: 1; */
   }
-
-  /* input.value {
-    color: var(--input-foreground);
-    background: var(--input-background);
-    border-radius: calc(var(--corner-radius) * 1px);
-    border: calc(var(--border-width) * 1px) solid var(--dropdown-border);
-    font-style: inherit;
-    font-variant: inherit;
-    font-weight: inherit;
-    font-stretch: inherit;
-    font-family: inherit;
-    font-size: var(--type-ramp-base-font-size);
-    line-height: var(--type-ramp-base-line-height);
-    padding: calc(var(--design-unit) * 2px + 1px);
-    width: 100%;
-    flex-grow: 1;
-    max-width: 50px;
-    resize: none;
-  }
-
-  span.label {
-    flex-grow: 1;
-  } */
 </style>

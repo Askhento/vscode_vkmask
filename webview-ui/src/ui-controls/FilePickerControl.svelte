@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount, tick } from "svelte";
+  import { slide } from "svelte/transition";
   import { logger } from "../logger";
   const print = logger("FilePickerControl.svelte");
 
@@ -11,7 +12,8 @@
 
   let extensions;
   let fileTypes;
-  let filteredAssets;
+  let filteredAssets; // subset of typedassets with search query applied
+  let typedAssets; // subset of assets to specific type/extension
   let searchValue = "";
   let dropdownOpened = false;
   let dropdown;
@@ -22,7 +24,17 @@
     // print("new extensions", extensions);
     fileTypes = params.types ? new Set(params.types) : undefined;
     searchValue = searchValue;
-    filteredAssets = $assets.filter(filterAsset);
+    typedAssets = $assets.filter((asset) => {
+      if (fileTypes !== undefined) {
+        return fileTypes.has(asset.type);
+      } else {
+        const extension = asset.path.split(".").at(-1);
+        return extensions.has(extension);
+      }
+    });
+    // print(typedAssets);
+    filteredAssets = typedAssets.filter(filterAsset);
+    // print(filteredAssets);
   }
   $: {
     // print("filterd", filteredAssets);
@@ -37,21 +49,22 @@
   }
 
   function filterAsset(asset) {
-    const assetPath = asset.path.toLowerCase();
-    if (searchValue.length > 0 && !assetPath.match(searchValue.toLowerCase())) {
-      return false;
-    }
-    if (fileTypes !== undefined) {
-      return fileTypes.has(asset.type);
-    } else {
-      const extension = assetPath.split(".").at(-1);
-      return extensions.has(extension);
-    }
+    if (searchValue.length === 0) return true;
+    return asset.path.toLowerCase().includes(searchValue.toLowerCase());
+  }
+
+  function isValueInAssets(newValue) {
+    return typedAssets.find((asset) => asset.path === newValue);
+  }
+  function setDropDownValue(newValue) {
+    if (controlElement)
+      controlElement.innerText = isValueInAssets(newValue) ? newValue : "-";
   }
 
   onMount(async () => {
     await tick();
-    if (controlElement) controlElement.innerText = value ? value : "-";
+
+    setDropDownValue(value);
   });
 </script>
 
@@ -63,30 +76,39 @@
     <!-- add REd color if file not found in options -->
     <span class="dropdown-wrapper">
       <vscode-dropdown
-        class="dropdown"
+        class:error={filteredAssets.length === 0}
         position="above"
         open={dropdownOpened}
         bind:this={dropdown}
         on:blur={(e) => {
           searchValue = "";
-          controlElement.innerText = value;
+          //   controlElement.innerText = value;
+          setDropDownValue(value);
           dropdownOpened = false;
         }}
-        on:keydown={(e) => {
+        on:keydown={async (e) => {
           if (e.key.length === 1) {
             //// character key
             searchValue += e.key;
             controlElement.innerText = searchValue;
+            // hack to keep dropdown opened while typing
+            dropdownOpened = false;
+            await tick();
             dropdownOpened = true;
           } else {
             switch (e.key) {
               case "Enter":
-                value = filteredAssets.length
-                  ? dropdown.getAttribute("current-value")
-                  : searchValue;
-                searchValue = "";
-                controlElement.innerText = value;
-                dropdownOpened = false;
+                if (filteredAssets.length === 0) {
+                  // hack to keep dropdown opened while typing
+                  dropdownOpened = false;
+                  await tick();
+                  dropdownOpened = true;
+                } else {
+                  value = dropdown.getAttribute("current-value");
+                  searchValue = "";
+                  controlElement.innerText = value;
+                  dropdownOpened = false;
+                }
                 break;
               case "Escape":
                 e.target.blur();
@@ -100,7 +122,7 @@
             }
           }
 
-          filteredAssets = $assets.filter(filterAsset);
+          //   filteredAssets = typedAssets.filter(filterAsset);
         }}
         on:change={(e) => {
           value = e.target.value;
@@ -134,6 +156,12 @@
   vscode-dropdown {
     width: 200px;
   }
+
+  vscode-dropdown.error {
+    color: var(--vscode-errorForeground);
+    animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  }
+
   .dropdown-wrapper {
     position: relative;
   }
@@ -156,5 +184,28 @@
   } */
   span.label {
     flex-grow: 1;
+  }
+
+  @keyframes shake {
+    10%,
+    90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+
+    20%,
+    80% {
+      transform: translate3d(2px, 0, 0);
+    }
+
+    30%,
+    50%,
+    70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+
+    40%,
+    60% {
+      transform: translate3d(4px, 0, 0);
+    }
   }
 </style>
