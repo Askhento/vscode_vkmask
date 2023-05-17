@@ -97,16 +97,42 @@
   function AddEffect(object) {
     if ($selection !== undefined && $selection.type === "effect") {
       $effects.splice($selection.id + 1, 0, object);
+      $effects = $effects;
+      $selection = {
+        type: "effect",
+        id: $selection.id + 1,
+      };
     } else {
       $effects.push(object);
+      $effects = $effects;
       $selection = {
         type: "effect",
         id: $effects.length - 1,
       };
     }
-    $effects = $effects;
   }
 
+  let addEffectButtonElem;
+
+  $: {
+    // !!!! fix for add button showing behind dropdown
+    if (addEffectButtonElem) {
+      const btnColor = window
+        .getComputedStyle(addEffectButtonElem, null)
+        .getPropertyValue("background-color");
+      // Get all color components (alpha may not be there if = 1):
+      const parts = btnColor.match(/[\d.]+/g);
+      console.log("parts", parts);
+      // If alpha is not there, add it:
+      if (parts.length === 4) {
+        // parts.push("1");
+        parts[3] = "1";
+      }
+      // Modify alpha:
+      // Apply new value:
+      addEffectButtonElem.style.backgroundColor = `rgba(${parts.join(",")})`;
+    }
+  }
 </script>
 
 <!-- <svelte:window on:message={handleMessage} /> -->
@@ -115,6 +141,7 @@
   <div class="effect-add-wrapper">
     <vscode-button
       class="add-effect-btn"
+      bind:this={addEffectButtonElem}
       on:click={() => {
         // addListOpened = !addListOpened;
       }}
@@ -239,10 +266,11 @@
     width: 120px;
   }
   .add-effect-btn {
+    /* background-color: rgb(from var(--button-primary-background) r g b / 50%); */
     pointer-events: none;
     width: 120px;
     position: absolute;
-    z-index: 1;
+    z-index: 2;
   }
   .effect-btn {
     display: inline-block;

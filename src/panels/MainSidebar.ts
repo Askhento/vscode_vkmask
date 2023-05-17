@@ -352,6 +352,7 @@ export class MainSidebarProvider implements WebviewViewProvider {
             return new Promise(resolve => {
                 return this._view.webview.onDidReceiveMessage(
                     function (message) {
+                        print("receivening logs")
                         if (message.type === "returnLogs")
                             resolve(message);
                     }

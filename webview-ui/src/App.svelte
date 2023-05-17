@@ -26,14 +26,14 @@
   $: print("state change : ", appState);
   let errorMessage = "";
   let updateLock = true;
-  let inspectorMountLock = true;
+  let inspectorMountLock = false;
   //   $: {
 
   //   }
 
   $: {
     print("selection changes : ", $selection);
-    if (!$selection) inspectorMountLock = true;
+    // if (!$selection) inspectorMountLock = true;
   }
 
   $: {
@@ -42,7 +42,7 @@
   }
 
   effects.subscribe((newEffects) => {
-    print("effects mount lock", inspectorMountLock);
+    // print("effects mount lock", inspectorMountLock);
     if (updateLock || inspectorMountLock) {
       updateLock = false;
       print("lock return ");

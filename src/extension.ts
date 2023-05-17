@@ -18,7 +18,7 @@ import { jsonPrettyArray } from './utils/jsonStringify';
     todo : angelscript intellisence
 */
 
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
 
     print("activating");
 
@@ -103,11 +103,12 @@ export function activate(context: vscode.ExtensionContext) {
 
 
     // show sidebar 
-    // vscode.commands.executeCommand(`workbench.view.extension.vkmask_primary_bar`)
+    // await vscode.commands.executeCommand("workbench.view.extension.vkmask_primary_bar.resetViewContainerLocation")
+    // await vscode.commands.executeCommand(`workbench.view.extension.vkmask_primary_bar`)
     // vscode.commands.executeCommand(`workbench.action.focusAuxiliaryBar`)
-
-    // await vscode.commands.executeCommand(`vkmask_primary_bar.focus`)
-    // await vscode.commands.executeCommand(`vkmask.sidepanel.focus`)
+    // vkmask.sidepanel.focus
+    // vscode.commands.executeCommand(`vkmask_primary_bar.focus`)
+    await vscode.commands.executeCommand(`vkmask.sidepanel.focus`) // this works
 
     // vscode.commands.executeCommand('workbench.action.moveFocusedView');
     // vscode.commands.executeCommand('vkmask.sidepanel.focus').then(() => {

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount, tick } from "svelte";
   import { logger } from "../logger";
   const print = logger("FilePickerControl.svelte");
 
@@ -18,7 +19,7 @@
   let focused;
   $: {
     extensions = new Set(params.extensions);
-    print("new extensions", extensions);
+    // print("new extensions", extensions);
     fileTypes = params.types ? new Set(params.types) : undefined;
     searchValue = searchValue;
     filteredAssets = $assets.filter(filterAsset);
@@ -47,6 +48,11 @@
       return extensions.has(extension);
     }
   }
+
+  onMount(async () => {
+    await tick();
+    if (controlElement) controlElement.innerText = value ? value : "-";
+  });
 </script>
 
 <div class="control-wrapper">
