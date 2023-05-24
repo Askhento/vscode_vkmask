@@ -4,7 +4,7 @@
   import { logger } from "../logger";
   const print = logger("FilePickerControl.svelte");
 
-  import { assets } from "../stores.js";
+  import { assets, userSettings } from "../stores.js";
 
   export let label = "empty",
     value,
@@ -19,6 +19,8 @@
   let dropdown;
   let controlElement;
   let focused;
+  let useBuiltins;
+
   $: {
     extensions = new Set(params.extensions);
     // print("new extensions", extensions);
@@ -32,8 +34,15 @@
         return extensions.has(extension);
       }
     });
-    // print(typedAssets);
-    filteredAssets = typedAssets.filter(filterAsset);
+    if ($userSettings) useBuiltins = $userSettings["vkmask.use-builtins"].value;
+    print("useBuiltins", useBuiltins);
+
+    filteredAssets = typedAssets
+      .filter(filterAssetByQuery)
+      .filter((asset) => useBuiltins || asset.projectFile)
+      .sort((e) => (e.projectFile ? -1 : 1));
+
+    setDropDownValue(value);
     // print(filteredAssets);
     // if (filteredAssets.length === 0) shakeDropdown();
   }
@@ -49,17 +58,20 @@
     }
   }
 
-  function filterAsset(asset) {
+  function filterAssetByQuery(asset) {
     if (searchValue.length === 0) return true;
     return asset.path.toLowerCase().includes(searchValue.toLowerCase());
   }
 
   function isValueInAssets(newValue) {
-    return typedAssets.find((asset) => asset.path === newValue);
+    return filteredAssets.find((asset) => asset.path === newValue);
   }
   function setDropDownValue(newValue) {
+    newValue = newValue.replace("builtin-", "");
     if (controlElement)
       controlElement.innerText = isValueInAssets(newValue) ? newValue : "-";
+
+    if (dropdown) dropdown.setAttribute("current-value", newValue);
   }
 
   onMount(async () => {
@@ -121,7 +133,9 @@
                   await tick();
                   dropdownOpened = true;
                 } else {
-                  value = dropdown.getAttribute("current-value");
+                  value = dropdown
+                    .getAttribute("current-value")
+                    .replace("builtin-", "");
                   searchValue = "";
                   controlElement.innerText = value;
                   dropdownOpened = false;
@@ -142,13 +156,15 @@
           //   filteredAssets = typedAssets.filter(filterAsset);
         }}
         on:change={(e) => {
-          value = e.target.value;
-          controlElement.innerText = e.target.value;
+          value = e.target.value.replace("builtin-", "");
+          controlElement.innerText = value;
           searchValue = "";
         }}
       >
         {#each filteredAssets as asset, i}
-          <vscode-option>{asset.path}</vscode-option>
+          <vscode-option class:builtin={!asset.projectFile}
+            >{asset.path}</vscode-option
+          >
         {/each}
       </vscode-dropdown>
     </span>
@@ -172,6 +188,10 @@
 
   vscode-dropdown {
     width: 200px;
+  }
+
+  vscode-option.builtin {
+    background-color: var(--vscode-inputValidation-warningBackground);
   }
 
   vscode-dropdown.error {

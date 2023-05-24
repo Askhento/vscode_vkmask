@@ -11,7 +11,7 @@ import { watch } from "chokidar";
 import { logDump, logger } from "./logger";
 const print = logger(__filename);
 import { assetWatcher } from './AssetWatcher';
-
+import { userSettings } from "./UserSettings";
 import { jsonPrettyArray } from './utils/jsonStringify';
 /*
     todo : angelscript intellisence
@@ -21,9 +21,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
     print("activating");
 
-    vscode.workspace.onDidChangeConfiguration((e) => {
-        print(e)
-    })
 
 
 
@@ -107,13 +104,9 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction").then(() => {
             sidebar.sendEffects();
             assetWatcher.searchAssets();
-
+            userSettings.emitChangeEvent();
         });
     }))
-
-    // watch().on('change', (filename: string) => {
-
-    // });
 
 
     // show sidebar 
@@ -135,6 +128,7 @@ export async function activate(context: vscode.ExtensionContext) {
     //   "id": "vkmask.inspector",
     //   "name": "Inspector"
     // }
+
 
 }
 

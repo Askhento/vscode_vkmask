@@ -13,7 +13,7 @@
   import ErrorMessage from "./ErrorMessage.svelte";
 
   import { vscode } from "./utils/vscode";
-  import { assets, effects, selection, logDump } from "./stores";
+  import { assets, effects, selection, logDump, userSettings } from "./stores";
   import WelcomeScreen from "./WelcomeScreen.svelte";
 
   let appStates = {
@@ -90,6 +90,12 @@
         $assets = message.assets;
         break;
       }
+
+      case "userSettings": {
+        $userSettings = message.userSettings;
+
+        break;
+      }
       case "showWelcome": {
         appState = appStates.WELCOME;
         break;
@@ -130,7 +136,9 @@
 </script>
 
 <svelte:window on:message={handleMessageApp} />
-<div>HELLOOO</div>
+<!-- {#if $userSettings}
+  <pre>{JSON.stringify($userSettings, null, "\t")}</pre>
+{/if} -->
 {#if appState === appStates.WELCOME}
   <WelcomeScreen />
 {:else if appState === appStates.RUNNING}

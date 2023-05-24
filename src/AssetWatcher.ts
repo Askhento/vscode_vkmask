@@ -18,8 +18,8 @@ import { XMLParser } from "fast-xml-parser" // https://github.com/NaturalIntelli
 
 class AssetWatcher extends EventEmitter {
 
-    public assets: Array<Record<string, string>> = [];
-    public builtInAssets: Array<Record<string, string>> = [];
+    public assets: Array<Record<string, string | boolean>> = [];
+    public builtInAssets: Array<Record<string, string | boolean>> = [];
     private xmlParser = new XMLParser({
         ignoreDeclaration: true
     });
@@ -63,7 +63,8 @@ class AssetWatcher extends EventEmitter {
                 }
                 return {
                     path: this.getRelative(file.fsPath),
-                    type: assetType
+                    type: assetType,
+                    projectFile: true
                 }
             }
             )

@@ -4,6 +4,7 @@ import { MaskConfig } from "../MaskConfig";
 import { logger } from "../logger";
 const print = logger(__filename);
 import { assetWatcher } from "../AssetWatcher";
+import { userSettings } from "../UserSettings";
 import { getUri } from "../utils/getUri";
 import { getNonce } from "../utils/getNonce";
 import { copyRecursiveSync } from "../utils/copyFilesRecursive"
@@ -224,6 +225,13 @@ export class MainSidebarProvider implements WebviewViewProvider {
         });
         assetWatcher.searchAssets();
 
+        userSettings.init(this._extensionUri) // will resolve in promise so not blocking
+
+        userSettings.on("configChanged", (data) => {
+            this.sendUserSettings(data)
+        })
+
+
 
         // on init need to show mask.json only! so there is no misatakes working in a wrong file
         const tabsToClose = vscode.window.tabGroups.all.map(tg => tg.tabs).flat();
@@ -339,6 +347,15 @@ export class MainSidebarProvider implements WebviewViewProvider {
         if (this._view) {
             print("sending assets to webview");
             this._view.webview.postMessage({ type: 'assetsChanged', assets: e.assets });
+        } else {
+            print("send view is null ")
+        }
+    }
+
+    public sendUserSettings(userSettings: any) {
+        if (this._view) {
+            print("sending userSettings to webview");
+            this._view.webview.postMessage({ type: 'userSettings', userSettings });
         } else {
             print("send view is null ")
         }

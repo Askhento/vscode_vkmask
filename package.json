@@ -22,10 +22,15 @@
     "configuration": {
       "title": "vkmask",
       "properties": {
-        "vkmask.test_value": {
+        "vkmask.use-builtins": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show builtin resources in file pickers"
+        },
+        "vkmask.accumulate-logs": {
           "type": "boolean",
           "default": false,
-          "description": "Complete functions with their parameter signature."
+          "description": "Does it require to keep debug logs"
         }
       }
     },
