@@ -26,6 +26,7 @@ export async function activate(context: vscode.ExtensionContext) {
     })
 
 
+
     const createBuiltinAssets = false;
     if (createBuiltinAssets) {
         assetWatcher.on("assetsChanged", (e) => {

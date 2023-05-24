@@ -17,7 +17,7 @@
 		"strict": false,   /* enable all strict type-checking options */
         "noUncheckedIndexedAccess": false,
         // "forceConsistentCasingInFileNames": true,
-        // "skipLibCheck": true
+        "skipLibCheck": true,
 		/* Additional Checks */
 		"noImplicitReturns": false, /* Report error when not all code paths in function return a value. */
 		// "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
