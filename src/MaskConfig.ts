@@ -1,11 +1,9 @@
 import * as vscode from "vscode";
 import * as fs from 'fs';
 import * as path from 'path';
-import { MaskJSON, Effect } from "./types"
-import * as t from "io-ts";
+
 import * as jsonMap from "json-source-map";
 import { jsonPrettyArray } from "./utils/jsonStringify";
-import { report, reportOne } from "io-ts-human-reporter"
 import { ZBaseEffect, ZMaskConfig } from "./ztypes.js"
 import { z } from "zod";
 import { fromZodError } from 'zod-validation-error';
@@ -327,7 +325,7 @@ export class MaskConfig extends EventEmitter {
         // this.maskJSON?.effects.splice(id , 1);
         // this.maskJSON.effects[idOld];
 
-        const newEffect = effectObject as t.TypeOf<typeof Effect>
+        const newEffect = effectObject as z.infer<typeof ZBaseEffect>;
         this.maskJSON.effects.unshift(newEffect);
 
         if (this.selectedEffectId) this.selectedEffectId++; // add new always in front 

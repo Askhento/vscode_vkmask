@@ -12,7 +12,6 @@ import { logDump, logger } from "./logger";
 const print = logger(__filename);
 import { assetWatcher } from './AssetWatcher';
 
-import "./consoleDump"
 import { jsonPrettyArray } from './utils/jsonStringify';
 /*
     todo : angelscript intellisence
@@ -87,12 +86,16 @@ export async function activate(context: vscode.ExtensionContext) {
     // !!!! add check on dev disabled
     let watchLock = false;
     let watchTimeout: NodeJS.Timeout;
-    watch(path.join(context.extensionPath, "webview-ui", "public", "build")).on('change', (filename: string) => {
+
+    const webviewBuildDir = path.join(context.extensionPath, "out", "panels", "webview-build");
+    const webviewWatcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(webviewBuildDir, '**'))
+
+    context.subscriptions.push(webviewWatcher.onDidChange((fileUri) => {
         if (watchLock) {
             return;
         }
 
-        print("\nThe file " + filename + " was modified!");
+        print("\nThe file " + fileUri.fsPath + " was modified!");
 
         if (watchTimeout) clearTimeout(watchTimeout)
         watchTimeout = setTimeout(() => {
@@ -105,7 +108,11 @@ export async function activate(context: vscode.ExtensionContext) {
             assetWatcher.searchAssets();
 
         });
-    });
+    }))
+
+    // watch().on('change', (filename: string) => {
+
+    // });
 
 
     // show sidebar 

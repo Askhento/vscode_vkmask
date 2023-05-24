@@ -123,7 +123,7 @@
         .getPropertyValue("background-color");
       // Get all color components (alpha may not be there if = 1):
       const parts = btnColor.match(/[\d.]+/g);
-      console.log("parts", parts);
+      //   console.log("parts", parts);
       // If alpha is not there, add it:
       if (parts.length === 4) {
         parts[3] = "1";

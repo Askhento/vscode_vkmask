@@ -415,7 +415,7 @@ export class MainSidebarProvider implements WebviewViewProvider {
         const stylesUri = getUri(webview, extensionUri, ["out", "panels", "webview-build", "bundle.css"]);
         // The JS file from the Svelte build output
         const scriptUri = getUri(webview, extensionUri, ["out", "panels", "webview-build", "bundle.js"]);
-        const codiconsUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'webview-ui', 'node_modules', '@vscode/codicons', 'dist', 'codicon.css'));
+        const codiconsUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'node_modules', '@vscode/codicons', 'dist', 'codicon.css'));
 
         const nonce = getNonce();
         // <meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src ${webview.cspSource}; style-src ${webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}';">

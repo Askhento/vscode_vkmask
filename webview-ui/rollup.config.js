@@ -7,28 +7,28 @@ import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
 import css from 'rollup-plugin-css-only';
 
-const production = !process.env.ROLLUP_WATCH;
+const production = !process.env.ROLLUP_WATCH; // !!!!! wtf
 // ! added sourcemaps
-function serve() {
-    let server;
+// function serve() {
+//     let server;
 
-    function toExit() {
-        if (server) server.kill(0);
-    }
+//     function toExit() {
+//         if (server) server.kill(0);
+//     }
 
-    return {
-        writeBundle() {
-            if (server) return;
-            server = require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
-                stdio: ['ignore', 'inherit', 'inherit'],
-                shell: true
-            });
+//     return {
+//         writeBundle() {
+//             if (server) return;
+//             server = require('child_process').spawn('npm', ['run', 'dev', '--', '--dev'], {
+//                 stdio: ['ignore', 'inherit', 'inherit'],
+//                 shell: true
+//             });
 
-            process.on('SIGTERM', toExit);
-            process.on('exit', toExit);
-        }
-    };
-}
+//             process.on('SIGTERM', toExit);
+//             process.on('exit', toExit);
+//         }
+//     };
+// }
 
 export default {
     input: 'src/main.ts',
@@ -72,13 +72,13 @@ export default {
             inlineSources: !production
         }),
 
-        // In dev mode, call `npm run start` once
-        // the bundle has been generated
-        !production && serve(),
+        // // In dev mode, call `npm run start` once
+        // // the bundle has been generated
+        // !production && serve(),
 
-        // Watch the `build` directory and refresh the
-        // browser on changes when not in production
-        !production && livereload('../out/panels/webview-build'),
+        // // Watch the `build` directory and refresh the
+        // // browser on changes when not in production
+        // !production && livereload('../out/panels/webview-build'),
 
         // If we're building for production (npm run build
         // instead of npm run dev), minify

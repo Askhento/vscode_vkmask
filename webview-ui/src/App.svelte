@@ -130,7 +130,7 @@
 </script>
 
 <svelte:window on:message={handleMessageApp} />
-
+<div>HELLOOO</div>
 {#if appState === appStates.WELCOME}
   <WelcomeScreen />
 {:else if appState === appStates.RUNNING}

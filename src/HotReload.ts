@@ -22,7 +22,7 @@ export class HotReload {
 
         const scriptsDest = vscode.Uri.joinPath(maskDir, 'ScriptEngine')
 
-        const scriptsDir = vscode.Uri.joinPath(this._extensionUri, "res", "angelscript");
+        const scriptsDir = vscode.Uri.joinPath(this._extensionUri, "res", "ScriptEngine");
 
         fs.mkdirSync(scriptsDest.fsPath, { recursive: true });
 
