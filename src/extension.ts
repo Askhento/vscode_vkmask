@@ -22,6 +22,11 @@ export async function activate(context: vscode.ExtensionContext) {
 
     print("activating");
 
+    vscode.workspace.onDidChangeConfiguration((e) => {
+        print(e)
+    })
+
+
     const createBuiltinAssets = false;
     if (createBuiltinAssets) {
         assetWatcher.on("assetsChanged", (e) => {
@@ -48,7 +53,8 @@ export async function activate(context: vscode.ExtensionContext) {
         const webviewLogDump = message.value;
         // combining multiple dumps into one, based on timestamp
         const dumps = [logDump, webviewLogDump]
-        const fullLogDump = [].concat(...dumps).sort((a, b) => a.timestamp - b.timestamp);
+        // !!!!!!!!!! any !!!!!!!!!!!!!
+        const fullLogDump = [].concat(...dumps).sort((a: any, b: any) => a.timestamp - b.timestamp);
 
         const dumpPath = sidebar.maskConfig.currentConfigDir;
         if (dumpPath === undefined) {

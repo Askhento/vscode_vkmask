@@ -35,6 +35,7 @@
     // print(typedAssets);
     filteredAssets = typedAssets.filter(filterAsset);
     // print(filteredAssets);
+    // if (filteredAssets.length === 0) shakeDropdown();
   }
   $: {
     // print("filterd", filteredAssets);
@@ -66,6 +67,22 @@
 
     setDropDownValue(value);
   });
+
+  function shakeDropdown() {
+    //
+    // -> removing the class
+    dropdown.classList.remove("error");
+
+    // -> triggering reflow /* The actual magic */
+    // without this it wouldn't work. Try uncommenting the line and the transition won't be retriggered.
+    // Oops! This won't work in strict mode. Thanks Felis Phasma!
+    // dropdown.offsetWidth = dropdown.offsetWidth;
+    // Do this instead:
+    void dropdown.offsetWidth;
+
+    // -> and re-adding the class
+    dropdown.classList.add("error");
+  }
 </script>
 
 <div class="control-wrapper">

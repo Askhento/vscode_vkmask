@@ -19,6 +19,16 @@
   ],
   "main": "./out/extension.js",
   "contributes": {
+    "configuration": {
+      "title": "vkmask",
+      "properties": {
+        "vkmask.test_value": {
+          "type": "boolean",
+          "default": false,
+          "description": "Complete functions with their parameter signature."
+        }
+      }
+    },
     "commands": [
       {
         "command": "vkmask.dumpLogs",
@@ -57,7 +67,7 @@
     "install:all": "npm install && cd webview-ui && npm install",
     "start:webview": "cd webview-ui && npm run dev",
     "build:webview": "cd webview-ui && npm run build",
-    "publish-patch": "vsce publish patch && vsce package"
+    "publish-patch": "vsce publish patch ; vsce package --out ./vsix-packages"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",

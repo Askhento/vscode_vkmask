@@ -352,9 +352,9 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
             return new Promise(resolve => {
 
-                this.logEvent = this._view.webview.onDidReceiveMessage(
+                this.logEvent = this._view?.webview.onDidReceiveMessage(
                     (message) => {
-                        this.logEvent.dispose();
+                        this.logEvent?.dispose();
                         print("receivening logs")
                         if (message.type === "returnLogs")
                             resolve(message);
@@ -369,7 +369,7 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
     }
 
-    public sendError(message) {
+    public sendError(message: string) {
         if (this._view) {
             print("sending error");
             print("error itself", message)
@@ -412,9 +412,9 @@ export class MainSidebarProvider implements WebviewViewProvider {
      */
     private _getWebviewContent(webview: Webview, extensionUri: Uri) {
         // The CSS file from the Svelte build output
-        const stylesUri = getUri(webview, extensionUri, ["webview-ui", "public", "build", "bundle.css"]);
+        const stylesUri = getUri(webview, extensionUri, ["out", "panels", "webview-build", "bundle.css"]);
         // The JS file from the Svelte build output
-        const scriptUri = getUri(webview, extensionUri, ["webview-ui", "public", "build", "bundle.js"]);
+        const scriptUri = getUri(webview, extensionUri, ["out", "panels", "webview-build", "bundle.js"]);
         const codiconsUri = webview.asWebviewUri(vscode.Uri.joinPath(extensionUri, 'webview-ui', 'node_modules', '@vscode/codicons', 'dist', 'codicon.css'));
 
         const nonce = getNonce();
