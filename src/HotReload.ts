@@ -2,8 +2,8 @@ import * as vscode from "vscode";
 import * as fs from 'fs';
 import * as path from 'path';
 
-import { logger } from "./logger";
-const print = logger(__filename);
+import { logger } from "./Logger";
+const print = (...args) => logger.log(__filename, ...args);
 
 export class HotReload {
 

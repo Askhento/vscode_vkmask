@@ -2,9 +2,9 @@
 import * as path from "path"
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import { logger } from "./logger";
 import { EventEmitter } from "events";
-const print = logger(__filename);
+import { logger } from "./Logger";
+const print = (...args) => logger.log(__filename, ...args);
 
 import { XMLParser } from "fast-xml-parser" // https://github.com/NaturalIntelligence/fast-xml-parser/blob/c7b3cea4ead020c21d39e135a50348208829e971/docs/v4/2.XMLparseOptions.md
 

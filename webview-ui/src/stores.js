@@ -9,6 +9,7 @@ export const controls = writable();
 
 export const assets = writable([]);
 
-export const logDump = writable([]);
+export const logDump = writable();
+logDump.set([])
 
 export const userSettings = writable();

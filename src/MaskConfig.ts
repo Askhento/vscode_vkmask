@@ -10,8 +10,8 @@ import { fromZodError } from 'zod-validation-error';
 import { delayPromise } from "./utils/delayPromise";
 import { EventEmitter } from "events";
 
-import { logger } from "./logger";
-const print = logger(__filename);
+import { logger } from "./Logger";
+const print = (...args) => logger.log(__filename, ...args);
 
 
 export class MaskConfig extends EventEmitter {
@@ -51,7 +51,7 @@ export class MaskConfig extends EventEmitter {
         // this.refreshEffects();
 
         vscode.workspace.onDidChangeTextDocument((event) => {
-
+            return; // !!!
             if (this.isSameDocument(event.document.uri, "mask.json")) {
 
                 if (event.contentChanges === undefined || event.contentChanges.length === 0) return;
@@ -80,7 +80,7 @@ export class MaskConfig extends EventEmitter {
 
 
         vscode.window.onDidChangeTextEditorSelection((event) => {
-
+            return; // !!!
             const editor = event.textEditor;
             // print(event.selections.map(s => s.start))
 
@@ -112,7 +112,6 @@ export class MaskConfig extends EventEmitter {
                 return;
             }
             if (this.isSameDocument(document.uri, "mask.json")) {
-                print("hey I mask.json")
                 this.onFileSave();
             }
         })

@@ -1,6 +1,5 @@
 <script lang="ts">
   import { onMount, tick } from "svelte";
-  import { slide } from "svelte/transition";
   import { logger } from "../logger";
   const print = logger("FilePickerControl.svelte");
 
@@ -18,83 +17,114 @@
   let dropdownOpened = false;
   let dropdown;
   let controlElement;
-  let focused;
+  let inputElement;
   let useBuiltins;
+
+  let dropdwonFocusLock = false;
 
   $: {
     extensions = new Set(params.extensions);
     // print("new extensions", extensions);
     fileTypes = params.types ? new Set(params.types) : undefined;
-    searchValue = searchValue;
-    typedAssets = $assets.filter((asset) => {
-      if (fileTypes !== undefined) {
-        return fileTypes.has(asset.type);
-      } else {
-        const extension = asset.path.split(".").at(-1);
-        return extensions.has(extension);
-      }
-    });
     if ($userSettings) useBuiltins = $userSettings["vkmask.use-builtins"].value;
     print("useBuiltins", useBuiltins);
+    typedAssets = $assets
+      .filter((asset) => {
+        if (fileTypes !== undefined) {
+          return fileTypes.has(asset.type);
+        } else {
+          const extension = asset.path.split(".").at(-1);
+          return extensions.has(extension);
+        }
+      })
+      .filter((asset) => useBuiltins || asset.projectFile);
 
     filteredAssets = typedAssets
       .filter(filterAssetByQuery)
-      .filter((asset) => useBuiltins || asset.projectFile)
-      .sort((e) => (e.projectFile ? -1 : 1));
+      .sort((e) => (e.projectFile ? -1 : 1)); // show builtin assets last
 
+    setControlElementValue(value);
     setDropDownValue(value);
-    // print(filteredAssets);
-    // if (filteredAssets.length === 0) shakeDropdown();
   }
   $: {
-    // print("filterd", filteredAssets);
+    searchValue = searchValue;
+
+    filteredAssets = typedAssets
+      .filter(filterAssetByQuery)
+      .sort((e) => (e.projectFile ? -1 : 1)); // show builtin assets last
   }
 
   $: {
     if (dropdown) {
-      controlElement = dropdown.shadowRoot.querySelector(
-        "div.control div slot"
-      );
+      controlElement = dropdown.shadowRoot.querySelector("div.control div");
     }
   }
 
+  //   function selectElementContents(el) {
+  //     var range = document.createRange();
+  //     print(el.firstChild);
+  //     range.selectNodeContents(el.firstChild);
+  //     var sel = window.getSelection();
+  //     sel.removeAllRanges();
+  //     sel.addRange(range);
+  //   }
+
+  //   function getControlElementValue() {
+  //     if (controlElement) {
+  //       return controlElement.innerText;
+  //     }
+  //     return "";
+  //   }
   function filterAssetByQuery(asset) {
     if (searchValue.length === 0) return true;
     return asset.path.toLowerCase().includes(searchValue.toLowerCase());
   }
 
   function isValueInAssets(newValue) {
-    return filteredAssets.find((asset) => asset.path === newValue);
+    return typedAssets.find((asset) => asset.path === newValue);
   }
-  function setDropDownValue(newValue) {
-    newValue = newValue.replace("builtin-", "");
+  function setControlElementValue(newValue) {
+    // this is inner slot which stores value of whole element
     if (controlElement)
       controlElement.innerText = isValueInAssets(newValue) ? newValue : "-";
+  }
 
-    if (dropdown) dropdown.setAttribute("current-value", newValue);
+  function setDropDownValue(newValue) {
+    // when dropdown opened which value currently highlighted
+    if (!dropdown) return;
+    dropdown.setAttribute(
+      "current-value",
+      isValueInAssets(newValue) ? newValue : typedAssets[0]
+    );
   }
 
   onMount(async () => {
     await tick();
 
+    setControlElementValue(value);
     setDropDownValue(value);
   });
 
-  function shakeDropdown() {
-    //
-    // -> removing the class
-    dropdown.classList.remove("error");
+  // from dropdown
 
-    // -> triggering reflow /* The actual magic */
-    // without this it wouldn't work. Try uncommenting the line and the transition won't be retriggered.
-    // Oops! This won't work in strict mode. Thanks Felis Phasma!
-    // dropdown.offsetWidth = dropdown.offsetWidth;
-    // Do this instead:
-    void dropdown.offsetWidth;
+  // on:keydown={(e) => {
+  // if (e.key === "Escape") {
+  //   print("escape!");
+  //   e.preventDefault();
+  //   dropdown.value = value;
+  //   return;
+  // }
+  // if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+  // setTimeout(function () {
+  //   const option = dropdown.querySelector("vscode-option.selected");
+  //   option.scrollIntoView({
+  //     behavior: "smooth",
+  //     block: "nearest",
+  //   });
+  //   // if (option.clientHeight < option.scrollHeight) option.focus();
+  // }, 10);
 
-    // -> and re-adding the class
-    dropdown.classList.add("error");
-  }
+  let inputTimer; // prevent closing dropdown
 </script>
 
 <div class="control-wrapper">
@@ -107,74 +137,158 @@
       <vscode-dropdown
         class:error={filteredAssets.length === 0}
         position="above"
-        open={dropdownOpened}
         bind:this={dropdown}
-        on:blur={(e) => {
-          searchValue = "";
-          //   controlElement.innerText = value;
-          setDropDownValue(value);
-          dropdownOpened = false;
+        on:focusout|capture={(e) => {
+          print("focus out");
+          //   e.preventDefault();
+          e.stopPropagation(); // this is to be able to print while dropdown opened
+          inputTimer = setTimeout(() => {
+            const event = new KeyboardEvent("keydown", { key: "Escape" });
+            dropdown.dispatchEvent(event);
+          }, 150);
         }}
-        on:keydown={async (e) => {
-          if (e.key.length === 1) {
-            //// character key
-            searchValue += e.key;
-            controlElement.innerText = searchValue;
-            // hack to keep dropdown opened while typing
-            dropdownOpened = false;
-            await tick();
-            dropdownOpened = true;
-          } else {
-            switch (e.key) {
-              case "Enter":
-                if (filteredAssets.length === 0) {
-                  // hack to keep dropdown opened while typing
-                  dropdownOpened = false;
-                  await tick();
-                  dropdownOpened = true;
-                } else {
-                  value = dropdown
-                    .getAttribute("current-value")
-                    .replace("builtin-", "");
-                  searchValue = "";
-                  controlElement.innerText = value;
-                  dropdownOpened = false;
-                }
-                break;
-              case "Escape":
-                e.target.blur();
-                break;
-              case "Backspace":
-                if (searchValue.length > 0) {
-                  searchValue = searchValue.slice(0, -1);
-                  controlElement.innerText = searchValue;
-                }
-                break;
-            }
-          }
-
-          //   filteredAssets = typedAssets.filter(filterAsset);
+        on:click|preventDefault={(e) => {
+          print("dropdown click");
+          //   setTimeout(function () {
+          //     inputElement.focus();
+          //   }, 1000);
         }}
         on:change={(e) => {
-          value = e.target.value.replace("builtin-", "");
-          controlElement.innerText = value;
+          //   value = e.target.value;
+          //   print("drop change", e.target.value);
+          print("change dropdonw");
+          value = dropdown.value;
           searchValue = "";
+          inputElement.value = "";
+        }}
+        on:keydown={(e) => {
+          if (e.key === "Escape") {
+            print("escape!");
+            e.preventDefault();
+            dropdown.value = value;
+            return;
+          }
+          if (e.key.length === 1) {
+            inputElement.focus(); // on time !
+
+            setTimeout(() => {
+              if (inputTimer) clearTimeout(inputTimer);
+            }, 0);
+          }
+          //   if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+          //   setTimeout(function () {
+          //     const option = dropdown.querySelector("vscode-option.selected");
+          //     option.scrollIntoView({
+          //       behavior: "smooth",
+          //       block: "nearest",
+          //     });
+          //   }, 10);
         }}
       >
+        <vscode-text-field
+          class:error={filteredAssets.length === 0}
+          bind:this={inputElement}
+          on:click|stopPropagation|capture={(e) => {
+            if (inputTimer) clearTimeout(inputTimer);
+            print("click text filed inside ");
+            // keeps dropdown opened
+          }}
+          on:input={(e) => {
+            print("oninput", e);
+            searchValue = e.target.value;
+            print(searchValue);
+          }}
+        />
         {#each filteredAssets as asset, i}
           <vscode-option class:builtin={!asset.projectFile}
             >{asset.path}</vscode-option
           >
         {/each}
       </vscode-dropdown>
+      <!-- svelte-ignore missing-declaration -->
+      <!-- <vscode-text-field
+        class:error={filteredAssets.length === 0}
+        bind:this={inputElement}
+        {value}
+        on:click={async (e) => {
+          if (dropdownOpened) return;
+
+          e.target.select();
+          dropdwonFocusLock = true;
+          dropdown.value = value;
+          dropdownOpened = false;
+          dropdown.click();
+          await tick();
+          dropdownOpened = true;
+          setTimeout(function () {
+            e.target.focus(); // wtf why this is working
+            dropdwonFocusLock = false;
+          }, 0);
+        }}
+        on:blur={(e) => {
+          //   searchValue = "";
+          print("blur");
+
+          //   setControlElementValue(value);
+          if (!dropdwonFocusLock) {
+            dropdownOpened = false;
+            dropdown.removeAttribute("open");
+            // dropdown.removeClassName("open")
+          }
+          inputElement.value = value;
+          searchValue = "";
+          //   dropdownOpened = false;
+        }}
+        on:input={(e) => {
+          //   print("oninput", e);
+          searchValue = inputElement.value;
+          print(searchValue);
+        }}
+        on:keydown={async (e) => {
+          if (e.key.length === 1) return;
+          print(e.key);
+          const controlKeys = e.ctrlKey || e.metaKey;
+          switch (e.key) {
+            case "ArrowUp":
+            case "ArrowDown":
+              // passing arrow to dropdown
+
+              const event = new KeyboardEvent("keydown", { key: e.key });
+              dropdown.dispatchEvent(event);
+              e.preventDefault();
+              break;
+            case "Enter":
+              if (filteredAssets.length === 0) {
+                // dropdownOpened = false;
+                // await tick();
+                // dropdownOpened = true;
+              } else {
+                value = dropdown.getAttribute("current-value");
+                // controlElement.innerText = value;
+
+                e.target.blur();
+              }
+              break;
+            case "Escape":
+              e.target.blur();
+              break;
+            case "Backspace":
+              if (searchValue.length > 0) {
+                searchValue = searchValue.slice(0, -1);
+                //   controlElement.innerText = searchValue;
+              }
+              break;
+          }
+        }}
+      /> -->
     </span>
   {/if}
 </div>
 
 <style>
   * {
-    /* margin: 5px; */
-    box-sizing: border-box;
+    margin: 5px;
+    /* box-sizing: border-box; */
   }
 
   .control-wrapper {
@@ -185,29 +299,46 @@
   /* select.options {
     flex-grow: 1;
   } */
+  .dropdown-wrapper {
+    position: relative;
+  }
 
-  vscode-dropdown {
-    width: 200px;
+  vscode-option {
+    margin: unset;
   }
 
   vscode-option.builtin {
     background-color: var(--vscode-inputValidation-warningBackground);
   }
 
-  vscode-dropdown.error {
+  vscode-dropdown {
+    margin: unset;
+    width: 200px;
+  }
+  /* vscode-dropdown.error {
     color: var(--vscode-errorForeground);
+    animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  } */
+
+  vscode-text-field {
+    /* position: absolute; */
+    /* display: flex; */
+    /* flex: 0 0 auto; */
+    /* z-index: 10; */
+    margin: unset;
+    width: 200px;
+  }
+
+  vscode-text-field.error::part(control) {
+    /* border: calc(var(--border-width) * 1px) solid var(--vscode-errorForeground); */
+    background: var(--vscode-inputValidation-errorBackground);
+  }
+
+  vscode-text-field.error {
     animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   }
 
-  .dropdown-wrapper {
-    position: relative;
-  }
-  /* vscode-text-field {
-    margin: unset;
-    position: absolute;
-    width: 200px;
-    z-index: 1;
-  }
+  /* 
 
   vscode-text-field > section {
     margin: unset;

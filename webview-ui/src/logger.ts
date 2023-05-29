@@ -1,6 +1,6 @@
 
-// export const logDump = [] //?? is this singletone??
-import { logDump } from "./stores.js";
+export const logDump = [] //?? is this singletone??
+// import { logDump } from "./stores.js";
 export const logger = (baseName) => {
 
     // if (process.env.NODE_ENV !== "dev") return () => { };
@@ -17,10 +17,15 @@ export const logger = (baseName) => {
         console.log.apply(console, args);
 
         const newEntry = { "timestamp": (new Date()).getTime(), "value": args };
-        logDump.update((val) => {
-            if (val)
-                val.push(newEntry)
-        })
+
+        logDump.push(newEntry)
+        // logDump.update((val) => {
+        //     if (val)
+        //         val.push(newEntry)
+
+        //     console.log(val)
+
+        // })
     }
 };
 

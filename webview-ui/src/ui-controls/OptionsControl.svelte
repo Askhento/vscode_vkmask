@@ -37,10 +37,10 @@
     display: flex;
   }
 
-  select.options {
+  /* select.options {
     display: inline;
     flex-grow: 1;
-  }
+  } */
   span.label {
     flex-grow: 1;
   }

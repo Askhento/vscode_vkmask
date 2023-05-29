@@ -1,9 +1,8 @@
 <!-- https://microsoft.github.io/vscode-codicons/dist/codicon.html -->
 
 <script lang="ts">
-  import { logger } from "./logger";
+  import { logger, logDump } from "./logger";
   const print = logger("App.svelte");
-
   import {
     provideVSCodeDesignSystem,
     allComponents,
@@ -13,7 +12,7 @@
   import ErrorMessage from "./ErrorMessage.svelte";
 
   import { vscode } from "./utils/vscode";
-  import { assets, effects, selection, logDump, userSettings } from "./stores";
+  import { assets, effects, selection, userSettings } from "./stores";
   import WelcomeScreen from "./WelcomeScreen.svelte";
 
   let appStates = {
@@ -82,7 +81,7 @@
         print("trying to send logs");
         vscode.postMessage({
           type: "returnLogs",
-          value: $logDump,
+          value: logDump,
         });
         break;
       }

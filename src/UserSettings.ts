@@ -2,11 +2,11 @@ import * as vscode from 'vscode';
 import * as path from 'path';
 import * as fs from 'fs';
 
-import { logger } from "./logger";
+// import { logger } from "./logger.js";
+// const print = logger(__filename);
 import { EventEmitter } from "events";
-const print = logger(__filename);
 
-// todo : update settings from webview
+// todo : add public  event for specific key 
 type Section = {
     type: "string",
     default: string | boolean | number,
@@ -33,8 +33,9 @@ class UserSettings extends EventEmitter {
 
         this.updateSettings(this.filteredSections);
         vscode.workspace.onDidChangeConfiguration((e) => {
+
             const affected = this.filteredSections.filter(section => e.affectsConfiguration(section))
-            print("affected configs", affected);
+            // console.log("affected configs", affected);
             this.updateSettings(affected);
 
         })
@@ -47,7 +48,7 @@ class UserSettings extends EventEmitter {
 
         try {
             const jsonConfig = JSON.parse(rawConfig);
-            // print(jsonConfig)
+            // console.log(jsonConfig)
             const props = jsonConfig.contributes.configuration.properties;
             // const { type, value, default : renameDefault }  : Section = props ;
             this.filteredSections = Object.keys(props);
@@ -56,7 +57,7 @@ class UserSettings extends EventEmitter {
             })
 
         } catch (err) {
-            print(err)
+            console.log(err)
         }
 
     }
@@ -65,15 +66,23 @@ class UserSettings extends EventEmitter {
     updateSettings(sections: string[]) {
         const configuration = vscode.workspace.getConfiguration();
 
+
         sections.forEach((section) => {
             this.settings[section].value = configuration.get(section)
+            this.emitChangedSectionEvent(section)
         })
         this.emitChangeEvent();
     }
 
-    public emitChangeEvent() {
-        this.emit("configChanged", this.settings)
+    emitChangedSectionEvent(section: string) {
+        const eventType = `configChanged:${section}`;
+        if (this.listenerCount(eventType))
+            this.emit(eventType, this.settings[section])
 
+    }
+
+    emitChangeEvent() {
+        this.emit("configChanged", this.settings)
     }
 
     public getSettings() {

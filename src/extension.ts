@@ -7,26 +7,27 @@ import { MainSidebarProvider } from './panels/MainSidebar'
 import { HotReload } from "./HotReload";
 // const { exec } = require('node:child_process');
 import * as path from "path"
-import { watch } from "chokidar";
-import { logDump, logger } from "./logger";
-const print = logger(__filename);
+import { logger } from "./Logger";
+const print = (...args) => logger.log(__filename, ...args);
+
 import { assetWatcher } from './AssetWatcher';
 import { userSettings } from "./UserSettings";
 import { jsonPrettyArray } from './utils/jsonStringify';
+
 /*
     todo : angelscript intellisence
 */
 
 export async function activate(context: vscode.ExtensionContext) {
 
+    await userSettings.init(context.extensionUri);
     print("activating");
-
-
 
 
     const createBuiltinAssets = false;
     if (createBuiltinAssets) {
         assetWatcher.on("assetsChanged", (e) => {
+            //todo : fetch buildins from github
             // const dir = vscode.workspace.workspaceFolders[0].uri.fsPath;
             const dir = context.extensionUri.fsPath;
 
@@ -46,27 +47,16 @@ export async function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand("vkmask.dumpLogs", async () => {
 
         const message: any = (await sidebar.requestLogs());
-        // console.log(message)
+        // console.log("message", message)
         const webviewLogDump = message.value;
-        // combining multiple dumps into one, based on timestamp
-        const dumps = [logDump, webviewLogDump]
-        // !!!!!!!!!! any !!!!!!!!!!!!!
-        const fullLogDump = [].concat(...dumps).sort((a: any, b: any) => a.timestamp - b.timestamp);
 
         const dumpPath = sidebar.maskConfig.currentConfigDir;
         if (dumpPath === undefined) {
             vscode.window.showErrorMessage("Seems like no folder opened to save logs.")
             return;
         }
-        vscode.window.showInformationMessage('Dumping logs to ' + dumpPath);
 
-        const jsonDump = jsonPrettyArray(fullLogDump, "\t");
-        const jsonDumpPath = path.join(dumpPath, "logDump.json");
-        fs.writeFileSync(jsonDumpPath, jsonDump, { encoding: 'utf-8' })
-
-        vscode.workspace.openTextDocument(jsonDumpPath).then(document => {
-            return vscode.window.showTextDocument(document)
-        })
+        logger.dumpLogs(webviewLogDump, dumpPath)
 
     }))
 
@@ -102,7 +92,7 @@ export async function activate(context: vscode.ExtensionContext) {
         watchLock = true;
 
         vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction").then(() => {
-            sidebar.sendEffects();
+            sidebar.updateAppState();
             assetWatcher.searchAssets();
             userSettings.emitChangeEvent();
         });

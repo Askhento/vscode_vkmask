@@ -6,7 +6,7 @@
     "url": "https://github.com/Askhento/vscode_vkmask"
   },
   "description": "UI for vkontakte AR development ",
-  "version": "0.4.5",
+  "version": "0.4.6",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -24,13 +24,18 @@
       "properties": {
         "vkmask.use-builtins": {
           "type": "boolean",
-          "default": true,
+          "default": false,
           "description": "Show builtin resources in file pickers"
         },
-        "vkmask.accumulate-logs": {
+        "vkmask.keep-logs": {
           "type": "boolean",
-          "default": false,
+          "default": true,
           "description": "Does it require to keep debug logs"
+        },
+        "vkmask.output-channel": {
+          "type": "boolean",
+          "default": true,
+          "description": "Open console ouput at the bottom"
         }
       }
     },

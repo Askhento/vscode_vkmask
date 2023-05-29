@@ -1,8 +1,8 @@
 import { Disposable, Webview, window, Uri, ViewColumn, WebviewViewProvider, WebviewView } from "vscode";
 import * as vscode from "vscode";
 import { MaskConfig } from "../MaskConfig";
-import { logger } from "../logger";
-const print = logger(__filename);
+import { logger } from "../Logger";
+const print = (...args) => logger.log(__filename, ...args);
 import { assetWatcher } from "../AssetWatcher";
 import { userSettings } from "../UserSettings";
 import { getUri } from "../utils/getUri";
@@ -157,16 +157,23 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
         webviewView.onDidChangeVisibility(() => {
             const visible = this._view?.visible
+            //  ??? check if need to parse ??? to save resources and get less flicker
             if (visible) {
                 print("webview visible update effects");
-                this.maskConfig.parseConfig();
-                if (this.maskConfig.pathMaskJSON === undefined) {
-                    print("mask.json not found, show welcome")
-                    this.sendShowWelcome();
-                } else {
-                    assetWatcher.searchAssets();
-                    this.sendEffects();
-                }
+                this.updateAppState();
+                assetWatcher.searchAssets();
+                // const parseResult = this.maskConfig.parseConfig();
+                // if (this.maskConfig.pathMaskJSON === undefined) {
+                //     print("mask.json not found, show welcome")
+                //     this.sendShowWelcome();
+                // } else {
+                //     print("Change visibility sending effects")
+                //     assetWatcher.searchAssets();
+                //     this.sendEffects();
+                // }
+
+
+
 
             }
         }, this);
@@ -181,6 +188,24 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
     }
 
+    public updateAppState() {
+
+        // ?? check if need and update
+        // for example mask.json file didn't changed
+
+        const parseResult = this.maskConfig.parseConfig()
+
+        if (this.maskConfig.pathMaskJSON === undefined) {
+            print("mask.json not found, show welcome")
+            this.sendShowWelcome();
+        } else {
+            if (parseResult.success)
+                this.sendEffects();
+            else {
+                this.sendError(parseResult.message)
+            }
+        }
+    }
 
     private init() {
 
@@ -189,14 +214,11 @@ export class MainSidebarProvider implements WebviewViewProvider {
         this.maskConfig.setupSelectLock();
 
         this.maskConfig.onTextEdit = () => {
+            print("on text edit call")
             // ! if error, then need to send error
             this.maskConfig.selectedEffectId = undefined;
-            const parseResult = this.maskConfig.parseConfig()
-            if (parseResult.success)
-                this.sendEffects();
-            else {
-                this.sendError(parseResult.message)
-            }
+            this.updateAppState();
+
         }
 
         this.maskConfig.onTextSelect = () => {
@@ -210,13 +232,9 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
         this.maskConfig.onFileSave = () => {
             // !!! seems like also require lock 
-            this.maskConfig.selectedEffectId = undefined;
-            const parseResult = this.maskConfig.parseConfig()
-            if (parseResult.success)
-                this.sendEffects();
-            else {
-                this.sendError(parseResult.message)
-            }
+            print("on file save call")
+            this.maskConfig.selectedEffectId = undefined; // ???? maybe should keep ????
+            this.updateAppState();
         }
 
         assetWatcher.on("assetsChanged", (e) => {
@@ -225,7 +243,7 @@ export class MainSidebarProvider implements WebviewViewProvider {
         });
         assetWatcher.searchAssets();
 
-        userSettings.init(this._extensionUri) // will resolve in promise so not blocking
+        // userSettings.init(this._extensionUri) // will resolve in promise so not blocking
 
         userSettings.on("configChanged", (data) => {
             this.sendUserSettings(data)
@@ -242,24 +260,7 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
         print("parsing init!");
         //?  there will be the case when user deletes mask.json and i should cover it also 
-        const parseResult = this.maskConfig.parseConfig()
-        if (parseResult.success)
-            this.sendEffects();
-        else {
-            if (this.maskConfig.pathMaskJSON === undefined) {
-                print("mask.json not found, show welcome")
-                this.sendShowWelcome();
-            } else {
-                this.sendError(parseResult.message)
-            }
-        }
-
-        if (this.maskConfig.pathMaskJSON === undefined) {
-            print("mask.json not found, show welcome")
-            this.sendShowWelcome();
-        } else {
-            this.sendEffects();
-        }
+        this.updateAppState();
     }
 
 
