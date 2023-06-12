@@ -3,7 +3,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import { logger } from "./Logger";
-const print = (...args) => logger.log(__filename, ...args);
+const print = (...args: any) => logger.log(__filename, ...args);
 
 export class HotReload {
 
@@ -53,6 +53,7 @@ export class HotReload {
             print("Load.as does not exist ");
             return;
         }
+
 
         const textLines = fs.readFileSync(filePath, 'utf8').split("\n");
 

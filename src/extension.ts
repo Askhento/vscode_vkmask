@@ -8,7 +8,7 @@ import { HotReload } from "./HotReload";
 // const { exec } = require('node:child_process');
 import * as path from "path"
 import { logger } from "./Logger";
-const print = (...args) => logger.log(__filename, ...args);
+const print = (...args: any) => logger.log(__filename, ...args);
 
 import { assetWatcher } from './AssetWatcher';
 import { userSettings } from "./UserSettings";

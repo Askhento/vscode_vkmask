@@ -6,7 +6,6 @@ import * as fs from 'fs';
 // const print = logger(__filename);
 import { EventEmitter } from "events";
 
-// todo : add public  event for specific key 
 type Section = {
     type: "string",
     default: string | boolean | number,
@@ -17,7 +16,7 @@ class UserSettings extends EventEmitter {
 
     settings: Record<string, Section> = {};
     filteredSections: string[] = [];
-    extensionUri: vscode.Uri;
+    extensionUri: vscode.Uri | undefined;
 
     constructor() {
         super();
@@ -68,7 +67,8 @@ class UserSettings extends EventEmitter {
 
 
         sections.forEach((section) => {
-            this.settings[section].value = configuration.get(section)
+            // !!!!! will  need a better type
+            this.settings[section].value = configuration.get(section) ?? "empty"
             this.emitChangedSectionEvent(section)
         })
         this.emitChangeEvent();

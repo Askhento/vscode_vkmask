@@ -11,7 +11,7 @@ import { delayPromise } from "./utils/delayPromise";
 import { EventEmitter } from "events";
 
 import { logger } from "./Logger";
-const print = (...args) => logger.log(__filename, ...args);
+const print = (...args: unknown[]) => logger.log(__filename, ...args);
 
 
 export class MaskConfig extends EventEmitter {
@@ -25,7 +25,7 @@ export class MaskConfig extends EventEmitter {
     private sourceMaskJSON: jsonMap.ParseResult | undefined;
     public maskLinePointers: jsonMap.Pointers = {};
     public rawMaskJSON: string = "";
-    public pathMaskJSON: string | undefined;
+    public pathMaskJSON: string = "";
     public currentConfigDir: string | undefined;
     public selectedEffectId: number | undefined;
 
@@ -52,56 +52,56 @@ export class MaskConfig extends EventEmitter {
 
         vscode.workspace.onDidChangeTextDocument((event) => {
             return; // !!!
-            if (this.isSameDocument(event.document.uri, "mask.json")) {
+            // if (this.isSameDocument(event.document.uri, "mask.json")) {
 
-                if (event.contentChanges === undefined || event.contentChanges.length === 0) return;
+            //     if (event.contentChanges === undefined || event.contentChanges.length === 0) return;
 
-                // const newChar = event.contentChanges[0].text;
-                print("edit event mask.json \n");
+            //     // const newChar = event.contentChanges[0].text;
+            //     print("edit event mask.json \n");
 
-                // print(typeof this.editLockCallback);
-                if (this.editLockCallback) {
-                    print("edit lock return");
-                    this.editLockCallback();
-                    return;
-                }
+            //     // print(typeof this.editLockCallback);
+            //     if (this.editLockCallback) {
+            //         print("edit lock return");
+            //         this.editLockCallback();
+            //         return;
+            //     }
 
-                print("seems like undo or user typing in mask.json")
+            //     print("seems like undo or user typing in mask.json")
 
-                if (this.editDelay !== undefined) this.editDelay.cancel();
-                this.editDelay = delayPromise(this.editDelayMS)
-                this.editDelay.promise.then(() => {
-                    this.onTextEdit();
-                })
+            //     if (this.editDelay !== undefined) this.editDelay.cancel();
+            //     this.editDelay = delayPromise(this.editDelayMS)
+            //     this.editDelay.promise.then(() => {
+            //         this.onTextEdit();
+            //     })
 
-            }
+            // }
 
         })
 
 
         vscode.window.onDidChangeTextEditorSelection((event) => {
             return; // !!!
-            const editor = event.textEditor;
-            // print(event.selections.map(s => s.start))
+            // const editor = event.textEditor;
+            // // print(event.selections.map(s => s.start))
 
-            if (this.isSameDocument(editor.document.uri, "mask.json")) {
+            // if (this.isSameDocument(editor.document.uri, "mask.json")) {
 
-                print("selection event mask.json");
-                if (this.selectionLockCallback !== undefined) {
-                    // ! if selected element already selected, then nothing happens
-                    print("selection lock return");
-                    this.selectionLockCallback();
-                    return;
-                }
+            //     print("selection event mask.json");
+            //     if (this.selectionLockCallback !== undefined) {
+            //         // ! if selected element already selected, then nothing happens
+            //         print("selection lock return");
+            //         this.selectionLockCallback();
+            //         return;
+            //     }
 
-                print("change selection by user");
+            //     print("change selection by user");
 
-                if (this.selectionDelay !== undefined) this.selectionDelay.cancel();
-                this.selectionDelay = delayPromise(this.selectionDelayMS)
-                this.selectionDelay.promise.then(() => {
-                    this.onTextSelect();
-                })
-            }
+            //     if (this.selectionDelay !== undefined) this.selectionDelay.cancel();
+            //     this.selectionDelay = delayPromise(this.selectionDelayMS)
+            //     this.selectionDelay.promise.then(() => {
+            //         this.onTextSelect();
+            //     })
+            // }
         })
 
         vscode.workspace.onDidSaveTextDocument((document) => {
@@ -206,7 +206,8 @@ export class MaskConfig extends EventEmitter {
                 return vscode.window.activeTextEditor;
             }
         }
-        return vscode.workspace.openTextDocument(this.pathMaskJSON).then(document => {
+
+        return vscode.workspace.openTextDocument(vscode.Uri.file(this.pathMaskJSON)).then(document => {
             return vscode.window.showTextDocument(document)
         })
 
@@ -379,7 +380,9 @@ export class MaskConfig extends EventEmitter {
         // fs.writeFileSync(this.pathMaskJSON, newConfigString, { encoding: 'utf-8' })
         // this.parseConfig();
 
-        await editor.edit((builder) => {
+        await editor.edit(async (builder) => {
+
+            if (editor === undefined) editor = await this.showConfig();
 
             builder.delete(new vscode.Range(0, 0, editor.document.lineCount, 0))
             builder.insert(new vscode.Position(0, 0), newConfigString);
@@ -398,14 +401,14 @@ export class MaskConfig extends EventEmitter {
 
 
 
-    public checkConfigAtPath(dir) {
+    public checkConfigAtPath(dir: string) {
         const configPath = path.join(dir, "mask.json");
         return fs.existsSync(configPath)
     }
 
 
 
-    public getConfigPath() {
+    public getConfigPath(): string | undefined {
 
         // ? what if more that one folder opened ???
         this.currentConfigDir = undefined;
@@ -428,20 +431,21 @@ export class MaskConfig extends EventEmitter {
         return path.join(this.currentConfigDir, "mask.json");
     }
 
-    public parseConfig() {
+    public parseConfig(): { success: boolean, message: string } {
 
         // ? maybe split to parse locations and actual object
         print("parsing mask.json")
         this.maskJSON = undefined;
 
-        this.pathMaskJSON = this.getConfigPath();
+        const configPath = this.getConfigPath();
 
-        if (this.pathMaskJSON === undefined) {
+        if (configPath === undefined) {
             return {
                 success: false,
                 message: "mask.json not seems to exist"
             }
         }
+        this.pathMaskJSON = configPath;
 
 
         // use unsaved version of config if possible
@@ -463,7 +467,7 @@ export class MaskConfig extends EventEmitter {
             print("raw mask.json ", this.rawMaskJSON)
             return {
                 success: false,
-                message: error.toString()
+                message: (error as Error).toString()
             }
         }
 
@@ -487,7 +491,7 @@ export class MaskConfig extends EventEmitter {
             print(this.maskJSON)
             return {
                 success: false,
-                message: fromZodError(parseResult.error)
+                message: fromZodError(parseResult.error).message
             }
             // return false;
         }
@@ -525,7 +529,7 @@ export class MaskConfig extends EventEmitter {
 
         this.maskLinePointers = this.sourceMaskJSON?.pointers;
 
-        return { success: true }
+        return { success: true, message: "Successful" }
 
 
 

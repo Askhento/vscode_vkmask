@@ -1,28 +1,40 @@
 {
-	"compilerOptions": {
-		"module": "CommonJS",
-		// "module": "ES2022",
-		"target": "ES2020",
-		"outDir": "out",
-		"esModuleInterop": true,
-		"moduleResolution": "Node",
-		"lib": [
-			"ES2020"
-		],
+    "compilerOptions": {
+        "module": "CommonJS",
+        // "module": "ES2022",
+        "target": "ES2020",
+        "outDir": "out",
+        "esModuleInterop": true,
+        "moduleResolution": "Node",
+        "lib": [
+            "ES2020"
+        ],
         "allowJs": true,
         "checkJs": false,
-
-		"sourceMap": false,
-		"rootDir": "src",
-		"strict": false,   /* enable all strict type-checking options */
+        "sourceMap": false,
+        "rootDir": "src",
+        "strict": false, /* enable all strict type-checking options */
         "noUncheckedIndexedAccess": false,
         // "forceConsistentCasingInFileNames": true,
         "skipLibCheck": true,
-		/* Additional Checks */
-		"noImplicitReturns": false, /* Report error when not all code paths in function return a value. */
-		// "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
-		// "noUnusedParameters": true,  /* Report errors on unused parameters. */
-	},
-    "include": ["src/**/*.js", "src/**/*.ts"],
-	"exclude": ["**/node_modules", ".vscode-test", "webview-ui"]
+        /* Additional Checks */
+        "noImplicitReturns": false, /* Report error when not all code paths in function return a value. */
+        // "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
+        // "noUnusedParameters": true,  /* Report errors on unused parameters. */
+        "types": [
+            "node"
+        ]
+    },
+    // "include": [
+    //     // "src/**/*.js",
+    //     "src/**/*.ts"
+    // ],
+    "include": [
+        "src"
+    ],
+    "exclude": [
+        "**/node_modules",
+        ".vscode-test",
+        "webview-ui"
+    ]
 }

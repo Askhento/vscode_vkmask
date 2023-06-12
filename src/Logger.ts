@@ -58,7 +58,7 @@ export class Logger {
 
 
     // }
-    public log(baseName: string, ...params) {
+    public log(baseName: string, ...params: unknown[]) {
         baseName = path.basename(baseName).toUpperCase().toString()
 
         //  Convert args to a normal array
@@ -77,7 +77,7 @@ export class Logger {
 
     }
 
-    public dumpLogs(webviewLogDump: unknown[], dumpPath: string) {
+    public dumpLogs(webviewLogDump: LogEntry[], dumpPath: string) {
 
         // combining multiple dumps into one, based on timestamp
 
@@ -85,8 +85,8 @@ export class Logger {
         // console.log("Delete", this.logDump)
 
         // return;
-        const dumps = [this.logDump, webviewLogDump]
-        const fullLogDump = [].concat(...dumps).sort((a: LogEntry, b: LogEntry) => a.timestamp - b.timestamp);
+        const dumps = [...this.logDump, ...webviewLogDump]
+        const fullLogDump = dumps.sort((a: LogEntry, b: LogEntry) => a.timestamp - b.timestamp);
 
         vscode.window.showInformationMessage('Dumping logs to ' + dumpPath);
 

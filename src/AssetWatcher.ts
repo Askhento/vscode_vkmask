@@ -4,7 +4,7 @@ import * as fs from 'fs';
 import * as vscode from 'vscode';
 import { EventEmitter } from "events";
 import { logger } from "./Logger";
-const print = (...args) => logger.log(__filename, ...args);
+const print = (...args: any) => logger.log(__filename, ...args);
 
 import { XMLParser } from "fast-xml-parser" // https://github.com/NaturalIntelligence/fast-xml-parser/blob/c7b3cea4ead020c21d39e135a50348208829e971/docs/v4/2.XMLparseOptions.md
 

@@ -78,7 +78,7 @@
     "install:all": "npm install && cd webview-ui && npm install",
     "dev:webview": "cd webview-ui && npm run dev",
     "build:webview": "cd webview-ui && npm run build",
-    "publish-patch": "vsce publish patch ; vsce package --out ./vsix-packages"
+    "publish-patch": "npm version patch ; vsce package --out ./vsix-packages"
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",

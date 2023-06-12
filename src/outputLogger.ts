@@ -1,59 +1,59 @@
-import * as path from 'path';
-import * as vscode from 'vscode';
-import * as util from 'util' // has no default export
+// import * as path from 'path';
+// import * as vscode from 'vscode';
+// import * as util from 'util' // has no default export
 
-import { userSettings } from "./UserSettings";
-
-
-export class Logger {
-    private outputChannel: vscode.OutputChannel;
-    private logDump: [Record<string, unknown>];
+// import { userSettings } from "./UserSettings";
 
 
-    constructor(extensionOuputName: string) {
-        this.outputChannel = vscode.window.createOutputChannel(extensionOuputName);
-        this.outputChannel.show(true);
-    }
+// export class Logger {
+//     private outputChannel: vscode.OutputChannel;
+//     private logDump: [Record<string, unknown>];
 
-    public append(o: any) {
-        // const prefix = `[${new Date().toLocaleString()}]`;
 
-        if (o.constructor === Array) {
-            o.forEach(item => this.append(item));
-        }
-        else {
+//     constructor(extensionOuputName: string) {
+//         this.outputChannel = vscode.window.createOutputChannel(extensionOuputName);
+//         this.outputChannel.show(true);
+//     }
 
-            // this.outputChannel.append(prefix + ' ');
-            const isObject = (typeof o === 'object' && o !== null);
-            //be carefull stringify can not convert circular dependencies
-            //this.outputChannel.appendLine(isObject ? JSON.stringify(o) : o);
-            this.outputChannel.appendLine(isObject ? util.inspect(o, { compact: false }) : o);
-        }
-    }
+//     public append(o: any) {
+//         // const prefix = `[${new Date().toLocaleString()}]`;
 
-    public getLogger(baseName: string) {
+//         if (o.constructor === Array) {
+//             o.forEach(item => this.append(item));
+//         }
+//         else {
 
-        baseName = path.basename(baseName).toUpperCase().toString()
-        return (...params) => {
+//             // this.outputChannel.append(prefix + ' ');
+//             const isObject = (typeof o === 'object' && o !== null);
+//             //be carefull stringify can not convert circular dependencies
+//             //this.outputChannel.appendLine(isObject ? JSON.stringify(o) : o);
+//             this.outputChannel.appendLine(isObject ? util.inspect(o, { compact: false }) : o);
+//         }
+//     }
 
-            // 1. Convert args to a normal array
-            var args = Array.prototype.slice.call(params);
+//     public getLogger(baseName: string) {
 
-            // 2. Prepend log prefix log string
-            args.unshift(baseName + ": ");
+//         baseName = path.basename(baseName).toUpperCase().toString()
+//         return (...params) => {
 
-            // if (process.env.NODE_ENV !== "dev") return () => { };
-            console.log.apply(console, args);
+//             // 1. Convert args to a normal array
+//             var args = Array.prototype.slice.call(params);
 
-            // 3. Save logs for something
-            if (userSettings.getSettings()["vkmask.keep-logs"].value)
-                this.logDump.push({ "timestamp": (new Date()).getTime(), "value": args });
+//             // 2. Prepend log prefix log string
+//             args.unshift(baseName + ": ");
 
-            if (userSettings.getSettings()["vkmask.output-channel"].value)
-                this.append(args)
+//             // if (process.env.NODE_ENV !== "dev") return () => { };
+//             console.log.apply(console, args);
 
-        }
-    }
-}
+//             // 3. Save logs for something
+//             if (userSettings.getSettings()["vkmask.keep-logs"].value)
+//                 this.logDump.push({ "timestamp": (new Date()).getTime(), "value": args });
 
-export const outputlogger = new Logger("vkmask")
+//             if (userSettings.getSettings()["vkmask.output-channel"].value)
+//                 this.append(args)
+
+//         }
+//     }
+// }
+
+// export const outputlogger = new Logger("vkmask")

@@ -1,5 +1,5 @@
 <script lang="ts">
-  /*
+    /*
 
     todo : need to add file picker
     todo : texture preview
@@ -8,65 +8,65 @@
 
 
   */
-  import { logger } from "./logger";
-  const print = logger("Inspector.svelte");
+    import { logger } from "./logger";
+    const print = logger("Inspector.svelte");
 
-  import { effectDefaults } from "../../src/ztypes.js";
-  import { effects, selection } from "./stores.js";
-  import { vscode } from "./utils/vscode";
+    import { effectDefaults } from "../../src/ztypes.js";
+    import { effects, selection } from "./stores.js";
+    import { vscode } from "./utils/vscode";
 
-  import ObjectControl from "./ui-controls/ObjectControl.svelte";
-  import { uiControls, EffectParserForUI } from "./ui-controls/Controls.js";
-  import { onMount, tick } from "svelte";
-  import NumberSliderControl from "./ui-controls/NumberSliderControl.svelte";
+    import ObjectControl from "./ui-controls/ObjectControl.svelte";
+    import { uiControls, EffectParserForUI } from "./ui-controls/Controls.js";
+    import { onMount, tick } from "svelte";
+    import NumberSliderControl from "./ui-controls/NumberSliderControl.svelte";
 
-  export let mountLock = true;
-  let uiElements; //= EffectParserForUI.parse($effects);
-  //   $: uiElements = EffectParserForUI.parse($effects);
+    export let mountLock = true;
+    let uiElements; //= EffectParserForUI.parse($effects);
+    //   $: uiElements = EffectParserForUI.parse($effects);
 
-  let selectedId;
+    let selectedId;
 
-  $: print("ui elements", uiElements);
-  onMount(async () => {
-    mountLock = true;
-    // print("mounted");
-    await tick();
-    mountLock = false;
-    // print("mount tick");
-  });
+    $: print("ui elements", uiElements);
+    onMount(async () => {
+        mountLock = true;
+        // print("mounted");
+        await tick();
+        mountLock = false;
+        // print("mount tick");
+    });
 
-  $: if ($selection) selectedId = $selection.id;
-  else selectedId = undefined;
+    $: if ($selection) selectedId = $selection.id;
+    else selectedId = undefined;
 
-  $: print("selection changes : ", $selection);
-  $: {
-    print("parsing ui elements  changes : ", $effects);
-    uiElements = EffectParserForUI.parse($effects); // this seems to help !!!
-  }
+    $: print("selection changes : ", $selection);
+    $: {
+        print("parsing ui elements  changes : ", $effects);
+        uiElements = EffectParserForUI.parse($effects); // this seems to help !!!
+    }
 </script>
 
 <div class="inspector-wrapper">
-  {#if selectedId !== undefined}
-    <div class="inspector-name">Inspector Panel</div>
-    {#if $selection.type === "effect"}
-      <!-- <div>{print("controls from inspector")}</div>
+    {#if selectedId !== undefined}
+        <div class="inspector-name">Inspector Panel</div>
+        {#if $selection.type === "effect"}
+            <!-- <div>{print("controls from inspector")}</div>
       <div>
         {print($selection)}
       </div> -->
-      <ObjectControl
-        expanded={true}
-        bind:value={$effects[selectedId]}
-        label={$effects[selectedId].name}
-        uiElements={uiElements.value[selectedId].value}
-      />
-      <!-- <NumberSliderControl
+            <ObjectControl
+                expanded={true}
+                value={$effects[selectedId]}
+                label={$effects[selectedId].name}
+                uiElements={uiElements.value[selectedId].value}
+            />
+            <!-- <NumberSliderControl
         bind:value={$effects[selectedId].mix}
         label={"TEST"}
         params={uiElements.value[selectedId].value.mix.uiData}
       /> -->
-      <!-- uiElements={uiControls[$effects[$selection.id].name].uiData} -->
+            <!-- uiElements={uiControls[$effects[$selection.id].name].uiData} -->
+        {/if}
     {/if}
-  {/if}
 </div>
 
 <!-- 

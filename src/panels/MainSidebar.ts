@@ -2,13 +2,14 @@ import { Disposable, Webview, window, Uri, ViewColumn, WebviewViewProvider, Webv
 import * as vscode from "vscode";
 import { MaskConfig } from "../MaskConfig";
 import { logger } from "../Logger";
-const print = (...args) => logger.log(__filename, ...args);
+const print = (...args: any[]) => logger.log(__filename, ...args);
 import { assetWatcher } from "../AssetWatcher";
 import { userSettings } from "../UserSettings";
 import { getUri } from "../utils/getUri";
 import { getNonce } from "../utils/getNonce";
 import { copyRecursiveSync } from "../utils/copyFilesRecursive"
 import path from "path";
+
 
 /**
  * This class manages the state and behavior of HelloWorld webview panels.
@@ -206,6 +207,7 @@ export class MainSidebarProvider implements WebviewViewProvider {
             }
         }
     }
+
 
     private init() {
 
