@@ -25,13 +25,13 @@
             "node"
         ]
     },
-    // "include": [
-    //     // "src/**/*.js",
-    //     "src/**/*.ts"
-    // ],
     "include": [
-        "src"
+        "src/**/*.js",
+        "src/**/*.ts"
     ],
+    // "include": [
+    //     "src"
+    // ],
     "exclude": [
         "**/node_modules",
         ".vscode-test",

@@ -1,9 +1,20 @@
 <script lang="js">
+  import { createEventDispatcher } from "svelte";
+
   export let label = "empty",
-    value = "";
+    value,
+    path;
   let tagElems = [];
   $: tags = value?.split(";");
-  //   $: console.log(value);
+  $: console.log("tags", value);
+  const dispatch = createEventDispatcher();
+  $: {
+    dispatch("changed", {
+      value,
+      path,
+    });
+  }
+
   function joinTags() {
     // .filter((tag) => tag.length)
     value = tags.join(";");
@@ -20,71 +31,71 @@
   }
   function removeTag(index) {
     tagElems = [];
-    console.log("removeing tag", index);
+    // console.log("removeing tag", index);
     tags.splice(index, 1);
-    console.log("new tags", tags);
+    // console.log("new tags", tags);
     tags = tags;
     joinTags();
   }
 </script>
 
 <div class="text-control-wrapper">
-  {#if label && tags}
+  {#if label}
     <span class="label">{label}</span>
-    <span class="control-wrapper">
-      {#each tags as tag, index}
-        <vscode-text-field
-          size="10"
-          value={tags[index]}
-          bind:this={tagElems[index]}
-          on:keydown={(e) => {
-            switch (e.key) {
-              case "Backspace":
-                if (e.target) {
-                  const newValue = e.target.value;
+    {#if tags}
+      <span class="control-wrapper">
+        {#each tags as tag, index}
+          <vscode-text-field
+            size="10"
+            value={tags[index]}
+            bind:this={tagElems[index]}
+            on:keydown={(e) => {
+              switch (e.key) {
+                case "Backspace":
+                  if (e.target) {
+                    const newValue = e.target.value;
 
-                  if (newValue === "" && index > 0) {
-                    removeTag(index);
+                    if (newValue === "" && index > 0) {
+                      removeTag(index);
+                    }
                   }
-                }
-                break;
-              case "Escape":
-                e.target.value = tag;
-                e.target.blur();
-                break;
-              default:
-                break;
-            }
-          }}
-          on:change={(e) => {
-            if (e.target) {
-              tags[index] = e.target.value;
-              console.log("changed tag", tags[index]);
-              joinTags();
-            }
-          }}
-        >
-          <section slot="end">
-            <vscode-button
-              class="tag-btn"
-              appearance="icon"
-              on:click|stopPropagation={() => {
-                removeTag(index);
-              }}
-            >
-              <span class="codicon codicon-remove" />
-            </vscode-button>
-          </section>
-        </vscode-text-field>
-      {/each}
-      <vscode-button
-        class="tag-btn"
-        appearance="icon"
-        on:click|stopPropagation={addTag}
-      >
-        <span class="codicon codicon-add" />
-      </vscode-button>
-    </span>
+                  break;
+                case "Escape":
+                  e.target.value = tag;
+                  e.target.blur();
+                  break;
+                default:
+                  break;
+              }
+            }}
+            on:change={(e) => {
+              if (e.target) {
+                tags[index] = e.target.value;
+                // console.log("changed tag", tags[index]);
+                joinTags();
+              }
+            }}
+          >
+            <section slot="end">
+              <vscode-button
+                class="tag-btn"
+                appearance="icon"
+                on:click|stopPropagation={() => {
+                  removeTag(index);
+                }}
+              >
+                <span class="codicon codicon-remove" />
+              </vscode-button>
+            </section>
+          </vscode-text-field>
+        {/each}
+        <vscode-button class="tag-btn" appearance="icon" on:click|stopPropagation={addTag}>
+          <span class="codicon codicon-add" />
+        </vscode-button>
+      </span>
+    {:else}
+      <span>ADDD a key !!!</span>
+    {/if}
   {/if}
 </div>
 

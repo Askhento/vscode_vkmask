@@ -1,10 +1,11 @@
-<script lang="ts">
+<script>
   // https://github.com/EugeneDae/vscode-mac-color-picker - native color picker for macos
+  import { createEventDispatcher } from "svelte";
 
   import { onMount } from "svelte";
   import NumberSliderControl from "./NumberSliderControl.svelte";
 
-  export let label, value, params;
+  export let label, value, path, params;
 
   let color, alpha;
 
@@ -15,12 +16,9 @@
   }
 
   function rgbToHex() {
+    // if (value === undefined) return;
     //! have to limit 0 - 1 range
-    color =
-      "#" +
-      componentToHex(value[0]) +
-      componentToHex(value[1]) +
-      componentToHex(value[2]);
+    color = "#" + componentToHex(value[0]) + componentToHex(value[1]) + componentToHex(value[2]);
     if (params.alpha !== undefined) alpha = value[3];
   }
 
@@ -47,26 +45,47 @@
   //
   //   $: console.log(color, alpha);
   //   $: console.log(value);
-  $: if (color !== undefined) hexToRGB();
-  $: if (alpha !== undefined) hexToRGB();
+  //   $: if (color !== undefined) hexToRGB();
+  $: if (alpha !== undefined && alpha !== value[3]) hexToRGB();
 
+  //   function onAlphaChange() {}
+  rgbToHex();
   onMount(() => {
     // console.log("mount", value);
-    if (value === undefined || value.length === 0) value = params.default;
+    // if (value === undefined || value.length === 0) value = params.defValue;
+
     rgbToHex();
+    // console.log("alpha picker", alpha, params);
   });
+
+  const dispatch = createEventDispatcher();
+  $: if (path !== undefined) {
+    dispatch("changed", {
+      value,
+      path,
+    });
+  }
 </script>
 
 <div class="color-control-wrapper">
   {#if label}
     <span class="label">{label}</span>
     <!-- <span class="color">{value}</span> -->
-    <input class="color" type="color" bind:value={color} />
+    <input
+      class="color"
+      type="color"
+      value={color}
+      on:change={(e) => {
+        console.log("color picker on change!!!!");
+        color = e.target.value;
+        hexToRGB();
+      }}
+    />
     {#if params.alpha}
       <NumberSliderControl
         label={"alpha"}
         bind:value={alpha}
-        params={{ min: 0, max: 1 }}
+        params={{ min: 0, max: 1, defValue: 0.0 }}
       />
       <!-- <input
         class="alpha"

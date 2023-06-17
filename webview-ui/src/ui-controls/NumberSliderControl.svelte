@@ -1,12 +1,15 @@
 <script lang="ts">
+  import { createEventDispatcher, onMount } from "svelte";
+
   export let label = "empty",
     value,
+    path = undefined,
     params;
 
   let step = 0.01,
-    sliderValue = value;
+    sliderValue;
   //   $: console.log("from slider", params);
-  function onSliderUp() {
+  export function onSliderUp() {
     value = sliderValue;
   }
 
@@ -21,8 +24,21 @@
     value = parseFloat(newValue);
     sliderValue = value;
   }
+
+  onMount(() => {
+    console.log("slider", value, sliderValue);
+    sliderValue = value;
+  });
   // !!! check if min max exist
   $: step = (params.max - params.min) / 20.0;
+
+  const dispatch = createEventDispatcher();
+  $: if (path !== undefined) {
+    dispatch("changed", {
+      value,
+      path,
+    });
+  }
 </script>
 
 <div class="number-control-wrapper">

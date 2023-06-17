@@ -29,8 +29,8 @@ class AssetWatcher extends EventEmitter {
     constructor() {
         super();
 
-        if (vscode.workspace.workspaceFolders) {
-            this.directory = vscode.workspace.workspaceFolders[0].uri.fsPath
+        if (vscode.workspace.workspaceFolders?.length) {
+            this.directory = vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath
         }
 
         this.attach();
@@ -58,7 +58,7 @@ class AssetWatcher extends EventEmitter {
                     // print(file.fsPath)
                     const rawXML = fs.readFileSync(file.fsPath)
                     let xmlObject = this.xmlParser.parse(rawXML);
-                    const xmlType = Object.keys(xmlObject)[0]
+                    const xmlType = Object.keys(xmlObject)?.[0]
                     assetType = "xml_" + xmlType;
                 }
                 return {

@@ -3,10 +3,7 @@
 <script lang="ts">
   import { logger, logDump } from "./logger";
   const print = logger("App.svelte");
-  import {
-    provideVSCodeDesignSystem,
-    allComponents,
-  } from "@vscode/webview-ui-toolkit";
+  import { provideVSCodeDesignSystem, allComponents } from "@vscode/webview-ui-toolkit";
   import Effects from "./Effects.svelte";
   import Inspector from "./Inspector.svelte";
   import ErrorMessage from "./ErrorMessage.svelte";
@@ -14,6 +11,7 @@
   import { vscode } from "./utils/vscode";
   import { assets, effects, selection, userSettings } from "./stores";
   import WelcomeScreen from "./WelcomeScreen.svelte";
+  import { onMount } from "svelte";
 
   let appStates = {
     LOADING: 0,
@@ -52,6 +50,7 @@
   });
 
   selection.subscribe((newSelection) => {
+    print("selection update");
     vscode.postMessage({
       type: "selectionUpdate",
       value: newSelection,
@@ -132,6 +131,12 @@
     });
   }
   provideVSCodeDesignSystem().register(allComponents);
+
+  onMount(() => {
+    vscode.postMessage({
+      type: "webviewReady",
+    });
+  });
 </script>
 
 <svelte:window on:message={handleMessageApp} />
@@ -149,7 +154,14 @@
   <Effects />
   <vscode-divider role="presentation" />
   {#if $selection}
-    <Inspector bind:mountLock={inspectorMountLock} />
+    {#key $selection}
+      <Inspector
+        bind:mountLock={inspectorMountLock}
+        on:changed={() => {
+          sendEffects($effects);
+        }}
+      />
+    {/key}
   {/if}
 {:else if appState === appStates.LOADING}
   <div>Loading...</div>

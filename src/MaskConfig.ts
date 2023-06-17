@@ -4,7 +4,7 @@ import * as path from 'path';
 
 import * as jsonMap from "json-source-map";
 import { jsonPrettyArray } from "./utils/jsonStringify";
-import { ZBaseEffect, ZMaskConfig } from "./ztypes.js"
+import { ZBaseEffect, ZMaskConfig, ZMaskConfigPreprocess } from "./ztypes.js"
 import { z } from "zod";
 import { fromZodError } from 'zod-validation-error';
 import { delayPromise } from "./utils/delayPromise";
@@ -22,10 +22,12 @@ export class MaskConfig extends EventEmitter {
 
 
     public maskJSON: z.infer<typeof ZMaskConfig> | undefined;
+    public maskPreprocessJSON: z.infer<typeof ZMaskConfigPreprocess> | undefined;
+
     private sourceMaskJSON: jsonMap.ParseResult | undefined;
     public maskLinePointers: jsonMap.Pointers = {};
-    public rawMaskJSON: string = "";
-    public pathMaskJSON: string = "";
+    public rawMaskJSON: string | undefined;
+    public pathMaskJSON: string | undefined;
     public currentConfigDir: string | undefined;
     public selectedEffectId: number | undefined;
 
@@ -165,7 +167,7 @@ export class MaskConfig extends EventEmitter {
 
         if (vscode.workspace.workspaceFolders === undefined) return false;
 
-        const dir = vscode.workspace.workspaceFolders[0].uri;
+        const dir = vscode.workspace.workspaceFolders?.[0].uri;
         return fsPath === vscode.Uri.joinPath(dir, baseName).fsPath;
     }
 
@@ -181,8 +183,11 @@ export class MaskConfig extends EventEmitter {
     public async clearSelection(editor?: vscode.TextEditor) {
         if (editor === undefined) editor = await this.showConfig();
 
-        this.setupSelectLock();
+        // !!!!!
+        if (editor === undefined) return;
 
+        this.setupSelectLock();
+        print("clear selection")
         this.selectedEffectId = undefined;
         var position = editor.selection.start;
         editor.selection = new vscode.Selection(position, position);
@@ -197,6 +202,13 @@ export class MaskConfig extends EventEmitter {
 
 
         // ? do need selection lock here ?? 
+        print("show config");
+
+        // !!! edge case here need research
+        if (this.pathMaskJSON === undefined) {
+            print("showConfig : pathMaskJSON is null");
+            return;
+        }
 
         if (vscode.window.activeTextEditor) {
             const currentDoc = vscode.window.activeTextEditor.document;
@@ -226,6 +238,10 @@ export class MaskConfig extends EventEmitter {
 
         this.setupSelectLock();
 
+        if (pointer === undefined) {
+            print("showconfig pointer is null!!");
+            return;
+        }
         print("showing config at - " + pointer.value.line + ", " + pointer.valueEnd.line);
         let pos = new vscode.Position(pointer.value.line, 0);
         let posEnd = new vscode.Position(pointer.valueEnd.line + 1, 0);
@@ -419,7 +435,7 @@ export class MaskConfig extends EventEmitter {
             return undefined;
         }
 
-        const dir = vscode.workspace.workspaceFolders[0].uri.fsPath;
+        const dir = vscode.workspace.workspaceFolders?.[0].uri.fsPath;
 
         if (!this.checkConfigAtPath(dir)) {
             print("No mask.json at " + dir)
@@ -481,20 +497,38 @@ export class MaskConfig extends EventEmitter {
 
         // this.maskJSON = this.sourceMaskJSON.data;
         // print(this.sourceMaskJSON.data);
-        const parseResult: any = ZMaskConfig.safeParse(this.sourceMaskJSON.data);
 
-        if (parseResult.success) {
-            this.maskJSON = parseResult.data as z.infer<typeof ZMaskConfig>;
+        const preprocessResult: any = ZMaskConfigPreprocess.safeParse(this.sourceMaskJSON.data);
+
+        if (preprocessResult.success) {
+            this.maskJSON = preprocessResult.data as z.infer<typeof ZMaskConfigPreprocess>;
+            print("parsed preprocess", this.maskJSON)
         } else {
-            print("parse error ! ", (parseResult));
+            print("parse error ! ", (preprocessResult));
             print("raw mask.json ", this.sourceMaskJSON.data)
             print(this.maskJSON)
             return {
                 success: false,
-                message: fromZodError(parseResult.error).message
+                message: fromZodError(preprocessResult.error).message
             }
-            // return false;
         }
+
+        // !!!!!!! any here
+        // const parseResult: any = ZMaskConfig.safeParse(this.sourceMaskJSON.data);
+
+
+        // if (parseResult.success) {
+        //     this.maskJSON = parseResult.data as z.infer<typeof ZMaskConfig>;
+        // } else {
+        //     print("parse error ! ", (parseResult));
+        //     print("raw mask.json ", this.sourceMaskJSON.data)
+        //     print(this.maskJSON)
+        //     return {
+        //         success: false,
+        //         message: fromZodError(parseResult.error).message
+        //     }
+        //     // return false;
+        // }
 
 
         print("mask.json parsed", this.maskJSON)

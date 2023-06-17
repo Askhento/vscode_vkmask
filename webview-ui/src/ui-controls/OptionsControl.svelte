@@ -1,7 +1,17 @@
 <script lang="ts">
-  export let label, value, params;
+  import { createEventDispatcher } from "svelte";
+
+  export let label, value, path, params;
   let options = params.options;
   //   $: console.log(text);
+
+  const dispatch = createEventDispatcher();
+  $: {
+    dispatch("changed", {
+      value,
+      path,
+    });
+  }
 </script>
 
 <div class="option-control-wrapper">

@@ -2,10 +2,13 @@
     import { logger } from "../logger";
     const print = logger("ArrayControl.svelte");
 
+    import { createEventDispatcher } from "svelte";
+
     export let expanded = false;
 
     export let value;
     export let label;
+    export let path;
     export let uiElements;
     export let params;
 
@@ -13,11 +16,21 @@
         expanded = !expanded;
     }
 
+    const dispatch = createEventDispatcher();
+    function onChanged() {
+        dispatch("changed", {
+            value,
+            path,
+            structural: true,
+        });
+    }
+
     function addElement() {
         // print(params);
         const { defaultElement } = params;
         value.push(defaultElement);
         value = value;
+        onChanged();
     }
 
     function removeElement(index) {
@@ -25,6 +38,7 @@
         // value.pop();
         value.splice(index, 1);
         value = value;
+        onChanged();
     }
 </script>
 
@@ -44,7 +58,7 @@
                     expanded={true}
                     bind:value={value[index]}
                     bind:label={index}
-                    params={data.uiData}
+                    params={data.uiDescription}
                     uiElements={data.value}
                   /> -->
 
@@ -53,8 +67,10 @@
                         expanded={true}
                         value={value[index]}
                         label={"index" + index}
-                        params={data.uiData}
+                        path={[...path, index]}
+                        params={data.uiDescription}
                         uiElements={data.value}
+                        on:changed
                     />
                     <vscode-button
                         class="remove-btn"

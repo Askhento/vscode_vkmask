@@ -26,6 +26,7 @@ export class MainSidebarProvider implements WebviewViewProvider {
     public static readonly viewId = 'vkmask.sidepanel';
     public maskConfig = new MaskConfig();
     private logEvent: Disposable | undefined;
+    private readyEvent: Disposable | undefined;
 
     private _view?: WebviewView;
 
@@ -54,6 +55,16 @@ export class MainSidebarProvider implements WebviewViewProvider {
         };
 
         webviewView.webview.html = this._getWebviewContent(webviewView.webview, this._extensionUri);
+
+        // this.readyEvent = webviewView.webview.onDidReceiveMessage(
+        //     (message) => {
+        //         if (message.type === "webviewReady") {
+        //             print("receivening webviewReady 2", message.type)
+        //             this.init();
+        //         }
+        //         this.readyEvent?.dispose();
+        //     }
+        // )
 
         webviewView.webview.onDidReceiveMessage(async data => {
             switch (data.type) {
@@ -123,7 +134,7 @@ export class MainSidebarProvider implements WebviewViewProvider {
                         print("received selection update")
                         const newSelection = data.value;
                         if (newSelection === undefined) {
-                            this.maskConfig.selectedEffectId = undefined;
+                            // this.maskConfig.selectedEffectId = undefined;
                             this.maskConfig.clearSelection();
                         } else {
                             // ?add type check 
@@ -147,12 +158,20 @@ export class MainSidebarProvider implements WebviewViewProvider {
                         this.createNewProject();
                         break;
                     }
-                case "moveView": {
-                    print("received moveView");
-                    vscode.commands.executeCommand('vkmask.sidepanel.focus').then(() => {
-                        vscode.commands.executeCommand('workbench.action.moveFocusedView');
-                    })
-                }
+                case "moveView":
+                    {
+                        print("received moveView");
+                        vscode.commands.executeCommand('vkmask.sidepanel.focus').then(() => {
+                            vscode.commands.executeCommand('workbench.action.moveFocusedView');
+                        })
+                        break;
+                    }
+                case "webviewReady":
+                    {
+                        print("received webviewReady");
+                        this.init();
+                        break;
+                    }
             }
         });
 
@@ -182,9 +201,12 @@ export class MainSidebarProvider implements WebviewViewProvider {
         // !   trying to fix not updating view
         // !   document should be ready
 
-        setTimeout(() => {
-            this.init();
-        }, 1000);
+        // setTimeout(() => {
+        // }, 1000);
+
+        // this.init();
+
+
 
 
     }
@@ -210,10 +232,10 @@ export class MainSidebarProvider implements WebviewViewProvider {
 
 
     private init() {
-
-        // when opening selection fires without doing anything
-        // this will not do any harm, just to keep clean the logs
-        this.maskConfig.setupSelectLock();
+        print("INIT")
+        // // when opening selection fires without doing anything
+        // // this will not do any harm, just to keep clean the logs
+        // this.maskConfig.setupSelectLock();
 
         this.maskConfig.onTextEdit = () => {
             print("on text edit call")
@@ -239,17 +261,9 @@ export class MainSidebarProvider implements WebviewViewProvider {
             this.updateAppState();
         }
 
-        assetWatcher.on("assetsChanged", (e) => {
 
-            this.sendAssets(e);
-        });
-        assetWatcher.searchAssets();
 
         // userSettings.init(this._extensionUri) // will resolve in promise so not blocking
-
-        userSettings.on("configChanged", (data) => {
-            this.sendUserSettings(data)
-        })
 
 
 
@@ -260,7 +274,20 @@ export class MainSidebarProvider implements WebviewViewProvider {
             this.maskConfig.showConfig();
         })
 
-        print("parsing init!");
+
+        assetWatcher.removeAllListeners();
+        assetWatcher.on("assetsChanged", (e) => {
+            this.sendAssets(e);
+        });
+        assetWatcher.searchAssets();
+
+        // !!! filter changed from other extensions
+        userSettings.removeAllListeners();
+        userSettings.on("configChanged", (data) => {
+            this.sendUserSettings(data)
+        })
+
+
         //?  there will be the case when user deletes mask.json and i should cover it also 
         this.updateAppState();
     }

@@ -1,10 +1,21 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
+
   export let label = "empty",
+    path,
     value;
 
   function onChange(e) {
     // console.log();
     value = e.target.checked;
+  }
+
+  const dispatch = createEventDispatcher();
+  $: {
+    dispatch("changed", {
+      value,
+      path,
+    });
   }
 </script>
 

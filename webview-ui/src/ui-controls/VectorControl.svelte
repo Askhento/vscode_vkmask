@@ -1,8 +1,10 @@
 <script lang="ts">
   import { onMount } from "svelte";
+  import { createEventDispatcher } from "svelte";
 
   export let label = "empty",
     value,
+    path,
     params;
 
   // !!! just a hack
@@ -10,6 +12,14 @@
     // console.log("mounted vector");
     if (value === undefined || value.length === 0) value = params.default;
   });
+
+  const dispatch = createEventDispatcher();
+  $: {
+    dispatch("changed", {
+      value,
+      path,
+    });
+  }
 
   // todo : add slider to move all values at the same time
 </script>
@@ -29,7 +39,7 @@
           v = parseFloat(e.target.value);
         }}
       /> -->
-      <input class="value" type="number" bind:value={value[index]} />
+      <input class="value" bind:value={value[index]} />
       <!-- {/each}
     {:else}
       {#each params.default as v, index}

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
   import { onMount, tick } from "svelte";
   import { logger } from "../logger";
   const print = logger("FilePickerControl.svelte");
@@ -6,9 +7,17 @@
   import { assets, userSettings } from "../stores.js";
 
   export let label = "empty",
-    value,
-    params;
+    value = undefined,
+    params,
+    path;
 
+  const dispatch = createEventDispatcher();
+  $: {
+    dispatch("changed", {
+      value,
+      path,
+    });
+  }
   let extensions;
   let fileTypes;
   let filteredAssets; // subset of typedassets with search query applied
@@ -27,7 +36,7 @@
     // print("new extensions", extensions);
     fileTypes = params.types ? new Set(params.types) : undefined;
     if ($userSettings) useBuiltins = $userSettings["vkmask.use-builtins"].value;
-    print("useBuiltins", useBuiltins);
+    // print("useBuiltins", useBuiltins);
     typedAssets = $assets
       .filter((asset) => {
         if (fileTypes !== undefined) {
@@ -39,9 +48,7 @@
       })
       .filter((asset) => useBuiltins || asset.projectFile);
 
-    filteredAssets = typedAssets
-      .filter(filterAssetByQuery)
-      .sort((e) => (e.projectFile ? -1 : 1)); // show builtin assets last
+    filteredAssets = typedAssets.filter(filterAssetByQuery).sort((e) => (e.projectFile ? -1 : 1)); // show builtin assets last
 
     setControlElementValue(value);
     setDropDownValue(value);
@@ -49,9 +56,7 @@
   $: {
     searchValue = searchValue;
 
-    filteredAssets = typedAssets
-      .filter(filterAssetByQuery)
-      .sort((e) => (e.projectFile ? -1 : 1)); // show builtin assets last
+    filteredAssets = typedAssets.filter(filterAssetByQuery).sort((e) => (e.projectFile ? -1 : 1)); // show builtin assets last
   }
 
   $: {
@@ -85,17 +90,13 @@
   }
   function setControlElementValue(newValue) {
     // this is inner slot which stores value of whole element
-    if (controlElement)
-      controlElement.innerText = isValueInAssets(newValue) ? newValue : "-";
+    if (controlElement) controlElement.innerText = isValueInAssets(newValue) ? newValue : "-";
   }
 
   function setDropDownValue(newValue) {
     // when dropdown opened which value currently highlighted
     if (!dropdown) return;
-    dropdown.setAttribute(
-      "current-value",
-      isValueInAssets(newValue) ? newValue : typedAssets[0]
-    );
+    dropdown.setAttribute("current-value", isValueInAssets(newValue) ? newValue : typedAssets[0]);
   }
 
   onMount(async () => {
@@ -143,7 +144,10 @@
           //   e.preventDefault();
           e.stopPropagation(); // this is to be able to print while dropdown opened
           inputTimer = setTimeout(() => {
-            const event = new KeyboardEvent("keydown", { key: "Escape" });
+            if (!dropdown) return;
+            const event = new KeyboardEvent("keydown", {
+              key: "Escape",
+            });
             dropdown.dispatchEvent(event);
           }, 150);
         }}
@@ -200,9 +204,7 @@
           }}
         />
         {#each filteredAssets as asset, i}
-          <vscode-option class:builtin={!asset.projectFile}
-            >{asset.path}</vscode-option
-          >
+          <vscode-option class:builtin={!asset.projectFile}>{asset.path}</vscode-option>
         {/each}
       </vscode-dropdown>
       <!-- svelte-ignore missing-declaration -->
