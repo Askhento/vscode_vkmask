@@ -2,7 +2,7 @@
 </script>
 
 <script>
-  import { createEventDispatcher } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
 
   export let expanded = false;
 
@@ -30,7 +30,33 @@
       structural: true,
     });
   }
+
+  let uiElementsVisible = {};
+  let uiElementsHidden = {};
+
+  onMount(() => {
+    // if (!uiElements) return;
+    Object.entries(uiElements).forEach(([key, el]) => {
+      if (el.value === null) {
+        uiElementsHidden[key] = el;
+      } else {
+        uiElementsVisible[key] = el;
+      }
+    });
+  });
   // $: console.log("Obj control", value);
+
+  //    {:else}
+  //             <vscode-button
+  //               class="remove-btn"
+  //               appearance="icon"
+  //               on:click={() => {
+  //                 addKey(key, data);
+  //                 // removeElement(index);
+  //               }}
+  //             >
+  //               Add {key}<span slot="start" class="codicon codicon-add" />
+  //             </vscode-button>
 </script>
 
 <div class="constrol-wrapper">
@@ -40,33 +66,35 @@
   </span>
   <div class="elements-wrapper">
     {#if expanded}
-      {#each Object.entries(uiElements) as [key, data]}
+      {#each Object.entries(uiElementsVisible) as [key, data]}
         <div>
-          {#if data.value !== null}
-            <svelte:component
-              this={data.uiElement}
-              expanded={true}
-              value={value[key]}
-              label={key}
-              path={[...path, key]}
-              params={data.uiDescription}
-              uiElements={data.value}
-              on:changed
-            />
-          {:else}
-            <vscode-button
-              class="remove-btn"
-              appearance="icon"
-              on:click={() => {
-                addKey(key, data);
-                // removeElement(index);
-              }}
-            >
-              Add {key}<span slot="start" class="codicon codicon-add" />
-            </vscode-button>
-          {/if}
+          <!-- data.value is null when key is missing -->
+          <svelte:component
+            this={data.uiElement}
+            expanded={true}
+            value={value[key]}
+            label={key}
+            path={[...path, key]}
+            params={data.uiDescription}
+            uiElements={data.value}
+            on:changed
+          />
         </div>
       {/each}
+
+      {#if Object.keys(uiElementsHidden).length}
+        <vscode-dropdown>
+          <vscode-option>Add key {label}</vscode-option>
+
+          {#each Object.entries(uiElementsHidden) as [key, data]}
+            <vscode-option
+              on:click={() => {
+                addKey(key, data);
+              }}>{key}</vscode-option
+            >
+          {/each}
+        </vscode-dropdown>
+      {/if}
     {/if}
   </div>
 </div>

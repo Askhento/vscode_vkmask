@@ -8,7 +8,7 @@
   //   ? do not send effects back on user input events, will cause loop
   // i use lock because i need to track changes made in inspector
 
-  import { fromZodError } from "zod-validation-error";
+  //   import { fromZodError } from "zod-validation-error";
 
   import { effectNames, effectDefaults, ZEffects } from "../../src/ztypes.js";
   import { flip } from "svelte/animate";
@@ -56,15 +56,11 @@
   function toggleSelection(id) {
     if (checkSelected(id)) {
       $selection = undefined;
-      //   print("sending deselect ", id);
-      //   vscode.postMessage({ type: "effectDeselected", value: id });
     } else {
       $selection = {
         type: "effect",
         id: id,
       };
-      //   print("sending select", id);
-      //   vscode.postMessage({ type: "effectSelected", value: id });
     }
   }
 
@@ -82,16 +78,10 @@
     if ($selection !== undefined && $selection.type === "effect") {
       if ($selection.id === id) {
         $selection = undefined;
-        // print("sending deselect", id);
-        // vscode.postMessage({ type: "effectDeselected", value: 0 });
       } else if ($selection.id > id) {
-        // print("sending select", id);
-        // vscode.postMessage({ type: "effectSelected", value: $selection.id });
         $selection.id--;
       }
     }
-    // print($effects);
-    // vscode.postMessage({ type: "effectDelete", value: id });
   }
 
   function AddEffect(object) {
@@ -162,58 +152,62 @@
         AddEffect(newEffect.data);
       }}
     >
-      <vscode-option />
       {#each effectNames as effectName}
         <vscode-option>{effectName}</vscode-option>
       {/each}
     </vscode-dropdown>
     <vscode-divider role="presentation" />
   </div>
+
   {#if $effects.length}
-    <div class="effect-list-wrapper">
-      <ul class="effectsList">
-        {#each $effects as effect, index (index)}
-          <vscode-option
-            animate:flip={{ duration: 200 }}
-            draggable={true}
-            class="effect-name"
-            class:is-active={hovering === index}
-            on:dragstart={(event) => dragstart(event, index)}
-            on:drop|preventDefault={(event) => drop(event, index)}
-            ondragover="return false"
-            on:dragenter={() => (hovering = index)}
-            on:dragover={(e) => {
-              e.preventDefault();
-            }}
-            on:click|stopPropagation={toggleSelection(index)}
-            selected={$selection &&
-              $selection.type === "effect" &&
-              $selection.id === index}
-            >{effect.name}
-            <span class="effect-btn-wrapper">
-              <vscode-button
-                class="effect-btn"
-                appearance="icon"
-                on:click|stopPropagation={onVisibleClick(index)}
-              >
-                <span
-                  class="codicon {effect.disabled
-                    ? 'codicon-eye-closed'
-                    : 'codicon-eye'}"
-                />
-              </vscode-button>
-              <vscode-button
-                class="effect-btn"
-                appearance="icon"
-                on:click|stopPropagation={onClickRemove(index)}
-              >
-                <span class="codicon codicon-trash" />
-              </vscode-button>
-            </span>
-          </vscode-option>
-        {/each}
-      </ul>
-    </div>
+    {#key $selection}
+      <div class="effect-list-wrapper">
+        <ul class="effectsList">
+          {#each $effects as effect, index (index)}
+            <vscode-option
+              animate:flip={{ duration: 200 }}
+              draggable={true}
+              class="effect-name"
+              class:is-active={hovering === index}
+              on:dragstart={(event) => dragstart(event, index)}
+              on:drop|preventDefault={(event) => drop(event, index)}
+              ondragover="return false"
+              on:dragenter={() => (hovering = index)}
+              on:dragover={(e) => {
+                e.preventDefault();
+              }}
+              on:click|stopPropagation={toggleSelection(index)}
+              selected={$selection && $selection.type === "effect" && $selection.id === index}
+              >{effect.name}
+              <span class="effect-btn-wrapper">
+                {#if effect.tag}
+                  <span class="effect-tag">
+                    {effect.tag
+                      .split(";")
+                      .filter((t) => t.length)
+                      .join(" or ")}
+                  </span>
+                {/if}
+                <vscode-button
+                  class="effect-btn"
+                  appearance="icon"
+                  on:click|stopPropagation={onVisibleClick(index)}
+                >
+                  <span class="codicon {effect.disabled ? 'codicon-eye-closed' : 'codicon-eye'}" />
+                </vscode-button>
+                <vscode-button
+                  class="effect-btn"
+                  appearance="icon"
+                  on:click|stopPropagation={onClickRemove(index)}
+                >
+                  <span class="codicon codicon-trash" />
+                </vscode-button>
+              </span>
+            </vscode-option>
+          {/each}
+        </ul>
+      </div>
+    {/key}
   {:else}
     <!-- add copy debug info button -->
     <div>Create your first effect!</div>
@@ -253,13 +247,10 @@
     background-color: var(--button-primary-hover-background);
   }
 
-  .effect-btn-wrapper {
-    position: absolute;
-    right: 0px;
-    top: 0px;
-  }
   .effect-add-wrapper {
     position: relative;
+
+    height: 100%;
   }
   .add-effect-dropdown {
     width: 120px;
@@ -270,6 +261,27 @@
     width: 120px;
     position: absolute;
     z-index: 2;
+  }
+  .effect-btn-wrapper {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    row-gap: 5px;
+    column-gap: 5px;
+    justify-content: flex-end;
+    /* align-content: center; */
+    align-items: center; /* ailgned text !!! */
+  }
+  .effect-tag {
+    color: var(--vscode-textCodeBlock-background);
+    text-align: center;
+    text-justify: center;
+    justify-content: center;
+    display: inline-block;
   }
   .effect-btn {
     display: inline-block;

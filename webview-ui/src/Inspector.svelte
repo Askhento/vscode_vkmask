@@ -14,6 +14,7 @@
 
   import { effectDefaults } from "../../src/ztypes.js";
   import { effects, selection } from "./stores.js";
+  import { get } from "svelte/store";
   import { vscode } from "./utils/vscode";
 
   import ObjectControl from "./ui-controls/ObjectControl.svelte";
@@ -53,6 +54,7 @@
     const { path, value, structural } = event.detail;
 
     applyValueByPath($effects[selectedId], path, value);
+
     // send to the app, store does not trigger for some reason
     dispatch("changed");
     //??? rerender inspector ???
