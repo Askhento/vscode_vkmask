@@ -105,7 +105,7 @@
   let addEffectButtonElem;
 
   $: {
-    // !!!! fix for add button showing behind dropdown
+    // !!!! fix for add button showing behind dropdown, when custom theme has alpha
     if (addEffectButtonElem) {
       // have to get computed value
       const btnColor = window

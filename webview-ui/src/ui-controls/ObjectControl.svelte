@@ -3,6 +3,7 @@
 
 <script>
   import { createEventDispatcher, onMount } from "svelte";
+  import { fly, slide } from "svelte/transition";
 
   export let expanded = false;
 
@@ -17,6 +18,8 @@
 
   function addKey(key, data) {
     value[key] = data.uiDescription.defValue;
+    uiElements[key].value = data.uiDescription.defValue;
+    splitElements();
     console.log("ui data add key ", data);
     console.log("add key", value);
     onChanged();
@@ -36,6 +39,12 @@
 
   onMount(() => {
     // if (!uiElements) return;
+    splitElements();
+  });
+
+  function splitElements() {
+    uiElementsHidden = {};
+    uiElementsVisible = {};
     Object.entries(uiElements).forEach(([key, el]) => {
       if (el.value === null) {
         uiElementsHidden[key] = el;
@@ -43,49 +52,51 @@
         uiElementsVisible[key] = el;
       }
     });
-  });
-  // $: console.log("Obj control", value);
+  }
 
-  //    {:else}
-  //             <vscode-button
-  //               class="remove-btn"
-  //               appearance="icon"
-  //               on:click={() => {
-  //                 addKey(key, data);
-  //                 // removeElement(index);
-  //               }}
-  //             >
-  //               Add {key}<span slot="start" class="codicon codicon-add" />
-  //             </vscode-button>
+  let addKeyButton, addKeyListOpened, addKeyHover;
 </script>
 
-<div class="constrol-wrapper">
+<div class="control-wrapper" class:add-key-color={addKeyHover}>
   <span class:expanded on:click={toggle}
     >{label}
     <i class="codicon codicon-triangle-{expanded ? 'down' : 'right'}" />
   </span>
-  <div class="elements-wrapper">
-    {#if expanded}
+
+  {#if expanded}
+    <div class="elements-wrapper">
       {#each Object.entries(uiElementsVisible) as [key, data]}
-        <div>
-          <!-- data.value is null when key is missing -->
-          <svelte:component
-            this={data.uiElement}
-            expanded={true}
-            value={value[key]}
-            label={key}
-            path={[...path, key]}
-            params={data.uiDescription}
-            uiElements={data.value}
-            on:changed
-          />
-        </div>
+        <!-- <div transition:fly|local={{ duration: 1000, x: 200 }}> -->
+        <!-- data.value is null when key is missing -->
+        <svelte:component
+          this={data.uiElement}
+          expanded={true}
+          value={value[key]}
+          label={key}
+          path={[...path, key]}
+          params={data.uiDescription}
+          uiElements={data.value}
+          on:changed
+        />
+        <!-- </div> -->
       {/each}
+    </div>
 
-      {#if Object.keys(uiElementsHidden).length}
-        <vscode-dropdown>
-          <vscode-option>Add key {label}</vscode-option>
-
+    {#if Object.keys(uiElementsHidden).length}
+      <div class="add-key-wrapper">
+        <vscode-button class="add-key-btn" bind:this={addKeyButton}>
+          <span slot="start" class="codicon codicon-add" />
+          {label}
+        </vscode-button>
+        <vscode-dropdown
+          class="add-key-dropdown"
+          on:mouseover={() => {
+            addKeyHover = true;
+          }}
+          on:mouseleave={() => {
+            addKeyHover = false;
+          }}
+        >
           {#each Object.entries(uiElementsHidden) as [key, data]}
             <vscode-option
               on:click={() => {
@@ -94,12 +105,18 @@
             >
           {/each}
         </vscode-dropdown>
-      {/if}
+      </div>
     {/if}
-  </div>
+  {/if}
 </div>
 
 <style>
+  .control-wrapper {
+    position: relative;
+    transition: all 0.5s ease;
+    border-radius: 0.5em;
+    border: 2px solid transparent;
+  }
   .elements-wrapper {
     padding: 0.2em 0 0 0.5em;
     margin: 0 0 0 0.5em;
@@ -119,4 +136,30 @@
   .expanded {
     background-image: url(tutorial/icons/folder-open.svg);
   } */
+
+  .add-key-wrapper {
+    padding: 0.2em 0 0 0.5em;
+    margin: 0 0 0 0.5em;
+    position: relative;
+    height: 100%;
+  }
+  .add-key-dropdown {
+    width: 150px;
+  }
+
+  .add-key-dropdown::part(listbox) {
+    z-index: 3;
+  }
+  .add-key-btn {
+    /* background-color: rgb(from var(--button-primary-background) r g b / 50%); */
+    pointer-events: none;
+    width: 150px;
+    position: absolute;
+    z-index: 2;
+  }
+
+  .add-key-color {
+    border-color: var(--vscode-focusBorder);
+    background-color: var(--button-secondary-hover-background);
+  }
 </style>
