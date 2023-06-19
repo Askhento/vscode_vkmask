@@ -89,6 +89,7 @@
           {label}
         </vscode-button>
         <vscode-dropdown
+          position="above"
           class="add-key-dropdown"
           on:mouseover={() => {
             addKeyHover = true;
