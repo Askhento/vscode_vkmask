@@ -7,11 +7,13 @@
   import Effects from "./Effects.svelte";
   import Inspector from "./Inspector.svelte";
   import ErrorMessage from "./ErrorMessage.svelte";
+  import Settings from "./Settings.svelte";
 
   import { vscode } from "./utils/vscode";
   import { assets, effects, selection, userSettings } from "./stores";
   import WelcomeScreen from "./WelcomeScreen.svelte";
   import { onMount } from "svelte";
+  import Header from "./Header.svelte";
 
   let appStates = {
     LOADING: 0,
@@ -125,11 +127,6 @@
     }
   }
 
-  function sendMoveView() {
-    vscode.postMessage({
-      type: "moveView",
-    });
-  }
   provideVSCodeDesignSystem().register(allComponents);
 
   onMount(() => {
@@ -146,15 +143,13 @@
 {#if appState === appStates.WELCOME}
   <WelcomeScreen />
 {:else if appState === appStates.RUNNING}
-  <vscode-button class="move-view-btn" on:click={sendMoveView}>
-    <span slot="start" class="codicon codicon-move" />
-    Move View
-  </vscode-button>
+  <Header />
+
   <vscode-divider role="presentation" />
   <Effects />
   <vscode-divider role="presentation" />
   {#if $selection}
-    {#key $selection}
+    {#key $selection || $effects}
       <Inspector
         bind:mountLock={inspectorMountLock}
         on:changed={() => {

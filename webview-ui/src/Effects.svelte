@@ -10,13 +10,10 @@
 
   //   import { fromZodError } from "zod-validation-error";
 
-  import { effectNames, effectDefaults, ZEffects } from "../../src/ztypes.js";
   import { flip } from "svelte/animate";
   import { onMount } from "svelte";
 
   let hovering: any = false;
-  let addListOpened = false;
-  //   let uiElements;
 
   const drop = (event, target) => {
     event.dataTransfer.dropEffect = "move";
@@ -84,81 +81,31 @@
     }
   }
 
-  function AddEffect(object) {
-    if ($selection !== undefined && $selection.type === "effect") {
-      $effects.splice($selection.id + 1, 0, object);
-      $effects = $effects;
-      $selection = {
-        type: "effect",
-        id: $selection.id + 1,
-      };
-    } else {
-      $effects.push(object);
-      $effects = $effects;
-      $selection = {
-        type: "effect",
-        id: $effects.length - 1,
-      };
-    }
-  }
-
   let addEffectButtonElem;
 
-  $: {
-    // !!!! fix for add button showing behind dropdown, when custom theme has alpha
-    if (addEffectButtonElem) {
-      // have to get computed value
-      const btnColor = window
-        .getComputedStyle(addEffectButtonElem, null)
-        .getPropertyValue("background-color");
-      // Get all color components (alpha may not be there if = 1):
-      const parts = btnColor.match(/[\d.]+/g);
-      //   console.log("parts", parts);
-      // If alpha is not there, add it:
-      if (parts.length === 4) {
-        parts[3] = "1";
-      }
-      // Apply new value:
-      addEffectButtonElem.style.backgroundColor = `rgba(${parts.join(",")})`;
-    }
-  }
+  //   $: {
+  //     // !!!! fix for add button showing behind dropdown, when custom theme has alpha
+  //     if (addEffectButtonElem) {
+  //       // have to get computed value
+  //       const btnColor = window
+  //         .getComputedStyle(addEffectButtonElem, null)
+  //         .getPropertyValue("background-color");
+  //       // Get all color components (alpha may not be there if = 1):
+  //       const parts = btnColor.match(/[\d.]+/g);
+  //       //   console.log("parts", parts);
+  //       // If alpha is not there, add it:
+  //       if (parts.length === 4) {
+  //         parts[3] = "1";
+  //       }
+  //       // Apply new value:
+  //       addEffectButtonElem.style.backgroundColor = `rgba(${parts.join(",")})`;
+  //     }
+  //   }
 </script>
 
 <!-- <svelte:window on:message={handleMessage} /> -->
 
 <main>
-  <div class="effect-add-wrapper">
-    <vscode-button
-      class="add-effect-btn"
-      bind:this={addEffectButtonElem}
-      on:click={() => {
-        // addListOpened = !addListOpened;
-      }}
-    >
-      <span slot="start" class="codicon codicon-add" />
-      Add Effect
-    </vscode-button>
-    <vscode-dropdown
-      class="add-effect-dropdown"
-      open={addListOpened}
-      on:blur={() => {
-        // addListOpened = false // edge case when hitting outside element
-      }}
-      on:change={(e) => {
-        const effectName = e.target.value;
-        print("new effect ", effectName);
-        const newEffect = effectDefaults[effectName];
-        print(newEffect);
-        AddEffect(newEffect.data);
-      }}
-    >
-      {#each effectNames as effectName}
-        <vscode-option>{effectName}</vscode-option>
-      {/each}
-    </vscode-dropdown>
-    <vscode-divider role="presentation" />
-  </div>
-
   {#if $effects.length}
     {#key $selection}
       <div class="effect-list-wrapper">
@@ -247,21 +194,6 @@
     background-color: var(--button-primary-hover-background);
   }
 
-  .effect-add-wrapper {
-    position: relative;
-
-    height: 100%;
-  }
-  .add-effect-dropdown {
-    width: 120px;
-  }
-  .add-effect-btn {
-    /* background-color: rgb(from var(--button-primary-background) r g b / 50%); */
-    pointer-events: none;
-    width: 120px;
-    position: absolute;
-    z-index: 2;
-  }
   .effect-btn-wrapper {
     position: absolute;
     right: 0px;

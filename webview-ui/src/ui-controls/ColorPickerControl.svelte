@@ -49,7 +49,7 @@
   $: if (alpha !== undefined && alpha !== value[3]) hexToRGB();
 
   //   function onAlphaChange() {}
-  rgbToHex();
+  //   rgbToHex();
   onMount(() => {
     // console.log("mount", value);
     // if (value === undefined || value.length === 0) value = params.defValue;

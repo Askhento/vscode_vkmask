@@ -60,7 +60,7 @@
     //??? rerender inspector ???
     // will need to rerender only if changed inspector structure
     // !!!!!!!!!!!!!!!!!!!!!!!!
-    // if (!structural) return;
+    if (!structural) return;
     rerenderInspector();
   }
 

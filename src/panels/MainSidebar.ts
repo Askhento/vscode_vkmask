@@ -11,6 +11,7 @@ import { copyRecursiveSync } from "../utils/copyFilesRecursive"
 import path from "path";
 
 
+
 /**
  * This class manages the state and behavior of HelloWorld webview panels.
  *
@@ -54,6 +55,8 @@ export class MainSidebarProvider implements WebviewViewProvider {
             ]
         };
 
+        
+
         webviewView.webview.html = this._getWebviewContent(webviewView.webview, this._extensionUri);
 
         // this.readyEvent = webviewView.webview.onDidReceiveMessage(
@@ -64,7 +67,10 @@ export class MainSidebarProvider implements WebviewViewProvider {
         //         }
         //         this.readyEvent?.dispose();
         //     }
-        // )
+        // )    
+
+
+
 
         webviewView.webview.onDidReceiveMessage(async data => {
             switch (data.type) {
@@ -164,6 +170,13 @@ export class MainSidebarProvider implements WebviewViewProvider {
                         vscode.commands.executeCommand('vkmask.sidepanel.focus').then(() => {
                             vscode.commands.executeCommand('workbench.action.moveFocusedView');
                         })
+                        break;
+                    }
+                case "openExtensionSettings":
+                    {
+                        print("received openExtensionSettings");
+                        vscode.commands.executeCommand( 'workbench.action.openSettings', 'vkmask' );
+
                         break;
                     }
                 case "webviewReady":

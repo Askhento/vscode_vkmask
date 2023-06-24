@@ -10,6 +10,7 @@
     dispatch("changed", {
       value,
       path,
+      structural: true,
     });
   }
 </script>

@@ -18,72 +18,86 @@ export const uiDescriptions = {
   none: () => ({
     name: "none",
   }),
-  numberSlider: ({ min = 0, max = 1, defValue = 0 }) => ({
+  numberSlider: ({ min = 0, max = 1, defValue = 0, showAlways = true }) => ({
+    showAlways,
     name: "numberSlider",
     min: min,
     max: max,
     defValue,
   }),
-  array2d: ({ min, max, defValue = [0, 0] }) => ({
+  array2d: ({ min, max, defValue = [0, 0], showAlways = true }) => ({
+    showAlways,
     name: "array2d",
     min: min,
     max: max,
     defValue,
   }),
-  array3d: ({ min, max, defValue = [0, 0, 0] }) => ({
+  array3d: ({ min, max, defValue = [0, 0, 0], showAlways = true }) => ({
+    showAlways,
     name: "array3d",
     min: min,
     max: max,
     defValue,
   }),
-  array4d: ({ min, max, defValue = [0, 0, 0, 0] }) => ({
+  array4d: ({ min, max, defValue = [0, 0, 0, 0], showAlways = true }) => ({
+    showAlways,
     name: "array4d",
     min: min,
     max: max,
     defValue,
   }),
-  enum: ({ options, defValue }) => ({
+  enum: ({ options, defValue, showAlways = true }) => ({
+    showAlways,
     name: "enum",
     options,
     defValue,
   }),
-  filepath: ({ extensions, types, defValue }) => ({
+  filepath: ({ extensions, types, defValue, showAlways = true }) => ({
+    showAlways,
     name: "filepath",
     extensions,
     types,
     defValue,
   }),
-  text: ({ defValue = "" }) => ({
+  text: ({ defValue = "", showAlways = true }) => ({
+    showAlways,
     name: "text",
     defValue,
   }),
-  tags: ({ defValue = "" }) => ({
+  tags: ({ defValue = "", showAlways = true }) => ({
+    showAlways,
     name: "tags",
     defValue,
   }),
   // !!!! color alpha redundant here
-  color: ({ min, max, defValue = [1, 1, 1] }) => ({
+  color: ({ min, max, defValue = [1, 1, 1], showAlways = true }) => ({
+    showAlways,
     name: "color",
     min: min,
     max: max,
     defValue,
+    showAlways,
   }),
-  colorAlpha: ({ min, max, defValue = [1, 1, 1, 1] }) => ({
+  colorAlpha: ({ min, max, defValue = [1, 1, 1, 1], showAlways = true }) => ({
+    showAlways,
     name: "colorAlpha",
     alpha: true,
     min: min,
     max: max,
     defValue,
   }),
-  bool: ({ defValue = false }) => ({
+  bool: ({ defValue = false, showAlways = true }) => ({
+    showAlways,
     name: "bool",
     defValue,
   }),
-  object: ({ defValue = {} }) => ({
+  object: ({ defValue = {}, showAlways = true }) => ({
+    showAlways,
     name: "object",
     defValue,
   }),
-  array: ({ elementName, defaultElement, defValue = [] }) => ({
+  array: ({ elementName, defaultElement, defValue = [], showAlways = true }) => ({
+    showAlways,
     name: "array",
     elementName: elementName,
     defaultElement: defaultElement,
@@ -263,13 +277,17 @@ export const ZTextureObject = z.preprocess(
           defValue: ZBlendModes.Values.replace,
         })
       ),
-      u_transform: ZArray3D.describe(uiDescriptions.array3d({ defValue: [1, 0, 0] })),
-      v_transform: ZArray3D.describe(uiDescriptions.array3d({ defValue: [0, 1, 0] })),
+      u_transform: ZArray3D.describe(
+        uiDescriptions.array3d({ defValue: [1, 0, 0], showAlways: false })
+      ),
+      v_transform: ZArray3D.describe(
+        uiDescriptions.array3d({ defValue: [0, 1, 0], showAlways: false })
+      ),
       render_order: ZNumberSlider.describe(
-        uiDescriptions.numberSlider({ max: 100, min: -100, defValue: 0 })
+        uiDescriptions.numberSlider({ max: 100, min: -100, defValue: 0, showAlways: false })
       ),
     })
-    .describe(uiDescriptions.object({}))
+    .describe(uiDescriptions.object({ showAlways: false }))
 );
 
 // const testObj = { diffuse: "diff", normal: "somenormal" };
@@ -331,14 +349,26 @@ const ZMaterialObject = z
       .describe(uiDescriptions.object({})),
     parameters: z
       .object({
-        UOffset: ZArray4D.describe(uiDescriptions.array4d({ defValue: [1.0, 0.0, 0.0, 0.0] })),
-        VOffset: ZArray4D.describe(uiDescriptions.array4d({ defValue: [0.0, 1.0, 0.0, 0.0] })),
         MatDiffColor: ZArray4D.describe(uiDescriptions.array4d({ defValue: [1.0, 1.0, 1.0, 1.0] })),
-        MatEmissiveColor: ZArray3D,
-        MatEnvMapColor: ZArray3D.describe(uiDescriptions.array3d({ defValue: [1.0, 1.0, 1.0] })),
-        MatSpecColor: ZArray4D.describe(uiDescriptions.array4d({ defValue: [0.0, 0.0, 0.0, 1.0] })),
-        Roughness: ZNumberSlider.describe(uiDescriptions.numberSlider({ defValue: 0.5 })),
-        Metallic: ZNumberSlider.describe(uiDescriptions.numberSlider({ defValue: 0.5 })),
+        MatSpecColor: ZArray4D.describe(
+          uiDescriptions.array4d({ defValue: [0.0, 0.0, 0.0, 1.0], showAlways: false })
+        ),
+        MatEmissiveColor: ZArray3D.describe(uiDescriptions.array3d({ showAlways: false })),
+        MatEnvMapColor: ZArray3D.describe(
+          uiDescriptions.array3d({ defValue: [1.0, 1.0, 1.0], showAlways: false })
+        ),
+        Roughness: ZNumberSlider.describe(
+          uiDescriptions.numberSlider({ defValue: 0.5, showAlways: false })
+        ),
+        Metallic: ZNumberSlider.describe(
+          uiDescriptions.numberSlider({ defValue: 0.5, showAlways: false })
+        ),
+        UOffset: ZArray4D.describe(
+          uiDescriptions.array4d({ defValue: [1.0, 0.0, 0.0, 0.0], showAlways: false })
+        ),
+        VOffset: ZArray4D.describe(
+          uiDescriptions.array4d({ defValue: [0.0, 1.0, 0.0, 0.0], showAlways: false })
+        ),
       })
       .describe(uiDescriptions.object({}))
       .passthrough(),
@@ -352,6 +382,7 @@ const ZMaterialObject = z
       uiDescriptions.enum({
         options: Object.keys(ZFillMode.Values),
         defValue: ZFillMode.Values.solid,
+        showAlways: false,
       })
     ),
   })
@@ -544,9 +575,13 @@ const ZLightEffect = z
 
 const ZLightBase = ZBaseEffect.extend({
   name: z.literal("light").describe(uiDescriptions.none({})),
-  color: ZColor.describe(uiDescriptions.color({ defValue: [1, 1, 1] })),
-  brightness: ZNumberSlider.describe(uiDescriptions.numberSlider({ defValue: 1 })),
-  specular_intensity: ZNumberSlider.describe(uiDescriptions.numberSlider({ defValue: 1 })),
+  color: ZColor.describe(uiDescriptions.color({ defValue: [1, 1, 1], showAlways: true })),
+  brightness: ZNumberSlider.describe(
+    uiDescriptions.numberSlider({ defValue: 1, showAlways: true })
+  ),
+  specular_intensity: ZNumberSlider.describe(
+    uiDescriptions.numberSlider({ defValue: 1, showAlways: true })
+  ),
 });
 
 const ZLightAmbientEffect = ZLightBase.merge(
@@ -554,7 +589,7 @@ const ZLightAmbientEffect = ZLightBase.merge(
     type: z.literal("ambient").describe(
       uiDescriptions.enum({
         options: Object.keys(ZLightType.Values),
-        defValue: ZLightType.Values.direct,
+        defValue: ZLightType.Values.ambient,
       })
     ),
   })
@@ -565,7 +600,7 @@ const ZLightDirectEffect = ZLightBase.merge(
     type: z.literal("direct").describe(
       uiDescriptions.enum({
         options: Object.keys(ZLightType.Values),
-        defValue: ZLightType.Values.direct,
+        defValue: ZLightType.Values.ambient,
       })
     ),
     direction: ZArray3D.describe(uiDescriptions.array3d({ defValue: [0, 0, 1] })),
@@ -578,7 +613,7 @@ const ZLightPointEffect = ZLightBase.merge(
     type: z.literal("point").describe(
       uiDescriptions.enum({
         options: Object.keys(ZLightType.Values),
-        defValue: ZLightType.Values.direct,
+        defValue: ZLightType.Values.ambient,
       })
     ),
     anchor: ZFaceAnchor.describe(

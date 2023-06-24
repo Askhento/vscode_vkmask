@@ -46,7 +46,8 @@
     uiElementsHidden = {};
     uiElementsVisible = {};
     Object.entries(uiElements).forEach(([key, el]) => {
-      if (el.value === null) {
+      //   console.log(key, el);
+      if (el.value === null && !el.uiDescription.showAlways) {
         uiElementsHidden[key] = el;
       } else {
         uiElementsVisible[key] = el;
@@ -71,7 +72,7 @@
         <svelte:component
           this={data.uiElement}
           expanded={true}
-          value={value[key]}
+          value={value[key] ?? data.uiDescription.defValue}
           label={key}
           path={[...path, key]}
           params={data.uiDescription}
