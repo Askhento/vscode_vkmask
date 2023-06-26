@@ -177,7 +177,7 @@ export class MaskConfig extends EventEmitter {
         const pointer = this.maskLinePointers[key]
         print("showing effect with key - " + key);
 
-        return this.showConfigAt(pointer, editor)
+        return this.showConfigAtPointer(pointer, editor)
     }
 
     public async clearSelection(editor?: vscode.TextEditor) {
@@ -195,7 +195,7 @@ export class MaskConfig extends EventEmitter {
     }
 
 
-    public showConfig() {
+    public async showConfig() {
         // ? check if it is already shwoing 
 
         // ? check if exist config ???
@@ -219,9 +219,9 @@ export class MaskConfig extends EventEmitter {
             }
         }
 
-        return vscode.workspace.openTextDocument(vscode.Uri.file(this.pathMaskJSON)).then(document => {
-            return vscode.window.showTextDocument(document)
-        })
+        const document = await vscode.workspace.openTextDocument(vscode.Uri.file(this.pathMaskJSON));
+        const editor = await vscode.window.showTextDocument(document, {preserveFocus : false, preview: false});
+        return editor;
 
     }
     public async saveConfig(editor?: vscode.TextEditor) {
@@ -233,7 +233,7 @@ export class MaskConfig extends EventEmitter {
         return editor;
     }
 
-    public async showConfigAt(pointer: Record<jsonMap.PointerProp, jsonMap.Location>, editor?: vscode.TextEditor) {
+    public async showConfigAtPointer(pointer: Record<jsonMap.PointerProp, jsonMap.Location>, editor?: vscode.TextEditor) {
         if (editor === undefined) editor = await this.showConfig();
 
         this.setupSelectLock();
@@ -249,11 +249,36 @@ export class MaskConfig extends EventEmitter {
         // !!! changed here 
         editor.selection = new vscode.Selection(posEnd, pos);
         // here we set the focus of the opened editor
-        editor.revealRange(new vscode.Range(posEnd, pos));
+        editor.revealRange(new vscode.Range(posEnd, pos), vscode.TextEditorRevealType.InCenter);
 
         return editor;
     }
 
+    public async showConfigAtLocation(locationStart : number, locationEnd : number, editor?: vscode.TextEditor) {
+        if (editor === undefined) editor = await this.showConfig();
+
+        console.log("old selection", editor.selection);
+        console.log("locationStart : ", locationStart);
+        console.log("locationEnd : ", locationEnd);
+
+        const {line : lineStart, character : charStart} = editor.document.positionAt(locationStart);
+        const {line : lineEnd, character : charEnd}  = editor.document.positionAt(locationEnd);
+
+        let posStart = new vscode.Position(lineStart, charStart);
+        let posEnd = new vscode.Position(lineEnd, charEnd);
+
+        console.log("posStart : ", posStart);
+        console.log("posEnd : ", posEnd);
+// vscode.TextEditorCursorStyle.BlockOutline
+        // editor.options.cursorStyle
+        // here we set the cursor
+        // !!! changed here 
+        editor.selection = new vscode.Selection(posStart, posEnd);
+        editor.revealRange(new vscode.Range(posStart, posEnd), vscode.TextEditorRevealType.InCenter);
+        // here we set the focus of the opened editor
+
+        return editor;
+    }
 
     // public setSelection(pointer: Record<jsonMap.PointerProp, jsonMap.Location>) {
 

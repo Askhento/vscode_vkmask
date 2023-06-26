@@ -12,6 +12,8 @@ import path from "path";
 
 
 
+
+
 /**
  * This class manages the state and behavior of HelloWorld webview panels.
  *
@@ -185,6 +187,17 @@ export class MainSidebarProvider implements WebviewViewProvider {
                         this.init();
                         break;
                     }
+                case "showErrorLocation":
+                    {
+                        print("received showErrorLocation");
+                        const locationStart = data.value.location;
+                        const tokenLength = data.value.token.length;
+                        const locationEnd = locationStart + tokenLength;
+                        this.maskConfig.showConfigAtLocation(locationStart, locationEnd);
+                        break;
+                    }
+
+                    
             }
         });
 

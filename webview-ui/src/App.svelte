@@ -162,7 +162,9 @@
   <div>Loading...</div>
   <vscode-progress-ring />
 {:else if appState === appStates.ERROR}
-  <ErrorMessage bind:message={errorMessage} />
+  {#key errorMessage}
+    <ErrorMessage bind:message={errorMessage} />
+  {/key}
 {/if}
 
 <style>
