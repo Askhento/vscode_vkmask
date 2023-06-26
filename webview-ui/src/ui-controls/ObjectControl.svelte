@@ -87,8 +87,9 @@
       <div class="add-key-wrapper">
         <vscode-button class="add-key-btn" bind:this={addKeyButton}>
           <span slot="start" class="codicon codicon-add" />
-          {label}
+          add
         </vscode-button>
+        <!-- svelte-ignore a11y-mouse-events-have-key-events -->
         <vscode-dropdown
           position="above"
           class="add-key-dropdown"
