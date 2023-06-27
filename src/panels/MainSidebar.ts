@@ -187,13 +187,21 @@ export class MainSidebarProvider implements WebviewViewProvider {
                         this.init();
                         break;
                     }
-                case "showErrorLocation":
+                case "showError":
                     {
-                        print("received showErrorLocation");
-                        const locationStart = data.value.location;
-                        const tokenLength = data.value.token.length;
-                        const locationEnd = locationStart + tokenLength;
-                        this.maskConfig.showConfigAtLocation(locationStart, locationEnd);
+                        print("received showError", data.value);
+                        const {path  : errorPath, location, token} = data.value;
+
+                        if (errorPath !== undefined) {
+                            const errorPointer = this.maskConfig.maskLinePointers[errorPath]
+                            this.maskConfig.showConfigAtPointer(errorPointer);
+                        } else if (location !== undefined && token !== undefined)
+                        {
+                            const locationStart = location;
+                            const tokenLength = token.length;
+                            const locationEnd = locationStart + tokenLength;
+                            this.maskConfig.showConfigAtLocation(locationStart, locationEnd);
+                        }
                         break;
                     }
 

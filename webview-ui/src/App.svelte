@@ -1,12 +1,12 @@
 <!-- https://microsoft.github.io/vscode-codicons/dist/codicon.html -->
 
-<script lang="ts">
+<script>
   import { logger, logDump } from "./logger";
   const print = logger("App.svelte");
   import { provideVSCodeDesignSystem, allComponents } from "@vscode/webview-ui-toolkit";
   import Effects from "./Effects.svelte";
   import Inspector from "./Inspector.svelte";
-  import ErrorMessage from "./ErrorMessage.svelte";
+
   import Settings from "./Settings.svelte";
 
   import { vscode } from "./utils/vscode";
@@ -14,6 +14,7 @@
   import WelcomeScreen from "./WelcomeScreen.svelte";
   import { onMount } from "svelte";
   import Header from "./Header.svelte";
+  import ErrorMessage from "./ErrorMessage.svelte";
 
   let appStates = {
     LOADING: 0,
@@ -23,7 +24,12 @@
   };
   let appState = appStates.LOADING;
   $: print("state change : ", appState);
-  let errorMessage = "";
+  let error = {
+    messsage: "",
+    path: undefined,
+    token: undefined,
+    location: undefined,
+  };
   let updateLock = true;
   let inspectorMountLock = false;
   //   $: {
@@ -101,7 +107,17 @@
         break;
       }
       case "error": {
-        showError(message.error);
+        // showError(message.error);
+        appState = appStates.ERROR;
+        const location = parseInt(message.error.match(/(?<=at position\s)\d+/gm));
+        const token = message.error.match(/(?<=token )\S+/gm);
+        console.log("err loc : ", location);
+        console.log("err token : ", token);
+        error = {
+          message: message.error,
+          location,
+          token,
+        };
         break;
       }
       case "updateEffects": {
@@ -124,12 +140,6 @@
     }
   }
 
-  function showError(error) {
-    appState = appStates.ERROR;
-    print("error received", error);
-    // print("message", message);
-    errorMessage = error;
-  }
   provideVSCodeDesignSystem().register(allComponents);
 
   onMount(() => {
@@ -161,8 +171,8 @@
         on:errorMessage={(e) => {
           print("reveived error");
           print("error", e);
-          const error = e.detail.message;
-          showError(error);
+          appState = appStates.ERROR;
+          error = e.detail;
           //   errorMessage = e.
         }}
       />
@@ -172,8 +182,8 @@
   <div>Loading...</div>
   <vscode-progress-ring />
 {:else if appState === appStates.ERROR}
-  {#key errorMessage}
-    <ErrorMessage bind:message={errorMessage} />
+  {#key error}
+    <ErrorMessage {error} />
   {/key}
 {/if}
 

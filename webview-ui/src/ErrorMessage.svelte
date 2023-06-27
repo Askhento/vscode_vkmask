@@ -1,25 +1,23 @@
 <script lang="ts">
   import { vscode } from "./utils/vscode";
 
-  export let message = "";
-  let errorLocation = undefined;
-  let errorToken;
+  export let error;
+  //   let errorLocation = undefined;
+  //   let errorToken;
 
   function getErrorString() {
-    errorLocation = message.match(/(?<=at position\s)\d+/gm);
-    errorToken = message.match(/(?<=token )\S+/gm);
-    console.log("err loc : ", errorLocation);
-    console.log("err token : ", errorToken);
-    return JSON.stringify(message, null, "  ");
+    return JSON.stringify(error.message, null, "  ");
   }
+
+  //   {
+  //         location: parseInt(errorLocation[0]),
+  //         token: errorToken[0],
+  //       }
 
   function sendShowError() {
     vscode.postMessage({
-      type: "showErrorLocation",
-      value: {
-        location: parseInt(errorLocation[0]),
-        token: errorToken[0],
-      },
+      type: "showError",
+      value: error,
     });
   }
 </script>
@@ -27,7 +25,7 @@
 <div class="text-control-wrapper">
   <div>Error :</div>
   <pre class="error">{getErrorString()}</pre>
-  {#if errorLocation}
+  {#if error.location || error.path}
     <vscode-button class="add-key-btn" on:click={sendShowError}>
       <span slot="start" class="codicon codicon-search" />
       Show error

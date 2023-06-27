@@ -243,13 +243,13 @@ export class MaskConfig extends EventEmitter {
             return;
         }
         print("showing config at - " + pointer.value.line + ", " + pointer.valueEnd.line);
-        let pos = new vscode.Position(pointer.value.line, 0);
-        let posEnd = new vscode.Position(pointer.valueEnd.line + 1, 0);
+        let pos = new vscode.Position(pointer.value.line, pointer.value.column);
+        let posEnd = new vscode.Position(pointer.valueEnd.line, pointer.valueEnd.column);
         // here we set the cursor
         // !!! changed here 
-        editor.selection = new vscode.Selection(posEnd, pos);
+        editor.selection = new vscode.Selection(pos, posEnd );
         // here we set the focus of the opened editor
-        editor.revealRange(new vscode.Range(posEnd, pos), vscode.TextEditorRevealType.InCenter);
+        editor.revealRange(new vscode.Range(pos, posEnd ), vscode.TextEditorRevealType.InCenter);
 
         return editor;
     }
@@ -473,7 +473,8 @@ export class MaskConfig extends EventEmitter {
     }
 
     public parseConfig(): { success: boolean, message: string } {
-
+        
+    
         // ? maybe split to parse locations and actual object
         print("parsing mask.json")
         this.maskJSON = undefined;
@@ -504,6 +505,10 @@ export class MaskConfig extends EventEmitter {
             this.sourceMaskJSON = jsonMap.parse(this.rawMaskJSON);
 
         } catch (error) {
+                // !!! repair json
+        // https://github.com/RyanMarcus/dirty-json
+        // https://github.com/josdejong/jsonrepair
+
             print("json parsing error, source maps", error);
             print("raw mask.json ", this.rawMaskJSON)
             return {

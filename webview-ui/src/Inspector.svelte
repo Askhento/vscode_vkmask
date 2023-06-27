@@ -51,9 +51,9 @@
       if (parseResult.success) {
         uiElements = parseResult.data;
       } else {
-        const prettyError = fromZodError(parseResult.error, { maxIssuesInMessage: 1 });
-        print(parseResult.error.flatten());
-        onError(prettyError);
+        // const prettyError = fromZodError(parseResult.error, { maxIssuesInMessage: 1 });
+
+        onError(parseResult.error);
         // return {
         //     success: false,
         //     message: .message
@@ -79,10 +79,36 @@
     rerenderInspector();
   }
 
-  async function onError(errorMessage) {
+  async function onError(error) {
+    const { name, _errors, ...formated } = error.format();
+    print("formated error", formated);
+
+    // let errorPath = ;
+
+    let { path, message } = reduceError(formated, `/effects/${$selection.id}`);
+
+    print("path, message", path, message);
     await tick();
     print("sending error");
-    dispatch("errorMessage", errorMessage);
+    dispatch("errorMessage", {
+      message,
+      path,
+    });
+  }
+
+  /**
+   * Digs inside Zod error to extract valuable information
+   * !!! should be a helper function
+   * @param error
+   * @param path
+   */
+  function reduceError(error, path) {
+    const { _errors, ...newError } = { ...error };
+    if (Object.keys(newError).length === 0) {
+      return { path, message: _errors[0] };
+    }
+    const key = Object.keys(newError)[0];
+    return reduceError(newError[key], `${path}/${key}`);
   }
 
   async function rerenderInspector() {
