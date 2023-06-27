@@ -8,6 +8,8 @@
 
 
   */
+  import { fromZodError } from "zod-validation-error";
+
   import { logger } from "./logger";
   const print = logger("Inspector.svelte");
   import { createEventDispatcher } from "svelte";
@@ -44,7 +46,20 @@
   $: print("selection changes : ", $selection);
   $: {
     print("parsing ui elements  changes : ", $effects);
-    if ($selection) uiElements = EffectParserForUI.parse($effects[$selection.id]); // this seems to help !!!
+    if ($selection) {
+      const parseResult = EffectParserForUI.safeParse($effects[$selection.id]); // this seems to help !!!
+      if (parseResult.success) {
+        uiElements = parseResult.data;
+      } else {
+        const prettyError = fromZodError(parseResult.error, { maxIssuesInMessage: 1 });
+        print(parseResult.error.flatten());
+        onError(prettyError);
+        // return {
+        //     success: false,
+        //     message: .message
+        // }
+      }
+    }
   }
 
   const dispatch = createEventDispatcher();
@@ -64,7 +79,14 @@
     rerenderInspector();
   }
 
+  async function onError(errorMessage) {
+    await tick();
+    print("sending error");
+    dispatch("errorMessage", errorMessage);
+  }
+
   async function rerenderInspector() {
+    // !!! a hack
     const oldSelection = $selection;
     $selection = undefined;
     await tick();
@@ -88,7 +110,7 @@
 </script>
 
 <div class="inspector-wrapper">
-  {#if selectedId !== undefined}
+  {#if selectedId !== undefined && uiElements !== undefined}
     <div class="inspector-name">Inspector Panel</div>
     {#if $selection.type === "effect"}
       <!-- <div>{print("controls from inspector")}</div>
@@ -103,27 +125,8 @@
         uiElements={uiElements.value}
         on:changed={onChanged}
       />
-      <!-- <NumberSliderControl
-        bind:value={$effects[selectedId].mix}
-        label={"TEST"}
-        params={uiElements.value[selectedId].value.mix.uiDescription}
-      /> -->
-      <!-- uiElements={uiControls[$effects[$selection.id].name].uiDescription} -->
     {/if}
+  {:else}
+    <div>some error</div>
   {/if}
 </div>
-
-<!-- 
-<div>{$effects[$selection.id].name}</div>
-{#if $effects[$selection.id].name in uiControls}
-  {#each Object.entries(uiControls[$effects[$selection.id].name]) as [key, element]}
-    <svelte:component
-      this={element}
-      bind:label={key}
-      params={effectDefaults[$effects[$selection.id].name].type.shape[
-        key
-      ].removeDefault().description || {}}
-      bind:value={$effects[$selection.id][key]}
-    />
-  {/each}
-{/if} -->

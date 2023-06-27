@@ -101,10 +101,7 @@
         break;
       }
       case "error": {
-        appState = appStates.ERROR;
-        print("error received", message.error);
-        print("message", message);
-        errorMessage = message.error;
+        showError(message.error);
         break;
       }
       case "updateEffects": {
@@ -127,6 +124,12 @@
     }
   }
 
+  function showError(error) {
+    appState = appStates.ERROR;
+    print("error received", error);
+    // print("message", message);
+    errorMessage = error;
+  }
   provideVSCodeDesignSystem().register(allComponents);
 
   onMount(() => {
@@ -154,6 +157,13 @@
         bind:mountLock={inspectorMountLock}
         on:changed={() => {
           sendEffects($effects);
+        }}
+        on:errorMessage={(e) => {
+          print("reveived error");
+          print("error", e);
+          const error = e.detail.message;
+          showError(error);
+          //   errorMessage = e.
         }}
       />
     {/key}

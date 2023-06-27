@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
   import { onMount } from "svelte";
   import { createEventDispatcher } from "svelte";
 
@@ -16,7 +16,7 @@
   const dispatch = createEventDispatcher();
   $: {
     dispatch("changed", {
-      value,
+      value: value.map(parseFloat), // !!!! hack
       path,
     });
   }

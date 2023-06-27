@@ -139,24 +139,28 @@ function addTypeToSchema(schema) {
       break;
 
     case "union":
-    case "discriminatedUnion": // ??? i don't use this union type at all !!!!
+      // case "discriminatedUnion": // ??? i don't use this union type at all !!!!
       // seems like unions are different and should not be included in ui
       res = z.union(schema.options.map((elem) => addTypeToSchema(elem)));
       return res;
       break;
 
-    // case "discriminatedUnion":
-    //     // seems like unions are different and should not be included in ui
-    //     console.log("in desc union", schema.discriminator)
-    //     // res = z.discriminatedUnion(schema.discriminator, schema.options.map(elem => addTypeToSchema(elem)))
-    //     // schema.options = schema.options.map(elem => addTypeToSchema(elem))
-    //     for (let i = 0; i < schema.options.length; i++) {
-    //         const name = schema.options[i].shape.name
-    //         schema.options[i] = addTypeToSchema(schema.options[i]);
-    //         schema.optionsMap[name] = schema.options[i]
-    //     }
-    //     // res = schema
-    //     break;
+    case "discriminatedUnion":
+      // seems like unions are different and should not be included in ui
+      // console.log("in desc union", schema.discriminator)
+      res = z.discriminatedUnion(
+        schema.discriminator,
+        schema.options.map((elem) => addTypeToSchema(elem))
+      );
+      return res;
+    // schema.options = schema.options.map(elem => addTypeToSchema(elem))
+    // for (let i = 0; i < schema.options.length; i++) {
+    //     const name = schema.options[i].shape.name
+    //     schema.options[i] = addTypeToSchema(schema.options[i]);
+    //     schema.optionsMap[name] = schema.options[i]
+    // }
+    // res = schema
+    // break;
     // default:
     //     break;
   }
@@ -215,3 +219,729 @@ export const EffectParserForUI = addTypeToSchema(ZEffect); //z.discriminatedUnio
 
 //     }]
 // )))
+
+// ZodError: [
+//   {
+//     "code": "invalid_union",
+//     "unionErrors": [
+//       {
+//         "issues": [
+//           {
+//             "code": "invalid_union",
+//             "unionErrors": [
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_union",
+//                     "unionErrors": [
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_literal",
+//                             "expected": "facemodel",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Invalid literal value, expected \"facemodel\""
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       },
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_type",
+//                             "expected": "null",
+//                             "received": "string",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Expected null, received string"
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       }
+//                     ],
+//                     "path": [
+//                       "name"
+//                     ],
+//                     "message": "Invalid input"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               },
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_type",
+//                     "expected": "null",
+//                     "received": "object",
+//                     "path": [],
+//                     "message": "Expected null, received object"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               }
+//             ],
+//             "path": [],
+//             "message": "Invalid input"
+//           }
+//         ],
+//         "name": "ZodError"
+//       },
+//       {
+//         "issues": [
+//           {
+//             "code": "invalid_union",
+//             "unionErrors": [
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_union",
+//                     "unionErrors": [
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_literal",
+//                             "expected": "plane",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Invalid literal value, expected \"plane\""
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       },
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_type",
+//                             "expected": "null",
+//                             "received": "string",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Expected null, received string"
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       }
+//                     ],
+//                     "path": [
+//                       "name"
+//                     ],
+//                     "message": "Invalid input"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               },
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_type",
+//                     "expected": "null",
+//                     "received": "object",
+//                     "path": [],
+//                     "message": "Expected null, received object"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               }
+//             ],
+//             "path": [],
+//             "message": "Invalid input"
+//           }
+//         ],
+//         "name": "ZodError"
+//       },
+//       {
+//         "issues": [
+//           {
+//             "code": "invalid_union",
+//             "unionErrors": [
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_union",
+//                     "unionErrors": [
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_literal",
+//                             "expected": "model3d",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Invalid literal value, expected \"model3d\""
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       },
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_type",
+//                             "expected": "null",
+//                             "received": "string",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Expected null, received string"
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       }
+//                     ],
+//                     "path": [
+//                       "name"
+//                     ],
+//                     "message": "Invalid input"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               },
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_type",
+//                     "expected": "null",
+//                     "received": "object",
+//                     "path": [],
+//                     "message": "Expected null, received object"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               }
+//             ],
+//             "path": [],
+//             "message": "Invalid input"
+//           }
+//         ],
+//         "name": "ZodError"
+//       },
+//       {
+//         "issues": [
+//           {
+//             "code": "invalid_union",
+//             "unionErrors": [
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_union",
+//                     "unionErrors": [
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_type",
+//                             "expected": "number",
+//                             "received": "string",
+//                             "path": [
+//                               "size",
+//                               0
+//                             ],
+//                             "message": "Expected number, received string"
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       },
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_type",
+//                             "expected": "null",
+//                             "received": "array",
+//                             "path": [
+//                               "size"
+//                             ],
+//                             "message": "Expected null, received array"
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       }
+//                     ],
+//                     "path": [
+//                       "size"
+//                     ],
+//                     "message": "Invalid input"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               },
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_type",
+//                     "expected": "null",
+//                     "received": "object",
+//                     "path": [],
+//                     "message": "Expected null, received object"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               }
+//             ],
+//             "path": [],
+//             "message": "Invalid input"
+//           }
+//         ],
+//         "name": "ZodError"
+//       },
+//       {
+//         "issues": [
+//           {
+//             "code": "invalid_union",
+//             "unionErrors": [
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_union",
+//                     "unionErrors": [
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_literal",
+//                             "expected": "light",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Invalid literal value, expected \"light\""
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       },
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_type",
+//                             "expected": "null",
+//                             "received": "string",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Expected null, received string"
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       }
+//                     ],
+//                     "path": [
+//                       "name"
+//                     ],
+//                     "message": "Invalid input"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               },
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_type",
+//                     "expected": "null",
+//                     "received": "object",
+//                     "path": [],
+//                     "message": "Expected null, received object"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               }
+//             ],
+//             "path": [],
+//             "message": "Invalid input"
+//           }
+//         ],
+//         "name": "ZodError"
+//       },
+//       {
+//         "issues": [
+//           {
+//             "code": "invalid_union",
+//             "unionErrors": [
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_union",
+//                     "unionErrors": [
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_literal",
+//                             "expected": "light",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Invalid literal value, expected \"light\""
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       },
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_type",
+//                             "expected": "null",
+//                             "received": "string",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Expected null, received string"
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       }
+//                     ],
+//                     "path": [
+//                       "name"
+//                     ],
+//                     "message": "Invalid input"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               },
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_type",
+//                     "expected": "null",
+//                     "received": "object",
+//                     "path": [],
+//                     "message": "Expected null, received object"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               }
+//             ],
+//             "path": [],
+//             "message": "Invalid input"
+//           }
+//         ],
+//         "name": "ZodError"
+//       },
+//       {
+//         "issues": [
+//           {
+//             "code": "invalid_union",
+//             "unionErrors": [
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_union",
+//                     "unionErrors": [
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_literal",
+//                             "expected": "light",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Invalid literal value, expected \"light\""
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       },
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_type",
+//                             "expected": "null",
+//                             "received": "string",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Expected null, received string"
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       }
+//                     ],
+//                     "path": [
+//                       "name"
+//                     ],
+//                     "message": "Invalid input"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               },
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_type",
+//                     "expected": "null",
+//                     "received": "object",
+//                     "path": [],
+//                     "message": "Expected null, received object"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               }
+//             ],
+//             "path": [],
+//             "message": "Invalid input"
+//           }
+//         ],
+//         "name": "ZodError"
+//       },
+//       {
+//         "issues": [
+//           {
+//             "code": "invalid_union",
+//             "unionErrors": [
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_union",
+//                     "unionErrors": [
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_literal",
+//                             "expected": "beautify",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Invalid literal value, expected \"beautify\""
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       },
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_type",
+//                             "expected": "null",
+//                             "received": "string",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Expected null, received string"
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       }
+//                     ],
+//                     "path": [
+//                       "name"
+//                     ],
+//                     "message": "Invalid input"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               },
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_type",
+//                     "expected": "null",
+//                     "received": "object",
+//                     "path": [],
+//                     "message": "Expected null, received object"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               }
+//             ],
+//             "path": [],
+//             "message": "Invalid input"
+//           }
+//         ],
+//         "name": "ZodError"
+//       },
+//       {
+//         "issues": [
+//           {
+//             "code": "invalid_union",
+//             "unionErrors": [
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_union",
+//                     "unionErrors": [
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_literal",
+//                             "expected": "liquifiedwarp",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Invalid literal value, expected \"liquifiedwarp\""
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       },
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_type",
+//                             "expected": "null",
+//                             "received": "string",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Expected null, received string"
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       }
+//                     ],
+//                     "path": [
+//                       "name"
+//                     ],
+//                     "message": "Invalid input"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               },
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_type",
+//                     "expected": "null",
+//                     "received": "object",
+//                     "path": [],
+//                     "message": "Expected null, received object"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               }
+//             ],
+//             "path": [],
+//             "message": "Invalid input"
+//           }
+//         ],
+//         "name": "ZodError"
+//       },
+//       {
+//         "issues": [
+//           {
+//             "code": "invalid_union",
+//             "unionErrors": [
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_union",
+//                     "unionErrors": [
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_literal",
+//                             "expected": "colorfilter",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Invalid literal value, expected \"colorfilter\""
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       },
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_type",
+//                             "expected": "null",
+//                             "received": "string",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Expected null, received string"
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       }
+//                     ],
+//                     "path": [
+//                       "name"
+//                     ],
+//                     "message": "Invalid input"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               },
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_type",
+//                     "expected": "null",
+//                     "received": "object",
+//                     "path": [],
+//                     "message": "Expected null, received object"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               }
+//             ],
+//             "path": [],
+//             "message": "Invalid input"
+//           }
+//         ],
+//         "name": "ZodError"
+//       },
+//       {
+//         "issues": [
+//           {
+//             "code": "invalid_union",
+//             "unionErrors": [
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_union",
+//                     "unionErrors": [
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_literal",
+//                             "expected": "posteffect",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Invalid literal value, expected \"posteffect\""
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       },
+//                       {
+//                         "issues": [
+//                           {
+//                             "code": "invalid_type",
+//                             "expected": "null",
+//                             "received": "string",
+//                             "path": [
+//                               "name"
+//                             ],
+//                             "message": "Expected null, received string"
+//                           }
+//                         ],
+//                         "name": "ZodError"
+//                       }
+//                     ],
+//                     "path": [
+//                       "name"
+//                     ],
+//                     "message": "Invalid input"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               },
+//               {
+//                 "issues": [
+//                   {
+//                     "code": "invalid_type",
+//                     "expected": "null",
+//                     "received": "object",
+//                     "path": [],
+//                     "message": "Expected null, received object"
+//                   }
+//                 ],
+//                 "name": "ZodError"
+//               }
+//             ],
+//             "path": [],
+//             "message": "Invalid input"
+//           }
+//         ],
+//         "name": "ZodError"
+//       }
+//     ],
+//     "path": [],
+//     "message": "Invalid input"
+//   }
