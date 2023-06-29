@@ -25,6 +25,10 @@
 <div class="text-control-wrapper">
   <div>Error :</div>
   <pre class="error">{getErrorString()}</pre>
+  {#if error.path}
+    <pre>at path : {error.path}</pre>
+  {/if}
+
   {#if error.location || error.path}
     <vscode-button class="add-key-btn" on:click={sendShowError}>
       <span slot="start" class="codicon codicon-search" />

@@ -202,6 +202,8 @@ export class MainSidebarProvider implements WebviewViewProvider {
                             const locationEnd = locationStart + tokenLength;
                             this.maskConfig.showConfigAtLocation(locationStart, locationEnd);
                         }
+                        vscode.commands.executeCommand("workbench.action.focusFirstEditorGroup")
+                        
                         break;
                     }
 
