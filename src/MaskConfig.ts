@@ -490,16 +490,16 @@ export class MaskConfig extends EventEmitter {
         this.pathMaskJSON = configPath;
 
 
-        // use unsaved version of config if possible
-        if (vscode.window.activeTextEditor) {
-            const currentDoc = vscode.window.activeTextEditor.document;
-            if (currentDoc.uri.fsPath === this.pathMaskJSON) {
-                const editor = vscode.window.activeTextEditor;
-                this.rawMaskJSON = editor.document.getText()
-            } else {
-                this.rawMaskJSON = fs.readFileSync(this.pathMaskJSON, 'utf8');
-            }
-        }
+        // // use unsaved version of config if possible
+        // if (vscode.window.activeTextEditor) {
+        //     const currentDoc = vscode.window.activeTextEditor.document;
+        //     if (currentDoc.uri.fsPath === this.pathMaskJSON) {
+        //         const editor = vscode.window.activeTextEditor;
+        //         this.rawMaskJSON = editor.document.getText()
+        //     } else {
+        //     }
+        // }
+        this.rawMaskJSON = fs.readFileSync(this.pathMaskJSON, 'utf8');
 
         try {
             this.sourceMaskJSON = jsonMap.parse(this.rawMaskJSON);
