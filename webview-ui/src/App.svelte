@@ -6,7 +6,6 @@
   import { provideVSCodeDesignSystem, allComponents } from "@vscode/webview-ui-toolkit";
   import Effects from "./Effects.svelte";
   import Inspector from "./Inspector.svelte";
-
   import Settings from "./Settings.svelte";
 
   import { vscode } from "./utils/vscode";

@@ -13,8 +13,6 @@
   import { logger } from "./logger";
   const print = logger("Inspector.svelte");
   import { createEventDispatcher } from "svelte";
-
-  import { effectDefaults } from "../../src/ztypes.js";
   import { effects, selection } from "./stores.js";
   import { get } from "svelte/store";
   import { vscode } from "./utils/vscode";
@@ -26,7 +24,6 @@
   export let mountLock = true;
   let uiElements; //= EffectParserForUI.parse($effects);
   //   $: uiElements = EffectParserForUI.parse($effects);
-
   let selectedId;
 
   print("INIT");
@@ -46,7 +43,7 @@
   $: print("selection changes : ", $selection);
   $: {
     print("parsing ui elements  changes : ", $effects);
-    if ($selection) {
+    if ($selection && $selection.type !== "unknownEffect") {
       const parseResult = EffectParserForUI.safeParse($effects[$selection.id]); // this seems to help !!!
       if (parseResult.success) {
         uiElements = parseResult.data;
@@ -136,7 +133,7 @@
 </script>
 
 <div class="inspector-wrapper">
-  {#if selectedId !== undefined && uiElements !== undefined}
+  {#if selectedId !== undefined}
     <div class="inspector-name">Inspector Panel</div>
     {#if $selection.type === "effect"}
       <!-- <div>{print("controls from inspector")}</div>
@@ -151,6 +148,8 @@
         uiElements={uiElements.value}
         on:changed={onChanged}
       />
+    {:else if $selection.type === "unknownEffect"}
+      <div>unknownEffect</div>
     {/if}
   {:else}
     <div>some error</div>

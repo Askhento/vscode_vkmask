@@ -4,6 +4,7 @@
 
   import { vscode } from "./utils/vscode";
   import { effects, selection } from "./stores.js";
+  import { effectNames } from "../../src/ztypes.js";
 
   //   ? do not send effects back on user input events, will cause loop
   // i use lock because i need to track changes made in inspector
@@ -14,6 +15,7 @@
   import { onMount } from "svelte";
 
   let hovering: any = false;
+  const effectNamesSet = new Set(effectNames);
 
   const drop = (event, target) => {
     event.dataTransfer.dropEffect = "move";
@@ -32,10 +34,12 @@
     }
 
     $effects = newEffects;
-    $selection = {
-      type: "effect",
-      id: target,
-    };
+    $selection.id = target;
+
+    //  = {
+    //   type: "effect",
+    //   id: target,
+    // };
   };
 
   const dragstart = (event, i) => {
@@ -48,14 +52,16 @@
 
   function checkSelected(id) {
     if ($selection === undefined) return false;
-    return $selection.type === "effect" && $selection.id === id;
+    return (
+      ($selection.type === "effect" || $selection.type === "unknownEffect") && $selection.id === id
+    );
   }
   function toggleSelection(id) {
     if (checkSelected(id)) {
       $selection = undefined;
     } else {
       $selection = {
-        type: "effect",
+        type: effectNamesSet.has($effects[id].name) ? "effect" : "unknownEffect",
         id: id,
       };
     }
@@ -72,7 +78,8 @@
     print("remove", $effects);
     $effects = $effects;
 
-    if ($selection !== undefined && $selection.type === "effect") {
+    if ($selection !== undefined) {
+      // !!! && $selection.type === "effect"
       if ($selection.id === id) {
         $selection = undefined;
       } else if ($selection.id > id) {
@@ -107,6 +114,16 @@
 
 <main>
   {#if $effects.length}
+    <!-- {@debug $effects} -->
+
+    <!-- {@const filteredEffects = $effects
+      .map((e, i) => {
+        e.index = i;
+        return e;
+      })
+      .filter((e) => effectNamesSet.has(e.name))
+      } -->
+    <!-- {@debug filteredEffects} -->
     {#key $selection}
       <div class="effect-list-wrapper">
         <ul class="effectsList">
@@ -124,8 +141,8 @@
                 e.preventDefault();
               }}
               on:click|stopPropagation={toggleSelection(index)}
-              selected={$selection && $selection.type === "effect" && $selection.id === index}
-              >{effect.name}
+              selected={checkSelected(index)}
+              >{effect.name ?? "unknown-effect"}
               <span class="effect-btn-wrapper">
                 {#if effect.tag}
                   <span class="effect-tag">
