@@ -39,11 +39,20 @@
                 }
             }
         },
+        "menus": {
+            "view/title": [
+                {
+                    "command": "vkmask.dumpLogs",
+                    "when": "view == vkmask.sidepanel"
+                }
+            ]
+        },
         "commands": [
             {
                 "command": "vkmask.dumpLogs",
                 "title": "Dump vkmask logs to logsDump.json file",
-                "shortTitle": "Dump vkmask logs"
+                "shortTitle": "Dump vkmask logs",
+                "icon": "$(zap)"
             }
         ],
         "viewsContainers": {

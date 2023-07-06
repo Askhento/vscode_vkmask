@@ -57,7 +57,7 @@ export class MainSidebarProvider implements WebviewViewProvider {
             ]
         };
 
-        
+
 
         webviewView.webview.html = this._getWebviewContent(webviewView.webview, this._extensionUri);
 
