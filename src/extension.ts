@@ -3,7 +3,12 @@
 
 import * as fs from 'fs';
 import * as vscode from 'vscode';
-import { MainSidebarProvider } from './panels/MainSidebar'
+import { MainViewProvider } from './panels/MainViewProvider'
+import { InspectorViewProvider } from './panels/InspectorViewProvider'
+import { AssetsManagerViewProvider } from './panels/AssetsManagerViewProvider'
+
+import { MessageHandler } from "./MessageHandler"
+
 import { HotReload } from "./HotReload";
 // const { exec } = require('node:child_process');
 import * as path from "path"
@@ -18,55 +23,106 @@ import { jsonPrettyArray } from './utils/jsonStringify';
     todo : angelscript intellisence
 */
 
+enum ViewIds {
+    "vkmask.inspector",
+    "vkmask.assets_manager"
+}
+
+
+
 export async function activate(context: vscode.ExtensionContext) {
 
-    await userSettings.init(context.extensionUri);
-    print("activating");
+    const messageHandler = new MessageHandler();
 
-
-    const createBuiltinAssets = false;
-    if (createBuiltinAssets) {
-        assetWatcher.on("assetsChanged", (e) => {
-            //todo : fetch buildins from github
-            // const dir = vscode.workspace.workspaceFolders[0].uri.fsPath;
-            const dir = context.extensionUri.fsPath;
-
-            const jsonDump = jsonPrettyArray(e, "\t");
-            fs.writeFileSync(dir + "/res/build-in-assets.json", jsonDump, { encoding: 'utf-8' })
-        });
-    } else {
-        assetWatcher.getBuiltinAssets(context.extensionUri)
-    }
-
-    const sidebar = new MainSidebarProvider(context.extensionUri);
-
+    const assetsManager = new AssetsManagerViewProvider(context.extensionUri);
     context.subscriptions.push(
-        vscode.window.registerWebviewViewProvider(MainSidebarProvider.viewId, sidebar)
+        vscode.window.registerWebviewViewProvider(AssetsManagerViewProvider.viewId, assetsManager)
     );
 
-    context.subscriptions.push(vscode.commands.registerCommand("vkmask.dumpLogs", async () => {
-
-        const message: any = (await sidebar.requestLogs());
-        // console.log("message", message)
-        const webviewLogDump = message.value;
-
-        const dumpPath = sidebar.maskConfig.currentConfigDir;
-        if (dumpPath === undefined) {
-            vscode.window.showErrorMessage("Seems like no folder opened to save logs.")
-            return;
-        }
-
-        logger.dumpLogs(webviewLogDump, dumpPath)
-
-    }))
+    const inspector = new InspectorViewProvider(context.extensionUri);
+    context.subscriptions.push(
+        vscode.window.registerWebviewViewProvider(InspectorViewProvider.viewId, inspector)
+    );
 
 
-    // "workbench.action.movePanelToSecondarySideBar",
-    // workbench.action.openView
+    assetsManager.onResolveWebviewView = () => {
+        context.subscriptions.push(messageHandler.bindViewMessageHandler(assetsManager.webview, AssetsManagerViewProvider.viewId));
+        // messageHandler.send(
+        // {
+        //     target : AssetsManagerViewProvider.viewId,
+        //     payload : "send data from extension"
+        // }
+    // )
+    }
 
-    // ! does this thing still required???
-    const hotReloader = new HotReload(context.extensionUri);
-    hotReloader.copyFilesToMask();
+
+    inspector.onResolveWebviewView = () => {
+        context.subscriptions.push(messageHandler.bindViewMessageHandler(inspector.webview, InspectorViewProvider.viewId));
+    //     messageHandler.send(
+    //     InspectorViewProvider.viewId,
+    //     "send data from extension"
+    // )
+    }
+
+    // messageHandler.send(
+    //     [InspectorViewProvider.viewId, AssetsManagerViewProvider.viewId],
+    //     {
+    //         message : "send : hello world from extensoin"
+    //     }
+    // )
+
+
+    // await userSettings.init(context.extensionUri);
+    // print("activating");
+
+
+    // const createBuiltinAssets = false;
+    // if (createBuiltinAssets) {
+    //     assetWatcher.on("assetsChanged", (e) => {
+    //         //todo : fetch buildins from github
+    //         // const dir = vscode.workspace.workspaceFolders[0].uri.fsPath;
+    //         const dir = context.extensionUri.fsPath;
+
+    //         const jsonDump = jsonPrettyArray(e, "\t");
+    //         fs.writeFileSync(dir + "/res/build-in-assets.json", jsonDump, { encoding: 'utf-8' })
+    //     });
+    // } else {
+    //     assetWatcher.getBuiltinAssets(context.extensionUri)
+    // }
+
+
+
+
+    // const sidebar = new MainViewProvider(context.extensionUri);
+    
+
+    // context.subscriptions.push(
+    //     vscode.window.registerWebviewViewProvider(MainViewProvider.viewId, sidebar)
+    // );
+
+    // context.subscriptions.push(vscode.commands.registerCommand("vkmask.dumpLogs", async () => {
+
+    //     const message: any = (await sidebar.requestLogs());
+    //     // console.log("message", message)
+    //     const webviewLogDump = message.value;
+
+    //     const dumpPath = sidebar.maskConfig.currentConfigDir;
+    //     if (dumpPath === undefined) {
+    //         vscode.window.showErrorMessage("Seems like no folder opened to save logs.")
+    //         return;
+    //     }
+
+    //     logger.dumpLogs(webviewLogDump, dumpPath)
+
+    // }))
+
+
+    // // "workbench.action.movePanelToSecondarySideBar",
+    // // workbench.action.openView
+
+    // // ! does this thing still required???
+    // const hotReloader = new HotReload(context.extensionUri);
+    // hotReloader.copyFilesToMask();
 
 
 
@@ -92,32 +148,32 @@ export async function activate(context: vscode.ExtensionContext) {
         watchLock = true;
 
         vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction").then(() => {
-            sidebar.updateAppState();
-            assetWatcher.searchAssets();
-            userSettings.emitChangeEvent();
+            // sidebar.updateAppState();
+            // assetWatcher.searchAssets();
+            // userSettings.emitChangeEvent();
         });
     }))
 
 
-    // show sidebar 
-    // await vscode.commands.executeCommand("workbench.view.extension.vkmask_primary_bar.resetViewContainerLocation")
-    // await vscode.commands.executeCommand(`workbench.view.extension.vkmask_primary_bar`)
-    // vscode.commands.executeCommand(`workbench.action.focusAuxiliaryBar`)
-    // vkmask.sidepanel.focus
-    // vscode.commands.executeCommand(`vkmask_primary_bar.focus`)
-    await vscode.commands.executeCommand(`vkmask.sidepanel.focus`) // this works
+    // // show sidebar 
+    // // await vscode.commands.executeCommand("workbench.view.extension.vkmask_primary_bar.resetViewContainerLocation")
+    // // await vscode.commands.executeCommand(`workbench.view.extension.vkmask_primary_bar`)
+    // // vscode.commands.executeCommand(`workbench.action.focusAuxiliaryBar`)
+    // // vkmask.sidepanel.focus
+    // // vscode.commands.executeCommand(`vkmask_primary_bar.focus`)
+    // await vscode.commands.executeCommand(`vkmask.sidepanel.focus`) // this works
 
-    // vscode.commands.executeCommand('workbench.action.moveFocusedView');
-    // vscode.commands.executeCommand('vkmask.sidepanel.focus').then(() => {
+    // // vscode.commands.executeCommand('workbench.action.moveFocusedView');
+    // // vscode.commands.executeCommand('vkmask.sidepanel.focus').then(() => {
 
-    // })
+    // // })
 
-    // {
-    //   "type": "webview",
-    //   "contextualTitle": "vkmask inspector",
-    //   "id": "vkmask.inspector",
-    //   "name": "Inspector"
-    // }
+    // // {
+    // //   "type": "webview",
+    // //   "contextualTitle": "vkmask inspector",
+    // //   "id": "vkmask.inspector",
+    // //   "name": "Inspector"
+    // // }
 
 
 }

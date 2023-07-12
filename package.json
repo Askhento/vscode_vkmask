@@ -79,6 +79,13 @@
                     "id": "vkmask.inspector",
                     "name": "Inspector",
                     "icon": "./node_modules/@vscode/codicons/src/icons/arrow-circle-up.svg"
+                },
+                {
+                    "type": "webview",
+                    "contextualTitle": "vkmask assets manager",
+                    "id": "vkmask.assets_manager",
+                    "name": "Asset Manager",
+                    "icon": "${zap}"
                 }
             ]
         }
