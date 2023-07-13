@@ -72,9 +72,12 @@ export async function activate(context: vscode.ExtensionContext) {
     // )
 
 
-    // await userSettings.init(context.extensionUri);
-    // print("activating");
+    await userSettings.init(context.extensionUri);
 
+    userSettings.on("configChanged", (e) => {
+        console.log("extension : settings changed", e);
+
+    })
 
     // const createBuiltinAssets = false;
     // if (createBuiltinAssets) {
@@ -127,32 +130,34 @@ export async function activate(context: vscode.ExtensionContext) {
 
 
 
-    // !!!! add check on dev disabled
-    let watchLock = false;
-    let watchTimeout: NodeJS.Timeout;
+    if (context.extensionMode === vscode.ExtensionMode.Development) {
 
-    const webviewBuildDir = path.join(context.extensionPath, "out", "panels", "webview-build");
-    const webviewWatcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(webviewBuildDir, '**'))
+        let watchLock = false;
+        let watchTimeout: NodeJS.Timeout;
 
-    context.subscriptions.push(webviewWatcher.onDidChange((fileUri) => {
-        if (watchLock) {
-            return;
-        }
+        const webviewBuildDir = path.join(context.extensionPath, "out", "panels", "webview-build");
+        const webviewWatcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(webviewBuildDir, '**'))
 
-        print("\nThe file " + fileUri.fsPath + " was modified!");
+        context.subscriptions.push(webviewWatcher.onDidChange((fileUri) => {
+            if (watchLock) {
+                return;
+            }
 
-        if (watchTimeout) clearTimeout(watchTimeout)
-        watchTimeout = setTimeout(() => {
-            watchLock = false;
-        }, 1000)
-        watchLock = true;
+            print("\nThe file " + fileUri.fsPath + " was modified!");
 
-        vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction").then(() => {
-            // sidebar.updateAppState();
-            // assetWatcher.searchAssets();
-            // userSettings.emitChangeEvent();
-        });
-    }))
+            if (watchTimeout) clearTimeout(watchTimeout)
+            watchTimeout = setTimeout(() => {
+                watchLock = false;
+            }, 1000)
+            watchLock = true;
+
+            vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction").then(() => {
+                // sidebar.updateAppState();
+                // assetWatcher.searchAssets();
+                // userSettings.emitChangeEvent();
+            });
+        }))
+    }
 
 
     // // show sidebar 

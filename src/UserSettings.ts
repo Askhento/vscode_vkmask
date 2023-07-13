@@ -6,11 +6,11 @@ import * as fs from 'fs';
 // const print = logger(__filename);
 import { EventEmitter } from "events";
 
-type Section = {
+interface Section  {
     type: "string",
     default: string | boolean | number,
     value: string | boolean | number,
-}
+};
 
 class UserSettings extends EventEmitter {
 
@@ -71,7 +71,7 @@ class UserSettings extends EventEmitter {
             this.settings[section].value = configuration.get(section) ?? "empty"
             this.emitChangedSectionEvent(section)
         })
-        this.emitChangeEvent();
+        // this.emitChangeEvent(); // @deprecated
     }
 
     emitChangedSectionEvent(section: string) {
@@ -81,6 +81,9 @@ class UserSettings extends EventEmitter {
 
     }
 
+    /**
+     * @deprecated seems kinda useless 
+     */
     emitChangeEvent() {
         this.emit("configChanged", this.settings)
     }
