@@ -11,8 +11,8 @@ import { XMLParser } from "fast-xml-parser" // https://github.com/NaturalIntelli
 
 /*
     add exclude 
-    add types of assets
-    add builtin assets
+    add types of assets 50/50
+    add builtin assets DONE
 
 */
 
