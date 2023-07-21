@@ -25,7 +25,7 @@
 </script> -->
 
 <script lang="ts">
-  /*
+    /*
 
     todo : need to add file picker
     todo : texture preview
@@ -34,134 +34,136 @@
 
 
   */
-  import { MessageHandler, MessageHandlerData } from "../common/MessageHandler";
-  import { RequestTarget, RequestCommand } from "../../../src/types";
+    import { MessageHandler } from "../common/MessageHandler";
+    import type { MessageHandlerData } from "../common/MessageHandler";
 
-  const origin = RequestTarget.inspector;
+    import { RequestTarget, RequestCommand } from "../../../src/types";
 
-  const messageHandler = new MessageHandler(handleMessageApp, origin);
+    const origin = RequestTarget.inspector;
 
-  function handleMessageApp(event) {}
+    const messageHandler = new MessageHandler(handleMessageApp, origin);
 
-  import { fromZodError } from "zod-validation-error";
+    function handleMessageApp(event) {}
 
-  import { logger } from "../logger";
-  const print = logger("Inspector.svelte");
-  import { createEventDispatcher } from "svelte";
-  //   import { effects, selection } from "./stores.js";
+    import { fromZodError } from "zod-validation-error";
 
-  import ObjectControl from "../ui-controls/ObjectControl.svelte";
-  import { EffectParserForUI } from "../ui-controls/Controls.js";
-  import { onMount, tick } from "svelte";
+    import { logger } from "../logger";
+    const print = logger("Inspector.svelte");
+    import { createEventDispatcher } from "svelte";
+    //   import { effects, selection } from "./stores.js";
 
-  //   export let mountLock = true;
-  //   let uiElements;
-  //   let selectedId;
+    import ObjectControl from "../ui-controls/ObjectControl.svelte";
+    import { EffectParserForUI } from "../ui-controls/Controls.js";
+    import { onMount, tick } from "svelte";
 
-  //   print("INIT");
-  //   // mountLock = true;
+    //   export let mountLock = true;
+    //   let uiElements;
+    //   let selectedId;
 
-  //   $: print("ui elements", uiElements);
-  //   onMount(async () => {
-  //     // print("mounted");
-  //     await tick();
-  //     mountLock = false;
-  //     // print("mount tick");
-  //   });
+    //   print("INIT");
+    //   // mountLock = true;
 
-  //   $: if ($selection) selectedId = $selection.id;
-  //   else selectedId = undefined;
+    //   $: print("ui elements", uiElements);
+    //   onMount(async () => {
+    //     // print("mounted");
+    //     await tick();
+    //     mountLock = false;
+    //     // print("mount tick");
+    //   });
 
-  //   $: print("selection changes : ", $selection);
-  //   $: {
-  //     print("parsing ui elements  changes : ", $effects);
-  //     if ($selection && $selection.type !== "unknownEffect") {
-  //       const parseResult = EffectParserForUI.safeParse($effects[$selection.id]); // this seems to help !!!
-  //       if (parseResult.success) {
-  //         uiElements = parseResult.data;
-  //       } else {
-  //         // const prettyError = fromZodError(parseResult.error, { maxIssuesInMessage: 1 });
+    //   $: if ($selection) selectedId = $selection.id;
+    //   else selectedId = undefined;
 
-  //         onError(parseResult.error);
-  //         // return {
-  //         //     success: false,
-  //         //     message: .message
-  //         // }
-  //       }
-  //     }
-  //   }
+    //   $: print("selection changes : ", $selection);
+    //   $: {
+    //     print("parsing ui elements  changes : ", $effects);
+    //     if ($selection && $selection.type !== "unknownEffect") {
+    //       const parseResult = EffectParserForUI.safeParse($effects[$selection.id]); // this seems to help !!!
+    //       if (parseResult.success) {
+    //         uiElements = parseResult.data;
+    //       } else {
+    //         // const prettyError = fromZodError(parseResult.error, { maxIssuesInMessage: 1 });
 
-  //   const dispatch = createEventDispatcher();
+    //         onError(parseResult.error);
+    //         // return {
+    //         //     success: false,
+    //         //     message: .message
+    //         // }
+    //       }
+    //     }
+    //   }
 
-  //   async function onChanged(event) {
-  //     console.log("onChange: ", event);
-  //     const { path, value, structural } = event.detail;
+    //   const dispatch = createEventDispatcher();
 
-  //     applyValueByPath($effects[selectedId], path, value);
+    //   async function onChanged(event) {
+    //     console.log("onChange: ", event);
+    //     const { path, value, structural } = event.detail;
 
-  //     // send to the app, store does not trigger for some reason
-  //     dispatch("changed");
-  //     //??? rerender inspector ???
-  //     // will need to rerender only if changed inspector structure
-  //     // !!!!!!!!!!!!!!!!!!!!!!!!
-  //     if (!structural) return;
-  //     rerenderInspector();
-  //   }
+    //     applyValueByPath($effects[selectedId], path, value);
 
-  //   async function onError(error) {
-  //     const { name, _errors, ...formated } = error.format();
-  //     print("formated error", formated);
+    //     // send to the app, store does not trigger for some reason
+    //     dispatch("changed");
+    //     //??? rerender inspector ???
+    //     // will need to rerender only if changed inspector structure
+    //     // !!!!!!!!!!!!!!!!!!!!!!!!
+    //     if (!structural) return;
+    //     rerenderInspector();
+    //   }
 
-  //     // let errorPath = ;
+    //   async function onError(error) {
+    //     const { name, _errors, ...formated } = error.format();
+    //     print("formated error", formated);
 
-  //     let { path, message } = reduceError(formated, `/effects/${$selection.id}`);
+    //     // let errorPath = ;
 
-  //     print("path, message", path, message);
-  //     await tick();
-  //     print("sending error");
-  //     dispatch("errorMessage", {
-  //       message,
-  //       path,
-  //     });
-  //   }
+    //     let { path, message } = reduceError(formated, `/effects/${$selection.id}`);
 
-  //   /**
-  //    * Digs inside Zod error to extract valuable information
-  //    * !!! should be a helper function
-  //    * @param error
-  //    * @param path
-  //    */
-  //   function reduceError(error, path) {
-  //     const { _errors, ...newError } = { ...error };
-  //     if (Object.keys(newError).length === 0) {
-  //       return { path, message: _errors[0] };
-  //     }
-  //     const key = Object.keys(newError)[0];
-  //     return reduceError(newError[key], `${path}/${key}`);
-  //   }
+    //     print("path, message", path, message);
+    //     await tick();
+    //     print("sending error");
+    //     dispatch("errorMessage", {
+    //       message,
+    //       path,
+    //     });
+    //   }
 
-  //   async function rerenderInspector() {
-  //     // !!! a hack
-  //     const oldSelection = $selection;
-  //     $selection = undefined;
-  //     await tick();
-  //     $selection = oldSelection;
-  //   }
+    //   /**
+    //    * Digs inside Zod error to extract valuable information
+    //    * !!! should be a helper function
+    //    * @param error
+    //    * @param path
+    //    */
+    //   function reduceError(error, path) {
+    //     const { _errors, ...newError } = { ...error };
+    //     if (Object.keys(newError).length === 0) {
+    //       return { path, message: _errors[0] };
+    //     }
+    //     const key = Object.keys(newError)[0];
+    //     return reduceError(newError[key], `${path}/${key}`);
+    //   }
 
-  //   function applyValueByPath(obj, path, value) {
-  //     // parts = path.split(".");
-  //     // console.log(obj, path, value);
-  //     if (path.length === 0) {
-  //       obj = value;
-  //       return;
-  //     }
+    //   async function rerenderInspector() {
+    //     // !!! a hack
+    //     const oldSelection = $selection;
+    //     $selection = undefined;
+    //     await tick();
+    //     $selection = oldSelection;
+    //   }
 
-  //     if (path.length === 1) {
-  //       obj[path[0]] = value;
-  //     } else {
-  //       applyValueByPath(obj[path[0]], path.slice(1), value);
-  //     }
-  //   }
+    //   function applyValueByPath(obj, path, value) {
+    //     // parts = path.split(".");
+    //     // console.log(obj, path, value);
+    //     if (path.length === 0) {
+    //       obj = value;
+    //       return;
+    //     }
+
+    //     if (path.length === 1) {
+    //       obj[path[0]] = value;
+    //     } else {
+    //       applyValueByPath(obj[path[0]], path.slice(1), value);
+    //     }
+    //   }
 </script>
 
 <!-- <div class="inspector-wrapper">
@@ -187,7 +189,7 @@
 <div>empty</div>
 
 <style>
-  div {
-    background-color: transparent;
-  }
+    div {
+        background-color: transparent;
+    }
 </style>

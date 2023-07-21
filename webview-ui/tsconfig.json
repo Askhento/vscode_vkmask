@@ -9,10 +9,11 @@
           "node",
           "svelte",
       ],
-    //   "skipLibCheck": true
+     "skipLibCheck": true,
+     
     "ignoreDeprecations" : "5.0",
   },
 
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "../src/types.ts"], //types here worked!!!
   "exclude": ["node_modules", "__sapper__/*"]
 }

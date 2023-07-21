@@ -1,9 +1,10 @@
 <script lang="ts">
     import { provideVSCodeDesignSystem, allComponents } from "@vscode/webview-ui-toolkit";
-    import { MessageHandler, MessageHandlerData } from "../common/MessageHandler";
-    import List from "../components/List.svelte";
-    import { RequestTarget, RequestCommand, Selection, SelectionType } from "../../../src/types";
-
+    import { MessageHandler } from "../common/MessageHandler";
+    import type { MessageHandlerData } from "../common/MessageHandler";
+    import List from "../components/DraggableList.svelte";
+    import { RequestTarget, RequestCommand, SelectionType } from "../../../src/types";
+    import type { Selection } from "../../../src/types";
     import { logger } from "../logger";
     import Effect from "./Effect.svelte";
     import Plugin from "./Plugin.svelte";
@@ -121,6 +122,7 @@
         />
     {/if}
 {/key}
+
 {#key plugins}
     {#if plugins}
         <List

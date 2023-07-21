@@ -1,6 +1,9 @@
 <script lang="ts">
-    import { MessageHandler, MessageHandlerData } from "../common/MessageHandler";
+    import { MessageHandler } from "../common/MessageHandler";
+    import type { MessageHandlerData } from "../common/MessageHandler";
+
     import { RequestTarget, RequestCommand } from "../../../src/types";
+    import type { Selection } from "../../../src/types";
 
     const origin = RequestTarget.assetsManager;
 
