@@ -1,68 +1,63 @@
-
 import { vscode } from "../utils/vscode";
-// import { MessageHandlerData } from "../../../src/MessageHandler" 
+// import { MessageHandlerData } from "../../../src/MessageHandler"
 
 export interface MessageHandlerData<T> {
-    requestId?: string;
-    error?: any;
-    target : string,
-    origin? : string,
-    payload?: T;
+  requestId?: string;
+  error?: any;
+  target: string;
+  origin?: string;
+  command: string;
+  payload?: T;
 }
 
-export class MessageHandler
-{
-    // public webViewsMap : Record<string, Webview>  = {};
-    
-    private listeners: { [requestId: string]: (data : MessageHandlerData<any>) => void } = {};
+export class MessageHandler {
+  // public webViewsMap : Record<string, Webview>  = {};
 
-    constructor( public onWebviewMessage : (data : MessageHandlerData<any>) => void, private origin : string )
-    {
-        window.addEventListener("message", (e) => {
-            const data : MessageHandlerData<any> = e.data;
-            if (data.requestId && this.listeners[data.requestId] && data.target === this.origin) 
-            {
-                this.listeners[data.requestId](data);
-                return;
-            }
-            this.onWebviewMessage(data);
-        })
-    }
+  private listeners: { [requestId: string]: (data: MessageHandlerData<any>) => void } = {};
 
-    request(data : MessageHandlerData<any>) : Promise<MessageHandlerData<any>> {
-        const requestId = crypto.randomUUID();
+  constructor(
+    public onWebviewMessage: (data: MessageHandlerData<any>) => void,
+    private origin: string
+  ) {
+    window.addEventListener("message", (e) => {
+      const data: MessageHandlerData<any> = e.data;
+      if (data.requestId && this.listeners[data.requestId] && data.target === this.origin) {
+        this.listeners[data.requestId](data);
+        return;
+      }
+      this.onWebviewMessage(data);
+    });
+  }
 
-        this.send({
-            ...data,
-            origin : this.origin,
-            requestId
-        });
+  request(data: MessageHandlerData<any>): Promise<MessageHandlerData<any>> {
+    const requestId = crypto.randomUUID();
 
-        return new Promise((resolve) => {
-            this.listeners[requestId] = (data : MessageHandlerData<any>) => {
-            // if (error) {
-            // reject(error);
-            // } else {
-            // }
-            resolve(data);
-
-            if (this.listeners[requestId]) {
-                delete this.listeners[requestId];
-            }
-        };
-
+    this.send({
+      ...data,
+      origin: this.origin,
+      requestId,
     });
 
-    }
+    return new Promise((resolve) => {
+      this.listeners[requestId] = (data: MessageHandlerData<any>) => {
+        // if (error) {
+        // reject(error);
+        // } else {
+        // }
+        resolve(data);
 
-    send(data : MessageHandlerData<any>) {
-        if (data.target === undefined) {
-            print("need a target to send ");
-            return;
+        if (this.listeners[requestId]) {
+          delete this.listeners[requestId];
         }
-        vscode.postMessage(data) // ??? await 
+      };
+    });
+  }
+
+  send(data: MessageHandlerData<any>) {
+    if (data.target === undefined) {
+      console.log("MessageHandler : need a target to send ");
+      return;
     }
-
+    vscode.postMessage(data); // ??? await
+  }
 }
-
-

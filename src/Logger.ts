@@ -16,6 +16,8 @@ export class Logger {
     private logDump: Array<LogEntry> = [];
     private useOutputChannel = false;
     private keepLogs = false;
+    private mode : vscode.ExtensionMode = vscode.ExtensionMode.Development;
+
 
     constructor(extensionOuputName: string) {
         this.outputChannel = vscode.window.createOutputChannel(extensionOuputName);
@@ -38,6 +40,10 @@ export class Logger {
         })
 
 
+    }
+
+    public setMode(mode : vscode.ExtensionMode) {
+        this.mode = mode;
     }
 
     updateChannelVisibility() {
@@ -66,7 +72,9 @@ export class Logger {
 
         const newArgs = [baseName + ": ", ...args]
         // if (process.env.NODE_ENV !== "dev") return () => { };
-        console.log.apply(console, newArgs);
+
+        if (this.mode === vscode.ExtensionMode.Development)
+            console.log.apply(console, newArgs);
 
         //  Save logs for something
         if (this.keepLogs)

@@ -31,87 +31,88 @@ const production = !process.env.ROLLUP_WATCH; // !!!!! wtf
 // }
 
 const common = {
-  plugins: [
-    svelte({
-      include: "src/**/*.svelte",
-      preprocess: sveltePreprocess({ sourceMap: true }),
-      compilerOptions: {
-        // enable run-time checks when not in production
-        dev: !production,
-        enableSourcemap: true,
-      },
-    }),
-    // we'll extract any component CSS out into
-    // a separate file - better for performance
-    css({ output: "bundle.css" }),
+    plugins: [
+        typescript({
+            tsconfig: "./tsconfig.json",
+            rootDirs: ["./src", "../src"],
 
-    // If you have external dependencies installed from
-    // npm, you'll most likely need these plugins. In
-    // some cases you'll need additional configuration -
-    // consult the documentation for details:
-    // https://github.com/rollup/plugins/tree/master/packages/commonjs
-    resolve({
-      browser: true,
-      dedupe: ["svelte"],
-      extensions: [".js", ".ts", ".svelte"], // !!! added to solve UNRESOLVED it helped!
-    }),
-    commonjs(),
-    typescript({
-      tsconfig: "./tsconfig.json",
-      rootDir: "./src",
-      sourceMap: true,
-      inlineSources: !production,
-    }),
+            sourceMap: true,
+            inlineSources: !production,
+        }),
+        svelte({
+            include: "src/**/*.svelte",
+            preprocess: [sveltePreprocess({ sourceMap: true })],
+            compilerOptions: {
+                // enable run-time checks when not in production
+                dev: !production,
+                enableSourcemap: true,
+            },
+        }),
+        // we'll extract any component CSS out into
+        // a separate file - better for performance
+        css({ output: "bundle.css" }),
 
-    // // In dev mode, call `npm run start` once
-    // // the bundle has been generated
-    // !production && serve(),
+        // If you have external dependencies installed from
+        // npm, you'll most likely need these plugins. In
+        // some cases you'll need additional configuration -
+        // consult the documentation for details:
+        // https://github.com/rollup/plugins/tree/master/packages/commonjs
+        resolve({
+            browser: true,
+            dedupe: ["svelte"],
+            extensions: [".js", ".ts", ".svelte"], // !!! added to solve UNRESOLVED it helped!
+        }),
+        commonjs(),
 
-    // // Watch the `build` directory and refresh the
-    // // browser on changes when not in production
-    // !production && livereload('../out/panels/webview-build'),
+        // // In dev mode, call `npm run start` once
+        // // the bundle has been generated
+        // !production && serve(),
 
-    // If we're building for production (npm run build
-    // instead of npm run dev), minify
-    production && terser(),
-  ],
-  watch: {
-    clearScreen: false,
-  },
+        // // Watch the `build` directory and refresh the
+        // // browser on changes when not in production
+        // !production && livereload('../out/panels/webview-build'),
+
+        // If we're building for production (npm run build
+        // instead of npm run dev), minify
+        production && terser(),
+    ],
+    watch: {
+        clearScreen: false,
+    },
 };
 
 export default [
-  {
-    input: "src/main.ts",
+    {
+        input: "src/main/main.ts",
 
-    output: {
-      sourcemap: true,
-      format: "iife",
-      name: "app",
-      file: "../out/panels/webview-build/bundle.js",
+        output: {
+            sourcemap: true,
+            format: "iife",
+            name: "app",
+            file: "../out/panels/webview-build/main/bundle.js", //!!!! add path resolve
+        },
+        ...common,
     },
-    ...common,
-  },
-  {
-    input: "src/inspector/main.ts",
+    {
+        input: "src/inspector/main.ts",
 
-    output: {
-      sourcemap: true,
-      format: "iife",
-      name: "inspector",
-      file: "../out/panels/webview-build/inspector/bundle.js",
+        output: {
+            sourcemap: true,
+            format: "iife",
+            name: "inspector",
+            file: "../out/panels/webview-build/inspector/bundle.js",
+        },
+        ...common,
     },
-    ...common,
-  },
-  {
-    input: "src/assets_manager/main.ts",
+    {
+        input: "src/assets_manager/main.ts",
 
-    output: {
-      sourcemap: true,
-      format: "iife",
-      name: "assets_manager",
-      file: "../out/panels/webview-build/assets_manager/bundle.js",
+        output: {
+            sourcemap: true,
+            format: "iife",
+            name: "assets_manager",
+            file: "../out/panels/webview-build/assets_manager/bundle.js",
+        },
+        ...common,
     },
-    ...common,
-  },
 ];

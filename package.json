@@ -43,7 +43,13 @@
             "view/title": [
                 {
                     "command": "vkmask.dumpLogs",
-                    "when": "view == vkmask.sidepanel"
+                    "when": "view == vkmask.main",
+                    "group": "navigation"
+                },
+                {
+                    "command": "vkmask.resetSidebar",
+                    "when": "view == vkmask.main",
+                    "group": "navigation"
                 }
             ]
         },
@@ -53,6 +59,12 @@
                 "title": "Dump vkmask logs to logsDump.json file",
                 "shortTitle": "Dump vkmask logs",
                 "icon": "$(zap)"
+            },
+            {
+                "command": "vkmask.resetSidebar",
+                "title": "Reset all views in sidebar",
+                "shortTitle": "Reset sidebar",
+                "icon": "$(refresh)"
             }
         ],
         "viewsContainers": {
@@ -68,9 +80,9 @@
             "vkmask_primary_bar": [
                 {
                     "type": "webview",
-                    "contextualTitle": "vkmask sidepanel",
-                    "id": "vkmask.sidepanel",
-                    "name": "Sidepanel",
+                    "contextualTitle": "vkmask main",
+                    "id": "vkmask.main",
+                    "name": "Main",
                     "icon": "./node_modules/@vscode/codicons/src/icons/add.svg"
                 },
                 {
