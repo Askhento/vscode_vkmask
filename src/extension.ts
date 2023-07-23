@@ -112,6 +112,16 @@ export async function activate(context: vscode.ExtensionContext) {
                 maskConfig.showEffect(id);
                 break;
 
+            case SelectionType.plugin:
+                maskConfig.selection = selection;
+                maskConfig.showPlugin(id);
+                break;
+
+            case SelectionType.settings:
+                maskConfig.selection = selection;
+                // maskConfig.showPlugin(id);
+                break;
+
             case SelectionType.empty:
                 maskConfig.clearSelection();
                 break;

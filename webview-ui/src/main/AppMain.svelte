@@ -9,6 +9,7 @@
     import { logger } from "../logger";
     import Effect from "./Effect.svelte";
     import Plugin from "./Plugin.svelte";
+    import Settings from "./Settings.svelte";
     const print = logger("AppMain.svelte");
 
     provideVSCodeDesignSystem().register(allComponents);
@@ -187,13 +188,24 @@
 
     function proccessSelection(newSelection) {
         selection = newSelection;
-        // print("new selectio", selection);
+        print("new selection", selection);
     }
 
     getSelection();
 </script>
 
 {#key selection}
+    <Settings
+        selected={selection.type === SelectionType.settings}
+        onSelect={(selected) => {
+            if (selected) {
+                selection = { type: SelectionType.settings };
+            } else {
+                selection = { type: SelectionType.empty };
+            }
+            sendSelect();
+        }}
+    />
     {#key effects}
         {#if effects}
             <List
