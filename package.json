@@ -6,7 +6,7 @@
         "url": "https://github.com/Askhento/vscode_vkmask"
     },
     "description": "UI for vkontakte AR development ",
-    "version": "0.4.12",
+    "version": "0.5.0",
     "engines": {
         "vscode": "^1.74.0"
     },
@@ -116,7 +116,6 @@
         "build:webview": "cd webview-ui && npm run build",
         "publish-patch": "npm version patch ; vsce package --out ./vsix-packages",
         "publish-minor": "npm version minor ; vsce package --out ./vsix-packages"
-
     },
     "devDependencies": {
         "@types/glob": "^8.0.0",
