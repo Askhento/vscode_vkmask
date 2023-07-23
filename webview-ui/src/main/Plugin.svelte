@@ -1,12 +1,16 @@
 <script lang="ts">
-    export let id, value, onClickDelete;
-
-    let { name, tag, disabled } = value;
-
-    let selected = false;
+    export let id, value, selected, onClickVisible, onClickDelete, onSelect;
+    let { name } = value;
 </script>
 
-<vscode-option class="plugin-name"
+<vscode-option
+    class="plugin-name"
+    {selected}
+    on:click={() => {
+        selected = !selected;
+        // if (selected)
+        onSelect(id, selected);
+    }}
     >{name ?? "unknown-plugin"}
     <span class="plugin-btn-wrapper">
         <vscode-button

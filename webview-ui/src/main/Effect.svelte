@@ -1,7 +1,10 @@
 <script lang="ts">
+    import { getContext } from "svelte";
+
     export let id,
         value,
-        selected = false,
+        // @ts-expect-error
+        selected = getContext("selection").selection.id === id,
         onClickVisible,
         onClickDelete,
         onSelect;
@@ -15,7 +18,7 @@
     // dispatch("test", "test_payload");
     //  class="effect-name" on:click|stopPropagation={onSelect}
     // on:click|stopPropagation={onVisible}
-    console.log("effect INIT", value, id);
+    // console.log("effect INIT", value, id);
 </script>
 
 <vscode-option
@@ -23,6 +26,7 @@
     {selected}
     on:click={() => {
         selected = !selected;
+        // if (selected)
         onSelect(id, selected);
     }}
     >{name ?? "unknown-effect"}

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { setContext } from "svelte";
     import { provideVSCodeDesignSystem, allComponents } from "@vscode/webview-ui-toolkit";
     import { MessageHandler } from "../common/MessageHandler";
     import type { MessageHandlerData } from "../common/MessageHandler";
@@ -14,17 +15,8 @@
 
     const origin = RequestTarget.main;
     let effects,
+        plugins,
         selection: Selection = { type: SelectionType.empty };
-    let plugins = [
-        {
-            id: 0,
-            value: { name: "mirror" },
-        },
-        {
-            id: 1,
-            value: { name: "perspective" },
-        },
-    ];
 
     const messageHandler = new MessageHandler(handleMessageApp, origin);
 
@@ -36,25 +28,26 @@
                 processEffects(payload);
                 break;
 
+            case RequestCommand.updatePlugins:
+                processPlugins(payload);
+                break;
+
+            case RequestCommand.updateSelection:
+                proccessSelection(payload);
+                break;
+
             default:
                 break;
         }
     }
 
-    messageHandler
-        .request({
-            target: RequestTarget.extension,
-            command: RequestCommand.getEffects,
-        })
-        .then(({ payload }) => {
-            processEffects(payload);
-        });
-
     function processEffects(newEffects) {
         effects = newEffects.map((e, id) => {
+            // print("process effect ", id, selection.id === id);
             return {
                 value: e,
                 id,
+                selected: selection.id === id,
                 onClickVisible: (id, disabled) => {
                     // print("disabled ", id, disabled);
                     effects[id].value.disabled = disabled;
@@ -75,7 +68,7 @@
                     }
                 },
                 onSelect: (id, selected) => {
-                    print(id, selected);
+                    // print(id, selected);
                     for (let i = 0; i < effects.length; i++) {
                         effects[i].selected = id === i && selected;
                     }
@@ -84,7 +77,18 @@
                 },
             };
         });
-        print(effects);
+        // print(effects);
+    }
+
+    function getEffects() {
+        messageHandler
+            .request({
+                target: RequestTarget.extension,
+                command: RequestCommand.getEffects,
+            })
+            .then(({ payload }) => {
+                processEffects(payload);
+            });
     }
 
     function sendEffects() {
@@ -95,47 +99,132 @@
         });
     }
 
+    function processPlugins(newPlugins) {
+        plugins = newPlugins.map((e, id) => {
+            // print("process plugin ", id, selection.id === id);
+            return {
+                value: e,
+                id,
+                selected: selection.id === id,
+                onClickVisible: (id, disabled) => {
+                    // print("disabled ", id, disabled);
+                    plugins[id].value.disabled = disabled;
+                    sendPlugins();
+                },
+                onClickDelete: (id) => {
+                    print("ondelte", id);
+                    plugins.splice(id, 1);
+                    plugins = plugins;
+                    sendPlugins();
+                    if (selection.type === SelectionType.plugin) {
+                        if (selection.id === id) {
+                            selection = { type: SelectionType.empty };
+                        } else if (selection.id > id) {
+                            selection.id--;
+                        }
+                        sendSelect();
+                    }
+                },
+                onSelect: (id, selected) => {
+                    // print(id, selected);
+                    for (let i = 0; i < plugins.length; i++) {
+                        plugins[i].selected = id === i && selected;
+                    }
+                    selection = { type: selected ? SelectionType.plugin : SelectionType.empty, id };
+                    sendSelect();
+                },
+            };
+        });
+    }
+
+    function getPlugins() {
+        messageHandler
+            .request({
+                target: RequestTarget.extension,
+                command: RequestCommand.getPlugins,
+            })
+            .then(({ payload }) => {
+                processPlugins(payload);
+            });
+    }
+
+    function sendPlugins() {
+        messageHandler.send({
+            command: RequestCommand.updatePlugins,
+            target: RequestTarget.extension,
+            payload: plugins.map((e) => e.value),
+        });
+    }
+
     function sendSelect() {
         messageHandler.send({
             command: RequestCommand.updateSelection,
-            target: RequestTarget.extension,
+            target: RequestTarget.all,
             payload: selection,
         });
     }
+
+    function getSelection() {
+        messageHandler
+            .request({
+                target: RequestTarget.extension,
+                command: RequestCommand.getSelection,
+            })
+            .then(({ payload }) => {
+                proccessSelection(payload);
+                getEffects();
+                getPlugins();
+                // switch (selection.type) {
+                //     case SelectionType.effect:
+                //         break;
+                //     case SelectionType.plugin:
+                //         break;
+                //     default:
+                //         break;
+                // }
+            });
+    }
+
+    function proccessSelection(newSelection) {
+        selection = newSelection;
+        // print("new selectio", selection);
+    }
+
+    getSelection();
 </script>
 
-{#key effects}
-    {#if effects}
-        <List
-            elements={effects}
-            elementComponent={Effect}
-            name="Effects"
-            onDrop={(newElements, dragId) => {
-                // !!! check type of selection
-                if (dragId === selection.id) {
-                    print("selected drag");
-                }
-                effects = newElements.map((e, index) => ({ ...e, id: index }));
-                sendEffects();
-                console.log("drop", effects);
-            }}
-        />
-    {/if}
-{/key}
+{#key selection}
+    {#key effects}
+        {#if effects}
+            <List
+                elements={effects}
+                elementComponent={Effect}
+                name="Effects"
+                onDrop={(newElements, dragId) => {
+                    // !!! check type of selection
+                    if (dragId === selection.id) {
+                        print("selected drag");
+                    }
+                    effects = newElements.map((e, index) => ({ ...e, id: index }));
+                    sendEffects();
+                    console.log("drop", effects);
+                }}
+            />
+        {/if}
+    {/key}
 
-{#key plugins}
-    {#if plugins}
-        <List
-            elements={plugins}
-            elementComponent={Plugin}
-            name="Plugins"
-            onDrop={(newElements) => {
-                plugins = newElements.map((e, index) => ({ ...e, id: index }));
-                // sendEffects();
-                // console.log("drop", effects);
-            }}
-        />
-    {/if}
+    {#key plugins}
+        {#if plugins}
+            <List
+                elements={plugins}
+                elementComponent={Plugin}
+                name="Plugins"
+                onDrop={(newElements) => {
+                    plugins = newElements.map((e, index) => ({ ...e, id: index }));
+                }}
+            />
+        {/if}
+    {/key}
 {/key}
 
 <style>

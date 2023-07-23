@@ -32,6 +32,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     const messageHandler = new MessageHandler();
     const maskConfig = new MaskConfig();
+    // let selection: Selection = { type: SelectionType.empty };
 
     const webviewsBuildPath = path.join("out", "panels", "webview-build");
     const webviewProviders: Array<BaseWebviewProvider> = [];
@@ -104,14 +105,14 @@ export async function activate(context: vscode.ExtensionContext) {
     function onSelection(selection: Selection) {
         const { type, id } = selection as Selection;
 
+        // deal with config file
         switch (type) {
             case SelectionType.effect:
-                maskConfig.selectedEffectId = id;
+                maskConfig.selection = selection;
                 maskConfig.showEffect(id);
                 break;
 
             case SelectionType.empty:
-                maskConfig.selectedEffectId = null;
                 maskConfig.clearSelection();
                 break;
 
@@ -157,6 +158,24 @@ export async function activate(context: vscode.ExtensionContext) {
                     target: origin,
                 });
                 break;
+
+            case RequestCommand.getPlugins:
+                // reply with effects
+                messageHandler.send({
+                    ...data,
+                    payload: await maskConfig.getPlugins(),
+                    target: origin,
+                });
+                break;
+
+            case RequestCommand.getSelection:
+                // reply with effects
+                messageHandler.send({
+                    ...data,
+                    payload: maskConfig.selection,
+                    target: origin,
+                });
+                break;
             default:
                 break;
         }
@@ -165,10 +184,14 @@ export async function activate(context: vscode.ExtensionContext) {
             case RequestCommand.updateEffects:
                 maskConfig.updateEffects(payload);
                 break;
+            case RequestCommand.updatePlugins:
+                maskConfig.updatePlugins(payload);
+                break;
 
             case RequestCommand.updateSelection:
                 // maskConfig.
                 onSelection(payload);
+                // inform inspector
 
                 break;
 
@@ -178,12 +201,29 @@ export async function activate(context: vscode.ExtensionContext) {
     };
 
     maskConfig.onFileSave = async () => {
+        // maskConfig.selection = {type : SelectionType.empty};
+        await maskConfig.clearSelection();
+
+        messageHandler.send({
+            target: RequestTarget.all,
+            command: RequestCommand.updateSelection,
+            payload: maskConfig.selection,
+        });
+
         print("sending effects on file save");
         const effects = await maskConfig.getEffects();
         messageHandler.send({
             target: RequestTarget.main,
             command: RequestCommand.updateEffects,
             payload: effects,
+        });
+
+        print("sending plugins on file save");
+        const plugins = await maskConfig.getPlugins();
+        messageHandler.send({
+            target: RequestTarget.main,
+            command: RequestCommand.updatePlugins,
+            payload: plugins,
         });
     };
 

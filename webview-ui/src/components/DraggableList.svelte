@@ -20,13 +20,14 @@
         onDrop(elements, dragId);
     }
 
-    console.log("list INIT", elements);
+    // console.log("list INIT", elements);
     // use:dndzone={{ items: elements }}
     // on:consider={handleDndConsider}
     // on:finalize={handleDndFinalize}
 </script>
 
-<div>{name}</div>
+<h3>{name}</h3>
+
 <section
     use:dndzone={{ items: elements, flipDurationMs, ...dndProps }}
     on:consider={handleConsider}

@@ -11,6 +11,9 @@ import { delayPromise } from "./utils/delayPromise";
 import { EventEmitter } from "events";
 
 import { logger } from "./Logger";
+import { SelectionType } from "./types";
+import type { Selection } from "./types";
+
 const print = (...args: unknown[]) => logger.log(__filename, ...args);
 
 export class MaskConfig extends EventEmitter {
@@ -27,6 +30,7 @@ export class MaskConfig extends EventEmitter {
     public pathMaskJSON: string | undefined;
     public currentConfigDir: string | undefined;
     public selectedEffectId: number | undefined;
+    public selection: Selection = { type: SelectionType.empty };
 
     private selectionDelay: { promise: Promise<any>; cancel: Function } | undefined;
     private editDelay: { promise: Promise<any>; cancel: Function } | undefined;
@@ -174,6 +178,15 @@ export class MaskConfig extends EventEmitter {
         return this.showConfigAtPointer(pointer, editor);
     }
 
+    public showPlugin(id: number | undefined, editor?: vscode.TextEditor) {
+        if (id === undefined) return;
+        const key = "/plugins/" + id;
+        const pointer = this.maskLinePointers[key];
+        print("showing plugin with key - " + key);
+
+        return this.showConfigAtPointer(pointer, editor);
+    }
+
     public async clearSelection(editor?: vscode.TextEditor) {
         if (editor === undefined) editor = await this.showConfig();
 
@@ -182,7 +195,7 @@ export class MaskConfig extends EventEmitter {
 
         this.setupSelectLock();
         print("clear selection");
-        this.selectedEffectId = undefined;
+        this.selection = { type: SelectionType.empty };
         var position = editor.selection.start;
         editor.selection = new vscode.Selection(position, position);
         return editor;
@@ -194,7 +207,7 @@ export class MaskConfig extends EventEmitter {
         // ? check if exist config ???
 
         // ? do need selection lock here ??
-        print("show config");
+        // print("show config");
 
         // !!! edge case here need research
         if (this.pathMaskJSON === undefined) {
@@ -204,9 +217,9 @@ export class MaskConfig extends EventEmitter {
 
         if (vscode.window.activeTextEditor) {
             const currentDoc = vscode.window.activeTextEditor.document;
-            print("active document", currentDoc);
+            // print("active document", currentDoc);
             if (currentDoc.uri.fsPath === this.pathMaskJSON) {
-                print("active is same");
+                // print("active is same");
                 return vscode.window.activeTextEditor;
             }
         }
@@ -332,46 +345,46 @@ export class MaskConfig extends EventEmitter {
     //     });
     // }
 
-    public swapEffects(start: number, target: number) {
-        if (!this.maskJSON) return;
+    // public swapEffects(start: number, target: number) {
+    //     if (!this.maskJSON) return;
 
-        const newEffects = this.maskJSON.effects;
+    //     const newEffects = this.maskJSON.effects;
 
-        if (start < target) {
-            newEffects.splice(target + 1, 0, newEffects[start]);
-            newEffects.splice(start, 1);
-        } else {
-            newEffects.splice(target, 0, newEffects[start]);
-            newEffects.splice(start + 1, 1);
-        }
+    //     if (start < target) {
+    //         newEffects.splice(target + 1, 0, newEffects[start]);
+    //         newEffects.splice(start, 1);
+    //     } else {
+    //         newEffects.splice(target, 0, newEffects[start]);
+    //         newEffects.splice(start + 1, 1);
+    //     }
 
-        this.maskJSON.effects = newEffects;
+    //     this.maskJSON.effects = newEffects;
 
-        this.writeConfig();
-    }
+    //     this.writeConfig();
+    // }
 
-    public addPropertyToEffect(effectId: number, prop: object) {
-        if (!this.maskJSON) return;
+    // public addPropertyToEffect(effectId: number, prop: object) {
+    //     if (!this.maskJSON) return;
 
-        //! need to check object
+    //     //! need to check object
 
-        this.maskJSON.effects[effectId] = { ...this.maskJSON.effects[effectId], ...prop };
+    //     this.maskJSON.effects[effectId] = { ...this.maskJSON.effects[effectId], ...prop };
 
-        this.writeConfig();
-    }
+    //     this.writeConfig();
+    // }
 
-    public addEffect(effectObject: object) {
-        if (!this.maskJSON) return;
-        // this.maskJSON?.effects.splice(id , 1);
-        // this.maskJSON.effects[idOld];
+    // public addEffect(effectObject: object) {
+    //     if (!this.maskJSON) return;
+    //     // this.maskJSON?.effects.splice(id , 1);
+    //     // this.maskJSON.effects[idOld];
 
-        const newEffect = effectObject as z.infer<typeof ZBaseEffect>;
-        this.maskJSON.effects.unshift(newEffect);
+    //     const newEffect = effectObject as z.infer<typeof ZBaseEffect>;
+    //     this.maskJSON.effects.unshift(newEffect);
 
-        if (this.selectedEffectId) this.selectedEffectId++; // add new always in front
+    //     if (this.selectedEffectId) this.selectedEffectId++; // add new always in front
 
-        this.writeConfig();
-    }
+    //     this.writeConfig();
+    // }
 
     public async updateEffects(effectsObject: object[]) {
         if (!this.maskJSON) return;
@@ -383,7 +396,8 @@ export class MaskConfig extends EventEmitter {
 
         this.parseConfig();
 
-        await this.showEffect(this.selectedEffectId, editor);
+        if (this.selection.type !== SelectionType.empty)
+            await this.showEffect(this.selection.id, editor);
 
         // if (this.saveDelayPromise !== undefined) this.saveDelayPromise.cancel();
 
@@ -398,6 +412,20 @@ export class MaskConfig extends EventEmitter {
         // this.saveDelayTimeout = setTimeout(() => {
         //     this.writeConfig();
         // }, this.saveDelayMS);
+    }
+
+    public async updatePlugins(pluginsObject: object[]) {
+        if (!this.maskJSON) return;
+
+        const newPlugin = pluginsObject; // as z.infer<typeof ZBasePlugin>[];
+        this.maskJSON.plugins = newPlugin;
+
+        const editor = await this.writeConfig();
+
+        this.parseConfig();
+
+        if (this.selection.type !== SelectionType.empty)
+            await this.showPlugin(this.selection.id, editor);
     }
 
     public async writeConfig(editor?: vscode.TextEditor) {
@@ -582,6 +610,15 @@ export class MaskConfig extends EventEmitter {
 
         return this.maskJSON.effects;
     }
+
+    async getPlugins() {
+        // if (this.maskJSON != undefined) return this.maskJSON.effects;
+
+        if (!this.parseConfig().success) return null;
+
+        return this.maskJSON.plugins;
+    }
+
     // Values returned in the callback of `hotRequire` must
     // have a `dispose` function.
     dispose() {}

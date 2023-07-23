@@ -8,16 +8,20 @@ export const ViewIds = {
 export const RequestTarget = {
     ...ViewIds,
     extension: "extension",
+    all: "all",
 };
 
 export const RequestCommand = {
     getEffects: "getEffects",
+    getPlugins: "getPlugins",
     getAssets: "getAssets",
     getSettings: "getSettings",
+    getSelection: "getSelection",
 
     updateAssets: "updateAssets",
     updateSettings: "updateSettings",
     updateEffects: "updateEffects",
+    updatePlugins: "updatePlugins",
     updateSelection: "updateSelection",
 };
 
@@ -31,6 +35,8 @@ export const AppStates = {
 export enum SelectionType {
     "effect",
     "plugin",
+    "asset",
+    "settings",
     "empty",
 }
 
