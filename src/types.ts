@@ -16,10 +16,12 @@ export const RequestCommand = {
     getPlugins: "getPlugins",
     getAssets: "getAssets",
     getSettings: "getSettings",
+    getMaskSettings: "getMaskSettings",
     getSelection: "getSelection",
 
     updateAssets: "updateAssets",
     updateSettings: "updateSettings",
+    updateMaskSettings: "updateMaskSettings",
     updateEffects: "updateEffects",
     updatePlugins: "updatePlugins",
     updateSelection: "updateSelection",
@@ -32,13 +34,16 @@ export const AppStates = {
     ERROR: 3,
 };
 
-export enum SelectionType {
-    "effect",
-    "plugin",
-    "asset",
-    "settings",
-    "empty",
-}
+export const SelectionType = {
+    effect: "EFFECT",
+    plugin: "PLUGIN",
+    asset: "ASSET",
+    maskSettings: "MASKSETTINGS",
+    empty: "EMPTY",
+} as const;
+
+type ObjValues<T> = T[keyof T];
+type SelectionType = ObjValues<typeof SelectionType>;
 
 export interface Selection {
     type: SelectionType;

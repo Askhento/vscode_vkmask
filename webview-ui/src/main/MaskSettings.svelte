@@ -2,7 +2,7 @@
     export let selected, onSelect;
 </script>
 
-<h3>Project</h3>
+<h3>Mask</h3>
 <vscode-option
     class="plugin-name"
     {selected}
@@ -11,7 +11,7 @@
         // if (selected)
         onSelect(selected);
     }}
-    >Settings (todo)
+    >Settings
 </vscode-option>
 
 <style>

@@ -24,12 +24,17 @@
     //   import { effects, selection } from "./stores.js";
 
     import ObjectControl from "../ui-controls/ObjectControl.svelte";
-    import { EffectParserForUI, PluginParserForUI } from "../ui-controls/Controls.js";
+    import {
+        EffectParserForUI,
+        MaskSettingsParserForUI,
+        PluginParserForUI,
+    } from "../ui-controls/Controls.js";
     import { effectNames, pluginNames } from "../../../src/ztypes.js";
     import { onMount, tick } from "svelte";
 
     provideVSCodeDesignSystem().register(allComponents);
 
+    // ??? is there any way to get rid of this ?
     const effectNamesSet = new Set(effectNames);
     const pluginNamesSet = new Set(pluginNames);
 
@@ -37,6 +42,7 @@
     let selection: Selection = { type: SelectionType.empty },
         effects,
         plugins,
+        maskSettings,
         uiElements;
 
     const messageHandler = new MessageHandler(handleMessageApp, origin);
@@ -52,6 +58,31 @@
             default:
                 break;
         }
+    }
+
+    function getMaskSettings() {
+        messageHandler
+            .request({
+                target: RequestTarget.extension,
+                command: RequestCommand.getMaskSettings,
+            })
+            .then(({ payload }) => {
+                processMaskSettings(payload);
+            });
+    }
+
+    function sendMaskSettings() {
+        messageHandler.send({
+            command: RequestCommand.updateMaskSettings,
+            target: RequestTarget.extension,
+            payload: maskSettings,
+        });
+    }
+
+    function processMaskSettings(newMaskSettings) {
+        print("new mask settings", newMaskSettings);
+        maskSettings = newMaskSettings;
+        parseUI();
     }
 
     function getPlugins() {
@@ -111,6 +142,9 @@
             case SelectionType.plugin:
                 return pluginNamesSet.has(plugins[selection.id].name);
 
+            case SelectionType.maskSettings:
+                return true;
+
             default:
                 return false;
         }
@@ -131,6 +165,10 @@
             case SelectionType.plugin:
                 print("will parse plugin", plugins[selection.id]);
                 parseResult = PluginParserForUI.safeParse(plugins[selection.id]);
+                break;
+            case SelectionType.maskSettings:
+                print("will parse mask settings", maskSettings);
+                parseResult = MaskSettingsParserForUI.safeParse(maskSettings);
                 break;
 
             default:
@@ -171,6 +209,10 @@
                 getPlugins();
                 break;
 
+            case SelectionType.maskSettings:
+                getMaskSettings();
+                break;
+
             default:
                 print("selection type not implemented " + selection.type);
                 break;
@@ -194,6 +236,12 @@
                 applyValueByPath(plugins[selection.id], path, value);
                 print("updated plugins", plugins[selection.id]);
                 sendPlugins();
+                break;
+
+            case SelectionType.maskSettings:
+                applyValueByPath(maskSettings, path, value);
+                print("updated maskSettings", maskSettings);
+                sendMaskSettings();
                 break;
 
             default:
@@ -358,6 +406,22 @@
                 />
             {:else}
                 <div>unknownPlugin</div>
+            {/if}
+        {/if}
+    {:else if selection.type === SelectionType.maskSettings}
+        <!-- <pre> {JSON.stringify(maskSettings, null, "\t")}</pre> -->
+        {#if maskSettings}
+            {#if uiElements}
+                <ObjectControl
+                    expanded={true}
+                    value={maskSettings}
+                    label={"MaskSettings"}
+                    path={[]}
+                    uiElements={uiElements.value}
+                    on:changed={onChanged}
+                />
+            {:else}
+                <div>ui not parsed</div>
             {/if}
         {/if}
     {:else}

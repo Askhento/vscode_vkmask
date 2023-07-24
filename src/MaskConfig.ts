@@ -428,6 +428,19 @@ export class MaskConfig extends EventEmitter {
             await this.showPlugin(this.selection.id, editor);
     }
 
+    public async updateMaskSettings(maskSettingsObject: object[]) {
+        if (!this.maskJSON) return;
+
+        this.maskJSON = { ...this.maskJSON, ...maskSettingsObject };
+
+        const editor = await this.writeConfig();
+
+        this.parseConfig();
+
+        if (this.selection.type !== SelectionType.empty)
+            await this.showPlugin(this.selection.id, editor);
+    }
+
     public async writeConfig(editor?: vscode.TextEditor) {
         this.setupEditLock();
 
@@ -617,6 +630,16 @@ export class MaskConfig extends EventEmitter {
         if (!this.parseConfig().success) return null;
 
         return this.maskJSON.plugins;
+    }
+
+    async getMaskSettings() {
+        // if (this.maskJSON != undefined) return this.maskJSON.effects;
+
+        if (!this.parseConfig().success) return null;
+
+        const { effects, plugins, ...maskSettings } = this.maskJSON;
+        print("debug masksettings : ", maskSettings);
+        return maskSettings;
     }
 
     // Values returned in the callback of `hotRequire` must

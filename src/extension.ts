@@ -117,7 +117,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 maskConfig.showPlugin(id);
                 break;
 
-            case SelectionType.settings:
+            case SelectionType.maskSettings:
                 maskConfig.selection = selection;
                 // maskConfig.showPlugin(id);
                 break;
@@ -160,6 +160,15 @@ export async function activate(context: vscode.ExtensionContext) {
                 });
                 break;
 
+            case RequestCommand.getMaskSettings:
+                // reply with settings
+                messageHandler.send({
+                    ...data,
+                    payload: await maskConfig.getMaskSettings(),
+                    target: origin,
+                });
+                break;
+
             case RequestCommand.getEffects:
                 // reply with effects
                 messageHandler.send({
@@ -196,6 +205,9 @@ export async function activate(context: vscode.ExtensionContext) {
                 break;
             case RequestCommand.updatePlugins:
                 maskConfig.updatePlugins(payload);
+                break;
+            case RequestCommand.updateMaskSettings:
+                maskConfig.updateMaskSettings(payload);
                 break;
 
             case RequestCommand.updateSelection:

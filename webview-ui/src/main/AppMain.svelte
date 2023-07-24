@@ -9,7 +9,7 @@
     import { logger } from "../logger";
     import Effect from "./Effect.svelte";
     import Plugin from "./Plugin.svelte";
-    import Settings from "./Settings.svelte";
+    import MaskSettings from "./MaskSettings.svelte";
     const print = logger("AppMain.svelte");
 
     provideVSCodeDesignSystem().register(allComponents);
@@ -195,11 +195,11 @@
 </script>
 
 {#key selection}
-    <Settings
-        selected={selection.type === SelectionType.settings}
+    <MaskSettings
+        selected={selection.type === SelectionType.maskSettings}
         onSelect={(selected) => {
             if (selected) {
-                selection = { type: SelectionType.settings };
+                selection = { type: SelectionType.maskSettings };
             } else {
                 selection = { type: SelectionType.empty };
             }

@@ -184,11 +184,18 @@ const AssetTypes = {
         defValue: "Models/DefaultPlane.mdl",
         extensions: ["mdl"],
     },
+    script: {
+        defValue: "",
+        extensions: ["as"],
+    },
 };
 
 const ZAsset = z.string().describe(uiDescriptions.filepath({}));
 
 const ZText = z.string().describe(uiDescriptions.text({}));
+// ? idea to use function, use later to refactor
+// const ZText = (desc = {}) => z.string().describe(uiDescriptions.text(desc));
+// ZText({})
 const ZTags = z.string().describe(uiDescriptions.tags({}));
 
 const ZVisibleType = z.enum(["always", "face", "animation", "mouth_open"]);
@@ -197,6 +204,7 @@ const ZPatchFitMode = z.enum(["none", "crop", "pad"]);
 
 const ZTextureAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.texture));
 const ZModel3dAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.model3d));
+const ZScriptAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.script));
 
 const ZRenderPathAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.renderPath));
 const ZTechniqueAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.technique));
@@ -846,17 +854,42 @@ export const ZPlugins = ZPlugin.array().describe(uiDescriptions.array({}));
 
 export const pluginNames = [...new Set(ZPlugin.options.map((val) => val.shape.name.value))];
 
-const MaskConfigSettings = {
-    name: z.string().default("defaultName"),
-    user_hint: z.string().default(""),
-    facemodel_version: z.number().default(0),
-    mouse_input: z.boolean().default(false),
-    preview: z.string().default(""),
-    script: z.string().default("main.as"),
+const UserHintOptions = ["none", "open_mouth", "tap_change", "with_friends", "start_recording"];
+
+const ZEnum = (defValue, options = [], showAlways = false) => {
+    return z.enum(options).describe(
+        uiDescriptions.enum({
+            options,
+            defValue,
+            showAlways,
+        })
+    );
 };
 
+const ZNumberEnum = (defValue, options = [], showAlways = false) => {
+    return z.number().describe(
+        uiDescriptions.enum({
+            options,
+            defValue,
+            showAlways,
+        })
+    );
+};
+
+const MaskSettings = {
+    name: ZText.describe(uiDescriptions.text({ defValue: "defaultName" })),
+    user_hint: ZEnum(UserHintOptions[0], UserHintOptions),
+    facemodel_version: ZNumberEnum(0, [0, 1]),
+    // num_faces: ZEnum(1, [0, 1, 2]),
+    mouse_input: ZBool,
+    preview: ZTextureAsset,
+    script: ZScriptAsset,
+};
+
+export const ZMaskSettings = z.object(MaskSettings).describe(uiDescriptions.object({}));
+
 export const ZMaskConfig = z.object({
-    ...MaskConfigSettings,
+    ...MaskSettings,
     effects: ZEffects.default([]),
     plugins: ZPlugins.default([]),
 });
