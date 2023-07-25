@@ -1,19 +1,22 @@
 <script lang="ts">
     import { setContext } from "svelte";
+    import { writable } from "svelte/store";
     import { provideVSCodeDesignSystem, allComponents } from "@vscode/webview-ui-toolkit";
     import { MessageHandler } from "../common/MessageHandler";
     import type { MessageHandlerData } from "../common/MessageHandler";
     import List from "../components/DraggableList.svelte";
     import { RequestTarget, RequestCommand, SelectionType } from "../../../src/types";
-    // import type { Selection } from "../../../src/types";
+    import type { Selection } from "../../../src/types";
     import Effect from "./Effect.svelte";
     import Plugin from "./Plugin.svelte";
     import MaskSettings from "./MaskSettings.svelte";
-    import { selection } from "./stores";
     import { logger } from "../logger";
     const print = logger("AppMain.svelte");
 
     provideVSCodeDesignSystem().register(allComponents);
+
+    const selection = writable<Selection>({ type: SelectionType.empty });
+    setContext("stores", { selection });
 
     const origin = RequestTarget.main;
     let effects, plugins;

@@ -1,6 +1,8 @@
 <script lang="ts">
-    import { SelectionType } from "src/types";
-    import { selection } from "./stores";
+    import { SelectionType } from "../../../src/types";
+    import { getContext } from "svelte";
+    //@ts-expect-error
+    const { selection } = getContext("stores");
     export let id, value, selected, onClickDelete, onSelect;
     let { name } = value;
 
