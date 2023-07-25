@@ -1,15 +1,24 @@
 <script lang="ts">
-    export let id, value, selected, onClickVisible, onClickDelete, onSelect;
+    import { SelectionType } from "src/types";
+    import { selection } from "./stores";
+    export let id, value, selected, onClickDelete, onSelect;
     let { name } = value;
+
+    function checkSelected() {
+        return $selection.id === id && $selection.type === SelectionType.plugin;
+    }
 </script>
 
 <vscode-option
     class="plugin-name"
-    {selected}
+    selected={checkSelected()}
     on:click={() => {
-        selected = !selected;
-        // if (selected)
-        onSelect(id, selected);
+        if (checkSelected()) {
+            $selection = { type: SelectionType.empty };
+        } else {
+            $selection = { type: SelectionType.plugin, id };
+        }
+        onSelect();
     }}
     >{name ?? "unknown-plugin"}
     <span class="plugin-btn-wrapper">

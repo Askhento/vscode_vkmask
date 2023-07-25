@@ -1,13 +1,10 @@
 <script lang="ts">
-    import { getContext } from "svelte";
+    import { SelectionType } from "src/types";
 
-    export let id,
-        value,
-        // @ts-expect-error
-        selected = getContext("selection").selection.id === id,
-        onClickVisible,
-        onClickDelete,
-        onSelect;
+    // import {     getContext } from "svelte";
+    import { selection } from "./stores";
+
+    export let id, value, selected, onClickVisible, onClickDelete, onSelect;
 
     let { name, tag, disabled } = value;
 
@@ -19,15 +16,22 @@
     //  class="effect-name" on:click|stopPropagation={onSelect}
     // on:click|stopPropagation={onVisible}
     // console.log("effect INIT", value, id);
+
+    function checkSelected() {
+        return $selection.id === id && $selection.type === SelectionType.effect;
+    }
 </script>
 
 <vscode-option
     class="effect-name"
-    {selected}
+    selected={checkSelected()}
     on:click={() => {
-        selected = !selected;
-        // if (selected)
-        onSelect(id, selected);
+        if (checkSelected()) {
+            $selection = { type: SelectionType.empty };
+        } else {
+            $selection = { type: SelectionType.effect, id };
+        }
+        onSelect();
     }}
     >{name ?? "unknown-effect"}
     <span class="effect-btn-wrapper">

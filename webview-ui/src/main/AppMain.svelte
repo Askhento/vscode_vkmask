@@ -5,19 +5,18 @@
     import type { MessageHandlerData } from "../common/MessageHandler";
     import List from "../components/DraggableList.svelte";
     import { RequestTarget, RequestCommand, SelectionType } from "../../../src/types";
-    import type { Selection } from "../../../src/types";
-    import { logger } from "../logger";
+    // import type { Selection } from "../../../src/types";
     import Effect from "./Effect.svelte";
     import Plugin from "./Plugin.svelte";
     import MaskSettings from "./MaskSettings.svelte";
+    import { selection } from "./stores";
+    import { logger } from "../logger";
     const print = logger("AppMain.svelte");
 
     provideVSCodeDesignSystem().register(allComponents);
 
     const origin = RequestTarget.main;
-    let effects,
-        plugins,
-        selection: Selection = { type: SelectionType.empty };
+    let effects, plugins;
 
     const messageHandler = new MessageHandler(handleMessageApp, origin);
 
@@ -48,7 +47,7 @@
             return {
                 value: e,
                 id,
-                selected: selection.id === id,
+                selected: $selection.id === id,
                 onClickVisible: (id, disabled) => {
                     // print("disabled ", id, disabled);
                     effects[id].value.disabled = disabled;
@@ -59,21 +58,16 @@
                     effects.splice(id, 1);
                     effects = effects;
                     sendEffects();
-                    if (selection.type === SelectionType.effect) {
-                        if (selection.id === id) {
-                            selection = { type: SelectionType.empty };
-                        } else if (selection.id > id) {
-                            selection.id--;
+                    if ($selection.type === SelectionType.effect) {
+                        if ($selection.id === id) {
+                            $selection = { type: SelectionType.empty };
+                        } else if ($selection.id > id) {
+                            $selection.id--;
                         }
                         sendSelect();
                     }
                 },
-                onSelect: (id, selected) => {
-                    // print(id, selected);
-                    for (let i = 0; i < effects.length; i++) {
-                        effects[i].selected = id === i && selected;
-                    }
-                    selection = { type: selected ? SelectionType.effect : SelectionType.empty, id };
+                onSelect: () => {
                     sendSelect();
                 },
             };
@@ -106,7 +100,7 @@
             return {
                 value: e,
                 id,
-                selected: selection.id === id,
+                selected: $selection.id === id,
                 onClickVisible: (id, disabled) => {
                     // print("disabled ", id, disabled);
                     plugins[id].value.disabled = disabled;
@@ -117,21 +111,16 @@
                     plugins.splice(id, 1);
                     plugins = plugins;
                     sendPlugins();
-                    if (selection.type === SelectionType.plugin) {
-                        if (selection.id === id) {
-                            selection = { type: SelectionType.empty };
-                        } else if (selection.id > id) {
-                            selection.id--;
+                    if ($selection.type === SelectionType.plugin) {
+                        if ($selection.id === id) {
+                            $selection = { type: SelectionType.empty };
+                        } else if ($selection.id > id) {
+                            $selection.id--;
                         }
                         sendSelect();
                     }
                 },
-                onSelect: (id, selected) => {
-                    // print(id, selected);
-                    for (let i = 0; i < plugins.length; i++) {
-                        plugins[i].selected = id === i && selected;
-                    }
-                    selection = { type: selected ? SelectionType.plugin : SelectionType.empty, id };
+                onSelect: () => {
                     sendSelect();
                 },
             };
@@ -161,7 +150,7 @@
         messageHandler.send({
             command: RequestCommand.updateSelection,
             target: RequestTarget.all,
-            payload: selection,
+            payload: $selection,
         });
     }
 
@@ -187,21 +176,21 @@
     }
 
     function proccessSelection(newSelection) {
-        selection = newSelection;
-        print("new selection", selection);
+        $selection = newSelection;
+        print("new selection", $selection);
     }
 
     getSelection();
 </script>
 
-{#key selection}
+{#key $selection}
     <MaskSettings
-        selected={selection.type === SelectionType.maskSettings}
+        selected={$selection.type === SelectionType.maskSettings}
         onSelect={(selected) => {
             if (selected) {
-                selection = { type: SelectionType.maskSettings };
+                $selection = { type: SelectionType.maskSettings };
             } else {
-                selection = { type: SelectionType.empty };
+                $selection = { type: SelectionType.empty };
             }
             sendSelect();
         }}
@@ -214,7 +203,7 @@
                 name="Effects"
                 onDrop={(newElements, dragId) => {
                     // !!! check type of selection
-                    if (dragId === selection.id) {
+                    if (dragId === $selection.id) {
                         print("selected drag");
                     }
                     effects = newElements.map((e, index) => ({ ...e, id: index }));
