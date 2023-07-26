@@ -3,13 +3,13 @@ export const ViewIds = {
     inspector: "vkmask.inspector",
     assetsManager: "vkmask.assets_manager",
     main: "vkmask.main",
-};
+} as const;
 
 export const RequestTarget = {
     ...ViewIds,
     extension: "extension",
     all: "all",
-};
+} as const;
 
 export const RequestCommand = {
     getEffects: "getEffects",
@@ -18,6 +18,7 @@ export const RequestCommand = {
     getSettings: "getSettings",
     getMaskSettings: "getMaskSettings",
     getSelection: "getSelection",
+    getLogs: "getLogs",
 
     updateAssets: "updateAssets",
     updateSettings: "updateSettings",
@@ -34,6 +35,7 @@ export const AppStates = {
     ERROR: 3,
 };
 
+// enum emulation
 export const SelectionType = {
     effect: "EFFECT",
     plugin: "PLUGIN",

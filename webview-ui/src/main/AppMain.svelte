@@ -10,7 +10,7 @@
     import Effect from "./Effect.svelte";
     import Plugin from "./Plugin.svelte";
     import MaskSettings from "./MaskSettings.svelte";
-    import { logger } from "../logger";
+    import { logger, logDump } from "../logger";
     const print = logger("AppMain.svelte");
 
     provideVSCodeDesignSystem().register(allComponents);
@@ -27,6 +27,10 @@
         print("recived ", data);
         const { payload, command } = data;
         switch (command) {
+            case RequestCommand.getLogs:
+                returnLogs(data);
+                break;
+
             case RequestCommand.updateEffects:
                 processEffects(payload);
                 break;
@@ -42,6 +46,14 @@
             default:
                 break;
         }
+    }
+
+    function returnLogs(data: MessageHandlerData<any>) {
+        messageHandler.send({
+            ...data,
+            target: data.origin,
+            payload: logDump,
+        });
     }
 
     function processEffects(newEffects) {
@@ -110,7 +122,7 @@
                     sendPlugins();
                 },
                 onClickDelete: (id) => {
-                    print("ondelte", id);
+                    // print("ondelte", id);
                     plugins.splice(id, 1);
                     plugins = plugins;
                     sendPlugins();

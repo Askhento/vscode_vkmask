@@ -5,6 +5,9 @@
     import { RequestTarget, RequestCommand } from "../../../src/types";
     import type { Selection } from "../../../src/types";
 
+    import { logger, logDump } from "../logger";
+    const print = logger("Inspector.svelte");
+
     const origin = RequestTarget.assetsManager;
 
     const messageHandler = new MessageHandler(handleMessageApp, origin);
@@ -31,6 +34,10 @@
                 assets = payload;
                 break;
 
+            case RequestCommand.getLogs:
+                returnLogs(data);
+                break;
+
             default:
                 break;
         }
@@ -45,6 +52,14 @@
         //     command: "",
         //   });
         // }
+    }
+
+    function returnLogs(data: MessageHandlerData<any>) {
+        messageHandler.send({
+            ...data,
+            target: data.origin,
+            payload: logDump,
+        });
     }
 
     let inputValue = "";

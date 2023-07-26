@@ -7,7 +7,8 @@ import { MainViewProvider } from "./panels/MainViewProvider";
 import { InspectorViewProvider } from "./panels/InspectorViewProvider";
 import { AssetsManagerViewProvider } from "./panels/AssetsManagerViewProvider";
 
-import { MessageHandler } from "./MessageHandler";
+import { mergeAll } from "./utils/mergeSorted";
+import { MessageHandler, MessageHandlerData } from "./MessageHandler";
 
 import { HotReload } from "./HotReload";
 // const { exec } = require('node:child_process');
@@ -18,7 +19,7 @@ const print = (...args: any) => logger.log(__filename, ...args);
 import { assetWatcher } from "./AssetWatcher";
 import { userSettings } from "./UserSettings";
 import { jsonPrettyArray } from "./utils/jsonStringify";
-import { RequestCommand, RequestTarget, Selection, SelectionType } from "./types";
+import { RequestCommand, RequestTarget, Selection, SelectionType, ViewIds } from "./types";
 import { MaskConfig } from "./MaskConfig";
 import { BaseWebviewProvider } from "./panels/BaseWebviewProvider";
 
@@ -283,21 +284,27 @@ export async function activate(context: vscode.ExtensionContext) {
     //     vscode.window.registerWebviewViewProvider(MainViewProvider.viewId, sidebar)
     // );
 
-    // context.subscriptions.push(vscode.commands.registerCommand("vkmask.dumpLogs", async () => {
+    context.subscriptions.push(
+        vscode.commands.registerCommand("vkmask.dumpLogs", async () => {
+            const dumpPath = maskConfig.currentConfigDir;
+            if (dumpPath === undefined) {
+                vscode.window.showErrorMessage("Seems like no folder opened to save logs.");
+                return;
+            }
 
-    //     const message: any = (await sidebar.requestLogs());
-    //     // console.log("message", message)
-    //     const webviewLogDump = message.value;
+            const responses = (await Promise.all(
+                Object.values(ViewIds).map((viewId) =>
+                    messageHandler.request({
+                        target: viewId,
+                        command: RequestCommand.getLogs,
+                    })
+                )
+            )) as MessageHandlerData<any>[];
 
-    //     const dumpPath = sidebar.maskConfig.currentConfigDir;
-    //     if (dumpPath === undefined) {
-    //         vscode.window.showErrorMessage("Seems like no folder opened to save logs.")
-    //         return;
-    //     }
-
-    //     logger.dumpLogs(webviewLogDump, dumpPath)
-
-    // }))
+            const webviewLogs = responses.map((resp) => resp.payload);
+            logger.dumpLogs(webviewLogs, dumpPath);
+        })
+    );
 
     context.subscriptions.push(
         vscode.commands.registerCommand("vkmask.resetSidebar", async () => {

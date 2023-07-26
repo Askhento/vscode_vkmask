@@ -611,7 +611,7 @@ export class MaskConfig extends EventEmitter {
         }
 
         this.maskLinePointers = this.sourceMaskJSON?.pointers;
-        print("jsonmap pointers : ", this.maskLinePointers);
+        // print("jsonmap pointers : ", this.maskLinePointers);
 
         return { success: true, message: "Successful" };
     }

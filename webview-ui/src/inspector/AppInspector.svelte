@@ -21,7 +21,7 @@
 
     import { fromZodError } from "zod-validation-error";
 
-    import { logger } from "../logger";
+    import { logger, logDump } from "../logger";
     const print = logger("Inspector.svelte");
     import { createEventDispatcher } from "svelte";
     //   import { effects, selection } from "./stores.js";
@@ -66,10 +66,21 @@
             case RequestCommand.updateSettings:
                 processSettings(payload);
                 break;
+            case RequestCommand.getLogs:
+                returnLogs(data);
+                break;
 
             default:
                 break;
         }
+    }
+
+    function returnLogs(data: MessageHandlerData<any>) {
+        messageHandler.send({
+            ...data,
+            target: data.origin,
+            payload: logDump,
+        });
     }
 
     async function getSettings() {
@@ -221,7 +232,6 @@
         switch (selection.type) {
             case SelectionType.effect:
                 await Promise.all([getAssets(), getEffects()]);
-                parseUI(); // !!!!!!! BUG BUG BUG !!!!!!
                 break;
 
             case SelectionType.plugin:
