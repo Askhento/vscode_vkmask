@@ -815,13 +815,13 @@ const ZPerspectivePlugin = z
     .object({
         name: z.literal("perspective").describe(uiDescriptions.none({})),
         fov: ZNumberSlider.describe(
-            uiDescriptions.numberSlider({ max: 30, min: 90, defValue: 30, showAlways: false })
+            uiDescriptions.numberSlider({ min: 30, max: 90, defValue: 30, showAlways: false })
         ),
         near_clip: ZNumberSlider.describe(
-            uiDescriptions.numberSlider({ max: 0.1, min: 5000, defValue: 0.1, showAlways: false })
+            uiDescriptions.numberSlider({ min: 0.1, max: 5000, defValue: 0.1, showAlways: false })
         ),
         far_clip: ZNumberSlider.describe(
-            uiDescriptions.numberSlider({ max: 0.1, min: 5000, defValue: 3000, showAlways: false })
+            uiDescriptions.numberSlider({ min: 0.1, max: 5000, defValue: 3000, showAlways: false })
         ),
     })
     .describe(uiDescriptions.object({}));

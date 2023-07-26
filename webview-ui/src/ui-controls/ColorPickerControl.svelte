@@ -20,7 +20,8 @@
         //! have to limit 0 - 1 range
         color =
             "#" + componentToHex(value[0]) + componentToHex(value[1]) + componentToHex(value[2]);
-        if (params.alpha !== undefined) alpha = value[3];
+        if (params.alpha != undefined) alpha = value[3];
+        console.log("RGBtoHEX ", params, value, alpha);
     }
 
     //   function roundColor(num) {
@@ -43,20 +44,11 @@
         }
     }
 
-    $: if (alpha !== undefined && alpha !== value[3]) hexToRGB();
-
-    //   function onAlphaChange() {}
-    //   rgbToHex();
-    onMount(() => {
-        // console.log("mount", value);
-        // if (value === undefined || value.length === 0) value = params.defValue;
-
-        rgbToHex();
-        // console.log("alpha picker", alpha, params);
-    });
-
+    rgbToHex();
     const dispatch = createEventDispatcher();
-    $: if (path !== undefined) {
+
+    function onChange() {
+        if (path == undefined) return;
         dispatch("changed", {
             value,
             path,
@@ -76,15 +68,20 @@
                 console.log("color picker on change!!!!");
                 color = e.target.value;
                 hexToRGB();
+                onChange();
             }}
         />
         {#if params.alpha}
             <NumberSliderControl
                 label={"alpha"}
                 params={{ min: 0, max: 1, defValue: 0.0 }}
+                value={alpha}
                 on:changed={(e) => {
                     // <!-- bind:value={alpha} -->
+                    console.log("color alpha slider changed", alpha);
                     alpha = e.detail.value;
+                    hexToRGB();
+                    onChange();
                 }}
             />
             <!-- <input

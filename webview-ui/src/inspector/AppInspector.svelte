@@ -8,6 +8,9 @@
 
 
   */
+    import { setContext } from "svelte";
+    import { writable } from "svelte/store";
+
     import { provideVSCodeDesignSystem, allComponents } from "@vscode/webview-ui-toolkit";
 
     import { MessageHandler } from "../common/MessageHandler";
@@ -45,6 +48,11 @@
         maskSettings,
         uiElements;
 
+    const assets = writable([]);
+    const settings = writable([]);
+
+    setContext("stores", { assets, settings });
+
     const messageHandler = new MessageHandler(handleMessageApp, origin);
 
     function handleMessageApp(data: MessageHandlerData<any>) {
@@ -55,20 +63,54 @@
                 processSelection(payload);
                 break;
 
+            case RequestCommand.updateSettings:
+                processSettings(payload);
+                break;
+
             default:
                 break;
         }
     }
 
-    function getMaskSettings() {
-        messageHandler
-            .request({
-                target: RequestTarget.extension,
-                command: RequestCommand.getMaskSettings,
-            })
-            .then(({ payload }) => {
-                processMaskSettings(payload);
-            });
+    async function getSettings() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getSettings,
+        });
+        processSettings(payload);
+    }
+
+    function processSettings(newSettings) {
+        print("new settings", newSettings);
+        $settings = newSettings;
+    }
+
+    async function getAssets() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getAssets,
+        });
+
+        print("new assets", payload);
+        $assets = payload;
+    }
+
+    function sendAssets() {
+        messageHandler.send({
+            command: RequestCommand.updateAssets,
+            target: RequestTarget.extension,
+            payload: assets,
+        });
+    }
+
+    async function getMaskSettings() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getMaskSettings,
+        });
+
+        print("new mask settings", payload);
+        maskSettings = payload;
     }
 
     function sendMaskSettings() {
@@ -79,21 +121,13 @@
         });
     }
 
-    function processMaskSettings(newMaskSettings) {
-        print("new mask settings", newMaskSettings);
-        maskSettings = newMaskSettings;
-        parseUI();
-    }
-
-    function getPlugins() {
-        messageHandler
-            .request({
-                target: RequestTarget.extension,
-                command: RequestCommand.getPlugins,
-            })
-            .then(({ payload }) => {
-                processPlugins(payload);
-            });
+    async function getPlugins() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getPlugins,
+        });
+        print("new plugins", payload);
+        plugins = payload;
     }
 
     function sendPlugins() {
@@ -104,21 +138,12 @@
         });
     }
 
-    function processPlugins(newPlugins) {
-        print("new plugins", newPlugins);
-        plugins = newPlugins;
-        parseUI();
-    }
-
-    function getEffects() {
-        messageHandler
-            .request({
-                target: RequestTarget.extension,
-                command: RequestCommand.getEffects,
-            })
-            .then(({ payload }) => {
-                processEffects(payload);
-            });
+    async function getEffects() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getEffects,
+        });
+        effects = payload;
     }
 
     function sendEffects() {
@@ -127,11 +152,6 @@
             target: RequestTarget.extension,
             payload: effects,
         });
-    }
-
-    function processEffects(newEffects) {
-        effects = newEffects;
-        parseUI();
     }
 
     function selectedIsKnown() {
@@ -185,41 +205,40 @@
         }
     }
 
-    function getSelection() {
-        messageHandler
-            .request({
-                target: RequestTarget.extension,
-                command: RequestCommand.getSelection,
-            })
-            .then(({ payload }) => {
-                processSelection(payload);
-            });
+    async function getSelection() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getSelection,
+        });
+
+        processSelection(payload);
     }
 
-    function processSelection(newSelection) {
+    async function processSelection(newSelection) {
         selection = newSelection;
         print("new selection", selection);
         uiElements = null; // this prevents new effects be applied to old uiElements
         switch (selection.type) {
             case SelectionType.effect:
-                getEffects();
+                await Promise.all([getAssets(), getEffects()]);
+                parseUI(); // !!!!!!! BUG BUG BUG !!!!!!
                 break;
 
             case SelectionType.plugin:
-                getPlugins();
+                await getPlugins();
                 break;
 
             case SelectionType.maskSettings:
-                getMaskSettings();
+                await getMaskSettings();
                 break;
 
             default:
                 print("selection type not implemented " + selection.type);
-                break;
+                return;
         }
-    }
 
-    getSelection();
+        parseUI();
+    }
 
     async function onChanged(event) {
         console.log("onChange: ", event);
@@ -353,6 +372,10 @@
             applyValueByPath(obj[path[0]], path.slice(1), value);
         }
     }
+
+    getSelection();
+    getAssets();
+    getSettings();
 </script>
 
 <!-- <div class="inspector-wrapper">
@@ -424,6 +447,8 @@
                 <div>ui not parsed</div>
             {/if}
         {/if}
+    {:else if selection.type === SelectionType.asset}
+        <pre> {JSON.stringify(maskSettings, null, "\t")}</pre>
     {:else}
         <div>select anything to see...</div>
         <!-- <pre>{JSON.stringify(selection, null, "\t")}</pre> -->

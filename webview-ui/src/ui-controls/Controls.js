@@ -36,66 +36,6 @@ export const uiControlsMap = {
     [uiDescriptions.array({}).name]: ArrayControl,
 };
 
-export let uiControls = {};
-// export const uiParser = { _type : uiDescriptions.object({}).name};
-
-function parseUIElement(schema) {
-    if (schema._def.typeName === "ZodLiteral") return null;
-
-    const defValue = schema._def.defaultValue ? schema._def.defaultValue() : null;
-    const cleanSchema = getInnerZType(schema);
-    console.log("clean chema", cleanSchema);
-    const uiTypeName = cleanSchema.description.name;
-    // schema = schema.transform(value => ({ value, type: cleanSchema.description.name })) // ? does it make anything
-    let res;
-    switch (uiTypeName) {
-        case "union":
-            break;
-
-        case "object":
-            res = Object.fromEntries(
-                Object.entries(cleanSchema.shape).flatMap(([k, v]) => {
-                    if (k === "disabled") return [];
-                    return [[k, parseUIElement(v)]];
-                })
-            );
-            break;
-
-        case "array":
-            res = cleanSchema.element.options.map((elem) => parseUIElement(elem));
-            break;
-
-        default:
-            res = {
-                uiElement: uiControlsMap[uiTypeName],
-                params: { ...cleanSchema.description, default: defValue },
-            };
-            break;
-    }
-    return {
-        _type: uiTypeName,
-        uiDescription: res,
-    };
-}
-
-// effectNames.forEach((name, i) => {
-//     const obj = EffectsList[i];
-//     uiControls[name] = parseUIElement(obj);
-// })
-
-console.log("old controls!", uiControls);
-
-// // I don't know the order of zod calls so i use recursive calls
-// function getInnerZType(schema) {
-//     let schemaType = schema._def.typeName;
-//     if (schemaType === "ZodDefault" || schemaType === "ZodOptional") {
-//         return getInnerZType(schema._def.innerType);
-//     } else if (schemaType === "ZodEffects") {     // this should be preprocess, but also transoform and refine
-//         return getInnerZType(schema._def.schema);
-//     }
-//     return schema;
-// }
-
 function getInnerZType(schema) {
     let schemaType = schema._def.typeName;
     if (schemaType === "ZodDefault" || schemaType === "ZodOptional") {

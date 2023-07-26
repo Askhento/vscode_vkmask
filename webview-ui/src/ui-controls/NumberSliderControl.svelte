@@ -1,143 +1,143 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from "svelte";
+    import { createEventDispatcher, onMount, tick } from "svelte";
 
-  export let label = "empty",
-    value,
-    path = undefined,
-    params;
+    export let label = "empty",
+        value,
+        path,
+        params;
 
-  let step = 0.01,
-    sliderValue;
-  //   $: console.log("from slider", params);
-  export function onSliderUp() {
-    value = sliderValue;
-  }
+    let step = 0.01,
+        displayValue = value;
 
-  function onEdit(target) {
-    const newValue = target.innerText;
-    target.blur();
+    // $: console.log("from slider", params);
 
-    if (isNaN(newValue)) {
-      value = sliderValue;
-      return;
+    $: step = (params.max - params.min) / 20.0;
+
+    const dispatch = createEventDispatcher();
+
+    function sendValue() {
+        console.log("should send value");
+        dispatch("changed", {
+            value,
+            path,
+        });
     }
-    value = parseFloat(newValue);
-    sliderValue = value;
-  }
-
-  onMount(() => {
-    console.log("slider", value, sliderValue);
-    sliderValue = value;
-  });
-  // !!! check if min max exist
-  $: step = (params.max - params.min) / 20.0;
-
-  const dispatch = createEventDispatcher();
-  $: if (path !== undefined) {
-    dispatch("changed", {
-      value,
-      path,
-    });
-  }
 </script>
 
 <div class="number-control-wrapper">
-  {#if label}
+    <!-- {#if label} -->
     <span class="label">{label}</span>
     <span class="control-wrapper">
-      <span
-        class="number"
-        contenteditable
-        on:keydown={(e) => {
-          if (e.key === "Enter") {
-            onEdit(e.target);
-          }
-        }}>{value}</span
-      >
-      <input
-        class="slider"
-        type="range"
-        bind:value={sliderValue}
-        on:mouseup={onSliderUp}
-        min={params.min || 0}
-        max={params.max || 1}
-        {step}
-      />
+        <input
+            class="number"
+            type="number"
+            bind:value
+            on:keydown={({ key, target }) => {
+                // console.log(key);
+                if (key === "Enter") {
+                    displayValue = value;
+                    //@ts-expect-error
+                    target.blur();
+                    sendValue();
+                } else if (key === "Escape") {
+                    value = displayValue;
+                    //@ts-expect-error
+                    target.blur();
+                }
+            }}
+        />
+        <input
+            class="slider"
+            type="range"
+            bind:value
+            on:mouseup={() => {
+                displayValue = value;
+                sendValue();
+            }}
+            min={params.min || 0}
+            max={params.max || 1}
+            {step}
+        />
     </span>
-  {/if}
+    <!-- {/if} -->
 </div>
 
 <style>
-  * {
-    padding: 5px;
-  }
-  .number-control-wrapper {
-    position: relative;
-    display: flex;
-    justify-content: start;
-  }
+    * {
+        padding: 5px;
+    }
+    .number-control-wrapper {
+        position: relative;
+        display: flex;
+        justify-content: start;
+    }
 
-  .control-wrapper {
-    display: inline-block;
-    /* flex-grow: 1; */
-    /* width: 50%; */
-    flex: 1;
-  }
-  span.number {
-    display: block;
-    /* margin-left: auto; */
-    max-height: 1em;
-    text-align: end;
-  }
-  span.label {
-    display: inline-block;
-    flex: 1;
-  }
+    .control-wrapper {
+        display: inline-block;
+        /* flex-grow: 1; */
+        /* width: 50%; */
+        flex: 1;
+    }
+    input.number {
+        display: block;
+        /* margin-left: auto; */
+        max-height: 1em;
+        text-align: end;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    span.label {
+        display: inline-block;
+        flex: 1;
+    }
 
-  input.slider {
-    display: block;
-    margin-left: auto;
+    input.slider {
+        display: block;
+        margin-left: auto;
 
-    /* flex: 2 0 0px; */
-  }
+        /* flex: 2 0 0px; */
+    }
 
-  input[type="range"] {
-    -webkit-appearance: none;
-    appearance: none;
-    background: transparent;
-    cursor: pointer;
-    /* width: 100%; */
-    width: 150px;
-  }
-  /***** Track Styles *****/
-  /***** Chrome, Safari, Opera, and Edge Chromium *****/
-  input[type="range"]::-webkit-slider-runnable-track {
-    /* background: #053a5f; */
-    height: 6px;
-    border-radius: 3px;
-    /* color: var(--input-foreground); */
-    background: var(--input-background);
-  }
+    input[type="range"] {
+        -webkit-appearance: none;
+        appearance: none;
+        background: transparent;
+        cursor: pointer;
+        /* width: 100%; */
+        width: 150px;
+    }
+    /***** Track Styles *****/
+    /***** Chrome, Safari, Opera, and Edge Chromium *****/
+    input[type="range"]::-webkit-slider-runnable-track {
+        /* background: #053a5f; */
+        height: 6px;
+        border-radius: 3px;
+        /* color: var(--input-foreground); */
+        background: var(--input-background);
+    }
 
-  input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none; /* Override default look */
-    appearance: none;
-    margin-top: -7px; /* Centers thumb on the track */
-    background-color: var(--input-foreground);
-    /* border-color: wheat; */
-    /* border: 1px solid var(--button-icon-background); */
+    input[type="range"]::-webkit-slider-thumb {
+        -webkit-appearance: none; /* Override default look */
+        appearance: none;
+        margin-top: -7px; /* Centers thumb on the track */
+        background-color: var(--input-foreground);
+        /* border-color: wheat; */
+        /* border: 1px solid var(--button-icon-background); */
 
-    height: 20px;
-    width: 20px;
-    border-radius: 10px;
-  }
-  input[type="range"]:focus {
-    outline: none;
-  }
-  /***** Chrome, Safari, Opera, and Edge Chromium *****/
-  input[type="range"]:focus::-webkit-slider-thumb {
-    border: 1px solid var(--focus-border);
-    outline: 2px solid var(--focus-border);
-    outline-offset: 0.125rem;
-  }
+        height: 20px;
+        width: 20px;
+        border-radius: 10px;
+    }
+    input[type="range"]:focus {
+        outline: none;
+    }
+    /***** Chrome, Safari, Opera, and Edge Chromium *****/
+    input[type="range"]:focus::-webkit-slider-thumb {
+        border: 1px solid var(--focus-border);
+        outline: 2px solid var(--focus-border);
+        outline-offset: 0.125rem;
+    }
 </style>
