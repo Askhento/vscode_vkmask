@@ -3,7 +3,6 @@ import * as vscode from "vscode";
 import * as util from "util"; // has no default export
 import * as fs from "fs";
 import { jsonPrettyArray } from "./utils/jsonStringify";
-import { mergeAll } from "./utils/mergeSorted";
 
 import { userSettings } from "./UserSettings";
 
@@ -80,9 +79,7 @@ export class Logger {
 
         const dumps = [this.logDump, ...webviewLogDump];
 
-        const fullLogDump = mergeAll("timestamp", dumps).map((l) => l.value);
-
-        // const fullLogDump = dumps.sort((a: LogEntry, b: LogEntry) => a.timestamp - b.timestamp);
+        const fullLogDump = dumps.sort((a: LogEntry, b: LogEntry) => a.timestamp - b.timestamp);
 
         vscode.window.showInformationMessage("Dumping logs to " + dumpPath);
 
