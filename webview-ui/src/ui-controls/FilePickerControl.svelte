@@ -150,7 +150,7 @@
                 position="above"
                 bind:this={dropdown}
                 on:focusout|capture={(e) => {
-                    print("focus out");
+                    // print("focus out");
                     //   e.preventDefault();
                     e.stopPropagation(); // this is to be able to print while dropdown opened
                     inputTimer = setTimeout(() => {
@@ -162,7 +162,7 @@
                     }, 150);
                 }}
                 on:click|preventDefault={(e) => {
-                    print("dropdown click");
+                    // print("dropdown click");
                     //   setTimeout(function () {
                     //     inputElement.focus();
                     //   }, 1000);
@@ -170,14 +170,14 @@
                 on:change={(e) => {
                     //   value = e.target.value;
                     //   print("drop change", e.target.value);
-                    print("change dropdonw");
+                    // print("change dropdonw");
                     value = dropdown.value;
                     searchValue = "";
                     inputElement.value = "";
                 }}
                 on:keydown={(e) => {
                     if (e.key === "Escape") {
-                        print("escape!");
+                        // print("escape!");
                         e.preventDefault();
                         dropdown.value = value;
                         return;
@@ -204,13 +204,13 @@
                     bind:this={inputElement}
                     on:click|stopPropagation|capture={(e) => {
                         if (inputTimer) clearTimeout(inputTimer);
-                        print("click text filed inside ");
+                        // print("click text filed inside ");
                         // keeps dropdown opened
                     }}
                     on:input={(e) => {
-                        print("oninput", e);
+                        // print("oninput", e);
                         searchValue = e.target.value;
-                        print(searchValue);
+                        // print(searchValue);
                     }}
                 />
                 {#each filteredAssets as asset, i}
