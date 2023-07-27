@@ -6,7 +6,7 @@ import { jsonPrettyArray } from "./utils/jsonStringify";
 
 import { userSettings } from "./UserSettings";
 
-type LogEntry = {
+export type LogEntry = {
     timestamp: number;
     value: unknown;
 };
@@ -74,11 +74,12 @@ export class Logger {
         if (this.useOutputChannel) this.append(baseName, args);
     }
 
-    public dumpLogs(webviewLogDump: LogEntry[], dumpPath: string) {
+    public dumpLogs(webviewLogDump: LogEntry[][], dumpPath: string) {
         // combining multiple dumps into one, based on timestamp
 
-        const dumps = [this.logDump, ...webviewLogDump];
+        const dumps = [this.logDump, ...webviewLogDump].flat();
 
+        console.log("dumps", dumps);
         const fullLogDump = dumps.sort((a: LogEntry, b: LogEntry) => a.timestamp - b.timestamp);
 
         vscode.window.showInformationMessage("Dumping logs to " + dumpPath);

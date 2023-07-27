@@ -7,13 +7,13 @@ import { MainViewProvider } from "./panels/MainViewProvider";
 import { InspectorViewProvider } from "./panels/InspectorViewProvider";
 import { AssetsManagerViewProvider } from "./panels/AssetsManagerViewProvider";
 
-import { mergeAll } from "./utils/mergeSorted";
 import { MessageHandler, MessageHandlerData } from "./MessageHandler";
 
 import { HotReload } from "./HotReload";
 // const { exec } = require('node:child_process');
 import * as path from "path";
 import { logger } from "./Logger";
+import type { LogEntry } from "./Logger";
 const print = (...args: any) => logger.log(__filename, ...args);
 
 import { assetWatcher } from "./AssetWatcher";
@@ -278,12 +278,6 @@ export async function activate(context: vscode.ExtensionContext) {
     //     assetWatcher.getBuiltinAssets(context.extensionUri)
     // }
 
-    // const sidebar = new MainViewProvider(context.extensionUri);
-
-    // context.subscriptions.push(
-    //     vscode.window.registerWebviewViewProvider(MainViewProvider.viewId, sidebar)
-    // );
-
     context.subscriptions.push(
         vscode.commands.registerCommand("vkmask.dumpLogs", async () => {
             const dumpPath = maskConfig.currentConfigDir;
@@ -299,20 +293,13 @@ export async function activate(context: vscode.ExtensionContext) {
                         command: RequestCommand.getLogs,
                     })
                 )
-            )) as MessageHandlerData<any>[];
+            )) as MessageHandlerData<LogEntry[]>[];
 
             const webviewLogs = responses.map((resp) => resp.payload);
             logger.dumpLogs(webviewLogs, dumpPath);
         })
     );
-
-    context.subscriptions.push(
-        vscode.commands.registerCommand("vkmask.resetSidebar", async () => {
-            webviewProviders.forEach((provider) => {
-                vscode.commands.executeCommand(provider.viewId + ".resetViewLocation");
-            });
-        })
-    );
+    //
     // // "workbench.action.movePanelToSecondarySideBar",
     // // workbench.action.openView
 
@@ -354,25 +341,26 @@ export async function activate(context: vscode.ExtensionContext) {
         );
     }
 
+    context.subscriptions.push(
+        vscode.commands.registerCommand("vkmask.resetSidebar", async () => {
+            webviewProviders.forEach((provider) => {
+                vscode.commands.executeCommand(provider.viewId + ".resetViewLocation");
+            });
+        })
+    );
     // // show sidebar
     // // await vscode.commands.executeCommand("workbench.view.extension.vkmask_primary_bar.resetViewContainerLocation")
     // // await vscode.commands.executeCommand(`workbench.view.extension.vkmask_primary_bar`)
     // // vscode.commands.executeCommand(`workbench.action.focusAuxiliaryBar`)
-    // // vkmask.sidepanel.focus
     // // vscode.commands.executeCommand(`vkmask_primary_bar.focus`)
-    // await vscode.commands.executeCommand(`vkmask.sidepanel.focus`) // this works
+
+    // this will ensure all the componenets will show up no matter if they closed before.
+    await vscode.commands.executeCommand(`vkmask.inspector.focus`);
+    await vscode.commands.executeCommand(`vkmask.assets_manager.focus`);
+    await vscode.commands.executeCommand(`vkmask.main.focus`);
 
     // // vscode.commands.executeCommand('workbench.action.moveFocusedView');
     // // vscode.commands.executeCommand('vkmask.sidepanel.focus').then(() => {
-
-    // // })
-
-    // // {
-    // //   "type": "webview",
-    // //   "contextualTitle": "vkmask inspector",
-    // //   "id": "vkmask.inspector",
-    // //   "name": "Inspector"
-    // // }
 }
 
 // This method is called when your extension is deactivated

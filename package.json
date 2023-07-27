@@ -14,7 +14,7 @@
         "Other"
     ],
     "activationEvents": [
-        "onWebviewPanel:vkmask.sidepanel",
+        "onWebviewPanel:vkmask.main",
         "workspaceContains:mask.json"
     ],
     "main": "./out/extension.js",
