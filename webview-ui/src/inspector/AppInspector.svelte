@@ -24,8 +24,6 @@
 
     import { logger, logDump } from "../logger";
     const print = logger("Inspector.svelte");
-    import { createEventDispatcher } from "svelte";
-    //   import { effects, selection } from "./stores.js";
 
     import ObjectControl from "../ui-controls/ObjectControl.svelte";
     import {
@@ -452,8 +450,8 @@
   {/if}
 </div> -->
 
-<h3>Inspector</h3>
 {#if appState === AppState.running}
+    <h3>{selection.type.toUpperCase()}</h3>
     {#key selection}
         {#if selection.type === SelectionType.effect}
             {#if effects}
