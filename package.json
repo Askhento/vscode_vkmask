@@ -80,9 +80,23 @@
             "vkmask_primary_bar": [
                 {
                     "type": "webview",
-                    "contextualTitle": "vkmask main",
-                    "id": "vkmask.main",
-                    "name": "Main",
+                    "contextualTitle": "vkmask effects",
+                    "id": "vkmask.effects",
+                    "name": "Effects",
+                    "icon": "./node_modules/@vscode/codicons/src/icons/add.svg"
+                },
+                {
+                    "type": "webview",
+                    "contextualTitle": "vkmask plugins",
+                    "id": "vkmask.plugins",
+                    "name": "Plugins",
+                    "icon": "./node_modules/@vscode/codicons/src/icons/add.svg"
+                },
+                {
+                    "type": "webview",
+                    "contextualTitle": "vkmask maskSettings",
+                    "id": "vkmask.mask_settings",
+                    "name": "MaskSettings",
                     "icon": "./node_modules/@vscode/codicons/src/icons/add.svg"
                 },
                 {

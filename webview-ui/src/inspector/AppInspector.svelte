@@ -8,6 +8,7 @@
 
 
   */
+    import Error from "../components/Error.svelte";
     import { setContext } from "svelte";
     import { writable } from "svelte/store";
 
@@ -16,7 +17,7 @@
     import { MessageHandler } from "../common/MessageHandler";
     import type { MessageHandlerData } from "../common/MessageHandler";
 
-    import { RequestTarget, RequestCommand, SelectionType } from "../../../src/types";
+    import { RequestTarget, RequestCommand, SelectionType, AppState } from "../../../src/types";
     import type { Selection } from "../../../src/types";
 
     import { fromZodError } from "zod-validation-error";
@@ -48,6 +49,9 @@
         maskSettings,
         uiElements;
 
+    let appState = AppState.running,
+        error;
+
     const assets = writable([]);
     const settings = writable([]);
 
@@ -66,12 +70,38 @@
             case RequestCommand.updateSettings:
                 processSettings(payload);
                 break;
+
+            case RequestCommand.updateAppState:
+                processAppState(payload);
+                break;
+
+            case RequestCommand.updateEffects:
+                processEffects(payload);
+                break;
+
             case RequestCommand.getLogs:
                 returnLogs(data);
                 break;
 
             default:
                 break;
+        }
+    }
+
+    async function getAppState() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getAppState,
+        });
+        processAppState(payload);
+    }
+
+    function processAppState(payload) {
+        appState = payload.state;
+        error = payload.error; // will be undefined
+        print("state", payload);
+        if (appState === AppState.error) {
+            onError(error);
         }
     }
 
@@ -106,13 +136,13 @@
         $assets = payload;
     }
 
-    function sendAssets() {
-        messageHandler.send({
-            command: RequestCommand.updateAssets,
-            target: RequestTarget.extension,
-            payload: assets,
-        });
-    }
+    // function sendAssets() {
+    //     messageHandler.send({
+    //         command: RequestCommand.updateAssets,
+    //         target: RequestTarget.extension,
+    //         payload: assets,
+    //     });
+    // }
 
     async function getMaskSettings() {
         const { payload } = await messageHandler.request({
@@ -154,7 +184,12 @@
             target: RequestTarget.extension,
             command: RequestCommand.getEffects,
         });
+        processEffects(payload);
+    }
+
+    function processEffects(payload) {
         effects = payload;
+        // parseUI();
     }
 
     function sendEffects() {
@@ -210,9 +245,8 @@
         if (parseResult.success) {
             uiElements = parseResult.data;
         } else {
-            print(parseResult.error);
-
-            // onError(parseResult.error);
+            // print(parseResult.error);
+            onError(parseResult.error);
         }
     }
 
@@ -231,15 +265,11 @@
         uiElements = null; // this prevents new effects be applied to old uiElements
         switch (selection.type) {
             case SelectionType.effect:
-                await Promise.all([getAssets(), getEffects()]);
+                await getEffects();
                 break;
 
             case SelectionType.plugin:
                 await getPlugins();
-                break;
-
-            case SelectionType.maskSettings:
-                await getMaskSettings();
                 break;
 
             default:
@@ -327,37 +357,43 @@
 
     //   const dispatch = createEventDispatcher();
 
-    //   async function onError(error) {
-    //     const { name, _errors, ...formated } = error.format();
-    //     print("formated error", formated);
+    async function onError(zodError) {
+        print("raw errpr", zodError);
+        const { name, _errors, ...formated } = zodError.format();
+        print("formated error", formated);
 
-    //     // let errorPath = ;
+        // let errorPath = ;
 
-    //     let { path, message } = reduceError(formated, `/effects/${$selection.id}`);
+        let { path, message } = reduceError(formated, `/effects/${selection.id}`);
 
-    //     print("path, message", path, message);
-    //     await tick();
-    //     print("sending error");
-    //     dispatch("errorMessage", {
-    //       message,
-    //       path,
-    //     });
-    //   }
+        print("error path, message", path, message);
 
-    //   /**
-    //    * Digs inside Zod error to extract valuable information
-    //    * !!! should be a helper function
-    //    * @param error
-    //    * @param path
-    //    */
-    //   function reduceError(error, path) {
-    //     const { _errors, ...newError } = { ...error };
-    //     if (Object.keys(newError).length === 0) {
-    //       return { path, message: _errors[0] };
-    //     }
-    //     const key = Object.keys(newError)[0];
-    //     return reduceError(newError[key], `${path}/${key}`);
-    //   }
+        error = { message, path };
+        appState = AppState.error;
+
+        // await tick();
+        // print("sending error");
+        // dispatch("errorMessage", {
+        //   message,
+        //   path,
+        // });
+    }
+
+    /**
+     * Digs inside Zod error to extract valuable information
+     * !!! should be a helper function
+     * @param error
+     * @param path
+     */
+    function reduceError(error, path) {
+        // @ts-expect-error
+        const { _errors, ...newError } = { ...error }; // remove _errors field
+        if (Object.keys(newError).length === 0) {
+            return { path, message: _errors[0] };
+        }
+        const key = Object.keys(newError)[0];
+        return reduceError(newError[key], `${path}/${key}`);
+    }
 
     async function rerenderInspector() {
         // !!! a hack
@@ -383,9 +419,16 @@
         }
     }
 
-    getSelection();
-    getAssets();
-    getSettings();
+    async function init() {
+        await getAppState();
+
+        if (appState === AppState.error) return;
+        getSelection();
+        getAssets();
+        getSettings();
+    }
+
+    init();
 </script>
 
 <!-- <div class="inspector-wrapper">
@@ -410,60 +453,52 @@
 </div> -->
 
 <h3>Inspector</h3>
-{#key selection}
-    {#if selection.type === SelectionType.effect}
-        {#if effects}
-            {#if uiElements}
-                <ObjectControl
-                    expanded={true}
-                    value={effects[selection.id]}
-                    label={effects[selection.id].name}
-                    path={[]}
-                    uiElements={uiElements.value}
-                    on:changed={onChanged}
-                />
-            {:else}
-                <div>unknownEffect</div>
+{#if appState === AppState.running}
+    {#key selection}
+        {#if selection.type === SelectionType.effect}
+            {#if effects}
+                {#key effects}
+                    {#if uiElements}
+                        <ObjectControl
+                            expanded={true}
+                            value={effects[selection.id]}
+                            label={effects[selection.id].name}
+                            path={[]}
+                            uiElements={uiElements.value}
+                            on:changed={onChanged}
+                        />
+                    {:else}
+                        <div>unknownEffect</div>
+                    {/if}
+                {/key}
             {/if}
-        {/if}
-    {:else if selection.type === SelectionType.plugin}
-        {#if plugins}
-            {#if uiElements}
-                <ObjectControl
-                    expanded={true}
-                    value={plugins[selection.id]}
-                    label={plugins[selection.id].name}
-                    path={[]}
-                    uiElements={uiElements.value}
-                    on:changed={onChanged}
-                />
-            {:else}
-                <div>unknownPlugin</div>
+        {:else if selection.type === SelectionType.plugin}
+            {#if plugins}
+                {#if uiElements}
+                    <ObjectControl
+                        expanded={true}
+                        value={plugins[selection.id]}
+                        label={plugins[selection.id].name}
+                        path={[]}
+                        uiElements={uiElements.value}
+                        on:changed={onChanged}
+                    />
+                {:else}
+                    <div>unknownPlugin</div>
+                {/if}
             {/if}
+        {:else if selection.type === SelectionType.asset}
+            <div>asset type not implememted error</div>
+            <!-- <pre> {JSON.stringify(maskSettings, null, "\t")}</pre> -->
+        {:else}
+            <div>select anything to see...</div>
+            <!-- <pre>{JSON.stringify(selection, null, "\t")}</pre> -->
         {/if}
-    {:else if selection.type === SelectionType.maskSettings}
-        <!-- <pre> {JSON.stringify(maskSettings, null, "\t")}</pre> -->
-        {#if maskSettings}
-            {#if uiElements}
-                <ObjectControl
-                    expanded={true}
-                    value={maskSettings}
-                    label={"MaskSettings"}
-                    path={[]}
-                    uiElements={uiElements.value}
-                    on:changed={onChanged}
-                />
-            {:else}
-                <div>ui not parsed</div>
-            {/if}
-        {/if}
-    {:else if selection.type === SelectionType.asset}
-        <pre> {JSON.stringify(maskSettings, null, "\t")}</pre>
-    {:else}
-        <div>select anything to see...</div>
-        <!-- <pre>{JSON.stringify(selection, null, "\t")}</pre> -->
-    {/if}
-{/key}
+    {/key}
+{:else if appState === AppState.error}
+    <div>should be erro</div>
+    <Error {error} />
+{/if}
 
 <style>
     div {

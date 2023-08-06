@@ -4,15 +4,15 @@ import * as path from "path";
 
 import * as jsonMap from "json-source-map";
 import { jsonPrettyArray } from "./utils/jsonStringify";
-import { ZBaseEffect, ZMaskConfig, ZMaskConfigPreprocess } from "./ztypes.js";
+import { ZBaseEffect, ZMaskConfig, ZMaskConfigPreprocess, ZEffects } from "./ztypes.js";
 import { z } from "zod";
 import { fromZodError } from "zod-validation-error";
 import { delayPromise } from "./utils/delayPromise";
 import { EventEmitter } from "events";
 
 import { logger } from "./Logger";
-import { SelectionType } from "./types";
-import type { Selection } from "./types";
+import { SelectionType, ErrorType } from "./types";
+import type { Error, Selection } from "./types";
 
 const print = (...args: unknown[]) => logger.log(__filename, ...args);
 
@@ -105,6 +105,10 @@ export class MaskConfig extends EventEmitter {
             // }
         });
 
+        /**
+         * on save used because I get undo stack for free.
+         * ? lock used to prevent infinte loop on save
+         */
         vscode.workspace.onDidSaveTextDocument((document) => {
             print("saving event");
             if (this.saveLockCallback !== undefined) {
@@ -112,6 +116,9 @@ export class MaskConfig extends EventEmitter {
                 this.saveLockCallback();
                 return;
             }
+
+            if (!this.parseConfig()) return;
+
             if (this.isSameDocument(document.uri, "mask.json")) {
                 this.onFileSave();
             }
@@ -396,7 +403,7 @@ export class MaskConfig extends EventEmitter {
 
         this.parseConfig();
 
-        if (this.selection.type !== SelectionType.empty)
+        if (this.selection.type === SelectionType.effect)
             await this.showEffect(this.selection.id, editor);
 
         // if (this.saveDelayPromise !== undefined) this.saveDelayPromise.cancel();
@@ -437,7 +444,7 @@ export class MaskConfig extends EventEmitter {
 
         this.parseConfig();
 
-        if (this.selection.type !== SelectionType.empty)
+        if (this.selection.type === SelectionType.plugin)
             await this.showPlugin(this.selection.id, editor);
     }
 
@@ -476,42 +483,38 @@ export class MaskConfig extends EventEmitter {
         return fs.existsSync(configPath);
     }
 
-    public getConfigPath(): string | undefined {
+    public updateConfigPath(): boolean {
         // ? what if more that one folder opened ???
         this.currentConfigDir = undefined;
 
         if (!vscode.workspace.workspaceFolders) {
-            print("No folder opened!");
-
-            return undefined;
+            print("No folder opened! Which is not possible!");
+            return false;
         }
 
         const dir = vscode.workspace.workspaceFolders?.[0].uri.fsPath;
 
         if (!this.checkConfigAtPath(dir)) {
             print("No mask.json at " + dir);
-            return undefined;
+            // !!!! error here
+            this.emitError({ type: ErrorType.configMissing });
+            return false;
         }
 
         this.currentConfigDir = dir;
 
-        return path.join(this.currentConfigDir, "mask.json");
+        const configPath = path.join(this.currentConfigDir, "mask.json");
+
+        this.pathMaskJSON = configPath;
+        return true;
     }
 
-    public parseConfig(): { success: boolean; message: string } {
+    public parseConfig(): boolean {
         // ? maybe split to parse locations and actual object
         print("parsing mask.json");
-        this.maskJSON = undefined;
+        this.maskJSON = null;
 
-        const configPath = this.getConfigPath();
-
-        if (configPath === undefined) {
-            return {
-                success: false,
-                message: "mask.json not seems to exist",
-            };
-        }
-        this.pathMaskJSON = configPath;
+        if (!this.updateConfigPath()) return false;
 
         // // use unsaved version of config if possible
         // if (vscode.window.activeTextEditor) {
@@ -527,16 +530,15 @@ export class MaskConfig extends EventEmitter {
         try {
             this.sourceMaskJSON = jsonMap.parse(this.rawMaskJSON);
         } catch (error) {
-            // !!! repair json
+            // ??? repair json
             // https://github.com/RyanMarcus/dirty-json
             // https://github.com/josdejong/jsonrepair
 
             print("json parsing error, source maps", error);
             print("raw mask.json ", this.rawMaskJSON);
-            return {
-                success: false,
-                message: (error as Error).toString(),
-            };
+            // this.emitError((error as Error).toString());
+            this.emitError({ type: ErrorType.configSyntax, value: error });
+            return false;
         }
 
         // if (this.sourceMaskJSON === undefined) {
@@ -552,94 +554,64 @@ export class MaskConfig extends EventEmitter {
 
         const preprocessResult: any = ZMaskConfigPreprocess.safeParse(this.sourceMaskJSON.data);
 
-        if (preprocessResult.success) {
-            this.maskJSON = preprocessResult.data as z.infer<typeof ZMaskConfigPreprocess>;
-            print("parsed preprocess", this.maskJSON);
-        } else {
-            print("parse error ! ", preprocessResult);
-            print("raw mask.json ", this.sourceMaskJSON.data);
-            print(this.maskJSON);
-            return {
-                success: false,
-                message: fromZodError(preprocessResult.error).message,
-            };
+        if (!preprocessResult.success) {
+            // print("parse error ! ", preprocessResult);
+            // print("raw mask.json ", this.sourceMaskJSON.data);
+            // print(this.maskJSON);
+
+            this.emitError({ type: ErrorType.configZod, value: preprocessResult.error });
+
+            return false;
         }
 
-        // !!!!!!! any here
-        // const parseResult: any = ZMaskConfig.safeParse(this.sourceMaskJSON.data);
+        this.maskJSON = preprocessResult.data as z.infer<typeof ZMaskConfig>;
+        // // !!!!!!! any here
+        // const parseResult: any = ZMaskConfig.safeParse(preprocessResult.data);
 
         // if (parseResult.success) {
         //     this.maskJSON = parseResult.data as z.infer<typeof ZMaskConfig>;
         // } else {
-        //     print("parse error ! ", (parseResult));
-        //     print("raw mask.json ", this.sourceMaskJSON.data)
-        //     print(this.maskJSON)
-        //     return {
-        //         success: false,
-        //         message: fromZodError(parseResult.error).message
-        //     }
+        //     print("parse error ! ", parseResult);
+        //     // print("raw mask.json ", this.sourceMaskJSON.data);
+        //     // print(this.maskJSON);
+        //     this.emitError({ type: ErrorType.configZod, value: parseResult.error });
+        //     return false;
         //     // return false;
         // }
 
         print("mask.json parsed", this.maskJSON);
 
-        // const maskDecode = MaskJSON.decode(this.maskJSON);
-        // if (maskDecode._tag === "Left") {
-        //     let errMsg = "mask.json require keys : \n"
-        //     const errors = report(maskDecode, {
-        //         messages: {
-        //             missing: (keys, path) => {
-        //                 errMsg += (path.join('/') + "/" + keys + ", ");
-        //                 return `YOINKS! You forgot to add "${keys.join(',')}" at "${path.join('/')}".`;
-        //             }
-        //         }
-        //     });
-
-        //     errMsg = errMsg.slice(0, -2); // remove comma at the end
-
-        //     print(errors)
-        //     vscode.window.showErrorMessage(errMsg);
-        //     return;
+        // if (this.sourceMaskJSON?.pointers === undefined) {
+        //     print("could not parse mask.json sourcemap");
+        //     this.emitError("could not parse mask.json sourcemap");
+        //     return false;
         // }
-
-        if (this.sourceMaskJSON?.pointers === undefined) {
-            print("could not parse mask.json sourcemap");
-            return {
-                success: false,
-                message: "could not parse mask.json sourcemap",
-            };
-        }
 
         this.maskLinePointers = this.sourceMaskJSON?.pointers;
         // print("jsonmap pointers : ", this.maskLinePointers);
 
-        return { success: true, message: "Successful" };
+        return true;
     }
 
     async getEffects() {
-        // if (this.maskJSON != undefined) return this.maskJSON.effects;
-
-        if (!this.parseConfig().success) return null;
-
+        if (!this.maskJSON) return null;
         return this.maskJSON.effects;
     }
 
     async getPlugins() {
-        // if (this.maskJSON != undefined) return this.maskJSON.effects;
-
-        if (!this.parseConfig().success) return null;
-
+        if (!this.maskJSON) return null;
         return this.maskJSON.plugins;
     }
 
     async getMaskSettings() {
-        // if (this.maskJSON != undefined) return this.maskJSON.effects;
-
-        if (!this.parseConfig().success) return null;
+        if (!this.maskJSON) return null;
 
         const { effects, plugins, ...maskSettings } = this.maskJSON;
-        print("debug masksettings : ", maskSettings);
         return maskSettings;
+    }
+
+    emitError(error: Error) {
+        this.emit("error", error);
     }
 
     // Values returned in the callback of `hotRequire` must

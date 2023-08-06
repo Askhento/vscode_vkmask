@@ -1,73 +1,74 @@
 import {
-  Disposable,
-  Webview,
-  window,
-  Uri,
-  ViewColumn,
-  WebviewViewProvider,
-  WebviewView,
+    Disposable,
+    Webview,
+    window,
+    Uri,
+    ViewColumn,
+    WebviewViewProvider,
+    WebviewView,
 } from "vscode";
 import * as vscode from "vscode";
 import { getUri } from "../utils/getUri";
 import { getNonce } from "../utils/getNonce";
 
 export class BaseWebviewProvider implements WebviewViewProvider {
-  private _view?: WebviewView;
-  public webview: Webview;
-  public onResolveWebviewView: () => void | undefined;
+    private _view?: WebviewView;
+    public webview: Webview;
+    public onResolveWebviewView: () => void | undefined;
 
-  constructor(
-    private readonly _extensionUri: Uri,
-    private readonly _buildPath: string,
-    public readonly viewId: string
-  ) {}
+    constructor(
+        private readonly _extensionUri: Uri,
+        private readonly _buildPath: string,
+        public readonly viewId: string
+    ) {}
 
-  public resolveWebviewView(
-    webviewView: WebviewView,
-    context: vscode.WebviewViewResolveContext,
-    _token: vscode.CancellationToken
-  ) {
-    this._view = webviewView;
-    this.webview = webviewView.webview;
+    public resolveWebviewView(
+        webviewView: WebviewView,
+        context: vscode.WebviewViewResolveContext,
+        _token: vscode.CancellationToken
+    ) {
+        this._view = webviewView;
+        this.webview = webviewView.webview;
 
-    this.webview.options = {
-      // Allow scripts in the webview
-      enableScripts: true,
+        this.webview.options = {
+            // Allow scripts in the webview
+            enableScripts: true,
+            enableCommandUris: true,
 
-      localResourceRoots: [this._extensionUri],
-    };
+            localResourceRoots: [this._extensionUri],
+        };
 
-    this.webview.html = this._getWebviewContent();
+        this.webview.html = this._getWebviewContent();
 
-    if (this.onResolveWebviewView) this.onResolveWebviewView();
-  }
+        if (this.onResolveWebviewView) this.onResolveWebviewView();
+    }
 
-  /**
-   * Defines and returns the HTML that should be rendered within the webview panel.
-   *
-   * @remarks This is also the place where references to the Svelte webview build files
-   * are created and inserted into the webview HTML.
-   * @returns A template string literal containing the HTML that should be
-   * rendered within the webview panel
-   */
-  private _getWebviewContent() {
-    // The CSS file from the Svelte build output
-    const stylesUri = getUri(this.webview, this._extensionUri, [this._buildPath, "bundle.css"]);
-    // The JS file from the Svelte build output
-    const scriptUri = getUri(this.webview, this._extensionUri, [this._buildPath, "bundle.js"]);
-    const codiconsUri = this.webview.asWebviewUri(
-      vscode.Uri.joinPath(
-        this._extensionUri,
-        "node_modules",
-        "@vscode/codicons",
-        "dist",
-        "codicon.css"
-      )
-    );
+    /**
+     * Defines and returns the HTML that should be rendered within the webview panel.
+     *
+     * @remarks This is also the place where references to the Svelte webview build files
+     * are created and inserted into the webview HTML.
+     * @returns A template string literal containing the HTML that should be
+     * rendered within the webview panel
+     */
+    private _getWebviewContent() {
+        // The CSS file from the Svelte build output
+        const stylesUri = getUri(this.webview, this._extensionUri, [this._buildPath, "bundle.css"]);
+        // The JS file from the Svelte build output
+        const scriptUri = getUri(this.webview, this._extensionUri, [this._buildPath, "bundle.js"]);
+        const codiconsUri = this.webview.asWebviewUri(
+            vscode.Uri.joinPath(
+                this._extensionUri,
+                "node_modules",
+                "@vscode/codicons",
+                "dist",
+                "codicon.css"
+            )
+        );
 
-    const nonce = getNonce();
-    // Tip: Install the es6-string-html VS Code extension to enable code highlighting below
-    return /*html*/ `
+        const nonce = getNonce();
+        // Tip: Install the es6-string-html VS Code extension to enable code highlighting below
+        return /*html*/ `
       <!DOCTYPE html>
       <html lang="en">
         <head>
@@ -86,5 +87,5 @@ export class BaseWebviewProvider implements WebviewViewProvider {
         </body>
       </html>
     `;
-  }
+    }
 }

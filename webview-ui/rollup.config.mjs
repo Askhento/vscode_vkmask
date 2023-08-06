@@ -81,38 +81,24 @@ const common = {
     },
 };
 
-export default [
-    {
-        input: "src/main/main.ts",
+function getSvelteEntry(name) {
+    return {
+        input: `src/${name}/main.ts`,
 
         output: {
             sourcemap: true,
             format: "iife",
             name: "app",
-            file: "../out/panels/webview-build/main/bundle.js", //!!!! add path resolve
+            file: `../out/panels/webview-build/${name}/bundle.js`, //!!!! add path resolve
         },
         ...common,
-    },
-    {
-        input: "src/inspector/main.ts",
+    };
+}
 
-        output: {
-            sourcemap: true,
-            format: "iife",
-            name: "inspector",
-            file: "../out/panels/webview-build/inspector/bundle.js",
-        },
-        ...common,
-    },
-    {
-        input: "src/assets_manager/main.ts",
-
-        output: {
-            sourcemap: true,
-            format: "iife",
-            name: "assets_manager",
-            file: "../out/panels/webview-build/assets_manager/bundle.js",
-        },
-        ...common,
-    },
+export default [
+    getSvelteEntry("effects"),
+    getSvelteEntry("plugins"),
+    getSvelteEntry("mask_settings"),
+    getSvelteEntry("assets_manager"),
+    getSvelteEntry("inspector"),
 ];

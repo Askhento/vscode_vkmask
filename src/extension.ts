@@ -3,7 +3,9 @@
 
 import * as fs from "fs";
 import * as vscode from "vscode";
-import { MainViewProvider } from "./panels/MainViewProvider";
+import { EffectsViewProvider } from "./panels/EffectsViewProvider";
+import { MaskSettingsViewProvider } from "./panels/MaskSettingsViewProvider";
+import { PluginsViewProvider } from "./panels/PluginsViewProvider";
 import { InspectorViewProvider } from "./panels/InspectorViewProvider";
 import { AssetsManagerViewProvider } from "./panels/AssetsManagerViewProvider";
 
@@ -19,7 +21,14 @@ const print = (...args: any) => logger.log(__filename, ...args);
 import { assetWatcher } from "./AssetWatcher";
 import { userSettings } from "./UserSettings";
 import { jsonPrettyArray } from "./utils/jsonStringify";
-import { RequestCommand, RequestTarget, Selection, SelectionType, ViewIds } from "./types";
+import {
+    RequestCommand,
+    RequestTarget,
+    Selection,
+    SelectionType,
+    ViewIds,
+    AppState,
+} from "./types";
 import { MaskConfig } from "./MaskConfig";
 import { BaseWebviewProvider } from "./panels/BaseWebviewProvider";
 
@@ -28,20 +37,38 @@ import { BaseWebviewProvider } from "./panels/BaseWebviewProvider";
 */
 
 export async function activate(context: vscode.ExtensionContext) {
+    let appState = AppState.running,
+        error = null;
+
     logger.setMode(context.extensionMode);
     await userSettings.init(context.extensionUri);
 
     const messageHandler = new MessageHandler();
     const maskConfig = new MaskConfig();
+
+    maskConfig.on("error", onError);
+
     // let selection: Selection = { type: SelectionType.empty };
 
     const webviewsBuildPath = path.join("out", "panels", "webview-build");
     const webviewProviders: Array<BaseWebviewProvider> = [];
 
-    const mainBuildPath = path.join(webviewsBuildPath, "main");
-    const main = new MainViewProvider(context.extensionUri, mainBuildPath);
-    webviewProviders.push(main);
-    context.subscriptions.push(vscode.window.registerWebviewViewProvider(main.viewId, main));
+    const effectsBuildPath = path.join(webviewsBuildPath, "effects");
+    const effects = new EffectsViewProvider(context.extensionUri, effectsBuildPath);
+    webviewProviders.push(effects);
+    context.subscriptions.push(vscode.window.registerWebviewViewProvider(effects.viewId, effects));
+
+    const pluginsBuildPath = path.join(webviewsBuildPath, "plugins");
+    const plugins = new PluginsViewProvider(context.extensionUri, pluginsBuildPath);
+    webviewProviders.push(plugins);
+    context.subscriptions.push(vscode.window.registerWebviewViewProvider(plugins.viewId, plugins));
+
+    const maskSettingsBuildPath = path.join(webviewsBuildPath, "mask_settings");
+    const maskSettings = new MaskSettingsViewProvider(context.extensionUri, maskSettingsBuildPath);
+    webviewProviders.push(maskSettings);
+    context.subscriptions.push(
+        vscode.window.registerWebviewViewProvider(maskSettings.viewId, maskSettings)
+    );
 
     const assetsManagerBuildPath = path.join(webviewsBuildPath, "assets_manager");
     const assetsManager = new AssetsManagerViewProvider(
@@ -60,48 +87,21 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.window.registerWebviewViewProvider(inspector.viewId, inspector)
     );
 
-    webviewProviders.forEach((provider) => {
-        provider.onResolveWebviewView = () => {
-            context.subscriptions.push(
-                messageHandler.bindViewMessageHandler(provider.webview, provider.viewId)
-            );
+    // ? eventually will make a class
+    // ? multiple errors could occur
+    function onError(newError) {
+        appState = AppState.error;
+        error = newError;
 
-            assetWatcher.on("assetsChanged", async () => {
-                messageHandler.send({
-                    command: RequestCommand.updateAssets,
-                    payload: await assetWatcher.getAssets(),
-                    target: provider.viewId,
-                });
-            });
-        };
-    });
-
-    // assetsManager.onResolveWebviewView = () => {
-    //     context.subscriptions.push(
-    //         messageHandler.bindViewMessageHandler(assetsManager.webview, assetsManager.viewId)
-    //     );
-
-    //     assetWatcher.on("assetsChanged", async () => {
-    //         messageHandler.send({
-    //             command: RequestCommand.updateAssets,
-    //             payload: await assetWatcher.getAssets(),
-    //             target: RequestTarget.assetsManager,
-    //         });
-    //     });
-    // };
-
-    // inspector.onResolveWebviewView = () => {
-    //     context.subscriptions.push(
-    //         messageHandler.bindViewMessageHandler(inspector.webview, inspector.viewId)
-    //     );
-    //     assetWatcher.on("assetsChanged", async () => {
-    //         messageHandler.send({
-    //             command: RequestCommand.updateAssets,
-    //             payload: await assetWatcher.getAssets(),
-    //             target: RequestTarget.inspector,
-    //         });
-    //     });
-    // };
+        messageHandler.send({
+            target: RequestTarget.all,
+            command: RequestCommand.updateAppState,
+            payload: {
+                state: appState,
+                error,
+            },
+        });
+    }
 
     function onSelection(selection: Selection) {
         const { type, id } = selection as Selection;
@@ -136,6 +136,22 @@ export async function activate(context: vscode.ExtensionContext) {
     │     communications                                                          │
     └─────────────────────────────────────────────────────────────────────────────┘
     */
+
+    webviewProviders.forEach((provider) => {
+        provider.onResolveWebviewView = () => {
+            context.subscriptions.push(
+                messageHandler.bindViewMessageHandler(provider.webview, provider.viewId)
+            );
+
+            assetWatcher.on("assetsChanged", async () => {
+                messageHandler.send({
+                    command: RequestCommand.updateAssets,
+                    payload: await assetWatcher.getAssets(),
+                    target: provider.viewId,
+                });
+            });
+        };
+    });
 
     messageHandler.onExtensionMessage = async (data) => {
         print("extension receives data", data);
@@ -196,6 +212,19 @@ export async function activate(context: vscode.ExtensionContext) {
                     target: origin,
                 });
                 break;
+
+            case RequestCommand.getAppState:
+                // reply with effects
+                messageHandler.send({
+                    ...data,
+                    target: origin,
+                    payload: {
+                        state: appState,
+                        error,
+                    },
+                });
+                break;
+
             default:
                 break;
         }
@@ -225,28 +254,38 @@ export async function activate(context: vscode.ExtensionContext) {
 
     maskConfig.onFileSave = async () => {
         // maskConfig.selection = {type : SelectionType.empty};
-        await maskConfig.clearSelection();
-
-        messageHandler.send({
-            target: RequestTarget.all,
-            command: RequestCommand.updateSelection,
-            payload: maskConfig.selection,
-        });
+        // await maskConfig.clearSelection();
 
         print("sending effects on file save");
         const effects = await maskConfig.getEffects();
         messageHandler.send({
-            target: RequestTarget.main,
+            target: RequestTarget.effects,
+            command: RequestCommand.updateEffects,
+            payload: effects,
+        });
+
+        messageHandler.send({
+            target: RequestTarget.inspector,
             command: RequestCommand.updateEffects,
             payload: effects,
         });
 
         print("sending plugins on file save");
         const plugins = await maskConfig.getPlugins();
+
         messageHandler.send({
-            target: RequestTarget.main,
+            target: RequestTarget.plugins,
             command: RequestCommand.updatePlugins,
             payload: plugins,
+        });
+
+        print("sending maskSettings");
+
+        const maskSttings = await maskConfig.getMaskSettings();
+        messageHandler.send({
+            target: RequestTarget.maskSettings,
+            command: RequestCommand.updateMaskSettings,
+            payload: maskSttings,
         });
     };
 
@@ -341,6 +380,11 @@ export async function activate(context: vscode.ExtensionContext) {
         );
     }
 
+    /* 
+    ┌─────────────────────────────────────────────────────────────────────────────┐
+    │     extension lifecycle                                                     │
+    └─────────────────────────────────────────────────────────────────────────────┘
+    */
     context.subscriptions.push(
         vscode.commands.registerCommand("vkmask.resetSidebar", async () => {
             webviewProviders.forEach((provider) => {
@@ -354,13 +398,31 @@ export async function activate(context: vscode.ExtensionContext) {
     // // vscode.commands.executeCommand(`workbench.action.focusAuxiliaryBar`)
     // // vscode.commands.executeCommand(`vkmask_primary_bar.focus`)
 
-    // this will ensure all the componenets will show up no matter if they closed before.
-    await vscode.commands.executeCommand(`vkmask.inspector.focus`);
-    await vscode.commands.executeCommand(`vkmask.assets_manager.focus`);
-    await vscode.commands.executeCommand(`vkmask.main.focus`);
+    // !!! erorr handle !!!
+    maskConfig.parseConfig();
+
+    // will ensure good initialize
+    if (maskConfig.updateConfigPath()) {
+        // on init need to show mask.json only! so there is no misatakes working in a wrong file
+        const tabsToClose = vscode.window.tabGroups.all.map((tg) => tg.tabs).flat();
+        // ? maybe close only files that are in old project, could be usefull for opened api reference
+        await vscode.window.tabGroups.close(tabsToClose);
+        maskConfig.showConfig();
+
+        // this will ensure all the componenets will show up no matter if they closed before.
+        webviewProviders.forEach((provider) => {
+            vscode.commands.executeCommand(provider.viewId + ".focus");
+        });
+        // await vscode.commands.executeCommand(`vkmask.inspector.focus`);
+        // await vscode.commands.executeCommand(`vkmask.assets_manager.focus`);
+        // await vscode.commands.executeCommand(`vkmask.assets_manager.removeView`);  // hides a view
+    }
 
     // // vscode.commands.executeCommand('workbench.action.moveFocusedView');
     // // vscode.commands.executeCommand('vkmask.sidepanel.focus').then(() => {
+
+    // ? open settings
+    // vscode.commands.executeCommand('workbench.action.openSettingsJson', { revealSetting: { key: 'editor.renderWhitespace' }});
 }
 
 // This method is called when your extension is deactivated

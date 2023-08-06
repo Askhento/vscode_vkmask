@@ -2,7 +2,9 @@
 export const ViewIds = {
     inspector: "vkmask.inspector",
     assetsManager: "vkmask.assets_manager",
-    main: "vkmask.main",
+    effects: "vkmask.effects",
+    plugins: "vkmask.plugins",
+    maskSettings: "vkmask.mask_settings",
 } as const;
 
 export const RequestTarget = {
@@ -19,6 +21,7 @@ export const RequestCommand = {
     getMaskSettings: "getMaskSettings",
     getSelection: "getSelection",
     getLogs: "getLogs",
+    getAppState: "getAppState",
 
     updateAssets: "updateAssets",
     updateSettings: "updateSettings",
@@ -26,13 +29,14 @@ export const RequestCommand = {
     updateEffects: "updateEffects",
     updatePlugins: "updatePlugins",
     updateSelection: "updateSelection",
-};
+    updateAppState: "updateAppState",
+} as const;
 
-export const AppStates = {
-    LOADING: 0,
-    RUNNING: 1,
-    WELCOME: 2,
-    ERROR: 3,
+export const AppState = {
+    loading: "LOADING",
+    running: "RUNNING",
+    welcome: "WELCOME",
+    error: "ERROR",
 };
 
 // enum emulation
@@ -45,9 +49,21 @@ export const SelectionType = {
 } as const;
 
 type ObjValues<T> = T[keyof T];
-type SelectionType = ObjValues<typeof SelectionType>;
+// type SelectionType = ObjValues<typeof SelectionType>;
 
 export interface Selection {
-    type: SelectionType;
+    type: ObjValues<typeof SelectionType>;
     id?: number;
+}
+
+// errors
+export const ErrorType = {
+    configSyntax: "CONFIGSYNTAX",
+    configZod: "CONFIGZOD",
+    configMissing: "CONFIGMISSING",
+} as const;
+
+export interface Error {
+    type: ObjValues<typeof ErrorType>;
+    value?: any;
 }

@@ -878,12 +878,12 @@ const ZNumberEnum = (defValue, options = [], showAlways = false) => {
 
 const MaskSettings = {
     name: ZText.describe(uiDescriptions.text({ defValue: "defaultName" })),
-    user_hint: ZEnum(UserHintOptions[0], UserHintOptions),
+    user_hint: ZEnum(UserHintOptions[0], UserHintOptions).optional(),
     facemodel_version: ZNumberEnum(0, [0, 1]),
     // num_faces: ZEnum(1, [0, 1, 2]),
-    mouse_input: ZBool,
-    preview: ZTextureAsset,
-    script: ZScriptAsset,
+    mouse_input: ZBool.optional(),
+    preview: ZTextureAsset.optional(),
+    script: ZScriptAsset.optional(),
 };
 
 export const ZMaskSettings = z.object(MaskSettings).describe(uiDescriptions.object({}));

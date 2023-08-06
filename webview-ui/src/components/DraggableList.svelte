@@ -26,7 +26,7 @@
     // on:finalize={handleDndFinalize}
 </script>
 
-<h3>{name}</h3>
+<!-- <h3>{name}</h3> -->
 
 <section
     use:dndzone={{ items: elements, flipDurationMs, ...dndProps }}

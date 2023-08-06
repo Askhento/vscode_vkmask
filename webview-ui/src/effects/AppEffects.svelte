@@ -8,18 +8,16 @@
     import { RequestTarget, RequestCommand, SelectionType } from "../../../src/types";
     import type { Selection } from "../../../src/types";
     import Effect from "./Effect.svelte";
-    import Plugin from "./Plugin.svelte";
-    import MaskSettings from "./MaskSettings.svelte";
     import { logger, logDump } from "../logger";
-    const print = logger("AppMain.svelte");
+    const print = logger("AppEffects.svelte");
 
     provideVSCodeDesignSystem().register(allComponents);
 
     const selection = writable<Selection>({ type: SelectionType.empty });
     setContext("stores", { selection });
 
-    const origin = RequestTarget.main;
-    let effects, plugins;
+    const origin = RequestTarget.effects;
+    let effects;
 
     const messageHandler = new MessageHandler(handleMessageApp, origin);
 
@@ -33,10 +31,6 @@
 
             case RequestCommand.updateEffects:
                 processEffects(payload);
-                break;
-
-            case RequestCommand.updatePlugins:
-                processPlugins(payload);
                 break;
 
             case RequestCommand.updateSelection:
@@ -57,6 +51,7 @@
     }
 
     function processEffects(newEffects) {
+        print("new effects", newEffects);
         effects = newEffects.map((e, id) => {
             // print("process effect ", id, selection.id === id);
             return {
@@ -109,58 +104,6 @@
         });
     }
 
-    function processPlugins(newPlugins) {
-        plugins = newPlugins.map((e, id) => {
-            // print("process plugin ", id, selection.id === id);
-            return {
-                value: e,
-                id,
-                selected: $selection.id === id,
-                onClickVisible: (id, disabled) => {
-                    // print("disabled ", id, disabled);
-                    plugins[id].value.disabled = disabled;
-                    sendPlugins();
-                },
-                onClickDelete: (id) => {
-                    // print("ondelte", id);
-                    plugins.splice(id, 1);
-                    plugins = plugins;
-                    sendPlugins();
-                    if ($selection.type === SelectionType.plugin) {
-                        if ($selection.id === id) {
-                            $selection = { type: SelectionType.empty };
-                        } else if ($selection.id > id) {
-                            $selection.id--;
-                        }
-                        sendSelect();
-                    }
-                },
-                onSelect: () => {
-                    sendSelect();
-                },
-            };
-        });
-    }
-
-    function getPlugins() {
-        messageHandler
-            .request({
-                target: RequestTarget.extension,
-                command: RequestCommand.getPlugins,
-            })
-            .then(({ payload }) => {
-                processPlugins(payload);
-            });
-    }
-
-    function sendPlugins() {
-        messageHandler.send({
-            command: RequestCommand.updatePlugins,
-            target: RequestTarget.extension,
-            payload: plugins.map((e) => e.value),
-        });
-    }
-
     function sendSelect() {
         messageHandler.send({
             command: RequestCommand.updateSelection,
@@ -176,9 +119,9 @@
                 command: RequestCommand.getSelection,
             })
             .then(({ payload }) => {
+                print("received selection");
                 proccessSelection(payload);
                 getEffects();
-                getPlugins();
                 // switch (selection.type) {
                 //     case SelectionType.effect:
                 //         break;
@@ -196,20 +139,10 @@
     }
 
     getSelection();
+    print("INIT");
 </script>
 
 {#key $selection}
-    <MaskSettings
-        selected={$selection.type === SelectionType.maskSettings}
-        onSelect={(selected) => {
-            if (selected) {
-                $selection = { type: SelectionType.maskSettings };
-            } else {
-                $selection = { type: SelectionType.empty };
-            }
-            sendSelect();
-        }}
-    />
     {#key effects}
         {#if effects}
             <List
@@ -228,23 +161,4 @@
             />
         {/if}
     {/key}
-
-    {#key plugins}
-        {#if plugins}
-            <List
-                elements={plugins}
-                elementComponent={Plugin}
-                name="Plugins"
-                onDrop={(newElements) => {
-                    plugins = newElements.map((e, index) => ({ ...e, id: index }));
-                }}
-            />
-        {/if}
-    {/key}
 {/key}
-
-<style>
-    div {
-        background-color: transparent;
-    }
-</style>
