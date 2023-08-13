@@ -8,18 +8,18 @@
     import { RequestTarget, RequestCommand, SelectionType } from "../../../src/types";
     import type { Selection } from "../../../src/types";
     import Plugin from "./Plugin.svelte";
+    import AddPlugin from "./AddPlugin.svelte";
     import { logger, logDump } from "../logger";
     const print = logger("AppPlugins.svelte");
+    const origin = RequestTarget.plugins;
 
     provideVSCodeDesignSystem().register(allComponents);
 
     const selection = writable<Selection>({ type: SelectionType.empty });
-    setContext("stores", { selection });
-
-    const origin = RequestTarget.plugins;
-    let plugins;
-
     const messageHandler = new MessageHandler(handleMessageApp, origin);
+    let plugins = writable([]);
+
+    setContext("stores", { selection, plugins, messageHandler });
 
     function handleMessageApp(data: MessageHandlerData<any>) {
         print("recived ", data);
@@ -51,7 +51,7 @@
     }
 
     function processPlugins(newPlugins) {
-        plugins = newPlugins.map((e, id) => {
+        $plugins = newPlugins.map((e, id) => {
             // print("process plugin ", id, selection.id === id);
             return {
                 value: e,
@@ -59,13 +59,13 @@
                 selected: $selection.id === id,
                 onClickVisible: (id, disabled) => {
                     // print("disabled ", id, disabled);
-                    plugins[id].value.disabled = disabled;
+                    $plugins[id].value.disabled = disabled;
                     sendPlugins();
                 },
                 onClickDelete: (id) => {
                     // print("ondelte", id);
-                    plugins.splice(id, 1);
-                    plugins = plugins;
+                    $plugins.splice(id, 1);
+                    $plugins = $plugins;
                     sendPlugins();
                     if ($selection.type === SelectionType.plugin) {
                         if ($selection.id === id) {
@@ -98,7 +98,7 @@
         messageHandler.send({
             command: RequestCommand.updatePlugins,
             target: RequestTarget.extension,
-            payload: plugins.map((e) => e.value),
+            payload: $plugins.map((e) => e.value),
         });
     }
 
@@ -130,15 +130,16 @@
     getSelection();
 </script>
 
+<AddPlugin />
 {#key $selection}
-    {#key plugins}
-        {#if plugins}
+    {#key $plugins}
+        {#if $plugins}
             <List
-                elements={plugins}
+                elements={$plugins}
                 elementComponent={Plugin}
                 name="Plugins"
                 onDrop={(newElements) => {
-                    plugins = newElements.map((e, index) => ({ ...e, id: index }));
+                    $plugins = newElements.map((e, index) => ({ ...e, id: index }));
                 }}
             />
         {/if}

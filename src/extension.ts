@@ -279,6 +279,12 @@ export async function activate(context: vscode.ExtensionContext) {
             payload: plugins,
         });
 
+        messageHandler.send({
+            target: RequestTarget.inspector,
+            command: RequestCommand.updatePlugins,
+            payload: plugins,
+        });
+
         print("sending maskSettings");
 
         const maskSttings = await maskConfig.getMaskSettings();

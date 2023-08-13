@@ -9,17 +9,17 @@
     import type { Selection } from "../../../src/types";
     import Effect from "./Effect.svelte";
     import { logger, logDump } from "../logger";
+    import AddEffect from "./AddEffect.svelte";
     const print = logger("AppEffects.svelte");
+    const origin = RequestTarget.effects;
 
     provideVSCodeDesignSystem().register(allComponents);
 
     const selection = writable<Selection>({ type: SelectionType.empty });
-    setContext("stores", { selection });
-
-    const origin = RequestTarget.effects;
-    let effects;
-
+    const effects = writable([]);
     const messageHandler = new MessageHandler(handleMessageApp, origin);
+
+    setContext("stores", { selection, effects, messageHandler });
 
     function handleMessageApp(data: MessageHandlerData<any>) {
         print("recived ", data);
@@ -52,7 +52,7 @@
 
     function processEffects(newEffects) {
         print("new effects", newEffects);
-        effects = newEffects.map((e, id) => {
+        $effects = newEffects.map((e, id) => {
             // print("process effect ", id, selection.id === id);
             return {
                 value: e,
@@ -60,13 +60,13 @@
                 selected: $selection.id === id,
                 onClickVisible: (id, disabled) => {
                     // print("disabled ", id, disabled);
-                    effects[id].value.disabled = disabled;
+                    $effects[id].value.disabled = disabled;
                     sendEffects();
                 },
                 onClickDelete: (id) => {
                     print("ondelte", id);
-                    effects.splice(id, 1);
-                    effects = effects;
+                    $effects.splice(id, 1);
+                    $effects = $effects;
                     sendEffects();
                     if ($selection.type === SelectionType.effect) {
                         if ($selection.id === id) {
@@ -100,7 +100,7 @@
         messageHandler.send({
             command: RequestCommand.updateEffects,
             target: RequestTarget.extension,
-            payload: effects.map((e) => e.value),
+            payload: $effects.map((e) => e.value),
         });
     }
 
@@ -142,11 +142,12 @@
     print("INIT");
 </script>
 
+<AddEffect />
 {#key $selection}
-    {#key effects}
-        {#if effects}
+    {#key $effects}
+        {#if $effects}
             <List
-                elements={effects}
+                elements={$effects}
                 elementComponent={Effect}
                 name="Effects"
                 onDrop={(newElements, dragId) => {
@@ -154,9 +155,9 @@
                     if (dragId === $selection.id) {
                         print("selected drag");
                     }
-                    effects = newElements.map((e, index) => ({ ...e, id: index }));
+                    $effects = newElements.map((e, index) => ({ ...e, id: index }));
                     sendEffects();
-                    console.log("drop", effects);
+                    console.log("drop", $effects);
                 }}
             />
         {/if}

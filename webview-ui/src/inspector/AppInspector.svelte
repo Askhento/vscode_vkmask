@@ -73,8 +73,16 @@
                 processAppState(payload);
                 break;
 
+            // !!!!! update plugins mask settings
+
+            case RequestCommand.updatePlugins:
+                processPlugins(payload);
+                parseUI();
+                break;
+
             case RequestCommand.updateEffects:
                 processEffects(payload);
+                parseUI();
                 break;
 
             case RequestCommand.getLogs:
@@ -166,6 +174,10 @@
             command: RequestCommand.getPlugins,
         });
         print("new plugins", payload);
+        processPlugins(payload);
+    }
+
+    function processPlugins(payload) {
         plugins = payload;
     }
 
@@ -187,7 +199,6 @@
 
     function processEffects(payload) {
         effects = payload;
-        // parseUI();
     }
 
     function sendEffects() {

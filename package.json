@@ -43,12 +43,19 @@
             "view/title": [
                 {
                     "command": "vkmask.dumpLogs",
-                    "when": "view == vkmask.main",
+                    "when": "view == vkmask_primary_bar",
                     "group": "navigation"
                 },
                 {
                     "command": "vkmask.resetSidebar",
                     "when": "view == vkmask.main",
+                    "group": "navigation"
+                }
+            ],
+            "extension.vkmask_primary_bar/title": [
+                {
+                    "command": "vkmask.dumpLogs",
+                    "when": "true",
                     "group": "navigation"
                 }
             ]
@@ -72,6 +79,7 @@
                 {
                     "id": "vkmask_primary_bar",
                     "title": "VK mask",
+
                     "icon": "./res/smile-svgrepo-com.svg"
                 }
             ]
