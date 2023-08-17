@@ -157,6 +157,7 @@
     {#if uiElements}
         <ObjectControl
             expanded={true}
+            nesting={false}
             value={maskSettings}
             label={"MaskSettings"}
             path={[]}
