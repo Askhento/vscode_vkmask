@@ -92,10 +92,24 @@
                     "title": "VK mask",
                     "icon": "./res/smile-svgrepo-com.svg"
                 }
+            ],
+            "auxiliaryBar": [
+                {
+                    "id": "vkmask_secondary_bar",
+                    "title": "VK mask",
+                    "icon": "./res/smile-svgrepo-com.svg"
+                }
             ]
         },
         "views": {
             "vkmask_primary_bar": [
+                {
+                    "type": "webview",
+                    "contextualTitle": "vkmask maskSettings",
+                    "id": "vkmask.mask_settings",
+                    "name": "MaskSettings",
+                    "icon": "./node_modules/@vscode/codicons/src/icons/add.svg"
+                },
                 {
                     "type": "webview",
                     "contextualTitle": "vkmask effects",
@@ -108,13 +122,6 @@
                     "contextualTitle": "vkmask plugins",
                     "id": "vkmask.plugins",
                     "name": "Plugins",
-                    "icon": "./node_modules/@vscode/codicons/src/icons/add.svg"
-                },
-                {
-                    "type": "webview",
-                    "contextualTitle": "vkmask maskSettings",
-                    "id": "vkmask.mask_settings",
-                    "name": "MaskSettings",
                     "icon": "./node_modules/@vscode/codicons/src/icons/add.svg"
                 },
                 {

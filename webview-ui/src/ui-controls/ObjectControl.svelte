@@ -67,7 +67,7 @@
     {/if}
 
     {#if expanded}
-        <div class="elements-wrapper">
+        <div class="elements-wrapper" style="padding-left: {nesting ? '0.2em' : '0'};">
             {#each Object.entries(uiElementsVisible) as [key, data]}
                 <!-- <div transition:fly|local={{ duration: 1000, x: 200 }}> -->
                 <!-- data.value is null when key is missing -->
@@ -124,7 +124,7 @@
     }
     .elements-wrapper {
         padding: 0 0 0 0.5em;
-        padding-left: 0.2em;
+
         margin: 0 0 0 0.5em;
     }
 

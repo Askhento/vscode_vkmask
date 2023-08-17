@@ -30,6 +30,8 @@ export const RequestCommand = {
     updatePlugins: "updatePlugins",
     updateSelection: "updateSelection",
     updateAppState: "updateAppState",
+
+    showError: "showError",
 } as const;
 
 export const AppState = {

@@ -8,7 +8,7 @@
 
 
   */
-    import Error from "../components/Error.svelte";
+    import ErrorMessage from "../components/ErrorMessage.svelte";
     import { setContext } from "svelte";
     import { writable } from "svelte/store";
 
@@ -18,9 +18,10 @@
     import type { MessageHandlerData } from "../common/MessageHandler";
 
     import { RequestTarget, RequestCommand, SelectionType, AppState } from "../../../src/types";
-    import type { Selection } from "../../../src/types";
+    import type { Selection, Error } from "../../../src/types";
+    import { ErrorType } from "../../../src/types";
 
-    import { fromZodError } from "zod-validation-error";
+    // import { fromZodError } from "zod-validation-error";
 
     import { logger, logDump } from "../logger";
     const print = logger("Inspector.svelte");
@@ -48,14 +49,13 @@
         uiElements;
 
     let appState = AppState.running,
-        error;
+        error: Error | null;
 
     const assets = writable([]);
     const settings = writable([]);
 
-    setContext("stores", { assets, settings });
-
     const messageHandler = new MessageHandler(handleMessageApp, origin);
+    setContext("stores", { assets, settings, messageHandler });
 
     function handleMessageApp(data: MessageHandlerData<any>) {
         print("recived ", data);
@@ -226,6 +226,8 @@
     }
 
     function parseUI() {
+        error = null;
+        appState = AppState.running;
         if (!selectedIsKnown()) {
             uiElements = null;
             return;
@@ -367,17 +369,27 @@
     //   const dispatch = createEventDispatcher();
 
     async function onError(zodError) {
-        print("raw errpr", zodError);
+        // print("raw errpr", zodError);
         const { name, _errors, ...formated } = zodError.format();
-        print("formated error", formated);
+        // print("formated error", formated);
 
         // let errorPath = ;
 
-        let { path, message } = reduceError(formated, `/effects/${selection.id}`);
+        let errorRootPath;
+        switch (selection.type) {
+            case SelectionType.effect:
+                errorRootPath = "effects";
+                break;
+            case SelectionType.plugin:
+                errorRootPath = "plugins";
+                break;
+        }
+
+        let { path, message } = reduceError(formated, `/${errorRootPath}/${selection.id}`);
 
         print("error path, message", path, message);
 
-        error = { message, path };
+        error = { type: ErrorType.configZod, value: { message, path } };
         appState = AppState.error;
 
         // await tick();
@@ -506,7 +518,7 @@
     {/key}
 {:else if appState === AppState.error}
     <div>should be erro</div>
-    <Error {error} />
+    <ErrorMessage {error} />
 {/if}
 
 <style>

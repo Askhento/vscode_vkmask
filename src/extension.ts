@@ -28,7 +28,9 @@ import {
     SelectionType,
     ViewIds,
     AppState,
+    ErrorType,
 } from "./types";
+import type { Error } from "./types";
 import { MaskConfig } from "./MaskConfig";
 import { BaseWebviewProvider } from "./panels/BaseWebviewProvider";
 
@@ -125,6 +127,24 @@ export async function activate(context: vscode.ExtensionContext) {
 
             case SelectionType.empty:
                 maskConfig.clearSelection();
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    function showConfgiError(error: Error) {
+        switch (error.type) {
+            case ErrorType.configZod:
+                const { path } = error.value;
+                const pointer = maskConfig.maskLinePointers[path];
+                print("error pointer", pointer, error);
+                print(maskConfig.maskLinePointers);
+                maskConfig.showConfigAtPointer(pointer);
+                break;
+
+            case ErrorType.configSyntax:
                 break;
 
             default:
@@ -244,7 +264,10 @@ export async function activate(context: vscode.ExtensionContext) {
                 // maskConfig.
                 onSelection(payload);
                 // inform inspector
+                break;
 
+            case RequestCommand.showError:
+                showConfgiError(payload);
                 break;
 
             default:
@@ -413,6 +436,7 @@ export async function activate(context: vscode.ExtensionContext) {
     // // await vscode.commands.executeCommand(`workbench.view.extension.vkmask_primary_bar`)
     // // vscode.commands.executeCommand(`workbench.action.focusAuxiliaryBar`)
     // // vscode.commands.executeCommand(`vkmask_primary_bar.focus`)
+    // workbench.action.focusAuxiliaryBar
 
     // !!! erorr handle !!!
     maskConfig.parseConfig();
