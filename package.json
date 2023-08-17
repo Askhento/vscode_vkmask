@@ -43,12 +43,17 @@
             "view/title": [
                 {
                     "command": "vkmask.dumpLogs",
-                    "when": "view == vkmask_primary_bar",
+                    "when": "view == vkmask.mask_settings",
                     "group": "navigation"
                 },
                 {
                     "command": "vkmask.resetSidebar",
-                    "when": "view == vkmask.main",
+                    "when": "view == vkmask.mask_settings",
+                    "group": "navigation"
+                },
+                {
+                    "command": "vkmask.openSettings",
+                    "when": "view == vkmask.mask_settings",
                     "group": "navigation"
                 }
             ],
@@ -72,6 +77,12 @@
                 "title": "Reset all views in sidebar",
                 "shortTitle": "Reset sidebar",
                 "icon": "$(refresh)"
+            },
+            {
+                "command": "vkmask.openSettings",
+                "title": "Open vkmask settings tab",
+                "shortTitle": "vkmask settings",
+                "icon": "$(settings-gear)"
             }
         ],
         "viewsContainers": {

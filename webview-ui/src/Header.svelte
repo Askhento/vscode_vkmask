@@ -1,6 +1,6 @@
 <script>
     import AddEffect from "./effects/AddEffect.svelte";
-    import AddPlugin from "./AddPlugin.svelte";
+    import AddPlugin from "./plugins/AddPlugin.svelte";
     import Settings from "./Settings.svelte";
     import Dropdown from "./components/Dropdown.svelte";
 </script>

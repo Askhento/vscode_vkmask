@@ -344,6 +344,16 @@ export async function activate(context: vscode.ExtensionContext) {
             logger.dumpLogs(webviewLogs, dumpPath);
         })
     );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand("vkmask.openSettings", async () => {
+            vscode.commands.executeCommand("workbench.action.openSettings", "vkmask");
+
+            // vscode.commands.executeCommand("workbench.action.openSettingsJson", {
+            //     revealSetting: { key: "editor.renderWhitespace" },
+            // });
+        })
+    );
     //
     // // "workbench.action.movePanelToSecondarySideBar",
     // // workbench.action.openView
@@ -426,9 +436,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
     // // vscode.commands.executeCommand('workbench.action.moveFocusedView');
     // // vscode.commands.executeCommand('vkmask.sidepanel.focus').then(() => {
-
-    // ? open settings
-    // vscode.commands.executeCommand('workbench.action.openSettingsJson', { revealSetting: { key: 'editor.renderWhitespace' }});
 }
 
 // This method is called when your extension is deactivated
