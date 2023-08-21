@@ -6,7 +6,7 @@
         "url": "https://github.com/Askhento/vscode_vkmask"
     },
     "description": "UI for vkontakte AR development ",
-    "version": "0.5.3",
+    "version": "0.5.4",
     "engines": {
         "vscode": "^1.74.0"
     },
@@ -52,7 +52,6 @@
             }
         ],
         "menus": {
-
             "view/title": [
                 {
                     "command": "vkmask.dumpLogs",
@@ -69,22 +68,17 @@
                     "when": "view == vkmask.projectManager",
                     "group": "navigation"
                 },
-
-
                 {
                     "submenu": "vkmask.add_effect_submenu",
                     "when": "view == vkmask.effects",
                     "group": "navigation"
                 },
-
-
                 {
                     "submenu": "vkmask.remove_effect_submenu",
                     "when": "view == vkmask.effects",
                     "group": "navigation"
                 }
             ],
-
             "vkmask.add_effect_submenu": [
                 {
                     "command": "vkmask.add_effect.patch"
@@ -93,7 +87,6 @@
                     "command": "vkmask.add_effect.facemodel"
                 }
             ],
-
             "vkmask.remove_effect_submenu": [
                 {
                     "command": "vkmask.add_effect.patch"
@@ -102,7 +95,6 @@
                     "command": "vkmask.add_effect.facemodel"
                 }
             ],
-
             "extension.vkmask_primary_bar/title": [
                 {
                     "command": "vkmask.dumpLogs",
@@ -127,8 +119,6 @@
                 "title": "execute command by Id",
                 "shortTitle": "execute by id"
             },
-
-
             {
                 "command": "vkmask.dumpLogs",
                 "title": "Dump vkmask logs to logsDump.json file",
