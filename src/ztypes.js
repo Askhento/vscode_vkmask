@@ -769,7 +769,7 @@ export const ZEffects = ZEffect.array().describe(uiDescriptions.array({}));
 // console.log(ZEffects.safeParse({ name: "facemodel" }))
 
 export const effectNames = [...new Set(ZEffect.options.map((val) => val.shape.name.value))];
-console.log("effectsNames", effectNames);
+// console.log("effectsNames", effectNames);
 export const effectDefaults = {};
 effectNames.forEach((name, i) => {
     effectDefaults[name] = {

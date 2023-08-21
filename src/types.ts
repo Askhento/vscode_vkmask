@@ -31,6 +31,10 @@ export const RequestCommand = {
     updateAppState: "updateAppState",
 
     showError: "showError",
+
+    openProject: "openProject",
+    createProject: "createProject",
+    createConfig: "createConfig",
 } as const;
 
 export const AppState = {

@@ -33,10 +33,8 @@ import {
 import type { AppError } from "./types";
 import { MaskConfig } from "./MaskConfig";
 import { BaseWebviewProvider } from "./panels/BaseWebviewProvider";
-
-/*
-    todo : angelscript intellisence
-*/
+import { delayPromise } from "./utils/delayPromise";
+import { copyRecursiveSync } from "./utils/copyFilesRecursive";
 
 export async function activate(context: vscode.ExtensionContext) {
     let appState = AppState.running,
@@ -49,7 +47,6 @@ export async function activate(context: vscode.ExtensionContext) {
     const maskConfig = new MaskConfig();
 
     maskConfig.on("error", onError);
-
     // let selection: Selection = { type: SelectionType.empty };
 
     const webviewsBuildPath = path.join("out", "panels", "webview-build");
@@ -95,8 +92,11 @@ export async function activate(context: vscode.ExtensionContext) {
     // ? eventually will make a class
     // ? multiple errors could occur
     // ? multiple time  like removed and added config
-    function onError(newError: AppError) {
+    async function onError(newError: AppError) {
         appState = AppState.error;
+
+        await vscode.commands.executeCommand("setContext", "vkmask.appState", appState);
+
         error = newError;
 
         switch (newError.type) {
@@ -109,28 +109,20 @@ export async function activate(context: vscode.ExtensionContext) {
         }
     }
 
-    function onConfigMissing() {
+    async function onConfigMissing() {
         print("config missing error handling");
 
-        // this will ensure all the componenets will show up no matter if they closed before.
-        webviewProviders.forEach((provider) => {
-            if (provider.viewId !== ViewIds.projectManager) {
-                print(`closing ${provider.viewId}`);
-                vscode.commands.executeCommand(provider.viewId + ".removeView");
-            }
-        });
-        vscode.commands.executeCommand(`vkmask.projectManager.focus`);
-        // await vscode.commands.executeCommand(`vkmask.assets_manager.focus`);
-        // await vscode.commands.executeCommand(`vkmask.assets_manager.removeView`);
+        // ! this works actually
+        // await vscode.commands.executeCommand(
+        //     `workbench.view.extension.vkmask_primary_bar.resetViewContainerLocation`
+        // );
+        // await vscode.commands.executeCommand(`vkmask.projectManager.resetViewLocation`);
 
-        // messageHandler.send({
-        //     target: RequestTarget.all,
-        //     command: RequestCommand.updateAppState,
-        //     payload: {
-        //         state: appState,
-        //         error,
-        //     },
-        // });
+        webviewProviders.forEach(async (provider) => {
+            await vscode.commands.executeCommand(provider.viewId + ".focus");
+            if (provider.viewId !== ViewIds.projectManager)
+                await vscode.commands.executeCommand(provider.viewId + ".removeView");
+        });
     }
 
     function showConfigError(error: AppError) {
@@ -151,6 +143,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }
     }
 
+    // ! selection should go outside of maskConfig.
     function onSelection(selection: Selection) {
         const { type, id } = selection as Selection;
 
@@ -168,7 +161,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
             case SelectionType.maskSettings:
                 maskConfig.selection = selection;
-                // maskConfig.showPlugin(id);
                 break;
 
             case SelectionType.empty:
@@ -299,6 +291,14 @@ export async function activate(context: vscode.ExtensionContext) {
                 showConfigError(payload);
                 break;
 
+            case RequestCommand.openProject:
+                openProject();
+                break;
+
+            case RequestCommand.createProject:
+                createProject();
+                break;
+
             default:
                 break;
         }
@@ -347,6 +347,48 @@ export async function activate(context: vscode.ExtensionContext) {
         });
     };
 
+    function openProject() {
+        // ? need to check if new folder have mask.json
+        const options: vscode.OpenDialogOptions = {
+            canSelectMany: false,
+            openLabel: "Open",
+            canSelectFiles: false,
+            canSelectFolders: true,
+            title: "Open existing vkmask project",
+        };
+
+        vscode.window.showOpenDialog(options).then(async (fileUri) => {
+            if (fileUri && fileUri[0]) {
+                print("Selected file: " + fileUri[0].fsPath);
+                await vscode.commands.executeCommand(`vscode.openFolder`, fileUri[0]);
+            }
+        });
+    }
+
+    function createProject() {
+        // ! need to check if project already there !!!
+
+        const options: vscode.SaveDialogOptions = {
+            saveLabel: "Create",
+            title: "Create mew vkmask project",
+        };
+
+        vscode.window.showSaveDialog(options).then(async (fileUri) => {
+            if (fileUri) {
+                print("new project folder", fileUri.fsPath);
+                const newProjectDir = fileUri;
+                const sampleProjectDir = vscode.Uri.joinPath(
+                    this._extensionUri,
+                    "res",
+                    "empty-project"
+                );
+                // print(sampleProjectDir)
+
+                copyRecursiveSync(sampleProjectDir.fsPath, newProjectDir.fsPath);
+                this.openProjectFolder(newProjectDir);
+            }
+        });
+    }
     // function updateAppState() {
     //     const parseResult = maskConfig.parseConfig();
 
@@ -416,14 +458,15 @@ export async function activate(context: vscode.ExtensionContext) {
                 value: "",
             });
 
-            if (commandID === "") {
-                vscode.window.showErrorMessage("Empty command");
+            if (commandID === "" || commandID === undefined) {
+                vscode.window.showErrorMessage("Empty/Undefined command");
                 return;
             }
 
             const result = (await vscode.commands.executeCommand(commandID)) as string;
 
             if (result) vscode.window.showErrorMessage(result);
+            print(result);
             // vscode.commands.executeCommand("workbench.action.openSettingsJson", {
             //     revealSetting: { key: "editor.renderWhitespace" },
             // });
@@ -491,11 +534,20 @@ export async function activate(context: vscode.ExtensionContext) {
     // // vscode.commands.executeCommand(`vkmask_primary_bar.focus`)
     // workbench.action.focusAuxiliaryBar
 
-    // !!! erorr handle !!!
-    maskConfig.parseConfig();
+    // ! additional context keys
+    // vkmask.projectManager.active
+    // vkmask.projectManager.canMove
+    // vkmask.projectManager.defaultViewLocation
+    // vkmask.projectManager.visible
+    // viewContainer.workbench.view.extension.vkmask_primary_bar.enabled
+
+    // // !!! erorr handle !!!
+    // ;
+
+    // await delayPromise(3000).promise;
 
     // will ensure good initialize
-    if (maskConfig.updateConfigPath()) {
+    if (maskConfig.parseConfig()) {
         print("showing all webivews/config/closing tabs");
         // on init need to show mask.json only! so there is no misatakes working in a wrong file
         const tabsToClose = vscode.window.tabGroups.all.map((tg) => tg.tabs).flat();

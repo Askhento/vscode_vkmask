@@ -56,17 +56,17 @@
             "view/title": [
                 {
                     "command": "vkmask.dumpLogs",
-                    "when": "view == vkmask.mask_settings",
+                    "when": "view == vkmask.projectManager && vkmask.appState != 'ERROR' ",
                     "group": "navigation"
                 },
                 {
                     "command": "vkmask.resetSidebar",
-                    "when": "view == vkmask.mask_settings",
+                    "when": "view == vkmask.projectManager",
                     "group": "navigation"
                 },
                 {
                     "command": "vkmask.openSettings",
-                    "when": "view == vkmask.mask_settings",
+                    "when": "view == vkmask.projectManager",
                     "group": "navigation"
                 },
 

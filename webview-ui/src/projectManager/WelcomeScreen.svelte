@@ -1,17 +1,24 @@
 <script lang="ts">
     import { vscode } from "../utils/vscode";
+    import { RequestTarget, RequestCommand, SelectionType } from "../../../src/types";
+
     //   import { logger } from "./logger";
     //   const print = logger("WelcomeScreen.svelte");
+    import { getContext } from "svelte";
+    //@ts-expect-error
+    const { messageHandler } = getContext("stores");
 
     function sendOpenProject() {
-        vscode.postMessage({
-            type: "openProject",
+        messageHandler.send({
+            command: RequestCommand.openProject,
+            target: RequestTarget.extension,
         });
     }
 
     function sendCreateNewProject() {
-        vscode.postMessage({
-            type: "createNewProject",
+        messageHandler.send({
+            command: RequestCommand.createProject,
+            target: RequestTarget.extension,
         });
     }
 </script>

@@ -20,9 +20,9 @@
     const assets = writable([]);
     const settings = writable([]);
 
-    setContext("stores", { assets, settings });
-
     const messageHandler = new MessageHandler(handleMessageApp, origin);
+
+    setContext("stores", { assets, settings, messageHandler });
 
     function handleMessageApp(data: MessageHandlerData<any>) {
         print("recived ", data);
