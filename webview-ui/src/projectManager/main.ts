@@ -1,4 +1,4 @@
-import App from "./AppMaskSettings.svelte";
+import App from "./AppProjectManager.svelte";
 
 const app = new App({
     target: document.body,

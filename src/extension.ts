@@ -4,7 +4,7 @@
 import * as fs from "fs";
 import * as vscode from "vscode";
 import { EffectsViewProvider } from "./panels/EffectsViewProvider";
-import { MaskSettingsViewProvider } from "./panels/MaskSettingsViewProvider";
+import { ProjectManagerViewProvider } from "./panels/ProjectManagerViewProvider";
 import { PluginsViewProvider } from "./panels/PluginsViewProvider";
 import { InspectorViewProvider } from "./panels/InspectorViewProvider";
 import { AssetsManagerViewProvider } from "./panels/AssetsManagerViewProvider";
@@ -65,14 +65,17 @@ export async function activate(context: vscode.ExtensionContext) {
     webviewProviders.push(plugins);
     context.subscriptions.push(vscode.window.registerWebviewViewProvider(plugins.viewId, plugins));
 
-    const maskSettingsBuildPath = path.join(webviewsBuildPath, "mask_settings");
-    const maskSettings = new MaskSettingsViewProvider(context.extensionUri, maskSettingsBuildPath);
-    webviewProviders.push(maskSettings);
+    const projectManagerBuildPath = path.join(webviewsBuildPath, "projectManager");
+    const projectManager = new ProjectManagerViewProvider(
+        context.extensionUri,
+        projectManagerBuildPath
+    );
+    webviewProviders.push(projectManager);
     context.subscriptions.push(
-        vscode.window.registerWebviewViewProvider(maskSettings.viewId, maskSettings)
+        vscode.window.registerWebviewViewProvider(projectManager.viewId, projectManager)
     );
 
-    const assetsManagerBuildPath = path.join(webviewsBuildPath, "assets_manager");
+    const assetsManagerBuildPath = path.join(webviewsBuildPath, "assetsManager");
     const assetsManager = new AssetsManagerViewProvider(
         context.extensionUri,
         assetsManagerBuildPath
@@ -312,7 +315,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
         const maskSttings = await maskConfig.getMaskSettings();
         messageHandler.send({
-            target: RequestTarget.maskSettings,
+            target: RequestTarget.projectManager,
             command: RequestCommand.updateMaskSettings,
             payload: maskSttings,
         });

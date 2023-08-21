@@ -6,9 +6,9 @@
     import type { MessageHandlerData } from "../common/MessageHandler";
     import { RequestTarget, RequestCommand, SelectionType } from "../../../src/types";
     import { logger, logDump } from "../logger";
-    const print = logger("AppMaskSettings.svelte");
+    const print = logger("AppProjectManager.svelte");
 
-    const origin = RequestTarget.maskSettings;
+    const origin = RequestTarget.projectManager;
 
     import ObjectControl from "../ui-controls/ObjectControl.svelte";
     import { MaskSettingsParserForUI } from "../ui-controls/Controls.js";

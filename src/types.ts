@@ -1,10 +1,10 @@
 // ??? seems like that using typescript should be everywhere
 export const ViewIds = {
     inspector: "vkmask.inspector",
-    assetsManager: "vkmask.assets_manager",
+    assetsManager: "vkmask.assetsManager",
     effects: "vkmask.effects",
     plugins: "vkmask.plugins",
-    maskSettings: "vkmask.mask_settings",
+    projectManager: "vkmask.projectManager",
 } as const;
 
 export const RequestTarget = {

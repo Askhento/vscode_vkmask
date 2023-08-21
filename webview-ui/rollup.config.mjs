@@ -98,7 +98,7 @@ function getSvelteEntry(name) {
 export default [
     getSvelteEntry("effects"),
     getSvelteEntry("plugins"),
-    getSvelteEntry("mask_settings"),
-    getSvelteEntry("assets_manager"),
+    getSvelteEntry("projectManager"),
+    getSvelteEntry("assetsManager"),
     getSvelteEntry("inspector"),
 ];
