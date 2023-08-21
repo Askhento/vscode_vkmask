@@ -4,6 +4,7 @@
     import { provideVSCodeDesignSystem, allComponents } from "@vscode/webview-ui-toolkit";
     import { MessageHandler } from "../common/MessageHandler";
     import type { MessageHandlerData } from "../common/MessageHandler";
+    import WelcomeScreen from "./WelcomeScreen.svelte";
     import { RequestTarget, RequestCommand, SelectionType } from "../../../src/types";
     import { logger, logDump } from "../logger";
     const print = logger("AppProjectManager.svelte");
@@ -157,7 +158,7 @@
     {#if uiElements}
         <ObjectControl
             expanded={true}
-            nesting={false}
+            nesting={true}
             value={maskSettings}
             label={"MaskSettings"}
             path={[]}
@@ -167,6 +168,8 @@
     {:else}
         <div>ui not parsed</div>
     {/if}
+{:else}
+    <WelcomeScreen />
 {/if}
 
 <style>

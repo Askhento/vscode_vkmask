@@ -18,7 +18,7 @@
     import type { MessageHandlerData } from "../common/MessageHandler";
 
     import { RequestTarget, RequestCommand, SelectionType, AppState } from "../../../src/types";
-    import type { Selection, Error } from "../../../src/types";
+    import type { Selection, AppError } from "../../../src/types";
     import { ErrorType } from "../../../src/types";
 
     // import { fromZodError } from "zod-validation-error";
@@ -49,7 +49,7 @@
         uiElements;
 
     let appState = AppState.running,
-        error: Error | null;
+        error: AppError | null;
 
     const assets = writable([]);
     const settings = writable([]);

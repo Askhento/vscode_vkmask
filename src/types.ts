@@ -1,4 +1,3 @@
-// ??? seems like that using typescript should be everywhere
 export const ViewIds = {
     inspector: "vkmask.inspector",
     assetsManager: "vkmask.assetsManager",
@@ -65,7 +64,8 @@ export const ErrorType = {
     configMissing: "CONFIGMISSING",
 } as const;
 
-export interface Error {
+//? maybe  add origin of the erorr and who could solve it
+export interface AppError {
     type: ObjValues<typeof ErrorType>;
     value?: any;
 }

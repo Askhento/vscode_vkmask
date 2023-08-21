@@ -12,7 +12,7 @@ import { EventEmitter } from "events";
 
 import { logger } from "./Logger";
 import { SelectionType, ErrorType } from "./types";
-import type { Error, Selection } from "./types";
+import type { AppError, Selection } from "./types";
 
 const print = (...args: unknown[]) => logger.log(__filename, ...args);
 
@@ -483,12 +483,18 @@ export class MaskConfig extends EventEmitter {
         return fs.existsSync(configPath);
     }
 
+    /**
+     *
+     * @returns true if mask.json fould in current workspacefolder
+     */
+
     public updateConfigPath(): boolean {
         // ? what if more that one folder opened ???
         this.currentConfigDir = undefined;
-
         if (!vscode.workspace.workspaceFolders) {
-            print("No folder opened! Which is not possible!");
+            // print("No folder opened! Which is not possible!");
+            // ? do need separate error for this
+            this.emitError({ type: ErrorType.configMissing });
             return false;
         }
 
@@ -496,7 +502,6 @@ export class MaskConfig extends EventEmitter {
 
         if (!this.checkConfigAtPath(dir)) {
             print("No mask.json at " + dir);
-            // !!!! error here
             this.emitError({ type: ErrorType.configMissing });
             return false;
         }
@@ -610,7 +615,7 @@ export class MaskConfig extends EventEmitter {
         return maskSettings;
     }
 
-    emitError(error: Error) {
+    emitError(error: AppError) {
         this.emit("error", error);
     }
 

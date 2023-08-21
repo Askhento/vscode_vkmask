@@ -14,7 +14,7 @@
         "Other"
     ],
     "activationEvents": [
-        "onWebviewPanel:vkmask.main",
+        "onWebviewPanel:vkmask.projectManager",
         "workspaceContains:mask.json"
     ],
     "main": "./out/extension.js",
@@ -121,6 +121,11 @@
                 "command": "vkmask.add_effect.facemodel",
                 "title": "facemodel",
                 "shortTitle": "Add facemodel effect"
+            },
+            {
+                "command": "vkmask.execute_command_by_id",
+                "title": "execute command by Id",
+                "shortTitle": "execute by id"
             },
 
 
