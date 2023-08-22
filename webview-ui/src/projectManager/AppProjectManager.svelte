@@ -114,6 +114,9 @@
         print("updated maskSettings", maskSettings);
         sendMaskSettings();
 
+        if (structural) {
+            maskSettings = maskSettings;
+        }
         //!!! structural
     }
 
@@ -155,19 +158,21 @@
 
 <!-- <pre> {JSON.stringify(maskSettings, null, "\t")}</pre> -->
 {#if maskSettings}
-    {#if uiElements}
-        <ObjectControl
-            expanded={true}
-            nesting={true}
-            value={maskSettings}
-            label={"MaskSettings"}
-            path={[]}
-            uiElements={uiElements.value}
-            on:changed={onChanged}
-        />
-    {:else}
-        <div>ui not parsed</div>
-    {/if}
+    {#key maskSettings}
+        {#if uiElements}
+            <ObjectControl
+                expanded={true}
+                nesting={true}
+                value={maskSettings}
+                label={"MaskSettings"}
+                path={[]}
+                uiElements={uiElements.value}
+                on:changed={onChanged}
+            />
+        {:else}
+            <div>ui not parsed</div>
+        {/if}
+    {/key}
 {:else}
     <WelcomeScreen />
 {/if}

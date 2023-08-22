@@ -881,7 +881,10 @@ const MaskSettings = {
     user_hint: ZEnum(UserHintOptions[0], UserHintOptions).optional(),
     facemodel_version: ZNumberEnum(0, [0, 1]),
     // num_faces: ZEnum(1, [0, 1, 2]),
-    mouse_input: ZBool.optional(),
+    mouse_input: z
+        .boolean()
+        .describe(uiDescriptions.bool({ defValue: false, showAlways: false }))
+        .optional(),
     preview: ZTextureAsset.optional(),
     script: ZScriptAsset.optional(),
 };
@@ -894,11 +897,12 @@ export const ZMaskConfig = z.object({
     plugins: ZPlugins.default([]),
 });
 
-// !!!! will need plugin preprocess for name field
+// !!!! will need plugin preprocess for name field, case sensitivity
 
 export const ZMaskConfigPreprocess = z
     .object({
-        name: z.string().optional(), // !!! this will ensure order of parsed keys
+        name: z.unknown().optional(), // !!! this will ensure order of parsed keys
+
         effects: z.array(
             z
                 .object({

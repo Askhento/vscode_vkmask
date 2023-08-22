@@ -6,6 +6,7 @@
 
     export let id, value, onClickVisible, onClickDelete, onSelect;
 
+    // ! here need to check if error on specific effect occurs
     let { name, tag, disabled } = value;
 
     // console.log(value);

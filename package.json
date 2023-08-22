@@ -106,12 +106,12 @@
         "commands": [
             {
                 "command": "vkmask.add_effect.patch",
-                "title": "patch",
+                "title": "patch (todo)",
                 "shortTitle": "Add patch effect"
             },
             {
                 "command": "vkmask.add_effect.facemodel",
-                "title": "facemodel",
+                "title": "facemodel (todo)",
                 "shortTitle": "Add facemodel effect"
             },
             {

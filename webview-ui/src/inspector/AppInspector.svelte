@@ -387,7 +387,7 @@
 
         let { path, message } = reduceError(formated, `/${errorRootPath}/${selection.id}`);
 
-        print("error path, message", path, message);
+        print("error path, message", path, message, zodError.format());
 
         error = { type: ErrorType.configZod, value: { message, path } };
         appState = AppState.error;
@@ -517,8 +517,10 @@
         {/if}
     {/key}
 {:else if appState === AppState.error}
-    <div>should be erro</div>
-    <ErrorMessage {error} />
+    {#key error}
+        <div>should be erro</div>
+        <ErrorMessage {error} />
+    {/key}
 {/if}
 
 <style>

@@ -560,8 +560,8 @@ export class MaskConfig extends EventEmitter {
         const preprocessResult: any = ZMaskConfigPreprocess.safeParse(this.sourceMaskJSON.data);
 
         if (!preprocessResult.success) {
-            // print("parse error ! ", preprocessResult);
-            // print("raw mask.json ", this.sourceMaskJSON.data);
+            print("preprocess parse error ! ", preprocessResult);
+            print("raw mask.json ", this.sourceMaskJSON.data);
             // print(this.maskJSON);
 
             this.emitError({ type: ErrorType.configZod, value: preprocessResult.error });

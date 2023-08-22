@@ -547,7 +547,7 @@ export async function activate(context: vscode.ExtensionContext) {
     // await delayPromise(3000).promise;
 
     // will ensure good initialize
-    if (maskConfig.parseConfig()) {
+    if (maskConfig.updateConfigPath()) {
         print("showing all webivews/config/closing tabs");
         // on init need to show mask.json only! so there is no misatakes working in a wrong file
         const tabsToClose = vscode.window.tabGroups.all.map((tg) => tg.tabs).flat();
@@ -562,6 +562,7 @@ export async function activate(context: vscode.ExtensionContext) {
         // await vscode.commands.executeCommand(`vkmask.inspector.focus`);
         // await vscode.commands.executeCommand(`vkmask.assets_manager.focus`);
         // await vscode.commands.executeCommand(`vkmask.assets_manager.removeView`);  // hides a view
+        maskConfig.parseConfig();
     } else {
         print("not able to find config");
     }
