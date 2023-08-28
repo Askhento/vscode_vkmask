@@ -903,46 +903,50 @@ export const ZMaskConfigPreprocess = z
     .object({
         name: z.unknown().optional(), // !!! this will ensure order of parsed keys
 
-        effects: z.array(
-            z
-                .object({
-                    texture: z
-                        .preprocess((val) => {
-                            if (isObject(val)) {
-                                // keep only diffuse, not texture in object
-                                if (val.hasOwnProperty("texture")) {
-                                    val["diffuse"] = val["texture"];
-                                    delete val["texture"];
+        effects: z
+            .array(
+                z
+                    .object({
+                        texture: z
+                            .preprocess((val) => {
+                                if (isObject(val)) {
+                                    // keep only diffuse, not texture in object
+                                    if (val.hasOwnProperty("texture")) {
+                                        val["diffuse"] = val["texture"];
+                                        delete val["texture"];
+                                    }
+                                    return val;
                                 }
-                                return val;
-                            }
-                            return {
-                                diffuse: val,
-                            };
-                        }, z.object({}).passthrough())
-                        .optional(),
+                                return {
+                                    diffuse: val,
+                                };
+                            }, z.object({}).passthrough())
+                            .optional(),
 
-                    material: z
-                        .preprocess((val) => {
-                            if (!Array.isArray(val)) return [val];
-                            return val;
-                        }, z.array(z.union([z.string(), z.object({}).passthrough()])))
-                        .optional(),
-                })
-                .passthrough()
-        ),
-        plugins: z.array(
-            z
-                .object({
-                    name: z
-                        .preprocess((val) => {
-                            // ??? what if non string
-                            return val.toLowerCase();
-                        }, z.string())
-                        .optional(),
-                })
-                .passthrough()
-        ),
+                        material: z
+                            .preprocess((val) => {
+                                if (!Array.isArray(val)) return [val];
+                                return val;
+                            }, z.array(z.union([z.string(), z.object({}).passthrough()])))
+                            .optional(),
+                    })
+                    .passthrough()
+            )
+            .optional(),
+        plugins: z
+            .array(
+                z
+                    .object({
+                        name: z
+                            .preprocess((val) => {
+                                // ??? what if non string
+                                return val.toLowerCase();
+                            }, z.string())
+                            .optional(),
+                    })
+                    .passthrough()
+            )
+            .optional(),
     })
     .passthrough();
 

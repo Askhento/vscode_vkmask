@@ -58,7 +58,9 @@ export class MessageHandler {
             console.log("MessageHandler : need a target to send ");
             return;
         }
-        const newOrigin = data.origin || this.origin;
-        vscode.postMessage({ ...data, origin: newOrigin }); // ??? await
+        const newOrigin = data.origin || this.origin; // for redirects
+
+        const clonedData = JSON.parse(JSON.stringify({ ...data, origin: newOrigin }));
+        vscode.postMessage(clonedData); // ??? await
     }
 }

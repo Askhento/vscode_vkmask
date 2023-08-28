@@ -20,7 +20,7 @@
         recentProjectInfo = payload;
     }
 
-    function sendOpenProject(payload = undefined) {
+    function sendOpenProject(payload) {
         messageHandler.send({
             command: RequestCommand.openProject,
             target: RequestTarget.extension,
@@ -76,7 +76,11 @@
         <span class="button-text">Create new project</span>
         <span slot="start" class="codicon codicon-add" />
     </vscode-button>
-    <vscode-button on:click={sendOpenProject}>
+    <vscode-button
+        on:click={() => {
+            sendOpenProject("");
+        }}
+    >
         <span class="button-text">Open existing project</span>
         <span slot="start" class="codicon codicon-folder-opened" />
     </vscode-button>
