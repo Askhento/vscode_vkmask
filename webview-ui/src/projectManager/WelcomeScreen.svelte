@@ -73,11 +73,11 @@
 <h4>No project opened yet.</h4>
 <div class="welcome-wrapper">
     <vscode-button on:click={sendCreateNewProject}>
-        Create new project
+        <span class="button-text">Create new project</span>
         <span slot="start" class="codicon codicon-add" />
     </vscode-button>
     <vscode-button on:click={sendOpenProject}>
-        Open existing project
+        <span class="button-text">Open existing project</span>
         <span slot="start" class="codicon codicon-folder-opened" />
     </vscode-button>
 </div>
@@ -110,7 +110,7 @@
 
     vscode-link {
         width: 4rem;
-        overflow: hidden;
+        overflow: visible;
         text-overflow: ellipsis;
         white-space: nowrap;
         margin-right: 1rem;
@@ -118,10 +118,12 @@
 
     .recent-path {
         /* width: 10rem; */
-        max-width: 15rem;
+        /* max-width: 15rem; */
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        margin-right: 1rem;
+
         /* background-color: aquamarine; */
     }
 
@@ -131,15 +133,35 @@
     }
 
     .welcome-wrapper {
+        width: 100%;
+        /* margin: unset; */
         display: flex;
         justify-content: center;
         align-items: center;
         flex-direction: column;
     }
 
+    h4 {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
     vscode-button {
         display: block;
-        margin: 5px;
-        width: 190px;
+        margin-top: 0.5rem;
+        /* max-width: max-content; */
+        /* width: fit-content; */
+        width: 11rem;
+    }
+
+    .button-text {
+        /* width: 100%; */
+        /* min-width: 5rem; */
+        width: fit-content;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        /* white-space: nowrap; */
     }
 </style>
