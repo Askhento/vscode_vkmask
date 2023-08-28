@@ -1,12 +1,24 @@
 <script lang="ts">
     import { vscode } from "../utils/vscode";
     import { RequestTarget, RequestCommand, SelectionType } from "../../../src/types";
-
-    //   import { logger } from "./logger";
-    //   const print = logger("WelcomeScreen.svelte");
+    import type { RecentProjectInfo } from "../../../src/RecentProjectInfo";
+    import { logger } from "../logger";
+    const print = logger("WelcomeScreen.svelte");
     import { getContext } from "svelte";
     //@ts-expect-error
     const { messageHandler } = getContext("stores");
+
+    let recentProjectInfo: RecentProjectInfo[] = [];
+
+    async function getRecentProjectInfo() {
+        const { payload } = await messageHandler.request({
+            command: RequestCommand.getRecentProjectInfo,
+            target: RequestTarget.extension,
+        });
+
+        // print(resp);
+        recentProjectInfo = payload;
+    }
 
     function sendOpenProject() {
         messageHandler.send({
@@ -21,6 +33,8 @@
             target: RequestTarget.extension,
         });
     }
+
+    getRecentProjectInfo();
 </script>
 
 <div class="welcome-wrapper">
@@ -34,6 +48,16 @@
         <span slot="start" class="codicon codicon-folder-opened" />
     </vscode-button>
 </div>
+
+{#if recentProjectInfo}
+    {#each recentProjectInfo as info}
+        <div>
+            <span>{info.name}</span>
+            <span>{info.path}</span>
+            <span>{new Date(info.dateModified)}</span>
+        </div>
+    {/each}
+{/if}
 
 <style>
     .welcome-wrapper {

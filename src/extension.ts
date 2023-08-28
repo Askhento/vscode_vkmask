@@ -8,7 +8,8 @@ import { ProjectManagerViewProvider } from "./panels/ProjectManagerViewProvider"
 import { PluginsViewProvider } from "./panels/PluginsViewProvider";
 import { InspectorViewProvider } from "./panels/InspectorViewProvider";
 import { AssetsManagerViewProvider } from "./panels/AssetsManagerViewProvider";
-
+import { RecentProjects } from "./RecentProjectInfo";
+// import type { RecentProjectInfo } from "./RecentProjectInfo"
 import { MessageHandler, MessageHandlerData } from "./MessageHandler";
 
 import { HotReload } from "./HotReload";
@@ -39,6 +40,8 @@ import { copyRecursiveSync } from "./utils/copyFilesRecursive";
 export async function activate(context: vscode.ExtensionContext) {
     let appState = AppState.loading,
         error = null;
+
+    const recentProjectInfo = new RecentProjects(context);
 
     logger.setMode(context.extensionMode);
     await userSettings.init(context.extensionUri);
@@ -274,6 +277,15 @@ export async function activate(context: vscode.ExtensionContext) {
                 });
                 break;
 
+            case RequestCommand.getRecentProjectInfo:
+                // reply with effects
+                messageHandler.send({
+                    ...data,
+                    target: origin,
+                    payload: await recentProjectInfo.getInfo(),
+                });
+                break;
+
             default:
                 break;
         }
@@ -368,6 +380,7 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.window.showOpenDialog(options).then(async (fileUri) => {
             if (fileUri && fileUri[0]) {
                 print("Selected file: " + fileUri[0].fsPath);
+                recentProjectInfo.addInfo(fileUri[0].fsPath);
                 await vscode.commands.executeCommand(`vscode.openFolder`, fileUri[0]);
             }
         });
@@ -393,7 +406,8 @@ export async function activate(context: vscode.ExtensionContext) {
                 // print(sampleProjectDir)
 
                 copyRecursiveSync(sampleProjectDir.fsPath, newProjectDir.fsPath);
-                this.openProjectFolder(newProjectDir);
+                recentProjectInfo.addInfo(newProjectDir.fsPath);
+                vscode.commands.executeCommand(`vscode.openFolder`, newProjectDir);
             }
         });
     }
@@ -556,6 +570,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
     // will ensure good initialize
     if (maskConfig.updateConfigPath()) {
+        recentProjectInfo.addInfo(maskConfig.currentConfigDir);
+
         print("showing all webivews/config/closing tabs");
         // on init need to show mask.json only! so there is no misatakes working in a wrong file
         const tabsToClose = vscode.window.tabGroups.all.map((tg) => tg.tabs).flat();

@@ -21,6 +21,7 @@ export const RequestCommand = {
     getSelection: "getSelection",
     getLogs: "getLogs",
     getAppState: "getAppState",
+    getRecentProjectInfo: "getRecentProjectInfo",
 
     updateAssets: "updateAssets",
     updateSettings: "updateSettings",
