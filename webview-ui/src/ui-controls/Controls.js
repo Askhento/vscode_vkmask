@@ -107,6 +107,7 @@ function addTypeToSchema(schema) {
         //     break;
     }
 
+    // !!! z.nullable()
     res = z.union([res, z.null()]).default(null); // a hack to know if prop is missing
 
     res = res.transform((value) => ({

@@ -37,7 +37,7 @@ import { delayPromise } from "./utils/delayPromise";
 import { copyRecursiveSync } from "./utils/copyFilesRecursive";
 
 export async function activate(context: vscode.ExtensionContext) {
-    let appState = AppState.running,
+    let appState = AppState.loading,
         error = null;
 
     logger.setMode(context.extensionMode);
@@ -170,6 +170,14 @@ export async function activate(context: vscode.ExtensionContext) {
             default:
                 break;
         }
+    }
+
+    function onSendAppState(target = RequestTarget.all) {
+        messageHandler.send({
+            target,
+            command: RequestCommand.updateAppState,
+            payload: appState,
+        });
     }
 
     /* 
@@ -562,8 +570,13 @@ export async function activate(context: vscode.ExtensionContext) {
         // await vscode.commands.executeCommand(`vkmask.inspector.focus`);
         // await vscode.commands.executeCommand(`vkmask.assets_manager.focus`);
         // await vscode.commands.executeCommand(`vkmask.assets_manager.removeView`);  // hides a view
-        maskConfig.parseConfig();
+        if (maskConfig.parseConfig()) {
+            appState = AppState.running;
+            onSendAppState();
+        }
     } else {
+        appState = AppState.welcome;
+        onSendAppState();
         print("not able to find config");
     }
     // // vscode.commands.executeCommand('workbench.action.moveFocusedView');

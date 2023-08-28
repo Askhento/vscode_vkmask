@@ -5,7 +5,7 @@
     import { MessageHandler } from "../common/MessageHandler";
     import type { MessageHandlerData } from "../common/MessageHandler";
     import WelcomeScreen from "./WelcomeScreen.svelte";
-    import { RequestTarget, RequestCommand, SelectionType } from "../../../src/types";
+    import { RequestTarget, RequestCommand, SelectionType, AppState } from "../../../src/types";
     import { logger, logDump } from "../logger";
     const print = logger("AppProjectManager.svelte");
 
@@ -17,6 +17,8 @@
     provideVSCodeDesignSystem().register(allComponents);
 
     let maskSettings, uiElements;
+    let appState = AppState.loading;
+
     const assets = writable([]);
     const settings = writable([]);
 
@@ -44,9 +46,30 @@
                 processAssets(payload);
                 break;
 
+            case RequestCommand.updateAppState:
+                processAppState(payload);
+                break;
+
             default:
                 break;
         }
+    }
+
+    async function getAppState() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getAppState,
+        });
+        processAppState(payload);
+    }
+
+    function processAppState(payload) {
+        appState = payload.state;
+        // error = payload.error; // will be undefined
+        print("state", payload);
+        // if (appState === AppState.error) {
+        //     onError(error);
+        // }
     }
 
     function processAssets(newAssets) {
@@ -147,6 +170,8 @@
     }
 
     async function init() {
+        await getAppState();
+
         await getSettings();
         await getAssets(); // ???? add filter to the query
 
@@ -157,24 +182,30 @@
 </script>
 
 <!-- <pre> {JSON.stringify(maskSettings, null, "\t")}</pre> -->
-{#if maskSettings}
-    {#key maskSettings}
-        {#if uiElements}
-            <ObjectControl
-                expanded={true}
-                nesting={true}
-                value={maskSettings}
-                label={"MaskSettings"}
-                path={[]}
-                uiElements={uiElements.value}
-                on:changed={onChanged}
-            />
-        {:else}
-            <div>ui not parsed</div>
-        {/if}
-    {/key}
-{:else}
+{#if appState === AppState.loading}
+    <div>loading...</div>
+{:else if appState === AppState.running}
+    {#if maskSettings}
+        {#key maskSettings}
+            {#if uiElements}
+                <ObjectControl
+                    expanded={true}
+                    nesting={true}
+                    value={maskSettings}
+                    label={"MaskSettings"}
+                    path={[]}
+                    uiElements={uiElements.value}
+                    on:changed={onChanged}
+                />
+            {:else}
+                <div>ui not parsed</div>
+            {/if}
+        {/key}
+    {/if}
+{:else if appState === AppState.welcome}
     <WelcomeScreen />
+{:else if appState === AppState.error}
+    <div>some Error occured! (todo: handle this)</div>
 {/if}
 
 <style>
