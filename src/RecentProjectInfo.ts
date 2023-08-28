@@ -36,6 +36,7 @@ export class RecentProjects {
         return this.updateInfo(newInfo);
     }
 
+    // todo clear non existent on get
     async getInfo() {
         let info = (await this.context.globalState.get(this.infoStorageKey)) as RecentProjectInfo[];
         if (info === undefined) info = [];

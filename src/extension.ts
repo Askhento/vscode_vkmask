@@ -312,7 +312,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 break;
 
             case RequestCommand.openProject:
-                openProject();
+                openProject(payload);
                 break;
 
             case RequestCommand.createProject:
@@ -367,7 +367,14 @@ export async function activate(context: vscode.ExtensionContext) {
         });
     };
 
-    function openProject() {
+    async function openProject(folder) {
+        if (folder) {
+            // notes : https://www.eliostruyf.com/opening-folders-visual-studio-code-extension/
+            print("new folder", folder);
+            const folderUri = vscode.Uri.parse(folder);
+            vscode.commands.executeCommand(`vscode.openFolder`, folderUri);
+            return;
+        }
         // ? need to check if new folder have mask.json
         const options: vscode.OpenDialogOptions = {
             canSelectMany: false,
@@ -380,7 +387,7 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.window.showOpenDialog(options).then(async (fileUri) => {
             if (fileUri && fileUri[0]) {
                 print("Selected file: " + fileUri[0].fsPath);
-                recentProjectInfo.addInfo(fileUri[0].fsPath);
+                recentProjectInfo.addInfo(fileUri[0].fsPath); // !!! maybe useless!!!!
                 await vscode.commands.executeCommand(`vscode.openFolder`, fileUri[0]);
             }
         });

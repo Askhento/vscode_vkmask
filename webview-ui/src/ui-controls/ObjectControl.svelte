@@ -45,6 +45,7 @@
     function splitElements() {
         uiElementsHidden = {};
         uiElementsVisible = {};
+        // !!! sometimes it is null !!!
         Object.entries(uiElements).forEach(([key, el]) => {
             //   console.log(key, el);
             if (el.value === null && !el.uiDescription.showAlways) {
