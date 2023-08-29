@@ -932,7 +932,7 @@ export const ZMaskConfigPreprocess = z
                     })
                     .passthrough()
             )
-            .optional(),
+            .default([]),
         plugins: z
             .array(
                 z
@@ -946,7 +946,7 @@ export const ZMaskConfigPreprocess = z
                     })
                     .passthrough()
             )
-            .optional(),
+            .default([]),
     })
     .passthrough();
 

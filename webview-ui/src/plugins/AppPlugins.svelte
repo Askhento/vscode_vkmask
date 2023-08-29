@@ -133,7 +133,7 @@
 <!-- <AddPlugin /> -->
 {#key $selection}
     {#key $plugins}
-        {#if $plugins}
+        {#if $plugins.length}
             <List
                 elements={$plugins}
                 elementComponent={Plugin}
@@ -142,6 +142,8 @@
                     $plugins = newElements.map((e, index) => ({ ...e, id: index }));
                 }}
             />
+        {:else}
+            <h4>Create your first plugin!</h4>
         {/if}
     {/key}
 {/key}

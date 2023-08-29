@@ -145,7 +145,7 @@
 <!-- <AddEffect /> -->
 {#key $selection}
     {#key $effects}
-        {#if $effects}
+        {#if $effects.length}
             <List
                 elements={$effects}
                 elementComponent={Effect}
@@ -160,6 +160,8 @@
                     console.log("drop", $effects);
                 }}
             />
+        {:else}
+            <h4>Create your first effect!</h4>
         {/if}
     {/key}
 {/key}
