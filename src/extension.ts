@@ -180,7 +180,10 @@ export async function activate(context: vscode.ExtensionContext) {
         messageHandler.send({
             target,
             command: RequestCommand.updateAppState,
-            payload: appState,
+            payload: {
+                state: appState,
+                error,
+            },
         });
     }
 
@@ -394,11 +397,18 @@ export async function activate(context: vscode.ExtensionContext) {
             title: "Open existing vkmask project",
         };
 
+        const oldState = appState;
+        appState = AppState.loading;
+        onSendAppState();
+
         vscode.window.showOpenDialog(options).then(async (fileUri) => {
             if (fileUri && fileUri[0]) {
                 print("Selected file: " + fileUri[0].fsPath);
                 recentProjectInfo.addInfo(fileUri[0].fsPath); // !!! maybe useless!!!!
                 await vscode.commands.executeCommand(`vscode.openFolder`, fileUri[0]);
+            } else {
+                appState = oldState;
+                onSendAppState();
             }
         });
     }
@@ -410,6 +420,10 @@ export async function activate(context: vscode.ExtensionContext) {
             saveLabel: "Create",
             title: "Create mew vkmask project",
         };
+
+        const oldState = appState;
+        appState = AppState.loading;
+        onSendAppState();
 
         vscode.window.showSaveDialog(options).then(async (fileUri) => {
             if (fileUri) {
@@ -425,6 +439,9 @@ export async function activate(context: vscode.ExtensionContext) {
                 copyRecursiveSync(sampleProjectDir.fsPath, newProjectDir.fsPath);
                 recentProjectInfo.addInfo(newProjectDir.fsPath);
                 vscode.commands.executeCommand(`vscode.openFolder`, newProjectDir);
+            } else {
+                appState = oldState;
+                onSendAppState();
             }
         });
     }

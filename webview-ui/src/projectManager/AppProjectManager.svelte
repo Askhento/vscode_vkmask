@@ -182,34 +182,39 @@
 </script>
 
 <!-- <pre> {JSON.stringify(maskSettings, null, "\t")}</pre> -->
-{#if appState === AppState.loading}
-    <div>loading...</div>
-{:else if appState === AppState.running}
-    {#if maskSettings}
-        {#key maskSettings}
-            {#if uiElements}
-                <ObjectControl
-                    expanded={true}
-                    nesting={true}
-                    value={maskSettings}
-                    label={"MaskSettings"}
-                    path={[]}
-                    uiElements={uiElements.value}
-                    on:changed={onChanged}
-                />
-            {:else}
-                <div>ui not parsed</div>
-            {/if}
-        {/key}
+{#key appState}
+    {#if appState === AppState.loading}
+        <vscode-progress-ring />Loading...
+    {:else if appState === AppState.running}
+        {#if maskSettings}
+            {#key maskSettings}
+                {#if uiElements}
+                    <ObjectControl
+                        expanded={true}
+                        nesting={true}
+                        value={maskSettings}
+                        label={"MaskSettings"}
+                        path={[]}
+                        uiElements={uiElements.value}
+                        on:changed={onChanged}
+                    />
+                {:else}
+                    <div>ui not parsed</div>
+                {/if}
+            {/key}
+        {/if}
+    {:else if appState === AppState.welcome}
+        <WelcomeScreen />
+    {:else if appState === AppState.error}
+        <div>some Error occured! (todo: handle this)</div>
     {/if}
-{:else if appState === AppState.welcome}
-    <WelcomeScreen />
-{:else if appState === AppState.error}
-    <div>some Error occured! (todo: handle this)</div>
-{/if}
+{/key}
 
 <style>
     div {
         background-color: transparent;
+    }
+
+    vscode-progress-ring {
     }
 </style>
