@@ -32,6 +32,7 @@ import {
     ErrorType,
 } from "./types";
 import type { AppError } from "./types";
+import { effectNames, pluginNames } from "./ztypes";
 import { MaskConfig } from "./MaskConfig";
 import { BaseWebviewProvider } from "./panels/BaseWebviewProvider";
 import { delayPromise } from "./utils/delayPromise";
@@ -147,23 +148,23 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 
     // ! selection should go outside of maskConfig.
-    function onSelection(selection: Selection) {
-        const { type, id } = selection as Selection;
+    function onSelection(newSelection: Selection) {
+        const { type, id } = newSelection as Selection;
 
         // deal with config file
         switch (type) {
             case SelectionType.effect:
-                maskConfig.selection = selection;
+                maskConfig.configSelection = newSelection;
                 maskConfig.showEffect(id);
                 break;
 
             case SelectionType.plugin:
-                maskConfig.selection = selection;
+                maskConfig.configSelection = newSelection;
                 maskConfig.showPlugin(id);
                 break;
 
             case SelectionType.maskSettings:
-                maskConfig.selection = selection;
+                maskConfig.configSelection = newSelection;
                 break;
 
             case SelectionType.empty:
@@ -260,7 +261,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 // reply with effects
                 messageHandler.send({
                     ...data,
-                    payload: maskConfig.selection,
+                    payload: maskConfig.configSelection,
                     target: origin,
                 });
                 break;
@@ -367,6 +368,15 @@ export async function activate(context: vscode.ExtensionContext) {
         });
     };
 
+    function sendSelection(target = RequestTarget.all) {
+        messageHandler.send({
+            command: RequestCommand.updateSelection,
+            origin: RequestTarget.extension,
+            payload: maskConfig.configSelection,
+            target,
+        });
+    }
+
     async function openProject(folder) {
         if (folder) {
             // notes : https://www.eliostruyf.com/opening-folders-visual-studio-code-extension/
@@ -418,6 +428,7 @@ export async function activate(context: vscode.ExtensionContext) {
             }
         });
     }
+
     // function updateAppState() {
     //     const parseResult = maskConfig.parseConfig();
 
@@ -445,6 +456,26 @@ export async function activate(context: vscode.ExtensionContext) {
     // } else {
     //     assetWatcher.getBuiltinAssets(context.extensionUri)
     // }
+
+    effectNames.forEach((name) => {
+        context.subscriptions.push(
+            vscode.commands.registerCommand(`vkmask.add_effect.${name}`, async () => {
+                await maskConfig.addEffect(name);
+                maskConfig.onFileSave();
+                sendSelection();
+            })
+        );
+    });
+
+    pluginNames.forEach((name) => {
+        context.subscriptions.push(
+            vscode.commands.registerCommand(`vkmask.add_plugin.${name}`, async () => {
+                await maskConfig.addPlugin(name);
+                maskConfig.onFileSave();
+                sendSelection();
+            })
+        );
+    });
 
     context.subscriptions.push(
         vscode.commands.registerCommand("vkmask.dumpLogs", async () => {
@@ -533,13 +564,12 @@ export async function activate(context: vscode.ExtensionContext) {
                 }, 1000);
                 watchLock = true;
 
-                vscode.commands
-                    .executeCommand("workbench.action.webview.reloadWebviewAction")
-                    .then(() => {
-                        // sidebar.updateAppState();
-                        // assetWatcher.searchAssets();
-                        // userSettings.emitChangeEvent();
-                    });
+                vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction");
+                // .then(() => {
+                //     // sidebar.updateAppState();
+                //     // assetWatcher.searchAssets();
+                //     // userSettings.emitChangeEvent();
+                // });
             })
         );
     }

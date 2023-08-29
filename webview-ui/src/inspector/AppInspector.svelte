@@ -228,10 +228,10 @@
     function selectedIsKnown() {
         switch (selection.type) {
             case SelectionType.effect:
-                return effectNamesSet.has(effects[selection.id].name);
+                return effectNamesSet.has(effects[selection.id]?.name);
 
             case SelectionType.plugin:
-                return pluginNamesSet.has(plugins[selection.id].name);
+                return pluginNamesSet.has(plugins[selection.id]?.name);
 
             case SelectionType.maskSettings:
                 return true;

@@ -130,7 +130,7 @@
     getSelection();
 </script>
 
-<AddPlugin />
+<!-- <AddPlugin /> -->
 {#key $selection}
     {#key $plugins}
         {#if $plugins}

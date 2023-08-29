@@ -142,7 +142,7 @@
     print("INIT");
 </script>
 
-<AddEffect />
+<!-- <AddEffect /> -->
 {#key $selection}
     {#key $effects}
         {#if $effects}

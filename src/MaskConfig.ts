@@ -30,7 +30,7 @@ export class MaskConfig extends EventEmitter {
     public pathMaskJSON: string | undefined;
     public currentConfigDir: string | undefined;
     public selectedEffectId: number | undefined;
-    public selection: Selection = { type: SelectionType.empty };
+    public configSelection: Selection = { type: SelectionType.empty };
 
     private selectionDelay: { promise: Promise<any>; cancel: Function } | undefined;
     private editDelay: { promise: Promise<any>; cancel: Function } | undefined;
@@ -202,7 +202,7 @@ export class MaskConfig extends EventEmitter {
 
         this.setupSelectLock();
         print("clear selection");
-        this.selection = { type: SelectionType.empty };
+        this.configSelection = { type: SelectionType.empty };
         var position = editor.selection.start;
         editor.selection = new vscode.Selection(position, position);
         return editor;
@@ -403,8 +403,8 @@ export class MaskConfig extends EventEmitter {
 
         this.parseConfig();
 
-        if (this.selection.type === SelectionType.effect)
-            await this.showEffect(this.selection.id, editor);
+        if (this.configSelection.type === SelectionType.effect)
+            await this.showEffect(this.configSelection.id, editor);
 
         // if (this.saveDelayPromise !== undefined) this.saveDelayPromise.cancel();
 
@@ -421,6 +421,66 @@ export class MaskConfig extends EventEmitter {
         // }, this.saveDelayMS);
     }
 
+    public async addEffect(name: string) {
+        if (!this.maskJSON) return;
+
+        const effectObjects = this.maskJSON.effects;
+
+        const newEffect = {
+            name,
+        };
+
+        if (
+            this.configSelection !== undefined &&
+            this.configSelection.type === SelectionType.effect
+        ) {
+            effectObjects.splice(this.configSelection.id + 1, 0, newEffect);
+            this.configSelection = {
+                type: SelectionType.effect,
+                id: this.configSelection.id + 1,
+            };
+        } else {
+            effectObjects.push(newEffect);
+            this.configSelection = {
+                type: SelectionType.effect,
+                id: effectObjects.length - 1,
+            };
+        }
+
+        // this.maskJSON.effects =;
+        await this.updateEffects(effectObjects);
+    }
+
+    public async addPlugin(name: string) {
+        if (!this.maskJSON) return;
+
+        const pluginObjects = this.maskJSON.plugins;
+
+        const newPlugin = {
+            name,
+        };
+
+        if (
+            this.configSelection !== undefined &&
+            this.configSelection.type === SelectionType.plugin
+        ) {
+            pluginObjects.splice(this.configSelection.id + 1, 0, newPlugin);
+            this.configSelection = {
+                type: SelectionType.plugin,
+                id: this.configSelection.id + 1,
+            };
+        } else {
+            pluginObjects.push(newPlugin);
+            this.configSelection = {
+                type: SelectionType.plugin,
+                id: pluginObjects.length - 1,
+            };
+        }
+
+        // this.maskJSON.effects =;
+        await this.updatePlugins(pluginObjects);
+    }
+
     public async updatePlugins(pluginsObject: object[]) {
         if (!this.maskJSON) return;
 
@@ -431,8 +491,8 @@ export class MaskConfig extends EventEmitter {
 
         this.parseConfig();
 
-        if (this.selection.type !== SelectionType.empty)
-            await this.showPlugin(this.selection.id, editor);
+        if (this.configSelection.type !== SelectionType.empty)
+            await this.showPlugin(this.configSelection.id, editor);
     }
 
     public async updateMaskSettings(maskSettingsObject: object[]) {
@@ -444,8 +504,8 @@ export class MaskConfig extends EventEmitter {
 
         this.parseConfig();
 
-        if (this.selection.type === SelectionType.plugin)
-            await this.showPlugin(this.selection.id, editor);
+        if (this.configSelection.type === SelectionType.plugin)
+            await this.showPlugin(this.configSelection.id, editor);
     }
 
     public async writeConfig(editor?: vscode.TextEditor) {
