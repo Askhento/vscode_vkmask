@@ -37,6 +37,22 @@
 
     provideVSCodeDesignSystem().register(allComponents);
 
+    import { genereateCommands } from "../../../gen_package_json_util";
+
+    // const effectCommands = genereateCommands(effectNames, {
+    //     command: "vkmask.add_effect.$",
+    //     // title: "$",
+    //     // shortTitle: "Add $ effect",
+    // });
+    // print(effectCommands);
+
+    const pluginCommands = genereateCommands(pluginNames, {
+        command: "vkmask.add_plugin.$",
+        // title: "$",
+        // shortTitle: "Add $ plugin",
+    });
+    print(pluginCommands);
+
     // ??? is there any way to get rid of this ?
     const effectNamesSet = new Set(effectNames);
     const pluginNamesSet = new Set(pluginNames);
