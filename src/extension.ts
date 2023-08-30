@@ -388,6 +388,7 @@ export async function activate(context: vscode.ExtensionContext) {
             if (!fs.existsSync(folder)) {
                 vscode.window.showErrorMessage(`Project does not seems to exist: \n${folder}`);
                 messageHandler.send({
+                    command: RequestCommand.getRecentProjectInfo,
                     origin: RequestTarget.extension,
                     target: RequestTarget.projectManager,
                     payload: await recentProjectInfo.getInfo(),
@@ -411,7 +412,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
         vscode.window.showOpenDialog(options).then(async (fileUri) => {
             if (fileUri && fileUri[0]) {
-                print("Selected file: " + fileUri[0].fsPath);
+                print("Selected open folder: " + fileUri[0].fsPath);
                 recentProjectInfo.addInfo(fileUri[0].fsPath); // !!! maybe useless!!!!
                 await vscode.commands.executeCommand(`vscode.openFolder`, fileUri[0]);
             } else {

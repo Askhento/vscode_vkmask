@@ -8,7 +8,7 @@
     //@ts-expect-error
     const { messageHandler } = getContext("stores");
 
-    let recentProjectInfo: RecentProjectInfo[] = [];
+    export let recentProjectInfo: RecentProjectInfo[] = [];
 
     async function getRecentProjectInfo() {
         const { payload } = await messageHandler.request({

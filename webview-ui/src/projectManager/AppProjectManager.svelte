@@ -13,6 +13,7 @@
 
     import ObjectControl from "../ui-controls/ObjectControl.svelte";
     import { MaskSettingsParserForUI } from "../ui-controls/Controls.js";
+    import type { RecentProjectInfo } from "src/RecentProjectInfo";
 
     provideVSCodeDesignSystem().register(allComponents);
 
@@ -21,6 +22,7 @@
 
     const assets = writable([]);
     const settings = writable([]);
+    let recentProjectInfo: RecentProjectInfo[] = [];
 
     const messageHandler = new MessageHandler(handleMessageApp, origin);
 
@@ -48,6 +50,10 @@
 
             case RequestCommand.updateAppState:
                 processAppState(payload);
+                break;
+
+            case RequestCommand.getRecentProjectInfo:
+                recentProjectInfo = payload;
                 break;
 
             default:
@@ -204,7 +210,9 @@
             {/key}
         {/if}
     {:else if appState === AppState.welcome}
-        <WelcomeScreen />
+        {#key recentProjectInfo}
+            <WelcomeScreen {recentProjectInfo} />
+        {/key}
     {:else if appState === AppState.error}
         <div>some Error occured! (todo: handle this)</div>
     {/if}
@@ -214,7 +222,7 @@
     div {
         background-color: transparent;
     }
-
+    /* 
     vscode-progress-ring {
-    }
+    } */
 </style>
