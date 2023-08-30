@@ -18,6 +18,10 @@ export class RecentProjects {
     ) {}
 
     async addInfo(newPath: string) {
+        if (!fs.existsSync(newPath)) {
+            console.log(`RecentProjectInfo  addInfo: ${newPath} don't exist`);
+            return;
+        }
         const oldInfo = await this.getInfo();
 
         const name = path.basename(newPath);
@@ -27,7 +31,7 @@ export class RecentProjects {
             dateModified: new Date().getTime(),
         };
 
-        let newInfo = oldInfo.filter((info) => newPath !== info.path && fs.existsSync(info.path));
+        let newInfo = oldInfo.filter((info) => newPath !== info.path);
         newInfo.push(newEntry);
         newInfo.sort((a, b) => a.dateModified - b.dateModified);
         newInfo = newInfo.slice(0, this.maxInfoCount);
@@ -36,11 +40,20 @@ export class RecentProjects {
         return this.updateInfo(newInfo);
     }
 
+    async updateExist() {
+        const oldInfo = await this.getInfo();
+        let newInfo = oldInfo.filter((info) => fs.existsSync(info.path));
+        await this.updateInfo(newInfo);
+    }
+
     // todo clear non existent on get
     async getInfo() {
-        let info = (await this.context.globalState.get(this.infoStorageKey)) as RecentProjectInfo[];
-        if (info === undefined) info = [];
-        return info;
+        let storedInfo = (await this.context.globalState.get(
+            this.infoStorageKey
+        )) as RecentProjectInfo[];
+        if (storedInfo === undefined) storedInfo = [];
+        let newInfo = storedInfo.filter((info) => fs.existsSync(info.path));
+        return newInfo;
     }
 
     async clearInfo() {

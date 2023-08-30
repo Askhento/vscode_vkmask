@@ -385,6 +385,14 @@ export async function activate(context: vscode.ExtensionContext) {
             // notes : https://www.eliostruyf.com/opening-folders-visual-studio-code-extension/
             print("new folder", folder);
             const folderUri = vscode.Uri.parse(folder);
+            if (!fs.existsSync(folder)) {
+                vscode.window.showErrorMessage(`Project does not seems to exist: \n${folder}`);
+                messageHandler.send({
+                    origin: RequestTarget.extension,
+                    target: RequestTarget.projectManager,
+                    payload: await recentProjectInfo.getInfo(),
+                });
+            }
             vscode.commands.executeCommand(`vscode.openFolder`, folderUri);
             return;
         }
@@ -430,7 +438,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 print("new project folder", fileUri.fsPath);
                 const newProjectDir = fileUri;
                 const sampleProjectDir = vscode.Uri.joinPath(
-                    this._extensionUri,
+                    context.extensionUri,
                     "res",
                     "empty-project"
                 );

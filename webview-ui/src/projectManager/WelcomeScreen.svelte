@@ -86,21 +86,23 @@
     </vscode-button>
 </div>
 
-{#if recentProjectInfo.length}
-    <h4>Recent projects:</h4>
-    {#each recentProjectInfo as info}
-        <div class="recent-projects-wrapper">
-            <vscode-link
-                on:click={() => {
-                    sendOpenProject(info.path);
-                }}>{info.name}</vscode-link
-            >
+{#key recentProjectInfo}
+    {#if recentProjectInfo.length}
+        <h4>Recent projects:</h4>
+        {#each recentProjectInfo as info}
+            <div class="recent-projects-wrapper">
+                <vscode-link
+                    on:click={() => {
+                        sendOpenProject(info.path);
+                    }}>{info.name}</vscode-link
+                >
 
-            <span class="recent-path">{info.path}</span>
-            <span class="recent-date">{formatDate(new Date(info.dateModified))}</span>
-        </div>
-    {/each}
-{/if}
+                <span class="recent-path">{info.path}</span>
+                <span class="recent-date">{formatDate(new Date(info.dateModified))}</span>
+            </div>
+        {/each}
+    {/if}
+{/key}
 
 <style>
     * {
