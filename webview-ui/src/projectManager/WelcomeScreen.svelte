@@ -115,7 +115,7 @@
     }
 
     vscode-link {
-        width: 4rem;
+        width: fit-content;
         overflow: visible;
         text-overflow: ellipsis;
         white-space: nowrap;

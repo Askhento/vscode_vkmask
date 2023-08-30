@@ -46,13 +46,16 @@ export class RecentProjects {
         await this.updateInfo(newInfo);
     }
 
-    // todo clear non existent on get
+    // todo clear if mask.json missing
     async getInfo() {
         let storedInfo = (await this.context.globalState.get(
             this.infoStorageKey
         )) as RecentProjectInfo[];
         if (storedInfo === undefined) storedInfo = [];
-        let newInfo = storedInfo.filter((info) => fs.existsSync(info.path));
+        let newInfo = storedInfo.filter((info) => {
+            const maskJsonFile = path.join(info.path, "mask.json");
+            return fs.existsSync(maskJsonFile);
+        });
         return newInfo;
     }
 

@@ -380,12 +380,12 @@ export async function activate(context: vscode.ExtensionContext) {
         });
     }
 
-    async function openProject(folder) {
+    async function openProject(folder: string) {
         if (folder) {
             // notes : https://www.eliostruyf.com/opening-folders-visual-studio-code-extension/
             print("new folder", folder);
-            const folderUri = vscode.Uri.parse(folder);
-            if (!fs.existsSync(folder)) {
+            const maskJsonFile = path.join(folder, "mask.json");
+            if (!fs.existsSync(maskJsonFile)) {
                 vscode.window.showErrorMessage(`Project does not seems to exist: \n${folder}`);
                 messageHandler.send({
                     command: RequestCommand.getRecentProjectInfo,
@@ -394,6 +394,7 @@ export async function activate(context: vscode.ExtensionContext) {
                     payload: await recentProjectInfo.getInfo(),
                 });
             }
+            const folderUri = vscode.Uri.parse(folder);
             vscode.commands.executeCommand(`vscode.openFolder`, folderUri);
             return;
         }
@@ -401,9 +402,12 @@ export async function activate(context: vscode.ExtensionContext) {
         const options: vscode.OpenDialogOptions = {
             canSelectMany: false,
             openLabel: "Open",
-            canSelectFiles: false,
-            canSelectFolders: true,
-            title: "Open existing vkmask project",
+            canSelectFiles: true,
+            canSelectFolders: false,
+            filters: {
+                "mask.json config": ["mask.json"],
+            },
+            title: "Select mask.json file",
         };
 
         const oldState = appState;
@@ -413,8 +417,11 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.window.showOpenDialog(options).then(async (fileUri) => {
             if (fileUri && fileUri[0]) {
                 print("Selected open folder: " + fileUri[0].fsPath);
-                recentProjectInfo.addInfo(fileUri[0].fsPath); // !!! maybe useless!!!!
-                await vscode.commands.executeCommand(`vscode.openFolder`, fileUri[0]);
+                const maskJsonFile = fileUri[0].fsPath;
+                const folder = path.dirname(maskJsonFile);
+                recentProjectInfo.addInfo(folder); // !!! maybe useless!!!!
+                const folderUri = vscode.Uri.parse(folder);
+                await vscode.commands.executeCommand(`vscode.openFolder`, folderUri);
             } else {
                 appState = oldState;
                 onSendAppState();
