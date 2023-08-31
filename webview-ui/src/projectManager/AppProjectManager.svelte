@@ -169,6 +169,7 @@
 
         if (parseResult.success) {
             uiElements = parseResult.data;
+            print(parseResult);
         } else {
             print(parseResult.error);
             // onError(parseResult.error);

@@ -7,6 +7,7 @@
 
     let displayValue = value;
     //   $: console.log(text);
+    console.log("text contorl value : ", value);
 
     const dispatch = createEventDispatcher();
 

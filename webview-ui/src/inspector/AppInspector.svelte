@@ -37,22 +37,6 @@
 
     provideVSCodeDesignSystem().register(allComponents);
 
-    import { genereateCommands } from "../../../gen_package_json_util";
-
-    // const effectCommands = genereateCommands(effectNames, {
-    //     command: "vkmask.add_effect.$",
-    //     // title: "$",
-    //     // shortTitle: "Add $ effect",
-    // });
-    // print(effectCommands);
-
-    const pluginCommands = genereateCommands(pluginNames, {
-        command: "vkmask.add_plugin.$",
-        // title: "$",
-        // shortTitle: "Add $ plugin",
-    });
-    print(pluginCommands);
-
     // ??? is there any way to get rid of this ?
     const effectNamesSet = new Set(effectNames);
     const pluginNamesSet = new Set(pluginNames);
@@ -271,6 +255,7 @@
 
         if (parseResult.success) {
             uiElements = parseResult.data;
+            print("parse result : ", parseResult);
         } else {
             // print(parseResult.error);
             onError(parseResult.error);
@@ -511,18 +496,20 @@
             {/if}
         {:else if selection.type === SelectionType.plugin}
             {#if plugins}
-                {#if uiElements}
-                    <ObjectControl
-                        expanded={true}
-                        value={plugins[selection.id]}
-                        label={plugins[selection.id].name}
-                        path={[]}
-                        uiElements={uiElements.value}
-                        on:changed={onChanged}
-                    />
-                {:else}
-                    <div>unknownPlugin</div>
-                {/if}
+                {#key plugins}
+                    {#if uiElements}
+                        <ObjectControl
+                            expanded={true}
+                            value={plugins[selection.id]}
+                            label={plugins[selection.id].name}
+                            path={[]}
+                            uiElements={uiElements.value}
+                            on:changed={onChanged}
+                        />
+                    {:else}
+                        <div>unknownPlugin</div>
+                    {/if}
+                {/key}
             {/if}
         {:else if selection.type === SelectionType.asset}
             <div>asset type not implememted error</div>

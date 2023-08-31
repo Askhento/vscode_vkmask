@@ -752,7 +752,9 @@ export const EffectsList = [
     ZPlaneEffect,
     ZModel3dEffect,
     ZPatchEffect,
-    ...ZLight,
+    // ...ZLight,
+    ZLightAmbientEffect,
+
     ZBeautifyEffect,
     ZLiquifiedWarpEffect,
     ZColorfilterEffect,
@@ -760,8 +762,8 @@ export const EffectsList = [
 ];
 
 // export const ZEffect = z
-//   .discriminatedUnion("name", [...EffectsList])
-//   .describe(uiDescriptions.discriminatedUnion({}));
+//     .discriminatedUnion("name", [...EffectsList])
+//     .describe(uiDescriptions.discriminatedUnion({}));
 
 export const ZEffect = z.union(EffectsList).describe(uiDescriptions.union({}));
 
@@ -790,26 +792,6 @@ effectNames.forEach((name, i) => {
     //     console.log(result.error);
     //   }
 });
-
-// t.type({
-//     script: t.string,
-//     effects: t.array(Effect)
-// }),
-// t.union([
-//     t.type({
-//         preview: t.string
-//     }),
-//     t.type({
-//         icon: t.string,
-//     })
-// ]),
-// t.partial({
-//     name: t.string,
-//     user_hint: t.string,
-//     facemodel_version: t.number,
-//     mouse_input: t.boolean,
-//     plugins: t.array(Plugin)
-// })
 
 const ZPerspectivePlugin = z
     .object({

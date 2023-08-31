@@ -72,6 +72,12 @@ function addTypeToSchema(schema) {
                 )
             ); //.partial();
 
+            // res = res.transform((value) => ({
+            //     value,
+            //     uiDescription: description,
+            //     uiElement: uiControlsMap[description.name],
+            // }));
+            // return res;
             break;
 
         case "array":
@@ -83,13 +89,17 @@ function addTypeToSchema(schema) {
         case "union":
             // case "discriminatedUnion": // ??? i don't use this union type at all !!!!
             // seems like unions are different and should not be included in ui
+            console.log("union", schema);
             res = z.union(schema.options.map((elem) => addTypeToSchema(elem)));
             return res;
             break;
 
         case "discriminatedUnion":
             // seems like unions are different and should not be included in ui
-            // console.log("in desc union", schema.discriminator)
+            console.log(
+                "in desc union",
+                schema.options.map((elem) => addTypeToSchema(elem))
+            );
             res = z.discriminatedUnion(
                 schema.discriminator,
                 schema.options.map((elem) => addTypeToSchema(elem))
@@ -108,13 +118,26 @@ function addTypeToSchema(schema) {
     }
 
     // !!! z.nullable()
+    // res = z.nullable(res);
     res = z.union([res, z.null()]).default(null); // a hack to know if prop is missing
-
+    // z.number().transform().catch()
     res = res.transform((value) => ({
         value,
         uiDescription: description,
         uiElement: uiControlsMap[description.name],
     }));
+
+    // if (schema._def.typeName !== "ZodLiteral") {
+    //     res = res.catch((ctx) => {
+    //         return {
+    //             value: description.defValue,
+    //             uiDescription: description,
+    //             uiElement: uiControlsMap[description.name],
+    //             error: ctx.error,
+    //         };
+    //     });
+    // }
+
     return res;
 }
 
