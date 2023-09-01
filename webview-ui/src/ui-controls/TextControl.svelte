@@ -20,43 +20,40 @@
     }
 </script>
 
-<div class="text-control-wrapper">
-    {#if label}
-        <span class="label">{label}</span>
-        <input
-            class="value"
-            type="text"
-            bind:value
-            on:keydown={({ key, target }) => {
-                // console.log(key);
-                if (key === "Enter") {
-                    displayValue = value;
-                    //@ts-expect-error
-                    target.blur();
-                    sendValue();
-                } else if (key === "Escape") {
-                    value = displayValue;
-                    //@ts-expect-error
-                    target.blur();
-                }
-            }}
-        />
-    {/if}
-</div>
+{#if label}
+    <span class="label">{label}</span>
+    <input
+        class="value"
+        type="text"
+        bind:value
+        on:keydown={({ key, target }) => {
+            // console.log(key);
+            if (key === "Enter") {
+                displayValue = value;
+                //@ts-expect-error
+                target.blur();
+                sendValue();
+            } else if (key === "Escape") {
+                value = displayValue;
+                //@ts-expect-error
+                target.blur();
+            }
+        }}
+    />
+{/if}
 
 <style>
     * {
         margin: 5px;
     }
-    .text-control-wrapper {
-        position: relative;
-        display: flex;
+    span.label {
+        justify-self: var(--label-justify);
     }
 
-    input.value {
-        flex-grow: 2;
-    }
-    span.label {
-        flex-grow: 1;
+    input {
+        color: var(--vscode-editor-foreground);
+        background-color: var(--vscode-input-background);
+        border-width: 0;
+        height: calc(var(--input-height) * 1px);
     }
 </style>

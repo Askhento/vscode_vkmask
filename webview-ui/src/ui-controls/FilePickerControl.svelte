@@ -138,87 +138,85 @@
     let inputTimer; // prevent closing dropdown
 </script>
 
-<div class="control-wrapper">
-    {#if label !== undefined}
-        <span class="label">{label}</span>
+{#if label !== undefined}
+    <span class="label">{label}</span>
 
-        <!-- <input class="value" type="text" bind:value /> -->
-        <!-- add REd color if file not found in options -->
-        <span class="dropdown-wrapper">
-            <vscode-dropdown
-                class:error={filteredAssets.length === 0}
-                position="above"
-                bind:this={dropdown}
-                on:focusout|capture={(e) => {
-                    // print("focus out");
-                    //   e.preventDefault();
-                    e.stopPropagation(); // this is to be able to print while dropdown opened
-                    inputTimer = setTimeout(() => {
-                        if (!dropdown) return;
-                        const event = new KeyboardEvent("keydown", {
-                            key: "Escape",
-                        });
-                        dropdown.dispatchEvent(event);
-                    }, 150);
-                }}
-                on:click|preventDefault={(e) => {
-                    // print("dropdown click");
-                    //   setTimeout(function () {
-                    //     inputElement.focus();
-                    //   }, 1000);
-                }}
-                on:change={(e) => {
-                    //   value = e.target.value;
-                    //   print("drop change", e.target.value);
-                    // print("change dropdonw");
-                    value = dropdown.value;
-                    searchValue = "";
-                    inputElement.value = "";
-                }}
-                on:keydown={(e) => {
-                    if (e.key === "Escape") {
-                        // print("escape!");
-                        e.preventDefault();
-                        dropdown.value = value;
-                        return;
-                    }
-                    if (e.key.length === 1) {
-                        inputElement.focus(); // on time !
+    <!-- <input class="value" type="text" bind:value /> -->
+    <!-- add REd color if file not found in options -->
+    <vscode-dropdown
+        class:error={filteredAssets.length === 0}
+        position="above"
+        bind:this={dropdown}
+        on:focusout|capture={(e) => {
+            // print("focus out");
+            //   e.preventDefault();
+            e.stopPropagation(); // this is to be able to print while dropdown opened
+            inputTimer = setTimeout(() => {
+                if (!dropdown) return;
+                const event = new KeyboardEvent("keydown", {
+                    key: "Escape",
+                });
+                dropdown.dispatchEvent(event);
+            }, 150);
+        }}
+        on:click|preventDefault={(e) => {
+            // print("dropdown click");
+            //   setTimeout(function () {
+            //     inputElement.focus();
+            //   }, 1000);
+        }}
+        on:change={(e) => {
+            //   value = e.target.value;
+            //   print("drop change", e.target.value);
+            // print("change dropdonw");
+            value = dropdown.value;
+            searchValue = "";
+            inputElement.value = "";
+        }}
+        on:keydown={(e) => {
+            if (e.key === "Escape") {
+                // print("escape!");
+                e.preventDefault();
+                dropdown.value = value;
+                return;
+            }
+            if (e.key.length === 1) {
+                inputElement.focus(); // on time !
 
-                        setTimeout(() => {
-                            if (inputTimer) clearTimeout(inputTimer);
-                        }, 0);
-                    }
-                    //   if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
-                    //   setTimeout(function () {
-                    //     const option = dropdown.querySelector("vscode-option.selected");
-                    //     option.scrollIntoView({
-                    //       behavior: "smooth",
-                    //       block: "nearest",
-                    //     });
-                    //   }, 10);
-                }}
-            >
-                <vscode-text-field
-                    class:error={filteredAssets.length === 0}
-                    bind:this={inputElement}
-                    on:click|stopPropagation|capture={(e) => {
-                        if (inputTimer) clearTimeout(inputTimer);
-                        // print("click text filed inside ");
-                        // keeps dropdown opened
-                    }}
-                    on:input={(e) => {
-                        // print("oninput", e);
-                        searchValue = e.target.value;
-                        // print(searchValue);
-                    }}
-                />
-                {#each filteredAssets as asset, i}
-                    <vscode-option class:builtin={!asset.projectFile}>{asset.path}</vscode-option>
-                {/each}
-            </vscode-dropdown>
-            <!-- svelte-ignore missing-declaration -->
-            <!-- <vscode-text-field
+                setTimeout(() => {
+                    if (inputTimer) clearTimeout(inputTimer);
+                }, 0);
+            }
+            //   if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+            //   setTimeout(function () {
+            //     const option = dropdown.querySelector("vscode-option.selected");
+            //     option.scrollIntoView({
+            //       behavior: "smooth",
+            //       block: "nearest",
+            //     });
+            //   }, 10);
+        }}
+    >
+        <vscode-text-field
+            class:error={filteredAssets.length === 0}
+            bind:this={inputElement}
+            on:click|stopPropagation|capture={(e) => {
+                if (inputTimer) clearTimeout(inputTimer);
+                // print("click text filed inside ");
+                // keeps dropdown opened
+            }}
+            on:input={(e) => {
+                // print("oninput", e);
+                searchValue = e.target.value;
+                // print(searchValue);
+            }}
+        />
+        {#each filteredAssets as asset, i}
+            <vscode-option class:builtin={!asset.projectFile}>{asset.path}</vscode-option>
+        {/each}
+    </vscode-dropdown>
+    <!-- svelte-ignore missing-declaration -->
+    <!-- <vscode-text-field
         class:error={filteredAssets.length === 0}
         bind:this={inputElement}
         {value}
@@ -293,9 +291,7 @@
           }
         }}
       /> -->
-        </span>
-    {/if}
-</div>
+{/if}
 
 <style>
     * {
@@ -303,17 +299,17 @@
         /* box-sizing: border-box; */
     }
 
-    .control-wrapper {
+    /* .control-wrapper {
         position: relative;
         display: flex;
-    }
+    } */
 
     /* select.options {
     flex-grow: 1;
   } */
-    .dropdown-wrapper {
-        position: relative;
-    }
+    /* .dropdown-wrapper {
+        
+    } */
 
     vscode-option {
         margin: unset;
@@ -324,8 +320,9 @@
     }
 
     vscode-dropdown {
-        margin: unset;
-        width: 200px;
+        /* margin: unset;
+        position: relative; */
+        /* width: 200px; */
     }
     /* vscode-dropdown.error {
     color: var(--vscode-errorForeground);
@@ -338,7 +335,7 @@
         /* flex: 0 0 auto; */
         /* z-index: 10; */
         margin: unset;
-        width: 200px;
+        /* width: 200px; */
     }
 
     vscode-text-field.error::part(control) {
@@ -362,8 +359,9 @@
   .dropdown-btn {
     display: inline-block;
   } */
+
     span.label {
-        flex-grow: 1;
+        justify-self: var(--label-justify);
     }
 
     @keyframes shake {

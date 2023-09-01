@@ -24,59 +24,57 @@
     }
 </script>
 
-<div class="number-control-wrapper">
-    <!-- {#if label} -->
-    <span class="label">{label}</span>
-    <span class="control-wrapper">
-        <input
-            class="number"
-            type="number"
-            bind:value
-            on:keydown={({ key, target }) => {
-                // console.log(key);
-                if (key === "Enter") {
-                    displayValue = value;
-                    //@ts-expect-error
-                    target.blur();
-                    sendValue();
-                } else if (key === "Escape") {
-                    value = displayValue;
-                    //@ts-expect-error
-                    target.blur();
-                }
-            }}
-        />
-        <input
-            class="slider"
-            type="range"
-            bind:value
-            on:mouseup={() => {
+<!-- {#if label} -->
+<span class="label">{label}</span>
+<span class="control-wrapper">
+    <input
+        class="number"
+        type="number"
+        bind:value
+        on:keydown={({ key, target }) => {
+            // console.log(key);
+            if (key === "Enter") {
                 displayValue = value;
+                //@ts-expect-error
+                target.blur();
                 sendValue();
-            }}
-            min={params.min || 0}
-            max={params.max || 1}
-            {step}
-        />
-    </span>
-    <!-- {/if} -->
-</div>
+            } else if (key === "Escape") {
+                value = displayValue;
+                //@ts-expect-error
+                target.blur();
+            }
+        }}
+    />
+    <input
+        class="slider"
+        type="range"
+        bind:value
+        on:mouseup={() => {
+            displayValue = value;
+            sendValue();
+        }}
+        min={params.min || 0}
+        max={params.max || 1}
+        {step}
+    />
+</span>
+
+<!-- {/if} -->
 
 <style>
     * {
-        padding: 5px;
+        margin: var(--global-margin);
     }
-    .number-control-wrapper {
+    /* .number-control-wrapper {
         position: relative;
         display: flex;
         justify-content: start;
-    }
+    } */
 
     .control-wrapper {
-        display: inline-block;
+        /* display: inline-block; */
         /* flex-grow: 1; */
         /* width: 50%; */
-        flex: 1;
     }
     input.number {
         display: block;
@@ -90,8 +88,7 @@
         margin: 0;
     }
     span.label {
-        display: inline-block;
-        flex: 1;
+        justify-self: var(--label-justify);
     }
 
     input.slider {

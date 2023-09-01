@@ -24,9 +24,9 @@
     // todo : add slider to move all values at the same time
 </script>
 
-<div class="vector-control-wrapper">
-    {#if label && value}
-        <span class="label">{label}</span>
+{#if label && value}
+    <span class="label">{label}</span>
+    <div class="vector-control-wrapper">
         {#each value as v, index}
             <!-- <vscode-text-area
         class="value"
@@ -45,16 +45,19 @@
       {#each params.default as v, index}
         <input class="value" type="number" bind:value={params.default[index]} /> -->
         {/each}
-    {/if}
-</div>
+    </div>
+{/if}
 
 <style>
     * {
-        margin: 5px;
+        margin: var(--global-margin);
     }
     .vector-control-wrapper {
-        position: relative;
         display: flex;
+        flex-direction: row;
+        /* min-height: fit-content; */
+        justify-content: start;
+        flex-wrap: wrap;
     }
 
     input.value {
@@ -70,14 +73,12 @@
         font-size: var(--type-ramp-base-font-size);
         line-height: var(--type-ramp-base-line-height);
         padding: calc(var(--design-unit) * 2px + 1px);
-        width: 100%;
         /* min-width: var(--input-min-width); */
+        text-align: center;
         flex-grow: 1;
-        max-width: 50px;
-        resize: none;
     }
     span.label {
-        flex-grow: 1;
+        justify-self: var(--label-justify);
     }
 
     /* div {

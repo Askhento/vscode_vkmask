@@ -4,4 +4,10 @@
 
 :root {
   --main-bg-color: rgb(75, 88, 78);
+  --project-manager-grid-label-column-size : 8rem;
+    --project-manager-grid-value-column-size : 15rem;
+    --global-margin : 5px;
+    --global-grid-column-gap : 0.5rem;
+
+  --label-justify: end;
 }

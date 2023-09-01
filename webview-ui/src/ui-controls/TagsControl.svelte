@@ -39,85 +39,75 @@
     }
 </script>
 
-<div class="text-control-wrapper">
-    {#if label}
-        <span class="label">{label}</span>
-        {#if tags}
-            <span class="control-wrapper">
-                {#each tags as tag, index}
-                    <vscode-text-field
-                        size="10"
-                        value={tags[index]}
-                        bind:this={tagElems[index]}
-                        on:keydown={(e) => {
-                            switch (e.key) {
-                                case "Backspace":
-                                    if (e.target) {
-                                        const newValue = e.target.value;
+{#if label}
+    <span class="label">{label}</span>
+    {#if tags}
+        <span class="control-wrapper">
+            {#each tags as tag, index}
+                <vscode-text-field
+                    size="10"
+                    value={tags[index]}
+                    bind:this={tagElems[index]}
+                    on:keydown={(e) => {
+                        switch (e.key) {
+                            case "Backspace":
+                                if (e.target) {
+                                    const newValue = e.target.value;
 
-                                        if (newValue === "" && index > 0) {
-                                            removeTag(index);
-                                        }
+                                    if (newValue === "" && index > 0) {
+                                        removeTag(index);
                                     }
-                                    break;
-                                case "Escape":
-                                    e.target.value = tag;
-                                    e.target.blur();
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }}
-                        on:change={(e) => {
-                            if (e.target) {
-                                tags[index] = e.target.value;
-                                // console.log("changed tag", tags[index]);
-                                joinTags();
-                            }
-                        }}
-                    >
-                        <section slot="end">
-                            <vscode-button
-                                class="tag-btn"
-                                appearance="icon"
-                                on:click|stopPropagation={() => {
-                                    removeTag(index);
-                                }}
-                            >
-                                <span class="codicon codicon-remove" />
-                            </vscode-button>
-                        </section>
-                    </vscode-text-field>
-                {/each}
-                <vscode-button class="tag-btn" appearance="icon" on:click|stopPropagation={addTag}>
-                    <span class="codicon codicon-add" />
-                </vscode-button>
-            </span>
-        {:else}
-            <span>ADDD a key !!!</span>
-        {/if}
+                                }
+                                break;
+                            case "Escape":
+                                e.target.value = tag;
+                                e.target.blur();
+                                break;
+                            default:
+                                break;
+                        }
+                    }}
+                    on:change={(e) => {
+                        if (e.target) {
+                            tags[index] = e.target.value;
+                            // console.log("changed tag", tags[index]);
+                            joinTags();
+                        }
+                    }}
+                >
+                    <section slot="end">
+                        <vscode-button
+                            class="tag-btn"
+                            appearance="icon"
+                            on:click|stopPropagation={() => {
+                                removeTag(index);
+                            }}
+                        >
+                            <span class="codicon codicon-remove" />
+                        </vscode-button>
+                    </section>
+                </vscode-text-field>
+            {/each}
+            <vscode-button class="tag-btn" appearance="icon" on:click|stopPropagation={addTag}>
+                <span class="codicon codicon-add" />
+            </vscode-button>
+        </span>
     {/if}
-</div>
+{/if}
 
 <style>
     * {
+        margin: var(--global-margin);
         box-sizing: border-box;
-    }
-    .text-control-wrapper {
-        margin: 5px;
-        display: flex;
     }
 
     span.label {
-        flex: 1;
+        justify-self: var(--label-justify);
     }
 
-    .control-wrapper {
-        display: flex;
-        flex: 1;
+    /* .control-wrapper {
         justify-content: end;
-        gap: 5px;
-    }
+    } */
     vscode-text-field {
         margin: unset;
     }

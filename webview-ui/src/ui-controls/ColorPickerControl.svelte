@@ -56,10 +56,10 @@
     }
 </script>
 
-<div class="color-control-wrapper">
-    {#if label}
-        <span class="label">{label}</span>
-        <!-- <span class="color">{value}</span> -->
+{#if label}
+    <span class="label">{label}</span>
+    <!-- <span class="color">{value}</span> -->
+    <div class="color-control-wrapper">
         <input
             class="color"
             type="color"
@@ -93,13 +93,10 @@
         step="0.02"
       /> -->
         {/if}
-    {/if}
-</div>
+    </div>
+{/if}
 
 <style>
-    * {
-        margin: 10px;
-    }
     .color-control-wrapper {
         position: relative;
         display: flex;
@@ -111,8 +108,7 @@
     flex: 1 0 0px;
   } */
     span.label {
-        display: inline-block;
-        flex: 1 0 0px;
+        justify-self: var(--label-justify);
     }
 
     input.color {

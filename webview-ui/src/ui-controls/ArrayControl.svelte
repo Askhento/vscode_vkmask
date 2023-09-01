@@ -42,18 +42,17 @@
     }
 </script>
 
-<div class="control-wrapper">
-    <span class:expanded on:click={toggle}
-        >{label}
-        <i class="codicon codicon-triangle-{expanded ? 'down' : 'right'}" />
-    </span>
+<span class="label" class:expanded on:click={toggle}
+    >{label}
+    <i class="codicon codicon-triangle-{expanded ? 'down' : 'right'}" />
+</span>
 
-    <div class="elements-wrapper">
-        {#if expanded}
-            {#if uiElements}
-                {#each uiElements as data, index}
-                    <!-- {@debug data, value} -->
-                    <!-- <svelte:component
+<div class="elements-wrapper">
+    {#if expanded}
+        {#if uiElements}
+            {#each uiElements as data, index}
+                <!-- {@debug data, value} -->
+                <!-- <svelte:component
                     this={data.uiElement}
                     expanded={true}
                     bind:value={value[index]}
@@ -62,37 +61,36 @@
                     uiElements={data.value}
                   /> -->
 
-                    <svelte:component
-                        this={data.uiElement}
-                        expanded={true}
-                        value={value[index]}
-                        label={"index" + index}
-                        path={[...path, index]}
-                        params={data.uiDescription}
-                        uiElements={data.value}
-                        on:changed
-                    />
-                    <vscode-button
-                        class="remove-btn"
-                        appearance="icon"
-                        on:click={() => {
-                            removeElement(index);
-                        }}
-                    >
-                        <span slot="start" class="codicon codicon-remove" />
-                    </vscode-button>
-                {/each}
-            {/if}
-            <vscode-button appearance="icon" on:click={addElement}>
-                <span slot="start" class="codicon codicon-add" />
-            </vscode-button>
-            <!-- {#if value.length}
+                <svelte:component
+                    this={data.uiElement}
+                    expanded={true}
+                    value={value[index]}
+                    label={"index" + index}
+                    path={[...path, index]}
+                    params={data.uiDescription}
+                    uiElements={data.value}
+                    on:changed
+                />
+                <vscode-button
+                    class="remove-btn"
+                    appearance="icon"
+                    on:click={() => {
+                        removeElement(index);
+                    }}
+                >
+                    <span slot="start" class="codicon codicon-remove" />
+                </vscode-button>
+            {/each}
+        {/if}
+        <vscode-button appearance="icon" on:click={addElement}>
+            <span slot="start" class="codicon codicon-add" />
+        </vscode-button>
+        <!-- {#if value.length}
         <vscode-button on:click={removeElement}>
           <span slot="start" class="codicon codicon-remove" />
         </vscode-button>
       {/if} -->
-        {/if}
-    </div>
+    {/if}
 </div>
 
 <style>
@@ -105,7 +103,9 @@
         flex-grow: 1;
         display: inline-block;
     }
-
+    .lable {
+        justify-self: var(--label-justify);
+    }
     /* span {
     padding: 0 0 0 1.5em;
     background: url(tutorial/icons/folder.svg) 0 0.1em no-repeat;
