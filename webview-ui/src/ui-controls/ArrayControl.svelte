@@ -103,7 +103,7 @@
         flex-grow: 1;
         display: inline-block;
     }
-    .lable {
+    .label {
         justify-self: var(--label-justify);
     }
     /* span {

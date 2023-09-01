@@ -174,6 +174,10 @@ export async function activate(context: vscode.ExtensionContext) {
             default:
                 break;
         }
+
+        if (type !== SelectionType.empty) {
+            vscode.commands.executeCommand(inspector.viewId + ".focus");
+        }
     }
 
     function onSendAppState(target = RequestTarget.all) {

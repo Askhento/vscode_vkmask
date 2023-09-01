@@ -34,6 +34,13 @@ const production = !process.env.ROLLUP_WATCH; // !!!!! wtf
 
 const common = {
     plugins: [
+        // !!! this will copy to the same dir for every webivew
+        copy({
+            // watch: "./src/global.css",
+            // copyOnce: false,
+
+            targets: [{ src: "./src/global.css", dest: "../out/panels/webview-build" }],
+        }),
         typescript({
             tsconfig: "./tsconfig.json",
             rootDirs: ["./src", "../src"],
@@ -66,13 +73,6 @@ const common = {
         }),
         commonjs(),
 
-        // !!! this will copy to the same dir for every webivew
-        copy({
-            watch: "./src/global.css",
-
-            targets: [{ src: "./src/global.css", dest: "../out/panels/webview-build" }],
-            copyOnce: false,
-        }),
         // // In dev mode, call `npm run start` once
         // // the bundle has been generated
         // !production && serve(),
