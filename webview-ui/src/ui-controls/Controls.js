@@ -89,7 +89,7 @@ function addTypeToSchema(schema) {
         case "union":
             // case "discriminatedUnion": // ??? i don't use this union type at all !!!!
             // seems like unions are different and should not be included in ui
-            console.log("union", schema);
+            // console.log("union", schema);
             res = z.union(schema.options.map((elem) => addTypeToSchema(elem)));
             return res;
             break;

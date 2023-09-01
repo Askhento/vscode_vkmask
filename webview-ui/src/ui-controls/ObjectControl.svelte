@@ -76,7 +76,7 @@
                     this={data.uiElement}
                     expanded={true}
                     value={value[key] ?? data.uiDescription.defValue}
-                    label={key}
+                    label={data.uiDescription.label ?? key}
                     path={[...path, key]}
                     params={data.uiDescription}
                     uiElements={data.value}

@@ -532,14 +532,15 @@
         background-color: brown;
     } */
 
-    div {
-        background-color: transparent;
-    }
+    
 </style> -->
 
 <style>
-    :global(div) {
+    div {
+        background-color: transparent;
+    }
+    /* :global(div) {
         color: aqua;
         background-color: var(--main-bg-color);
-    }
+    } */
 </style>
