@@ -54,6 +54,12 @@ export class BaseWebviewProvider implements WebviewViewProvider {
     private _getWebviewContent() {
         // The CSS file from the Svelte build output
         const stylesUri = getUri(this.webview, this._extensionUri, [this._buildPath, "bundle.css"]);
+        const globalVarsUri = getUri(this.webview, this._extensionUri, [
+            this._buildPath,
+            "..",
+            "global.css",
+        ]);
+
         // The JS file from the Svelte build output
         const scriptUri = getUri(this.webview, this._extensionUri, [this._buildPath, "bundle.js"]);
         const codiconsUri = this.webview.asWebviewUri(
@@ -76,6 +82,8 @@ export class BaseWebviewProvider implements WebviewViewProvider {
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
           <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${this.webview.cspSource} 'unsafe-inline'; img-src ${this.webview.cspSource}; style-src ${this.webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}' 'unsafe-inline';">
+
+            <link rel="stylesheet" type="text/css" href="${globalVarsUri}">
 
           <link rel="stylesheet" type="text/css" href="${stylesUri}">
           <link rel="stylesheet" type="text/css" href="${codiconsUri}">

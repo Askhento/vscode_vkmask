@@ -12,93 +12,139 @@
 
 import { z } from "zod";
 
-// import { fromZodError } from 'zod-validation-error';
-
 export const uiDescriptions = {
     none: () => ({
         name: "none",
+        group: "main",
     }),
-    numberSlider: ({ min = 0, max = 1, defValue = 0, showAlways = true }) => ({
+    numberSlider: ({
+        label,
+        group = "main",
+        min = 0,
+        max = 1,
+        defValue = 0,
+        showAlways = true,
+    }) => ({
         showAlways,
         name: "numberSlider",
+        label,
+        group,
         min: min,
         max: max,
         defValue,
     }),
-    array2d: ({ min, max, defValue = [0, 0], showAlways = true }) => ({
+    array2d: ({ label, group = "main", min, max, defValue = [0, 0], showAlways = true }) => ({
         showAlways,
         name: "array2d",
+        label,
+        group,
         min: min,
         max: max,
         defValue,
     }),
-    array3d: ({ min, max, defValue = [0, 0, 0], showAlways = true }) => ({
+    array3d: ({ label, group = "main", min, max, defValue = [0, 0, 0], showAlways = true }) => ({
         showAlways,
         name: "array3d",
+        label,
+        group,
         min: min,
         max: max,
         defValue,
     }),
-    array4d: ({ min, max, defValue = [0, 0, 0, 0], showAlways = true }) => ({
+    array4d: ({ label, group = "main", min, max, defValue = [0, 0, 0, 0], showAlways = true }) => ({
         showAlways,
         name: "array4d",
+        label,
+        group,
         min: min,
         max: max,
         defValue,
     }),
-    enum: ({ options, defValue, showAlways = true }) => ({
+    enum: ({ label, group = "main", options, defValue, showAlways = true }) => ({
         showAlways,
         name: "enum",
+        label,
+        group,
         options,
         defValue,
     }),
-    filepath: ({ extensions, types, defValue, showAlways = true }) => ({
+    filepath: ({ label, group = "main", extensions, types, defValue, showAlways = true }) => ({
         showAlways,
         name: "filepath",
+        label,
+        group,
         extensions,
         types,
         defValue,
     }),
-    text: ({ defValue = "", showAlways = true }) => ({
+    text: ({ label, group = "main", defValue = "", showAlways = true }) => ({
         showAlways,
         name: "text",
+        label,
+        group,
         defValue,
     }),
-    tags: ({ defValue = "", showAlways = true }) => ({
+    tags: ({ label, group = "main", defValue = "", showAlways = true }) => ({
         showAlways,
         name: "tags",
+        label,
+        group,
         defValue,
     }),
     // !!!! color alpha redundant here
-    color: ({ min, max, defValue = [1, 1, 1], showAlways = true }) => ({
+    color: ({ label, group = "main", min, max, defValue = [1, 1, 1], showAlways = true }) => ({
         showAlways,
         name: "color",
+        label,
+        group,
         min: min,
         max: max,
         defValue,
         showAlways,
     }),
-    colorAlpha: ({ min, max, defValue = [1, 1, 1, 1], showAlways = true }) => ({
+    colorAlpha: ({
+        label,
+        group = "main",
+        min,
+        max,
+        defValue = [1, 1, 1, 1],
+        showAlways = true,
+    }) => ({
         showAlways,
         name: "colorAlpha",
+        label,
+        group,
         alpha: true,
         min: min,
         max: max,
         defValue,
     }),
-    bool: ({ defValue = false, showAlways = true }) => ({
+    bool: ({ label, group = "main", defValue = false, showAlways = true }) => ({
         showAlways,
         name: "bool",
+        label,
+        group,
         defValue,
     }),
-    object: ({ defValue = {}, showAlways = true }) => ({
+    object: ({ label, group = "main", defValue = {}, showAlways = true }) => ({
         showAlways,
         name: "object",
+        label,
+        group,
         defValue,
     }),
-    array: ({ elementName, defaultElement, defValue = [], showAlways = true }) => ({
+    array: ({
+        label = "array",
+        group = "main",
+        elementName,
+        defaultElement,
+        defValue = [],
+        showAlways = true,
+    }) => ({
         showAlways,
         name: "array",
+        label,
+        group,
         elementName: elementName,
         defaultElement: defaultElement,
         defValue,
@@ -224,10 +270,6 @@ const ZTechniqueAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.techn
 //         })
 //     ]
 // ).describe(uiDescriptions.object({}))
-
-function isObject(val) {
-    return typeof val === "object" && !Array.isArray(val) && val !== null;
-}
 
 const ZBlendModes = z.enum([
     "replace",
@@ -484,8 +526,8 @@ const ZPatchEffect = ZBaseEffect.extend({
     offset: ZArray3D,
     rotation: ZArray3D,
     allow_rotation: ZBool,
-    texture: ZTextureObject,
     pass: ZRenderPathAsset,
+    texture: ZTextureObject,
 }).describe(uiDescriptions.object({}));
 
 // ZBaseLightEffect.shape.type.removeDefault().Values
@@ -752,8 +794,8 @@ export const EffectsList = [
     ZPlaneEffect,
     ZModel3dEffect,
     ZPatchEffect,
-    // ...ZLight,
-    ZLightAmbientEffect,
+    ...ZLight,
+    // ZLightAmbientEffect,
 
     ZBeautifyEffect,
     ZLiquifiedWarpEffect,
@@ -838,40 +880,49 @@ export const pluginNames = [...new Set(ZPlugin.options.map((val) => val.shape.na
 
 const UserHintOptions = ["none", "open_mouth", "tap_change", "with_friends", "start_recording"];
 
-const ZEnum = (defValue, options = [], showAlways = false) => {
+const ZEnum = (defValue, label, options = [], showAlways = false) => {
     return z.enum(options).describe(
         uiDescriptions.enum({
             options,
             defValue,
             showAlways,
+            label,
         })
     );
 };
 
-const ZNumberEnum = (defValue, options = [], showAlways = false) => {
+const ZNumberEnum = (defValue, label, group = "main", options = [], showAlways = false) => {
     return z.number().describe(
         uiDescriptions.enum({
             options,
             defValue,
             showAlways,
+            label,
+            group,
         })
     );
 };
 
 const MaskSettings = {
-    name: ZText.describe(uiDescriptions.text({ defValue: "defaultName" })),
-    user_hint: ZEnum(UserHintOptions[0], UserHintOptions).optional(),
-    facemodel_version: ZNumberEnum(0, [0, 1]),
+    name: ZText.describe(uiDescriptions.text({ defValue: "defaultName", label: "Name" })),
+    user_hint: ZEnum(UserHintOptions[0], "User Hint", UserHintOptions),
+    facemodel_version: ZNumberEnum(0, "Facemodel version", "Advanced", [0, 1]), // !!!! STRING !!!!
     // num_faces: ZEnum(1, [0, 1, 2]),
-    mouse_input: z
-        .boolean()
-        .describe(uiDescriptions.bool({ defValue: false, showAlways: false }))
-        .optional(),
-    icon: ZTextureAsset.optional(),
-    script: ZScriptAsset.optional(),
+    mouse_input: z.boolean().describe(
+        uiDescriptions.bool({
+            label: "Mouse input",
+            defValue: false,
+            showAlways: false,
+            group: "Advanced",
+        })
+    ),
+    icon: ZTextureAsset.describe(uiDescriptions.filepath({ ...AssetTypes.texture, label: "Icon" })),
+    script: ZScriptAsset.describe(
+        uiDescriptions.filepath({ ...AssetTypes.script, label: "Main Script", group: "Advanced" })
+    ),
 };
 
-export const ZMaskSettings = z.object(MaskSettings).describe(uiDescriptions.object({}));
+export const ZMaskSettings = z.object(MaskSettings).describe(uiDescriptions.object({})).partial();
 
 export const ZMaskConfig = z.object({
     ...MaskSettings,
@@ -879,7 +930,9 @@ export const ZMaskConfig = z.object({
     plugins: ZPlugins.default([]),
 });
 
-// !!!! will need plugin preprocess for name field, case sensitivity
+function isObject(val) {
+    return typeof val === "object" && !Array.isArray(val) && val !== null;
+}
 
 function replaceObjectSynonim(obj, nameFrom, nameTo) {
     if (obj.hasOwnProperty(nameFrom)) {
@@ -906,11 +959,6 @@ export const ZMaskConfigPreprocess = z.preprocess(
                                     if (isObject(val)) {
                                         // keep only diffuse, not texture in object
                                         return replaceObjectSynonim(val, "texture", "diffuse");
-                                        // if (val.hasOwnProperty("texture")) {
-                                        //     val["diffuse"] = val["texture"];
-                                        //     delete val["texture"];
-                                        // }
-                                        // return val;
                                     }
                                     return {
                                         diffuse: val,
