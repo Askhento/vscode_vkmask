@@ -6,6 +6,8 @@ import { terser } from "rollup-plugin-terser";
 import sveltePreprocess from "svelte-preprocess";
 import typescript from "@rollup/plugin-typescript";
 import css from "rollup-plugin-css-only";
+// import copy from "rollup-plugin-copy";
+import copy from "rollup-plugin-copy-watch";
 
 const production = !process.env.ROLLUP_WATCH; // !!!!! wtf
 // ! added sourcemaps
@@ -60,10 +62,17 @@ const common = {
         resolve({
             browser: true,
             dedupe: ["svelte"],
-            extensions: [".js", ".ts", ".svelte"], // !!! added to solve UNRESOLVED it helped!
+            extensions: [".js", ".ts", ".svelte"], //  added to solve UNRESOLVED it helped!
         }),
         commonjs(),
 
+        // !!! this will copy to the same dir for every webivew
+        copy({
+            watch: "./src/global.css",
+
+            targets: [{ src: "./src/global.css", dest: "../out/panels/webview-build" }],
+            copyOnce: false,
+        }),
         // // In dev mode, call `npm run start` once
         // // the bundle has been generated
         // !production && serve(),
@@ -78,6 +87,7 @@ const common = {
     ],
     watch: {
         clearScreen: false,
+        // exclude: "../out",
     },
 };
 

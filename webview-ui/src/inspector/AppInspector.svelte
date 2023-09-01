@@ -8,6 +8,7 @@
 
 
   */
+    // import "../common/global.css";
     import ErrorMessage from "../components/ErrorMessage.svelte";
     import { setContext } from "svelte";
     import { writable } from "svelte/store";
@@ -526,8 +527,19 @@
     {/key}
 {/if}
 
-<style>
+<!-- <style>
+    /* :global(div) {
+        background-color: brown;
+    } */
+
     div {
         background-color: transparent;
+    }
+</style> -->
+
+<style>
+    :global(div) {
+        color: aqua;
+        background-color: var(--main-bg-color);
     }
 </style>

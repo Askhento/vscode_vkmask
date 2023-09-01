@@ -17,6 +17,7 @@
     "@tsconfig/svelte": "^5.0.0",
     "@types/vscode-webview": "^1.57.1",
     "rollup": "^3.26.3",
+    "rollup-plugin-copy-watch": "^0.0.1",
     "rollup-plugin-css-only": "^4.3.0",
     "rollup-plugin-livereload": "^2.0.5",
     "rollup-plugin-svelte": "^7.1.6",
