@@ -867,7 +867,7 @@ const MaskSettings = {
         .boolean()
         .describe(uiDescriptions.bool({ defValue: false, showAlways: false }))
         .optional(),
-    preview: ZTextureAsset.optional(),
+    icon: ZTextureAsset.optional(),
     script: ZScriptAsset.optional(),
 };
 
@@ -881,56 +881,70 @@ export const ZMaskConfig = z.object({
 
 // !!!! will need plugin preprocess for name field, case sensitivity
 
-export const ZMaskConfigPreprocess = z
-    .object({
-        name: z.unknown().optional(), // !!! this will ensure order of parsed keys
+function replaceObjectSynonim(obj, nameFrom, nameTo) {
+    if (obj.hasOwnProperty(nameFrom)) {
+        obj[nameTo] = obj[nameFrom];
+        delete obj[nameFrom];
+    }
+    return obj;
+}
 
-        effects: z
-            .array(
-                z
-                    .object({
-                        texture: z
-                            .preprocess((val) => {
-                                if (isObject(val)) {
-                                    // keep only diffuse, not texture in object
-                                    if (val.hasOwnProperty("texture")) {
-                                        val["diffuse"] = val["texture"];
-                                        delete val["texture"];
+export const ZMaskConfigPreprocess = z.preprocess(
+    (val) => {
+        return replaceObjectSynonim(val, "preview", "icon");
+    },
+    z
+        .object({
+            name: z.unknown().optional(), // !!! this will ensure order of parsed keys
+            icon: z.unknown().optional(),
+            effects: z
+                .array(
+                    z
+                        .object({
+                            texture: z
+                                .preprocess((val) => {
+                                    if (isObject(val)) {
+                                        // keep only diffuse, not texture in object
+                                        return replaceObjectSynonim(val, "texture", "diffuse");
+                                        // if (val.hasOwnProperty("texture")) {
+                                        //     val["diffuse"] = val["texture"];
+                                        //     delete val["texture"];
+                                        // }
+                                        // return val;
                                     }
-                                    return val;
-                                }
-                                return {
-                                    diffuse: val,
-                                };
-                            }, z.object({}).passthrough())
-                            .optional(),
+                                    return {
+                                        diffuse: val,
+                                    };
+                                }, z.object({}).passthrough())
+                                .optional(),
 
-                        material: z
-                            .preprocess((val) => {
-                                if (!Array.isArray(val)) return [val];
-                                return val;
-                            }, z.array(z.union([z.string(), z.object({}).passthrough()])))
-                            .optional(),
-                    })
-                    .passthrough()
-            )
-            .default([]),
-        plugins: z
-            .array(
-                z
-                    .object({
-                        name: z
-                            .preprocess((val) => {
-                                // ??? what if non string
-                                return val.toLowerCase();
-                            }, z.string())
-                            .optional(),
-                    })
-                    .passthrough()
-            )
-            .default([]),
-    })
-    .passthrough();
+                            material: z
+                                .preprocess((val) => {
+                                    if (!Array.isArray(val)) return [val];
+                                    return val;
+                                }, z.array(z.union([z.string(), z.object({}).passthrough()])))
+                                .optional(),
+                        })
+                        .passthrough()
+                )
+                .default([]),
+            plugins: z
+                .array(
+                    z
+                        .object({
+                            name: z
+                                .preprocess((val) => {
+                                    // ??? what if non string
+                                    return val.toLowerCase();
+                                }, z.string())
+                                .optional(),
+                        })
+                        .passthrough()
+                )
+                .default([]),
+        })
+        .passthrough()
+);
 
 const maskTest = {
     name: "test",
