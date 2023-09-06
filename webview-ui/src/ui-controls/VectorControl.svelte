@@ -51,6 +51,7 @@
 <style>
     * {
         margin: var(--global-margin);
+        box-sizing: border-box;
     }
     .vector-control-wrapper {
         display: flex;
@@ -76,6 +77,7 @@
         /* min-width: var(--input-min-width); */
         text-align: center;
         flex-grow: 1;
+        height: var(--global-block-height);
     }
     span.label {
         justify-self: var(--label-justify);

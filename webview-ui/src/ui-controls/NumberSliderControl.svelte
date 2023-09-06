@@ -9,7 +9,7 @@
     let step = 0.01,
         displayValue = value;
 
-    // $: console.log("from slider", params);
+    $: console.log("from slider", params);
 
     $: step = (params.max - params.min) / 20.0;
 
@@ -46,7 +46,7 @@
         }}
     /> -->
 <span class="control-wrapper">
-    <div class="display-value">{value}</div>
+    <div class="display-value">{params.valueTemplate(value)}</div>
     {#if params.valueLabel}
         <div class="value-label">{params.valueLabel}</div>
     {/if}
@@ -113,6 +113,7 @@
         /* width: 800px; */
         white-space: pre;
         pointer-events: none;
+        color: var(--vscode-widget-border);
     }
 
     span.label {
@@ -133,7 +134,7 @@
         cursor: pointer;
         width: 100%;
         /* width: 150px; */
-        height: 2rem;
+        height: var(--global-block-height);
         /* height: calc(var(--global-box-height) * 1px); */
         /*  slider progress trick  */
         /* overflow: hidden; */

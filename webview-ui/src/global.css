@@ -11,6 +11,7 @@
 --global-margin : 5px;
 --global-grid-column-gap : 0.5rem;
 --global-grid-row-gap : 0.5rem;
+--global-block-height : 2rem;
 
 
 --label-justify: end;

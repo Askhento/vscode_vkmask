@@ -25,6 +25,9 @@ export const uiDescriptions = {
         defValue = 0,
         valueLabel = "",
         showAlways = true,
+        valueTemplate = (val) => {
+            return val;
+        },
     }) => ({
         showAlways,
         name: "numberSlider",
@@ -34,6 +37,7 @@ export const uiDescriptions = {
         max: max,
         defValue,
         valueLabel,
+        valueTemplate,
     }),
     array2d: ({ label, group = "main", min, max, defValue = [0, 0], showAlways = true }) => ({
         showAlways,
@@ -545,7 +549,11 @@ const ZBeautifyEffect = ZBaseEffect.extend({
 const ZColorfilterEffect = ZBaseEffect.extend({
     name: z.literal("colorfilter").describe(uiDescriptions.none({})),
     intensity: ZNumberSlider.describe(
-        uiDescriptions.numberSlider({ defValue: 0.75, valueLabel: "% " })
+        uiDescriptions.numberSlider({
+            defValue: 0.75,
+            valueLabel: "% ",
+            valueTemplate: (val) => Math.floor(val * 100),
+        })
     ),
     lookup: ZTextureAsset,
 }).describe(uiDescriptions.object({}));
