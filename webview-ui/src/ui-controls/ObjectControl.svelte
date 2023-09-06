@@ -196,6 +196,7 @@
             var(--project-manager-grid-label-column-size)
             minmax(auto, var(--project-manager-grid-value-column-size));
         column-gap: var(--global-grid-column-gap);
+        row-gap: var(--global-grid-row-gap);
     }
 
     .object-label {

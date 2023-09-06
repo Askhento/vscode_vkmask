@@ -3,11 +3,17 @@
     }
 
 :root {
-  --main-bg-color: rgb(75, 88, 78);
-  --project-manager-grid-label-column-size : 8rem;
-    --project-manager-grid-value-column-size : 15rem;
-    --global-margin : 5px;
-    --global-grid-column-gap : 0.5rem;
+--main-bg-color: rgb(75, 88, 78);
+--project-manager-grid-label-column-size : 8rem;
+--project-manager-grid-value-column-size : 15rem;
 
-  --label-justify: end;
+--global-box-height : 40px;
+--global-margin : 5px;
+--global-grid-column-gap : 0.5rem;
+--global-grid-row-gap : 0.5rem;
+
+
+--label-justify: end;
+--global-border-raduis : 2px;
+--global-border-width : 1px;
 }

@@ -26,8 +26,8 @@
 
 <!-- {#if label} -->
 <span class="label">{label}</span>
-<span class="control-wrapper">
-    <input
+<!-- <span class="control-wrapper"> -->
+<!-- <input
         class="number"
         type="number"
         bind:value
@@ -44,7 +44,12 @@
                 target.blur();
             }
         }}
-    />
+    /> -->
+<span class="control-wrapper">
+    <div class="display-value">{value}</div>
+    {#if params.valueLabel}
+        <div class="value-label">{params.valueLabel}</div>
+    {/if}
     <input
         class="slider"
         type="range"
@@ -59,11 +64,16 @@
     />
 </span>
 
+<!-- </span> -->
+
 <!-- {/if} -->
 
 <style>
     * {
-        margin: var(--global-margin);
+        margin: calc(var(--global-margin) * 1px);
+        /* padding: var(--global-margin); */
+        /* margin: 0; */
+        box-sizing: border-box;
     }
     /* .number-control-wrapper {
         position: relative;
@@ -71,22 +81,40 @@
         justify-content: start;
     } */
 
-    .control-wrapper {
-        /* display: inline-block; */
-        /* flex-grow: 1; */
-        /* width: 50%; */
-    }
-    input.number {
-        display: block;
-        /* margin-left: auto; */
-        max-height: 1em;
-        text-align: end;
-    }
+    /*     
     input::-webkit-outer-spin-button,
     input::-webkit-inner-spin-button {
         -webkit-appearance: none;
         margin: 0;
+    } */
+
+    .control-wrapper {
+        position: relative;
     }
+
+    div.display-value {
+        position: absolute;
+        /* left: calc(50%); */
+        width: 100%;
+        text-align: center;
+        top: calc(50% - 0.5rem);
+        /* vertical-align: middle; */
+        /* width: 800px; */
+        pointer-events: none;
+    }
+
+    div.value-label {
+        position: absolute;
+        /* left: calc(50%); */
+        width: 100%;
+        text-align: end;
+        top: calc(50% - 0.5rem);
+        /* vertical-align: middle; */
+        /* width: 800px; */
+        white-space: pre;
+        pointer-events: none;
+    }
+
     span.label {
         justify-self: var(--label-justify);
     }
@@ -101,40 +129,53 @@
     input[type="range"] {
         -webkit-appearance: none;
         appearance: none;
-        background: transparent;
+        background: var(--input-background);
         cursor: pointer;
-        /* width: 100%; */
-        width: 150px;
+        width: 100%;
+        /* width: 150px; */
+        height: 2rem;
+        /* height: calc(var(--global-box-height) * 1px); */
+        /*  slider progress trick  */
+        /* overflow: hidden; */
+        border-radius: var(--global-border-raduis);
+        /* border: 2px solid var(--vscode-widget-border); */
     }
     /***** Track Styles *****/
     /***** Chrome, Safari, Opera, and Edge Chromium *****/
     input[type="range"]::-webkit-slider-runnable-track {
         /* background: #053a5f; */
-        height: 6px;
-        border-radius: 3px;
+        height: 100%;
+        /* border-radius: var(--globel-border-raduis); */
         /* color: var(--input-foreground); */
-        background: var(--input-background);
+        overflow: hidden;
+
+        /* background: var(--input-background); */
+        border-radius: var(--global-border-raduis);
+        border: var(--global-border-width) solid var(--vscode-widget-border);
     }
 
     input[type="range"]::-webkit-slider-thumb {
         -webkit-appearance: none; /* Override default look */
         appearance: none;
-        margin-top: -7px; /* Centers thumb on the track */
-        background-color: var(--input-foreground);
+        /* margin-top: -7px; Centers thumb on the track */
+        /* background-color: var(--input-foreground); */
         /* border-color: wheat; */
-        /* border: 1px solid var(--button-icon-background); */
 
-        height: 20px;
-        width: 20px;
-        border-radius: 10px;
+        height: 0px;
+        width: 0px;
+        /* border-radius: 10px; */
+        /* opacity: 0; */
+        /* display: none; */
+        /*  slider progress trick  */
+        box-shadow: -400px 0 0 400px var(--vscode-dropdown-background);
     }
     input[type="range"]:focus {
         outline: none;
     }
-    /***** Chrome, Safari, Opera, and Edge Chromium *****/
+    /* **** Chrome, Safari, Opera, and Edge Chromium ****
     input[type="range"]:focus::-webkit-slider-thumb {
         border: 1px solid var(--focus-border);
         outline: 2px solid var(--focus-border);
         outline-offset: 0.125rem;
-    }
+    } */
 </style>
