@@ -90,7 +90,7 @@ export const uiDescriptions = {
         group,
         defValue,
     }),
-    tags: ({ label, group = "main", defValue = "", showAlways = true }) => ({
+    tags: ({ label, group = "Tags", defValue = "", showAlways = true }) => ({
         showAlways,
         name: "tags",
         label,

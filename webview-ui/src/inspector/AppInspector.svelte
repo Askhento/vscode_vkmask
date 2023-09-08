@@ -54,9 +54,10 @@
 
     const assets = writable([]);
     const settings = writable([]);
+    const allTags = writable(new Set([]));
 
     const messageHandler = new MessageHandler(handleMessageApp, origin);
-    setContext("stores", { assets, settings, messageHandler });
+    setContext("stores", { assets, settings, messageHandler, allTags });
 
     function handleMessageApp(data: MessageHandlerData<any>) {
         print("recived ", data);
@@ -202,6 +203,20 @@
         effects = payload;
     }
 
+    function updateTags() {
+        $allTags = new Set();
+        effects.forEach((effect) => {
+            if ("tag" in effect) {
+                effect.tag
+                    .split(";")
+                    .filter((tag) => tag.length)
+                    .forEach((tag) => $allTags.add(tag));
+            }
+        });
+
+        print("updated tags: ", $allTags);
+    }
+
     function sendEffects() {
         messageHandler.send({
             command: RequestCommand.updateEffects,
@@ -257,6 +272,8 @@
         if (parseResult.success) {
             uiElements = parseResult.data;
             print("parse result : ", parseResult);
+
+            if (selection.type === SelectionType.effect) updateTags();
         } else {
             // print(parseResult.error);
             onError(parseResult.error);
