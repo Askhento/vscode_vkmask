@@ -16,7 +16,7 @@
     const dispatch = createEventDispatcher();
 
     function sendValue() {
-        console.log("should send value");
+        // console.log("should send value");
         dispatch("changed", {
             value,
             path,
@@ -46,7 +46,7 @@
         }}
     /> -->
 <span class="control-wrapper">
-    <div class="display-value">{params.valueTemplate(value)}</div>
+    <div class="display-value">{params.valueTemplate?.(value) || value}</div>
     {#if params.valueLabel}
         <div class="value-label">{params.valueLabel}</div>
     {/if}

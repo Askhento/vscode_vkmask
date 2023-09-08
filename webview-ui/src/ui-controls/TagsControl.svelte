@@ -57,7 +57,7 @@
         // if()
         tags.push(newTag);
         tags = tags;
-        console.log("tags should rerender!!!! ", tags);
+        // console.log("tags should rerender!!!! ", tags);
 
         // //#impr focus on new
         // await tick();
