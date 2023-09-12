@@ -5,7 +5,7 @@
     //@ts-expect-error
     const { allTags } = getContext("stores");
 
-    console.log("tags all ", $allTags);
+    // console.log("tags all ", $allTags);
 
     export let label = "empty",
         value,

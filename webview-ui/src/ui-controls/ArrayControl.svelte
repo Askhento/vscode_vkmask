@@ -42,9 +42,11 @@
     }
 </script>
 
-<span class="label" class:expanded on:click={toggle}
-    >{label}
-    <i class="codicon codicon-triangle-{expanded ? 'down' : 'right'}" />
+<vscode-divider role="separator" />
+
+<span class="label" class:expanded on:click={toggle}>
+    <i class="codicon codicon-chevron-{expanded ? 'down' : 'right'}" />
+    {label}
 </span>
 
 <div class="elements-wrapper">
@@ -65,7 +67,7 @@
                     this={data.uiElement}
                     expanded={true}
                     value={value[index]}
-                    label={"index" + index}
+                    label={(params.elementName ?? "element") + "_" + index}
                     path={[...path, index]}
                     params={data.uiDescription}
                     uiElements={data.value}
@@ -73,17 +75,19 @@
                 />
                 <vscode-button
                     class="remove-btn"
+                    style="grid-row : {index + 1} / {index + 2}"
                     appearance="icon"
                     on:click={() => {
                         removeElement(index);
                     }}
                 >
-                    <span slot="start" class="codicon codicon-remove" />
+                    <span class="codicon codicon-close" />
                 </vscode-button>
             {/each}
         {/if}
-        <vscode-button appearance="icon" on:click={addElement}>
+        <vscode-button class="add-btn" on:click={addElement}>
             <span slot="start" class="codicon codicon-add" />
+            {"Add new " + params.elementName}
         </vscode-button>
         <!-- {#if value.length}
         <vscode-button on:click={removeElement}>
@@ -94,17 +98,57 @@
 </div>
 
 <style>
+    * {
+        /* margin: var(--global-margin); */
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
     .elements-wrapper {
-        padding: 0.2em 0 0 0.5em;
-        margin: 0 0 0 0.5em;
+        /* padding: 0.2em 0 0 0.5em; */
+        /* margin: 0 0 0 0.5em; */
+        position: relative;
+        grid-column: 1/3;
+        display: grid;
+        grid-template-columns:
+            var(--project-manager-grid-label-column-size)
+            minmax(auto, var(--project-manager-grid-value-column-size));
+        column-gap: var(--global-grid-column-gap);
+        /* row-gap: var(--global-grid-row-gap); */
+    }
+
+    .add-btn {
+        grid-column: 2/3;
+        margin: var(--global-margin);
     }
 
     .remove-btn {
-        flex-grow: 1;
-        display: inline-block;
+        /* flex-grow: 1; */
+        /* display: inline-block; */
+        position: absolute;
+
+        /* left: calc(100% + 0.25rem); */
+        /* top: calc(); */
+        /* height: 100%; */
+        height: var(--global-block-height);
+        width: var(--global-block-height);
+        /* text-justify: ; */
+        text-align: center;
+        grid-column: 3/4;
+        /* grid-row: 1/2; */
+        margin: 0;
+        padding: 0;
     }
     .label {
         justify-self: var(--label-justify);
+        color: var(--vscode-descriptionForeground);
+        grid-column: 1/3;
+        justify-self: self-start;
+        cursor: pointer;
+    }
+
+    vscode-divider {
+        grid-column: 1/3;
     }
     /* span {
     padding: 0 0 0 1.5em;
@@ -115,7 +159,7 @@
     min-height: 1em;
     display: inline-block;
   }
-
+    
   .expanded {
     background-image: url(tutorial/icons/folder-open.svg);
   } */

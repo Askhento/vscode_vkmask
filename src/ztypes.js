@@ -451,7 +451,7 @@ const ZMaterial = z.union([ZMaterialAsset, ZMaterialObject]).describe(uiDescript
 export const ZMaterialArray = z.preprocess((val) => {
     if (!Array.isArray(val)) return [val];
     return val;
-}, z.array(ZMaterial).describe(uiDescriptions.array({ elementName: "material", defaultElement: AssetTypes.material.defValue, defValue: [] })));
+}, z.array(ZMaterial).describe(uiDescriptions.array({ elementName: "material", label: "Materials", defaultElement: AssetTypes.material.defValue, defValue: [] })));
 
 // console.log(ZMaterialArray.innerType().element.options[1].description)
 
@@ -567,10 +567,10 @@ const ZModel3dEffect = ZBaseEffect.extend({
         })
     ),
     model: ZModel3dAsset,
-    material: ZMaterialArray,
     position: ZArray3D,
     rotation: ZArray3D,
     scale: ZArray3D.describe(uiDescriptions.array3d({ defValue: [1, 1, 1] })),
+    material: ZMaterialArray,
 }).describe(uiDescriptions.object({}));
 
 const ZPlaneEffect = ZBaseEffect.extend({
@@ -581,10 +581,10 @@ const ZPlaneEffect = ZBaseEffect.extend({
             defValue: ZFaceAnchor.Values.forehead,
         })
     ),
-    material: ZMaterialArray,
     position: ZArray3D,
     rotation: ZArray3D,
     scale: ZArray3D.describe(uiDescriptions.array3d({ defValue: [1, 1, 1] })),
+    material: ZMaterialArray,
 }).describe(uiDescriptions.object({}));
 
 // const ZBaseTest = ZBaseEffect.extend(
