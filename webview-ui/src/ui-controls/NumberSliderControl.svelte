@@ -25,7 +25,6 @@
 </script>
 
 <!-- {#if label} -->
-<span class="label">{label}</span>
 <!-- <span class="control-wrapper"> -->
 <!-- <input
         class="number"
@@ -45,6 +44,8 @@
             }
         }}
     /> -->
+<span class="label">{label}</span>
+
 <span class="control-wrapper">
     <div class="display-value">{params.valueTemplate?.(value) || value}</div>
     {#if params.valueLabel}
@@ -70,7 +71,8 @@
 
 <style>
     * {
-        margin: calc(var(--global-margin) * 1px);
+        margin: var(--global-margin);
+        padding: 0;
         /* padding: var(--global-margin); */
         /* margin: 0; */
         box-sizing: border-box;
@@ -97,7 +99,7 @@
         /* left: calc(50%); */
         width: 100%;
         text-align: center;
-        top: calc(50% - 0.5rem);
+        top: calc(50% - 0.5rem - var(--global-margin));
         /* vertical-align: middle; */
         /* width: 800px; */
         pointer-events: none;
@@ -108,7 +110,8 @@
         /* left: calc(50%); */
         width: 100%;
         text-align: end;
-        top: calc(50% - 0.5rem);
+        top: calc(50% - 0.5rem - var(--global-margin));
+        right: var(--global-margin);
         /* vertical-align: middle; */
         /* width: 800px; */
         white-space: pre;
@@ -122,7 +125,7 @@
 
     input.slider {
         display: block;
-        margin-left: auto;
+        margin: 0;
 
         /* flex: 2 0 0px; */
     }

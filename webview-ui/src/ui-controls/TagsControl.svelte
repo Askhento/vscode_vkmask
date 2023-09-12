@@ -176,8 +176,10 @@
     .remove-tag-btn {
         position: absolute;
         left: calc(100% + 0.25rem);
-        top: 0;
+        top: calc();
         height: 100%;
+        margin: 0;
+        padding: 0;
         /* overflow: auto; */
         /* display: inline-block; */
         /* flex-grow: 1; */

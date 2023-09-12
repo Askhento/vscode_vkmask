@@ -551,7 +551,7 @@ const ZColorfilterEffect = ZBaseEffect.extend({
     intensity: ZNumberSlider.describe(
         uiDescriptions.numberSlider({
             defValue: 0.75,
-            valueLabel: "% ",
+            valueLabel: "%",
             valueTemplate: (val) => Math.floor(val * 100),
         })
     ),
