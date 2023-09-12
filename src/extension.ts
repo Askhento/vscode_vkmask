@@ -41,14 +41,24 @@ import { copyRecursiveSync } from "./utils/copyFilesRecursive";
 export async function activate(context: vscode.ExtensionContext) {
     let appState = AppState.loading,
         error = null;
+    logger.setMode(context.extensionMode);
+
+    assetWatcher.searchBuiltinAssets(context.extensionUri);
 
     const recentProjectInfo = new RecentProjects(context);
 
-    logger.setMode(context.extensionMode);
-    await userSettings.init(context.extensionUri);
-
     const messageHandler = new MessageHandler();
     const maskConfig = new MaskConfig();
+
+    await userSettings.init(context.extensionUri);
+    userSettings.on("configChanged", (currentConfig) => {
+        print("new config", currentConfig);
+        messageHandler.send({
+            target: RequestTarget.all,
+            command: RequestCommand.updateSettings,
+            payload: currentConfig,
+        });
+    });
 
     maskConfig.on("error", onError);
     // let selection: Selection = { type: SelectionType.empty };
@@ -204,9 +214,12 @@ export async function activate(context: vscode.ExtensionContext) {
             );
 
             assetWatcher.on("assetsChanged", async () => {
+                const buildins = (await userSettings.getSettings()["vkmask.use-builtins"]
+                    .value) as boolean;
+
                 messageHandler.send({
                     command: RequestCommand.updateAssets,
-                    payload: await assetWatcher.getAssets(),
+                    payload: await assetWatcher.getAssets(true),
                     target: provider.viewId,
                 });
             });
@@ -223,7 +236,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 // reply with assets
                 messageHandler.send({
                     ...data,
-                    payload: await assetWatcher.getAssets(),
+                    payload: await assetWatcher.getAssets(true),
                     target: origin,
                 });
                 break;

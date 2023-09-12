@@ -46,6 +46,7 @@ class AssetWatcher extends EventEmitter {
 
         // !!!add error check, file could be missing
         this.builtInAssets = builtInJSON.assets;
+        // print(this.builtInAssets);
     }
 
     async searchAssets() {
@@ -66,11 +67,11 @@ class AssetWatcher extends EventEmitter {
         // this.assets = [...this.builtInAssets, ...newAssets];
     }
 
-    async getAssets() {
+    async getAssets(builtins = false) {
         if (!this.assets.length) {
             await this.searchAssets();
         }
-        return this.assets;
+        return builtins ? [...this.builtInAssets, ...this.assets] : this.assets;
     }
 
     readFileType(file: string) {

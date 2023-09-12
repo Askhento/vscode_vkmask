@@ -65,7 +65,7 @@ class UserSettings extends EventEmitter {
             this.settings[section].value = configuration.get(section) ?? "empty";
             this.emitChangedSectionEvent(section);
         });
-        // this.emitChangeEvent(); // @deprecated
+        this.emitChangeEvent(); // @deprecated
     }
 
     emitChangedSectionEvent(section: string) {
