@@ -113,7 +113,7 @@
         /* width: 800px; */
         white-space: pre;
         pointer-events: none;
-        color: var(--vscode-widget-border);
+        color: var(--vscode-descriptionForeground);
     }
 
     span.label {

@@ -80,7 +80,7 @@
 <div class="control-wrapper" class:add-key-color={addKeyHover}>
     {#if nesting}
         <span class="object-label" class:expanded on:click={toggle}>
-            <i class="codicon codicon-triangle-{expanded ? 'down' : 'right'}" />
+            <i class="codicon codicon-chevron-{expanded ? 'down' : 'right'}" />
             {label}
         </span>
     {/if}
@@ -98,7 +98,7 @@
                         }}
                     >
                         <i
-                            class="codicon codicon-triangle-{groupData.expanded ? 'down' : 'right'}"
+                            class="codicon codicon-chevron-{groupData.expanded ? 'down' : 'right'}"
                         />
                         {groupName}
                     </div>
@@ -208,9 +208,11 @@
 
     .object-label {
         cursor: pointer;
+        color: var(--vscode-descriptionForeground);
     }
     .group-label {
         cursor: pointer;
+        color: var(--vscode-descriptionForeground);
     }
 
     /* .add-key-wrapper {
