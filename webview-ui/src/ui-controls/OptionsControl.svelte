@@ -38,7 +38,7 @@
     }}
 >
     {#each options as option, i}
-        <vscode-option value={i}>{option}</vscode-option>
+        <vscode-option class="option" value={i}>{option}</vscode-option>
     {/each}
 </vscode-dropdown>
 
@@ -57,6 +57,10 @@
     display: inline;
     flex-grow: 1;
   } */
+
+    .option {
+        margin: 0;
+    }
     span.label {
         justify-self: var(--label-justify);
     }
