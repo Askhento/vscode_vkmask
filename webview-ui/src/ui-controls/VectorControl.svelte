@@ -51,14 +51,18 @@
 <style>
     * {
         margin: var(--global-margin);
+
+        padding: 0;
         box-sizing: border-box;
     }
+
     .vector-control-wrapper {
         display: flex;
         flex-direction: row;
         /* min-height: fit-content; */
         justify-content: start;
         flex-wrap: wrap;
+        margin: 0;
     }
 
     input.value {
@@ -73,7 +77,7 @@
         font-family: inherit;
         font-size: var(--type-ramp-base-font-size);
         line-height: var(--type-ramp-base-line-height);
-        padding: calc(var(--design-unit) * 2px + 1px);
+        padding: 0;
         /* min-width: var(--input-min-width); */
         text-align: center;
         flex-grow: 1;

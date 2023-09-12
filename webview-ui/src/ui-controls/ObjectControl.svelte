@@ -182,15 +182,22 @@
 </div>
 
 <style>
+    * {
+        margin: 0;
+
+        padding: 0;
+        box-sizing: border-box;
+    }
     .control-wrapper {
         position: relative;
         transition: all 0.5s ease;
         border-radius: 0.5em;
         border: 2px solid transparent;
+        grid-column: 1/3;
     }
     .group-wrapper {
-        padding: 0 0 0 0.5em;
-        margin: 0 0 0 0.5em;
+        /* padding: 0 0 0 0.5em; */
+        /* margin: 0 0 0 0.5em; */
         display: grid;
         grid-template-columns:
             var(--project-manager-grid-label-column-size)

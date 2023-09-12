@@ -138,9 +138,9 @@
 
 <style>
     * {
-        /* margin: var(--global-margin); */
-        margin: calc(var(--global-margin) * 1px);
+        margin: var(--global-margin);
 
+        padding: 0;
         box-sizing: border-box;
     }
 

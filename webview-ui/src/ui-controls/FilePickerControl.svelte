@@ -295,8 +295,10 @@
 
 <style>
     * {
-        margin: 5px;
-        /* box-sizing: border-box; */
+        margin: var(--global-margin);
+
+        /* padding: 0; */
+        box-sizing: border-box;
     }
 
     /* .control-wrapper {

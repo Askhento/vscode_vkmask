@@ -44,8 +44,9 @@
 
 <style>
     * {
-        /* padding: 5px; */
-        margin: 5px;
+        margin: var(--global-margin);
+        padding: 0;
+        box-sizing: border-box;
     }
     /* .option-control-wrapper {
     position: relative;
