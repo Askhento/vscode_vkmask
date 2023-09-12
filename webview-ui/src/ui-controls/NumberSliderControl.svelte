@@ -9,7 +9,7 @@
     let step = 0.01,
         displayValue = value;
 
-    $: console.log("from slider", params);
+    // $: console.log("from slider", params);
 
     $: step = (params.max - params.min) / 20.0;
 

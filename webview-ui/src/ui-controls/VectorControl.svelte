@@ -7,6 +7,8 @@
         path,
         params;
 
+    let dispalyValues = value;
+
     // !!! just a hack
     onMount(() => {
         // console.log("mounted vector");
@@ -39,7 +41,32 @@
           v = parseFloat(e.target.value);
         }}
       /> -->
-            <input class="value" bind:value={value[index]} />
+            <input
+                class="value"
+                value={v}
+                on:keydown={(e) => {
+                    switch (e.key) {
+                        case "Escape":
+                            e.target.value = value[index];
+                            e.target.blur();
+                            break;
+                        case "Enter":
+                            e.target.blur();
+                        default:
+                            break;
+                    }
+                }}
+                on:change={(e) => {
+                    console.log("vector", e);
+                    const parsed = parseFloat(e.target.value);
+                    console.log("vector parsed ", parsed);
+                    if (isNaN(parsed) || isNaN(e.target.value)) {
+                        e.target.value = value[index];
+                        return;
+                    }
+                    value[index] = parsed;
+                }}
+            />
             <!-- {/each}
     {:else}
       {#each params.default as v, index}
