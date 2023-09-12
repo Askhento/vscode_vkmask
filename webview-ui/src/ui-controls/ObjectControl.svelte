@@ -78,6 +78,7 @@
 </script>
 
 <div class="control-wrapper" class:add-key-color={addKeyHover}>
+    <vscode-divider role="separator" />
     {#if nesting}
         <span class="object-label" class:expanded on:click={toggle}>
             <i class="codicon codicon-chevron-{expanded ? 'down' : 'right'}" />
