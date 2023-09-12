@@ -56,35 +56,35 @@
     }
 </script>
 
-{#if label}
-    <span class="label">{label}</span>
-    <!-- <span class="color">{value}</span> -->
-    <div class="color-control-wrapper">
-        <input
-            class="color"
-            type="color"
-            value={color}
-            on:change={(e) => {
-                console.log("color picker on change!!!!");
-                color = e.target.value;
-                hexToRGB();
-                onChange();
-            }}
-        />
-        {#if params.alpha}
-            <NumberSliderControl
-                label={"alpha"}
-                params={{ min: 0, max: 1, defValue: 0.0 }}
-                value={alpha}
-                on:changed={(e) => {
-                    // <!-- bind:value={alpha} -->
-                    console.log("color alpha slider changed", alpha);
-                    alpha = e.detail.value;
-                    hexToRGB();
-                    onChange();
-                }}
-            />
-            <!-- <input
+<span class="label">{label}</span>
+<!-- <span class="color">{value}</span> -->
+<div class="color-control-wrapper">
+    <input
+        class="color"
+        type="color"
+        value={color}
+        on:change={(e) => {
+            console.log("color picker on change!!!!");
+            color = e.target.value;
+            hexToRGB();
+            onChange();
+        }}
+    />
+</div>
+{#if params.alpha}
+    <NumberSliderControl
+        label={"alpha"}
+        params={{ min: 0, max: 1, defValue: 0.0 }}
+        value={alpha}
+        on:changed={(e) => {
+            // <!-- bind:value={alpha} -->
+            console.log("color alpha slider changed", alpha);
+            alpha = e.detail.value;
+            hexToRGB();
+            onChange();
+        }}
+    />
+    <!-- <input
         class="alpha"
         type="range"
         bind:value={alpha}
@@ -92,14 +92,13 @@
         max="1"
         step="0.02"
       /> -->
-        {/if}
-    </div>
 {/if}
 
 <style>
     .color-control-wrapper {
         position: relative;
         display: flex;
+        flex-direction: column;
         justify-content: start;
     }
 
@@ -112,12 +111,14 @@
     }
 
     input.color {
-        display: inline-block;
+        display: block;
         background-color: var(--input-background);
         border: none;
-        border-radius: 5px;
-        height: 40px;
-        width: 40px;
+        border-radius: 2px;
+        height: var(--global-block-height);
+        width: 100%;
+        /* height: 40px; */
+        /* width: 40px; */
         /* flex: 1 0 0px; */
     }
 
