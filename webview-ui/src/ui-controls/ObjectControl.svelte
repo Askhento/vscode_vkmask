@@ -206,6 +206,7 @@
             minmax(auto, var(--project-manager-grid-value-column-size));
         column-gap: var(--global-grid-column-gap);
         row-gap: var(--global-grid-row-gap);
+        margin-bottom: var(--global-grid-row-gap);
     }
 
     .object-label {
@@ -229,6 +230,12 @@
         display: flex;
     }
 
+    .add-key-btn {
+        margin: var(--global-margin);
+        /* height: var(); */
+        height: var(--global-block-height);
+    }
+
     /* .add-key-wrapper {
         padding: 0.2em 0 0 0.5em;
         margin: 0 0 0 0.5em;
@@ -242,12 +249,7 @@
     .add-key-dropdown::part(listbox) {
         z-index: 3;
     }
-    .add-key-btn {
-        pointer-events: none;
-        width: 150px;
-        position: absolute;
-        z-index: 2;
-    } */
+*/
 
     /* .add-key-color {
         border-color: var(--vscode-focusBorder);
