@@ -314,6 +314,9 @@ export async function activate(context: vscode.ExtensionContext) {
         switch (command) {
             case RequestCommand.updateEffects:
                 maskConfig.updateEffects(payload);
+                sendEffects(
+                    [RequestTarget.inspector, RequestTarget.effects].filter((t) => t !== origin)
+                );
                 break;
             case RequestCommand.updatePlugins:
                 maskConfig.updatePlugins(payload);
@@ -348,45 +351,35 @@ export async function activate(context: vscode.ExtensionContext) {
     maskConfig.onFileSave = async () => {
         // maskConfig.selection = {type : SelectionType.empty};
         // await maskConfig.clearSelection();
-
-        print("sending effects on file save");
-        const effects = await maskConfig.getEffects();
-        messageHandler.send({
-            target: RequestTarget.effects,
-            command: RequestCommand.updateEffects,
-            payload: effects,
-        });
-
-        messageHandler.send({
-            target: RequestTarget.inspector,
-            command: RequestCommand.updateEffects,
-            payload: effects,
-        });
-
-        print("sending plugins on file save");
-        const plugins = await maskConfig.getPlugins();
-
-        messageHandler.send({
-            target: RequestTarget.plugins,
-            command: RequestCommand.updatePlugins,
-            payload: plugins,
-        });
-
-        messageHandler.send({
-            target: RequestTarget.inspector,
-            command: RequestCommand.updatePlugins,
-            payload: plugins,
-        });
-
-        print("sending maskSettings");
-
-        const maskSttings = await maskConfig.getMaskSettings();
-        messageHandler.send({
-            target: RequestTarget.projectManager,
-            command: RequestCommand.updateMaskSettings,
-            payload: maskSttings,
-        });
+        print("on file save");
+        sendEffects([RequestTarget.effects, RequestTarget.inspector]);
+        sendPlugins([RequestTarget.plugins, RequestTarget.inspector]);
+        sendMaskSettings(RequestTarget.projectManager);
     };
+
+    async function sendMaskSettings(target) {
+        messageHandler.send({
+            target,
+            command: RequestCommand.updateMaskSettings,
+            payload: await maskConfig.getMaskSettings(),
+        });
+    }
+
+    async function sendPlugins(target) {
+        messageHandler.send({
+            target,
+            command: RequestCommand.updatePlugins,
+            payload: await maskConfig.getPlugins(),
+        });
+    }
+
+    async function sendEffects(target) {
+        messageHandler.send({
+            target,
+            command: RequestCommand.updateEffects,
+            payload: await maskConfig.getEffects(),
+        });
+    }
 
     function sendSelection(target = RequestTarget.all) {
         messageHandler.send({

@@ -82,7 +82,7 @@
     {#if nesting}
         <span class="object-label" class:expanded on:click={toggle}>
             <i class="codicon codicon-chevron-{expanded ? 'down' : 'right'}" />
-            {label}
+            <span>{label}</span>
         </span>
     {/if}
     {#key uiElementsGroupData}
@@ -101,7 +101,8 @@
                         <i
                             class="codicon codicon-chevron-{groupData.expanded ? 'down' : 'right'}"
                         />
-                        {groupName}
+
+                        <span>{groupName}</span>
                     </div>
                 {/if}
                 {#if uiElementsGroupData[groupName].expanded}
@@ -210,10 +211,22 @@
     .object-label {
         cursor: pointer;
         color: var(--vscode-descriptionForeground);
+        margin: var(--global-margin);
+        display: flex;
     }
+
+    .group-label > span,
+    .object-label > span {
+        /* color: red; */
+        display: inline-block;
+        margin-left: var(--global-margin);
+    }
+
     .group-label {
         cursor: pointer;
         color: var(--vscode-descriptionForeground);
+        margin: var(--global-margin);
+        display: flex;
     }
 
     /* .add-key-wrapper {

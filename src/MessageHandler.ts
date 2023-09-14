@@ -12,7 +12,7 @@ const print = (...args: any) => logger.log(__filename, ...args);
 export interface MessageHandlerData<T> {
     requestId?: string;
     error?: any;
-    target: string;
+    target: string | string[];
     origin?: string;
     command: string;
     payload?: T;
@@ -93,11 +93,24 @@ export class MessageHandler {
         }
 
         const newOrigin = origin || this.origin;
+
         if (target === RequestTarget.all) {
             Object.keys(this.webviews).forEach((viewId) => {
                 const webview = this.webviews[viewId];
                 if (webview === undefined) {
-                    print("unkown target to send : " + target);
+                    print("unkown target to send : " + viewId);
+                    return;
+                }
+                webview.postMessage({ ...data, origin: newOrigin, target: viewId });
+            });
+            return;
+        }
+
+        if (Array.isArray(target)) {
+            target.forEach((viewId) => {
+                const webview = this.webviews[viewId];
+                if (webview === undefined) {
+                    print("unkown target to send : " + viewId);
                     return;
                 }
                 webview.postMessage({ ...data, origin: newOrigin, target: viewId });
