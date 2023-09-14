@@ -120,6 +120,7 @@
     .add-btn {
         grid-column: 2/3;
         margin: var(--global-margin);
+        height: var(--global-block-height);
     }
 
     .remove-btn {
@@ -138,6 +139,7 @@
         /* grid-row: 1/2; */
         margin: 0;
         padding: 0;
+        margin-top: var(--global-margin);
     }
     .label {
         justify-self: var(--label-justify);

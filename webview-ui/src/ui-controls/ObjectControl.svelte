@@ -109,7 +109,9 @@
                     <div class="group-wrapper">
                         {#each Object.entries(groupData.elements) as [key, data]}
                             {#if data.value === null && (data.uiDescription.name === "object" || data.uiDescription.name === "array")}
-                                <div>{data.uiDescription.label ?? key}</div>
+                                <span class="missing-key-label"
+                                    >{data.uiDescription.label ?? key}</span
+                                >
                                 <vscode-button
                                     class="add-key-btn"
                                     on:click={() => {
@@ -232,10 +234,13 @@
 
     .add-key-btn {
         margin: var(--global-margin);
-        /* height: var(); */
         height: var(--global-block-height);
     }
 
+    span.missing-key-label {
+        margin: var(--global-margin);
+        justify-self: var(--label-justify);
+    }
     /* .add-key-wrapper {
         padding: 0.2em 0 0 0.5em;
         margin: 0 0 0 0.5em;

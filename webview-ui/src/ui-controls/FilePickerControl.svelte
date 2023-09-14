@@ -325,6 +325,7 @@
         /* margin: unset;
         position: relative; */
         /* width: 200px; */
+        height: var(--global-block-height);
     }
     /* vscode-dropdown.error {
     color: var(--vscode-errorForeground);
