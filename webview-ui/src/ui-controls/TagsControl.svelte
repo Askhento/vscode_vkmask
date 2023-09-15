@@ -91,7 +91,6 @@
         <Dropdown options={tagOptions} name={"Add tag"} icon="add" />
         {#each tags as tag, index}
             <vscode-text-field
-                size="10"
                 value={tags[index]}
                 bind:this={tagElems[index]}
                 on:keydown={(e) => {

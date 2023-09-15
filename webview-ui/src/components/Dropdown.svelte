@@ -55,12 +55,19 @@
 {/if}
 
 <style>
+    * {
+        /* margin: var(--global-margin); */
+        padding: 0;
+        /* padding: var(--global-margin); */
+        /* margin: 0; */
+        box-sizing: border-box;
+    }
     .menu-button {
         /* min-width: 140px; */
         width: 100%;
-        height: 2rem;
         position: relative;
         right: 0;
+        height: var(--global-block-height);
     }
     .dropdown {
         position: relative;
@@ -81,6 +88,7 @@
         transition: all 150ms ease-in-out;
         transform-origin: top;
         width: 100%;
+        height: var(--global-block-height);
     }
 
     .dropdown-menu.active {

@@ -98,7 +98,7 @@
         position: absolute;
         /* left: calc(50%); */
         width: 100%;
-        text-align: center;
+        /* text-align: center; */
         top: calc(50% - 0.5rem - var(--global-margin));
         /* vertical-align: middle; */
         /* width: 800px; */

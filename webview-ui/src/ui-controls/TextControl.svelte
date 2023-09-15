@@ -18,24 +18,28 @@
             path,
         });
     }
+
+    // on:change={(e) => {
+    //         if (e.target) {
+    //             value = e.target.value;
+    //         }
+    //     }}
 </script>
 
 {#if label}
     <span class="label"><span>{label}</span></span>
-    <input
+    <vscode-text-field
         class="value"
         type="text"
-        bind:value
+        {value}
         on:keydown={({ key, target }) => {
             // console.log(key);
             if (key === "Enter") {
-                displayValue = value;
-                //@ts-expect-error
+                value = target.value;
                 target.blur();
                 sendValue();
             } else if (key === "Escape") {
-                value = displayValue;
-                //@ts-expect-error
+                target.value = value;
                 target.blur();
             }
         }}
@@ -44,7 +48,7 @@
 
 <style>
     * {
-        margin: 5px;
+        margin: var(--global-margin);
     }
     span.label {
         justify-self: var(--label-justify);
@@ -53,10 +57,16 @@
         justify-content: center;
     }
 
-    input {
+    vscode-text-field {
+        /* margin: unset; */
+        height: var(--global-block-height);
+        text-align: center;
+        /* width: 100%; */
+    }
+    /* input {
         color: var(--vscode-editor-foreground);
         background-color: var(--vscode-input-background);
         border-width: 0;
         height: calc(var(--input-height) * 1px);
-    }
+    } */
 </style>
