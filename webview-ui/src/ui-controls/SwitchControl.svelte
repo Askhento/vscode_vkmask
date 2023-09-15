@@ -19,7 +19,7 @@
     }
 </script>
 
-<div class="label">{label}</div>
+<span class="label"><span>{label}</span></span>
 
 <vscode-checkbox checked={value} on:change={onChange} />
 
@@ -30,13 +30,25 @@
 
 <style>
     * {
-        margin: 5px;
-        /* box-sizing: border-box; */
+        margin: var(--global-margin);
+        box-sizing: border-box;
     }
 
-    div.label {
-        justify-self: var(--label-justify);
+    vscode-checkbox {
+        height: var(--global-block-height);
     }
+
+    /* div.label {
+        justify-self: var(--label-justify);
+    } */
+
+    span.label {
+        justify-self: var(--label-justify);
+        height: var(--global-block-height);
+        display: flex;
+        justify-content: center;
+    }
+
     /* The switch - the box around the slider */
     .switch {
         flex-grow: 1;

@@ -75,7 +75,7 @@
     }
 </script>
 
-<span class="label">{label}</span>
+<span class="label"><span>{label}</span></span>
 
 {#if tags}
     <span class="control-wrapper">
@@ -146,6 +146,9 @@
 
     span.label {
         justify-self: var(--label-justify);
+        height: var(--global-block-height);
+        display: flex;
+        justify-content: center;
     }
 
     .control-wrapper {

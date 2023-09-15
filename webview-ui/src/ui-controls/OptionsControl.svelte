@@ -21,7 +21,7 @@
 </script>
 
 <span class="label">
-    {label}
+    <span>{label}</span>
 </span>
 <!-- <select class="options" name="" id="" bind:value>
     {#each options as option, i}
@@ -58,10 +58,17 @@
     flex-grow: 1;
   } */
 
+    vscode-dropdown {
+        height: var(--global-block-height);
+    }
+
     .option {
         margin: 0;
     }
     span.label {
         justify-self: var(--label-justify);
+        height: var(--global-block-height);
+        display: flex;
+        justify-content: center;
     }
 </style>

@@ -44,7 +44,7 @@
             }
         }}
     /> -->
-<span class="label">{label}</span>
+<span class="label"><span>{label}</span></span>
 
 <span class="control-wrapper">
     <div class="display-value">{params.valueTemplate?.(value) || value}</div>
@@ -121,6 +121,9 @@
 
     span.label {
         justify-self: var(--label-justify);
+        height: var(--global-block-height);
+        display: flex;
+        justify-content: center;
     }
 
     input.slider {

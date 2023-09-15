@@ -56,21 +56,21 @@
     }
 </script>
 
-<span class="label">{label}</span>
+<span class="label"><span>{label}</span></span>
 <!-- <span class="color">{value}</span> -->
-<div class="color-control-wrapper">
-    <input
-        class="color"
-        type="color"
-        value={color}
-        on:change={(e) => {
-            console.log("color picker on change!!!!");
-            color = e.target.value;
-            hexToRGB();
-            onChange();
-        }}
-    />
-</div>
+<!-- <div class="color-control-wrapper"> -->
+<input
+    class="color"
+    type="color"
+    value={color}
+    on:change={(e) => {
+        console.log("color picker on change!!!!");
+        color = e.target.value;
+        hexToRGB();
+        onChange();
+    }}
+/>
+<!-- </div> -->
 {#if params.alpha}
     <NumberSliderControl
         label={"alpha"}
@@ -95,11 +95,16 @@
 {/if}
 
 <style>
+    * {
+        margin: var(--global-margin);
+        /* box-sizing: border-box; */
+    }
+
     .color-control-wrapper {
         position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: start;
+        /* display: flex; */
+        /* flex-direction: column; */
+        /* justify-content: start; */
     }
 
     /* span.color {
@@ -107,19 +112,39 @@
     flex: 1 0 0px;
   } */
     span.label {
+        margin: var(--global-margin);
         justify-self: var(--label-justify);
+        height: var(--global-block-height);
+        display: flex;
+        justify-content: center;
     }
 
     input.color {
-        display: block;
-        background-color: var(--input-background);
+        -webkit-appearance: none;
+        /* -moz-appearance: none; */
+        appearance: none;
+        /* display: block; */
+        margin: unset;
+        background-color: transparent; /* var(--input-background); */
         border: none;
-        border-radius: 2px;
-        height: var(--global-block-height);
+        /* padding: 0; */
+        /* border-radius: 4px; */
+        /* height: var(--global-block-height); */
+        height: 100%;
         width: 100%;
         /* height: 40px; */
         /* width: 40px; */
         /* flex: 1 0 0px; */
+    }
+
+    input[type="color"]::-webkit-color-swatch-wrapper {
+        /* border: 2px solid #000000; */
+        /* padding: 0; */
+        /* border: 2px solid blue; */
+    }
+    input[type="color"]::-webkit-color-swatch {
+        border: 2px solid var(--input-background);
+        border-radius: 2px;
     }
 
     /* input.alpha {

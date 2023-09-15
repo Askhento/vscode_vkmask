@@ -110,7 +110,7 @@
                         {#each Object.entries(groupData.elements) as [key, data]}
                             {#if data.value === null && (data.uiDescription.name === "object" || data.uiDescription.name === "array")}
                                 <span class="missing-key-label"
-                                    >{data.uiDescription.label ?? key}</span
+                                    ><span>{data.uiDescription.label ?? key}</span></span
                                 >
                                 <vscode-button
                                     class="add-key-btn"
@@ -120,7 +120,7 @@
                                     }}
                                 >
                                     <span slot="start" class="codicon codicon-add" />
-                                    add
+                                    Add {data.uiDescription.label ?? key}
                                 </vscode-button>
                             {:else}
                                 <svelte:component
@@ -238,9 +238,17 @@
     }
 
     span.missing-key-label {
-        margin: var(--global-margin);
         justify-self: var(--label-justify);
+        margin: var(--global-margin);
+        height: var(--global-block-height);
+        display: flex;
+        justify-content: center;
     }
+
+    span.missing-key-label > span {
+        margin: var(--global-margin);
+    }
+
     /* .add-key-wrapper {
         padding: 0.2em 0 0 0.5em;
         margin: 0 0 0 0.5em;

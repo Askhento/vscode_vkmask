@@ -27,7 +27,7 @@
 </script>
 
 {#if label && value}
-    <span class="label">{label}</span>
+    <span class="label"><div class="label-text">{label}</div></span>
     <div class="vector-control-wrapper">
         {#each value as v, index}
             <!-- <vscode-text-area
@@ -112,7 +112,14 @@
     }
     span.label {
         justify-self: var(--label-justify);
+        height: var(--global-block-height);
+        display: flex;
+        justify-content: center;
     }
+
+    /* .label-text {
+        margin: unset;
+    } */
 
     /* div {
         color: aqua;

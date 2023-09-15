@@ -21,7 +21,7 @@
 </script>
 
 {#if label}
-    <span class="label">{label}</span>
+    <span class="label"><span>{label}</span></span>
     <input
         class="value"
         type="text"
@@ -48,6 +48,9 @@
     }
     span.label {
         justify-self: var(--label-justify);
+        height: var(--global-block-height);
+        display: flex;
+        justify-content: center;
     }
 
     input {

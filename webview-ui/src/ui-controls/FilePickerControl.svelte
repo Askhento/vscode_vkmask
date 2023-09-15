@@ -139,7 +139,7 @@
 </script>
 
 {#if label !== undefined}
-    <span class="label">{label}</span>
+    <span class="label"><span>{label}</span></span>
 
     <!-- <input class="value" type="text" bind:value /> -->
     <!-- add REd color if file not found in options -->
@@ -365,6 +365,9 @@
 
     span.label {
         justify-self: var(--label-justify);
+        height: var(--global-block-height);
+        display: flex;
+        justify-content: center;
     }
 
     @keyframes shake {
