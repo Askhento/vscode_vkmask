@@ -43,7 +43,8 @@ export async function activate(context: vscode.ExtensionContext) {
         error = null;
     logger.setMode(context.extensionMode);
 
-    assetWatcher.searchBuiltinAssets(context.extensionUri);
+    //  !!!!
+    // assetWatcher.searchBuiltinAssets(context.extensionUri);
 
     const recentProjectInfo = new RecentProjects(context);
 

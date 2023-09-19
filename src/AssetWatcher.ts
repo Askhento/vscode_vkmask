@@ -5,6 +5,8 @@ import { EventEmitter } from "events";
 import { logger } from "./Logger";
 const print = (...args: any) => logger.log(__filename, ...args);
 
+import sharp from "sharp";
+
 import { XMLParser } from "fast-xml-parser"; // https://github.com/NaturalIntelligence/fast-xml-parser/blob/c7b3cea4ead020c21d39e135a50348208829e971/docs/v4/2.XMLparseOptions.md
 
 /*
@@ -15,10 +17,14 @@ import { XMLParser } from "fast-xml-parser"; // https://github.com/NaturalIntell
 */
 
 export interface Asset {
+    absPath: string;
     path: string;
     type: string;
     projectFile?: boolean;
+    preview?: string;
 }
+
+const PREWVIEW_SIZE = 128;
 
 class AssetWatcher extends EventEmitter {
     public assets: Array<Asset> = [];
@@ -53,17 +59,14 @@ class AssetWatcher extends EventEmitter {
         print("Searching assets");
         const files = await vscode.workspace.findFiles("**");
 
-        const newAssets = files.map((file) => {
-            return {
-                ...this.fileToAsset(file.fsPath),
-                projectFile: true,
-            };
+        const newAssets = files.map(async (file) => {
+            return await this.fileToAsset(file.fsPath, true);
         });
 
         print(`new assets count :  ${newAssets.length}`);
         print(`builtin assets count :  ${this.builtInAssets.length}`);
 
-        this.assets = newAssets;
+        this.assets = await Promise.all(newAssets);
         // this.assets = [...this.builtInAssets, ...newAssets];
     }
 
@@ -77,24 +80,48 @@ class AssetWatcher extends EventEmitter {
     readFileType(file: string) {
         let type = "unknown";
         // !!!! error handling
-        if (file.endsWith("xml")) {
-            // print(file.fsPath)
-            try {
-                const rawXML = fs.readFileSync(file);
-                let xmlObject = this.xmlParser.parse(rawXML);
-                const xmlType = Object.keys(xmlObject)?.[0];
-                type = "xml_" + xmlType;
-            } catch (e) {
-                type = "xml_error";
-            }
+        const ext = path.extname(file);
+
+        switch (ext) {
+            case ".xml":
+                try {
+                    const rawXML = fs.readFileSync(file);
+                    let xmlObject = this.xmlParser.parse(rawXML);
+                    const xmlType = Object.keys(xmlObject)?.[0];
+                    type = "xml_" + xmlType;
+                } catch (e) {
+                    type = "xml_error";
+                }
+                break;
+
+            case ".png":
+            case ".jpg":
+                type = "image";
+                break;
+
+            case ".mdl":
+                type = "model3d";
+                break;
+
+            default:
+                break;
         }
+
         return type;
     }
 
-    fileToAsset(file: string): Asset {
+    async fileToAsset(file: string, projectFile: boolean = false): Promise<Asset> {
+        const path = this.getRelative(file);
+        const absPath = this.getAbsPath(file);
+        const type = await this.readFileType(file);
+        const preview = await this.getPreview(absPath, type);
+
         return {
-            path: this.getRelative(file),
-            type: this.readFileType(file),
+            absPath,
+            path,
+            type,
+            preview,
+            projectFile,
         };
     }
 
@@ -111,17 +138,20 @@ class AssetWatcher extends EventEmitter {
             new vscode.RelativePattern(this.directory, "**")
         );
 
-        watcher.onDidCreate((e) => {
+        watcher.onDidCreate(async (e) => {
             const fspath = this.getRelative(e.fsPath);
             print("created file ", fspath);
             const index = this.assets.findIndex((asset) => asset.path === fspath);
             if (index < 0) {
-                this.assets.splice(index, 0, {
-                    path: fspath,
-                    type: this.readFileType(fspath),
-                });
+                this.assets.splice(index, 0, await this.fileToAsset(e.fsPath, true));
                 this.fireChangedEvent();
             }
+
+            // {
+            //         absPath: this.getAbsPath(e.fsPath),
+            //         path: fspath,
+            //         type: this.readFileType(fspath),
+            //     }
         });
 
         watcher.onDidDelete((e) => {
@@ -133,6 +163,43 @@ class AssetWatcher extends EventEmitter {
                 this.fireChangedEvent();
             }
         });
+    }
+
+    async getPreview(absPath: string, type: string) {
+        if (type === "image") {
+            const options = {
+                width: PREWVIEW_SIZE,
+                height: PREWVIEW_SIZE,
+                responseType: "base64",
+                jpegOptions: { force: true, quality: 80 },
+            };
+
+            const imageBuffer = fs.readFileSync(absPath);
+
+            try {
+                const thumbnailBuffer = await sharp(imageBuffer)
+                    .resize({
+                        fit: "contain",
+                        width: PREWVIEW_SIZE,
+                        height: PREWVIEW_SIZE,
+                        // withoutEnlargement: true,
+                    })
+                    .jpeg({ force: true, quality: 80 })
+                    .toBuffer();
+
+                const thumbnail = thumbnailBuffer.toString("base64");
+                // print(thumbnail);
+                return thumbnail;
+            } catch (err) {
+                print(err);
+            }
+        }
+
+        return "";
+    }
+
+    getAbsPath(file: string) {
+        return path.resolve(file);
     }
 
     getRelative(file: string) {

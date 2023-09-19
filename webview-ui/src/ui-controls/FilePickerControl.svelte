@@ -23,7 +23,7 @@
     }
     let extensions;
     let fileTypes;
-    let filteredAssets; // subset of typedassets with search query applied
+    let filteredAssets; // subset of typed assets with search query applied
     let typedAssets; // subset of assets to specific type/extension
     let searchValue = "";
     let dropdownOpened = false;
@@ -107,6 +107,10 @@
             "current-value",
             isValueInAssets(newValue) ? newValue : typedAssets[0]
         );
+    }
+
+    function isImage(fsPath: string) {
+        return fsPath.endsWith("png") || fsPath.endsWith("jpg");
     }
 
     onMount(async () => {
@@ -212,6 +216,9 @@
             }}
         />
         {#each filteredAssets as asset, i}
+            {#if asset.absPath && asset.type === "image"}
+                <img src={"data:image/png;base64," + asset.preview} class="file-preview" />
+            {/if}
             <vscode-option class:builtin={!asset.projectFile}>{asset.path}</vscode-option>
         {/each}
     </vscode-dropdown>
@@ -315,6 +322,12 @@
 
     vscode-option {
         margin: unset;
+    }
+
+    img.file-preview {
+        display: inline-block;
+        height: var(--global-block-height);
+        width: var(--global-block-height);
     }
 
     vscode-option.builtin {

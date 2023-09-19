@@ -81,7 +81,7 @@ export class BaseWebviewProvider implements WebviewViewProvider {
           <title>vkmask</title>
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${this.webview.cspSource} 'unsafe-inline'; img-src ${this.webview.cspSource}; style-src ${this.webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}' 'unsafe-inline';">
+          <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${this.webview.cspSource} 'unsafe-inline'; img-src ${this.webview.cspSource} data:; style-src ${this.webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}' 'unsafe-inline';">
 
             <link rel="stylesheet" type="text/css" href="${globalVarsUri}">
 

@@ -294,6 +294,7 @@
         "@vscode/codicons": "^0.0.33",
         "fast-xml-parser": "^4.2.2",
         "json-source-map": "github:ramonsnir/json-source-map#typescript-definitions",
+        "sharp": "^0.32.6",
         "zod": "^3.20.2",
         "zod-validation-error": "^0.3.0"
     }
