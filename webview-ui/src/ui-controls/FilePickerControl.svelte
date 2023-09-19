@@ -147,81 +147,85 @@
 
     <!-- <input class="value" type="text" bind:value /> -->
     <!-- add REd color if file not found in options -->
-    <vscode-dropdown
-        class:error={filteredAssets.length === 0}
-        position="above"
-        bind:this={dropdown}
-        on:focusout|capture={(e) => {
-            // print("focus out");
-            //   e.preventDefault();
-            e.stopPropagation(); // this is to be able to print while dropdown opened
-            inputTimer = setTimeout(() => {
-                if (!dropdown) return;
-                const event = new KeyboardEvent("keydown", {
-                    key: "Escape",
-                });
-                dropdown.dispatchEvent(event);
-            }, 150);
-        }}
-        on:click|preventDefault={(e) => {
-            // print("dropdown click");
-            //   setTimeout(function () {
-            //     inputElement.focus();
-            //   }, 1000);
-        }}
-        on:change={(e) => {
-            //   value = e.target.value;
-            //   print("drop change", e.target.value);
-            // print("change dropdonw");
-            value = dropdown.value;
-            searchValue = "";
-            inputElement.value = "";
-        }}
-        on:keydown={(e) => {
-            if (e.key === "Escape") {
-                // print("escape!");
-                e.preventDefault();
-                dropdown.value = value;
-                return;
-            }
-            if (e.key.length === 1) {
-                inputElement.focus(); // on time !
-
-                setTimeout(() => {
-                    if (inputTimer) clearTimeout(inputTimer);
-                }, 0);
-            }
-            //   if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
-            //   setTimeout(function () {
-            //     const option = dropdown.querySelector("vscode-option.selected");
-            //     option.scrollIntoView({
-            //       behavior: "smooth",
-            //       block: "nearest",
-            //     });
-            //   }, 10);
-        }}
-    >
-        <vscode-text-field
+    <span class="control-wrapper">
+        <vscode-dropdown
             class:error={filteredAssets.length === 0}
-            bind:this={inputElement}
-            on:click|stopPropagation|capture={(e) => {
-                if (inputTimer) clearTimeout(inputTimer);
-                // print("click text filed inside ");
-                // keeps dropdown opened
+            position="above"
+            bind:this={dropdown}
+            on:focusout|capture={(e) => {
+                // print("focus out");
+                //   e.preventDefault();
+                e.stopPropagation(); // this is to be able to print while dropdown opened
+                inputTimer = setTimeout(() => {
+                    if (!dropdown) return;
+                    const event = new KeyboardEvent("keydown", {
+                        key: "Escape",
+                    });
+                    dropdown.dispatchEvent(event);
+                }, 150);
             }}
-            on:input={(e) => {
-                // print("oninput", e);
-                searchValue = e.target.value;
-                // print(searchValue);
+            on:click|preventDefault={(e) => {
+                // print("dropdown click");
+                //   setTimeout(function () {
+                //     inputElement.focus();
+                //   }, 1000);
             }}
-        />
-        {#each filteredAssets as asset, i}
-            {#if asset.absPath && asset.type === "image"}
-                <img src={"data:image/png;base64," + asset.preview} class="file-preview" />
-            {/if}
-            <vscode-option class:builtin={!asset.projectFile}>{asset.path}</vscode-option>
-        {/each}
-    </vscode-dropdown>
+            on:change={(e) => {
+                //   value = e.target.value;
+                //   print("drop change", e.target.value);
+                // print("change dropdonw");
+                value = dropdown.value;
+                searchValue = "";
+                inputElement.value = "";
+            }}
+            on:keydown={(e) => {
+                if (e.key === "Escape") {
+                    // print("escape!");
+                    e.preventDefault();
+                    dropdown.value = value;
+                    return;
+                }
+                if (e.key.length === 1) {
+                    inputElement.focus(); // on time !
+
+                    setTimeout(() => {
+                        if (inputTimer) clearTimeout(inputTimer);
+                    }, 0);
+                }
+                //   if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+                //   setTimeout(function () {
+                //     const option = dropdown.querySelector("vscode-option.selected");
+                //     option.scrollIntoView({
+                //       behavior: "smooth",
+                //       block: "nearest",
+                //     });
+                //   }, 10);
+            }}
+        >
+            <vscode-text-field
+                class:error={filteredAssets.length === 0}
+                bind:this={inputElement}
+                on:click|stopPropagation|capture={(e) => {
+                    if (inputTimer) clearTimeout(inputTimer);
+                    // print("click text filed inside ");
+                    // keeps dropdown opened
+                }}
+                on:input={(e) => {
+                    // print("oninput", e);
+                    searchValue = e.target.value;
+                    // print(searchValue);
+                }}
+            />
+            {#each filteredAssets as asset, i}
+                <vscode-option class:builtin={!asset.projectFile}>
+                    {#if asset.absPath && asset.type === "image"}
+                        <img src={"data:image/png;base64," + asset.preview} class="file-preview" />
+                    {/if}
+                    <span class="option-text">{asset.path}</span>
+                </vscode-option>
+            {/each}
+        </vscode-dropdown>
+    </span>
     <!-- svelte-ignore missing-declaration -->
     <!-- <vscode-text-field
         class:error={filteredAssets.length === 0}
@@ -303,31 +307,37 @@
 <style>
     * {
         margin: var(--global-margin);
-
         /* padding: 0; */
         box-sizing: border-box;
     }
 
-    /* .control-wrapper {
-        position: relative;
+    span.label {
+        justify-self: var(--label-justify);
+        height: var(--global-block-height);
         display: flex;
-    } */
+        justify-content: center;
+    }
 
-    /* select.options {
-    flex-grow: 1;
-  } */
-    /* .dropdown-wrapper {
-        
-    } */
+    span.control-wrapper {
+        margin: unset;
+        /* position: relative; */
+        /* display: flex; */
+    }
 
     vscode-option {
         margin: unset;
+        /* width: 100%; */
+    }
+
+    span.option-text {
+        vertical-align: middle;
     }
 
     img.file-preview {
         display: inline-block;
         height: var(--global-block-height);
         width: var(--global-block-height);
+        margin: unset;
     }
 
     vscode-option.builtin {
@@ -339,11 +349,17 @@
         position: relative; */
         /* width: 200px; */
         height: var(--global-block-height);
+        /* width: 100%; */
+        width: calc(var(--project-manager-grid-value-column-size) - 2 * var(--global-margin));
     }
     /* vscode-dropdown.error {
     color: var(--vscode-errorForeground);
     animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   } */
+
+    vscode-dropdown::part(control) {
+        /* width: var(--project-manager-grid-value-column-size); */
+    }
 
     vscode-text-field {
         /* position: absolute; */
@@ -375,13 +391,6 @@
   .dropdown-btn {
     display: inline-block;
   } */
-
-    span.label {
-        justify-self: var(--label-justify);
-        height: var(--global-block-height);
-        display: flex;
-        justify-content: center;
-    }
 
     @keyframes shake {
         10%,
