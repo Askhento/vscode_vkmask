@@ -49,6 +49,8 @@
 <style>
     * {
         margin: var(--global-margin);
+        /* padding: 0; */
+        box-sizing: border-box;
     }
     span.label {
         justify-self: var(--label-justify);
