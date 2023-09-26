@@ -941,9 +941,7 @@ const ZFixedDetectionPlugin = z
         name: z.literal("fixeddetection").describe(uiDescriptions.none({})),
 
         rotation: ZArray4D.default([0.1, 0.21, 0.7, 0.2]),
-        offset: ZNumberSlider.describe(
-            uiDescriptions.numberSlider({ max: 0, min: 1, defValue: 0.7, showAlways: false })
-        ),
+        offset: ZNumberSlider.describe(uiDescriptions.numberSlider({ defValue: 0.7 })),
     })
     .describe(uiDescriptions.object({}));
 

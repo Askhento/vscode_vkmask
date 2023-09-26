@@ -6,8 +6,10 @@
         path,
         params;
 
-    let step = 0.01,
-        displayValue = value;
+    let step = 0.01;
+
+    value = value ?? params.defValue;
+    // value = 0.5;
 
     // $: console.log("from slider", params);
 
@@ -47,7 +49,7 @@
 <span class="label"><span>{label}</span></span>
 
 <span class="control-wrapper">
-    <div class="display-value">{params.valueTemplate?.(value) || value}</div>
+    <div class="display-value">{params.valueTemplate?.(value) ?? value}</div>
     {#if params.valueLabel}
         <div class="value-label">{params.valueLabel}</div>
     {/if}
@@ -56,11 +58,10 @@
         type="range"
         bind:value
         on:mouseup={() => {
-            displayValue = value;
             sendValue();
         }}
-        min={params.min || 0}
-        max={params.max || 1}
+        min={params.min ?? 0}
+        max={params.max ?? 1}
         {step}
     />
 </span>
@@ -178,6 +179,9 @@
         /*  slider progress trick  */
         box-shadow: -400px 0 0 400px var(--vscode-badge-background);
     }
+
+    /* var(--vscode-badge-background) */
+
     input[type="range"]:focus {
         outline: none;
     }
