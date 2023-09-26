@@ -230,7 +230,7 @@
                 class:error={filteredAssets.length === 0}
                 position="above"
                 disabled={typedAssets.length === 0}
-                class:missing-asset={value && !isValueInAssets(value)}
+                class:missing-asset={value && currentAsset == null}
                 bind:this={dropdown}
                 on:focusout|capture={(e) => {
                     // print("focus out");
