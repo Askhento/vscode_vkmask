@@ -1,6 +1,6 @@
 export function applyValueByPath2(obj, path, value) {
     // parts = path.split(".");
-    // console.log(obj, path, value);
+    // console.log("apply!", obj, path, value);
     if (path.length === 0) {
         obj = value;
         return obj;
@@ -34,6 +34,8 @@ export function applyValueByPath2(obj, path, value) {
         return obj;
     } else {
         // remove first path element
-        return applyValueByPath(elem, path.slice(1), value);
+        const res = applyValueByPath2(elem, path.slice(1), value);
+        obj[lastPath] = res;
+        return obj;
     }
 }

@@ -453,20 +453,20 @@
         selection = oldSelection;
     }
 
-    function applyValueByPath(obj, path, value) {
-        // parts = path.split(".");
-        // console.log(obj, path, value);
-        if (path.length === 0) {
-            obj = value;
-            return;
-        }
+    // function applyValueByPath(obj, path, value) {
+    //     // parts = path.split(".");
+    //     // console.log(obj, path, value);
+    //     if (path.length === 0) {
+    //         obj = value;
+    //         return;
+    //     }
 
-        if (path.length === 1) {
-            obj[path[0]] = value;
-        } else {
-            applyValueByPath(obj[path[0]], path.slice(1), value);
-        }
-    }
+    //     if (path.length === 1) {
+    //         obj[path[0]] = value;
+    //     } else {
+    //         applyValueByPath(obj[path[0]], path.slice(1), value);
+    //     }
+    // }
 
     async function init() {
         await getAppState();
