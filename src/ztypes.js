@@ -80,6 +80,7 @@ export const uiDescriptions = {
         directory = ["/"],
         extensions,
         types,
+        typeName,
         defValue,
         showAlways = true,
     }) => ({
@@ -90,6 +91,7 @@ export const uiDescriptions = {
         group,
         extensions,
         types,
+        typeName,
         defValue,
     }),
     text: ({ label, group = "main", defValue = "", showAlways = true }) => ({
@@ -248,39 +250,46 @@ const AssetTypes = {
         defValue: "Textures/Spot.png",
         extensions: ["png", "jpg"],
         directory: ["Textures"],
+        typeName: "texture",
     },
     material: {
         defValue: "Materials/DefaultGrey.xml",
         extensions: ["xml", "json"],
         types: ["xml_material", "json_material"],
         directory: ["Materials"],
+        typeName: "material",
     },
     technique: {
         defValue: "Techniques/DiffUnlit.xml",
         extensions: ["xml"],
         types: ["xml_technique"],
         directory: ["Techniques"],
+        typeName: "technique",
     },
     renderPath: {
         defValue: "",
         extensions: ["xml"],
         types: ["xml_renderpath"],
         directory: ["RenderPaths"],
+        typeName: "renderPath",
     },
     animationClip: {
         defValue: "",
         extensions: ["ani"],
         directory: ["Animations"],
+        typeName: "animationClip",
     },
     model3d: {
         defValue: "Models/DefaultPlane.mdl",
         extensions: ["mdl"],
         directory: ["Models"],
+        typeName: "model3d",
     },
     script: {
         defValue: "",
         extensions: ["as"],
         directory: ["Scripts"],
+        typeName: "script",
     },
 };
 
@@ -297,14 +306,26 @@ const ZVisibleType = z.enum(["always", "face", "animation", "mouth_open"]);
 const ZPatchFitMode = z.enum(["none", "crop", "pad"]);
 
 // const ZTextureAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.texture));
-const ZModel3dAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.model3d));
+// const ZModel3dAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.model3d));
 // const ZScriptAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.script));
+// const ZRenderPathAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.renderPath));
 
-const ZRenderPathAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.renderPath));
-const ZTechniqueAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.technique));
+const ZTechniqueAsset = (desc) =>
+    z.string().describe({ ...uiDescriptions.filepath(AssetTypes.technique), ...desc });
+
+const ZModel3dAsset = (desc) =>
+    z.string().describe({ ...uiDescriptions.filepath(AssetTypes.model3d), ...desc });
+
+const ZRenderPathAsset = (desc) =>
+    z.string().describe({ ...uiDescriptions.filepath(AssetTypes.renderPath), ...desc });
 
 const ZTextureAsset = (desc) =>
     z.string().describe({ ...uiDescriptions.filepath(AssetTypes.texture), ...desc });
+
+const ZMaterialAsset = (desc) =>
+    z.string().describe({ ...uiDescriptions.filepath(AssetTypes.material), ...desc });
+
+// const ZMaterialAsset({ label : material}) = ZAsset.describe(uiDescriptions.filepath(AssetTypes.material));
 
 // export const ZTextureObject = z.union(
 //     [
@@ -401,8 +422,6 @@ export const ZTextureObject = z.preprocess(
 //     console.log(parseResult.error)
 // }
 
-const ZMaterialAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.material));
-
 // {
 // 	"techniques": [{"name": "Techniques/Diff.xml"}],
 // 	"textures": {
@@ -438,7 +457,7 @@ const ZFillMode = z.enum(["solid", "wireframe", "point"]);
 
 const ZMaterialObject = z
     .object({
-        technique: ZTechniqueAsset,
+        technique: ZTechniqueAsset({ label: "Technique" }),
         textures: z
             .object({
                 diffuse: ZTextureAsset({ label: "Diffuse" }),
@@ -491,7 +510,9 @@ const ZMaterialObject = z
     })
     .describe(uiDescriptions.object({}));
 
-const ZMaterial = z.union([ZMaterialAsset, ZMaterialObject]).describe(uiDescriptions.union({}));
+const ZMaterial = z
+    .union([ZMaterialAsset({ label: "Material" }), ZMaterialObject])
+    .describe(uiDescriptions.union({}));
 
 export const ZMaterialArray = z.preprocess((val) => {
     if (!Array.isArray(val)) return [val];
@@ -577,7 +598,7 @@ const ZPatchEffect = ZBaseEffect.extend({
     offset: ZArray3D,
     rotation: ZArray3D,
     allow_rotation: ZBool,
-    pass: ZRenderPathAsset,
+    pass: ZRenderPathAsset({ label: "RenderPath" }),
     texture: ZTextureObject,
 }).describe(uiDescriptions.object({}));
 
@@ -611,7 +632,7 @@ const ZModel3dEffect = ZBaseEffect.extend({
             defValue: ZFaceAnchor.Values.forehead,
         })
     ),
-    model: ZModel3dAsset,
+    model: ZModel3dAsset({ label: "Model" }),
     position: ZArray3D,
     rotation: ZArray3D,
     scale: ZArray3D.describe(uiDescriptions.array3d({ defValue: [1, 1, 1] })),

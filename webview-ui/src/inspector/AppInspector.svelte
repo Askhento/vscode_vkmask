@@ -91,6 +91,10 @@
                 returnLogs(data);
                 break;
 
+            case RequestCommand.updateAssets:
+                processAssets(payload);
+                break;
+
             default:
                 break;
         }
@@ -140,8 +144,12 @@
             command: RequestCommand.getAssets,
         });
 
-        print("new assets", payload);
-        $assets = payload;
+        processAssets(payload);
+    }
+
+    function processAssets(newAssets) {
+        print("new assets", newAssets);
+        $assets = newAssets;
     }
 
     // function sendAssets() {

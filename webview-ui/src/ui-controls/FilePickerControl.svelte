@@ -213,15 +213,17 @@
         <div class="dropdown-wrapper">
             <!-- <span class="file-preview">
             </span> -->
-            {#if currentAsset && currentAsset.preview}
-                <a href={getFileUri(currentAsset.absPath)}>
-                    <img
-                        src={"data:image/png;base64," + currentAsset.preview}
-                        class="file-preview"
-                    />
-                </a>
-            {:else}
-                <img src={missingTextureData} />
+            {#if params.typeName === "texture"}
+                {#if currentAsset && currentAsset.preview}
+                    <a href={getFileUri(currentAsset.absPath)}>
+                        <img
+                            src={"data:image/png;base64," + currentAsset.preview}
+                            class="file-preview"
+                        />
+                    </a>
+                {:else}
+                    <img src={missingTextureData} />
+                {/if}
             {/if}
             <vscode-dropdown
                 class:error={filteredAssets.length === 0}
