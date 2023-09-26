@@ -29,7 +29,7 @@
             target: RequestTarget.extension,
             payload: {
                 extensions: [["main.as"]],
-                to: ["/"],
+                to: [""],
             },
         });
 
@@ -186,7 +186,7 @@
     }
 
     .missing-file {
-        color: red;
+        color: var(--missing-asset-color);
     }
 
     vscode-progress-ring {

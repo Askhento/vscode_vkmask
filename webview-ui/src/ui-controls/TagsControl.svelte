@@ -155,21 +155,22 @@
     .control-wrapper {
         display: flex;
         flex-direction: column;
-        row-gap: 0.25rem;
+        row-gap: 0.5rem;
     }
+
     vscode-text-field {
-        margin: unset;
+        margin: 0;
         position: relative;
         height: var(--global-block-height);
     }
 
-    vscode-text-field > section {
+    /* vscode-text-field > section {
         margin: unset;
     }
 
     vscode-text-field > section > vscode-button {
         margin: unset;
-    }
+    } */
 
     .add-tag-btn {
         /* display: inline-block; */

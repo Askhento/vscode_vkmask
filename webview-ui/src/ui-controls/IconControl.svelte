@@ -28,10 +28,13 @@
         const { payload } = await messageHandler.request({
             command: RequestCommand.getUploadedAsset,
             target: RequestTarget.extension,
-            payload: [
-                ["*.png", "*.png"],
-                ["*.jpg", "*.jpg"],
-            ],
+            payload: {
+                extensions: [
+                    ["*.png", "*.png"],
+                    ["*.jpg", "*.jpg"],
+                ],
+                to: [""],
+            },
         });
 
         if (payload) {

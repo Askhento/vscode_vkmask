@@ -92,14 +92,16 @@
 
     .control-wrapper {
         position: relative;
+        display: flex;
+        justify-content: center;
     }
 
     div.display-value {
         position: absolute;
         /* left: calc(50%); */
-        width: 100%;
+        /* width: 100%; */
         /* text-align: center; */
-        top: calc(50% - 0.5rem - var(--global-margin));
+        /* top: calc(50% - 0.5rem - var(--global-margin)); */
         /* vertical-align: middle; */
         /* width: 800px; */
         pointer-events: none;
@@ -174,7 +176,7 @@
         /* opacity: 0; */
         /* display: none; */
         /*  slider progress trick  */
-        box-shadow: -400px 0 0 400px var(--vscode-dropdown-background);
+        box-shadow: -400px 0 0 400px var(--vscode-badge-background);
     }
     input[type="range"]:focus {
         outline: none;

@@ -103,7 +103,7 @@
     }
     function setControlElementValue(newValue) {
         // this is inner slot which stores value of whole element
-        if (controlElement) controlElement.innerText = isValueInAssets(newValue) ? newValue : "-";
+        if (controlElement) controlElement.innerText = newValue ?? `Select ${params.label}...`;
     }
 
     function setDropDownValue(newValue) {
@@ -132,7 +132,7 @@
 
         currentAsset = typedAssets[assetIndex];
 
-        print("current asset", currentAsset);
+        // print("current asset", currentAsset);
     }
 
     async function uploadAsset() {
@@ -225,9 +225,12 @@
                     <img src={missingTextureData} />
                 {/if}
             {/if}
+
             <vscode-dropdown
                 class:error={filteredAssets.length === 0}
                 position="above"
+                disabled={typedAssets.length === 0}
+                class:missing-asset={value && !isValueInAssets(value)}
                 bind:this={dropdown}
                 on:focusout|capture={(e) => {
                     // print("focus out");
@@ -304,6 +307,7 @@
                     </vscode-option>
                 {/each}
             </vscode-dropdown>
+
             {#if waiting}
                 <vscode-progress-ring />
             {/if}
@@ -505,7 +509,8 @@
     animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   } */
 
-    vscode-dropdown::part(control) {
+    vscode-dropdown.missing-asset::part(control) {
+        color: red;
         /* width: var(--project-manager-grid-value-column-size); */
     }
 
