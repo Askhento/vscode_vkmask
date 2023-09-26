@@ -70,11 +70,18 @@
         onChange();
     }}
 />
+
 <!-- </div> -->
 {#if params.alpha}
     <NumberSliderControl
         label={"alpha"}
-        params={{ min: 0, max: 1, defValue: 0.0 }}
+        params={{
+            min: 0,
+            max: 1,
+            defValue: 1.0,
+            valueTemplate: (val) => Math.floor(val * 100),
+            valueLabel: "%",
+        }}
         value={alpha}
         on:changed={(e) => {
             // <!-- bind:value={alpha} -->

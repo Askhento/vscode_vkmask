@@ -229,7 +229,7 @@
             <vscode-dropdown
                 class:error={filteredAssets.length === 0}
                 position="above"
-                disabled={typedAssets.length === 0}
+                disabled={typedAssets.length === 0 || waiting}
                 class:missing-asset={value && currentAsset == null}
                 bind:this={dropdown}
                 on:focusout|capture={(e) => {
