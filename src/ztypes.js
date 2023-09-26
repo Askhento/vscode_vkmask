@@ -74,9 +74,18 @@ export const uiDescriptions = {
         options,
         defValue,
     }),
-    filepath: ({ label, group = "main", extensions, types, defValue, showAlways = true }) => ({
+    filepath: ({
+        label,
+        group = "main",
+        directory = ["/"],
+        extensions,
+        types,
+        defValue,
+        showAlways = true,
+    }) => ({
         showAlways,
         name: "filepath",
+        directory,
         label,
         group,
         extensions,
@@ -96,6 +105,32 @@ export const uiDescriptions = {
         label,
         group,
         defValue,
+    }),
+    mainScript: ({
+        label = "Script",
+        group = "Advanced",
+        defValue = "main.as",
+        showAlways = true,
+    }) => ({
+        name: "script",
+        label,
+        group,
+        defValue,
+        showAlways,
+    }),
+    icon: ({ label = "Icon", group = "main", defValue = "", showAlways = true }) => ({
+        name: "icon",
+        label,
+        group,
+        defValue,
+        showAlways,
+    }),
+    texture: ({ label = "Texture", group = "main", defValue = "", showAlways = true }) => ({
+        name: "texture",
+        label,
+        group,
+        defValue,
+        showAlways,
     }),
     // !!!! color alpha redundant here
     color: ({ label, group = "main", min, max, defValue = [1, 1, 1], showAlways = true }) => ({
@@ -212,33 +247,40 @@ const AssetTypes = {
     texture: {
         defValue: "Textures/Spot.png",
         extensions: ["png", "jpg"],
+        directory: ["Textures"],
     },
     material: {
         defValue: "Materials/DefaultGrey.xml",
         extensions: ["xml", "json"],
         types: ["xml_material", "json_material"],
+        directory: ["Materials"],
     },
     technique: {
         defValue: "Techniques/DiffUnlit.xml",
         extensions: ["xml"],
         types: ["xml_technique"],
+        directory: ["Techniques"],
     },
     renderPath: {
         defValue: "",
         extensions: ["xml"],
         types: ["xml_renderpath"],
+        directory: ["RenderPaths"],
     },
     animationClip: {
         defValue: "",
         extensions: ["ani"],
+        directory: ["Animations"],
     },
     model3d: {
         defValue: "Models/DefaultPlane.mdl",
         extensions: ["mdl"],
+        directory: ["Models"],
     },
     script: {
         defValue: "",
         extensions: ["as"],
+        directory: ["Scripts"],
     },
 };
 
@@ -254,12 +296,15 @@ const ZVisibleType = z.enum(["always", "face", "animation", "mouth_open"]);
 
 const ZPatchFitMode = z.enum(["none", "crop", "pad"]);
 
-const ZTextureAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.texture));
+// const ZTextureAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.texture));
 const ZModel3dAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.model3d));
-const ZScriptAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.script));
+// const ZScriptAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.script));
 
 const ZRenderPathAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.renderPath));
 const ZTechniqueAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.technique));
+
+const ZTextureAsset = (desc) =>
+    z.string().describe({ ...uiDescriptions.filepath(AssetTypes.texture), ...desc });
 
 // export const ZTextureObject = z.union(
 //     [
@@ -321,10 +366,10 @@ export const ZTextureObject = z.preprocess(
     },
     z
         .object({
-            diffuse: ZTextureAsset,
+            diffuse: ZTextureAsset({ label: "Diffuse" }),
             // !!! probably will miss texture property
             // texture: ZTextureAsset,
-            normal: ZTextureAsset,
+            normal: ZTextureAsset({ label: "Normal" }),
             color: ZColorAlpha,
             lit: ZBool,
             blend_mode: ZBlendModes.describe(
@@ -396,11 +441,11 @@ const ZMaterialObject = z
         technique: ZTechniqueAsset,
         textures: z
             .object({
-                diffuse: ZTextureAsset,
-                normal: ZTextureAsset,
-                specular: ZTextureAsset,
-                emissive: ZTextureAsset,
-                environment: ZTextureAsset,
+                diffuse: ZTextureAsset({ label: "Diffuse" }),
+                normal: ZTextureAsset({ label: "Normal" }),
+                specular: ZTextureAsset({ label: "Specular" }),
+                emissive: ZTextureAsset({ label: "Emissive" }),
+                environment: ZTextureAsset({ label: "Environment" }),
             })
             .describe(uiDescriptions.object({})),
         parameters: z
@@ -555,7 +600,7 @@ const ZColorfilterEffect = ZBaseEffect.extend({
             valueTemplate: (val) => Math.floor(val * 100),
         })
     ),
-    lookup: ZTextureAsset,
+    lookup: ZTextureAsset({ label: "LUT" }),
 }).describe(uiDescriptions.object({}));
 
 const ZModel3dEffect = ZBaseEffect.extend({
@@ -915,6 +960,9 @@ const ZNumberEnum = (defValue, label, group = "main", options = [], showAlways =
     );
 };
 
+const ZMainScriptAsset = z.string().describe(uiDescriptions.mainScript({}));
+const ZIcon = z.string().describe(uiDescriptions.icon({}));
+
 const MaskSettings = {
     name: ZText.describe(uiDescriptions.text({ defValue: "defaultName", label: "Name" })),
     user_hint: ZEnum(UserHintOptions[0], "User Hint", UserHintOptions),
@@ -928,10 +976,9 @@ const MaskSettings = {
             group: "Advanced",
         })
     ),
-    icon: ZTextureAsset.describe(uiDescriptions.filepath({ ...AssetTypes.texture, label: "Icon" })),
-    script: ZScriptAsset.describe(
-        uiDescriptions.filepath({ ...AssetTypes.script, label: "Main Script", group: "Advanced" })
-    ),
+    icon: ZIcon,
+    // icon: ZTextureAsset.describe(uiDescriptions.filepath({ ...AssetTypes.texture, label: "Icon" })),
+    script: ZMainScriptAsset,
 };
 
 export const ZMaskSettings = z.object(MaskSettings).describe(uiDescriptions.object({})).partial();

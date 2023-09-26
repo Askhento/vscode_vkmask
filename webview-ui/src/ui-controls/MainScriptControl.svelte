@@ -1,0 +1,206 @@
+<script lang="ts">
+    import { createEventDispatcher } from "svelte";
+    import { onMount, tick } from "svelte";
+    import { logger } from "../logger";
+    const print = logger("MainScriptControl.svelte");
+    import { getContext } from "svelte";
+    import { RequestCommand, RequestTarget } from "src/types";
+    //@ts-expect-error
+    const { assets, settings, messageHandler } = getContext("stores");
+
+    export let label = "empty",
+        value,
+        params,
+        path;
+
+    let waiting = false;
+    let scriptPath = "";
+    let scriptAsset = null;
+
+    $: {
+        checkScriptExists();
+        $assets;
+    }
+
+    async function uploadScript() {
+        waiting = true;
+        const { payload } = await messageHandler.request({
+            command: RequestCommand.getUploadedAsset,
+            target: RequestTarget.extension,
+            payload: {
+                extensions: [["main.as"]],
+                to: ["/"],
+            },
+        });
+
+        if (payload) {
+            value = payload;
+            print("asset", value);
+        }
+
+        waiting = false;
+    }
+
+    async function createScript() {
+        waiting = true;
+        const { payload } = await messageHandler.request({
+            command: RequestCommand.getCreatedAssets,
+            target: RequestTarget.extension,
+            payload: { from: ["res", "empty-project", "main.as"], to: ["main.as"] },
+        });
+
+        if (payload) {
+            value = payload;
+            print("created asset : ", value);
+        }
+
+        waiting = false;
+    }
+
+    function checkScriptExists() {
+        // console.log("assets", $assets, value);
+        const assetIndex = $assets.findIndex((element) => {
+            return element.path === value;
+        });
+
+        // console.log("mainscript", assetIndex);
+        if (assetIndex < 0) {
+            scriptAsset = null;
+            return;
+        }
+
+        scriptAsset = $assets[assetIndex];
+    }
+
+    async function removeScript() {
+        waiting = true;
+
+        await messageHandler.request({
+            command: RequestCommand.removeAsset,
+            target: RequestTarget.extension,
+            payload: [value],
+        });
+
+        value = null;
+        waiting = false;
+    }
+
+    function getScriptUri() {
+        let scriptUri = {
+            scheme: "file",
+            path: scriptAsset.absPath,
+            authority: "",
+        };
+        return `command:vscode.open?${encodeURIComponent(JSON.stringify(scriptUri))}`;
+    }
+
+    const dispatch = createEventDispatcher();
+    $: {
+        dispatch("changed", {
+            value,
+            path,
+        });
+    }
+</script>
+
+{#if label !== undefined}
+    <span class="label"><span>{label}</span></span>
+
+    <span class="control-wrapper">
+        <div class="value-text">
+            {#if value == null}
+                <span class="text-center">Upload or create a scirpt file</span>
+            {:else if scriptAsset}
+                <vscode-link href={getScriptUri()}>{value}</vscode-link>
+            {:else}
+                <span class="text-center missing-file">{value}</span>
+            {/if}
+
+            {#if waiting}
+                <vscode-progress-ring />
+            {/if}
+        </div>
+        <vscode-button
+            appearance={value == null ? "primary" : "secondary"}
+            disabled={waiting}
+            class="upload-button"
+            on:click|stopPropagation={() => {
+                uploadScript();
+            }}
+        >
+            Upload main script
+        </vscode-button>
+        <vscode-button
+            appearance={value == null ? "primary" : "secondary"}
+            disabled={waiting}
+            class="create-button"
+            on:click|stopPropagation={() => {
+                createScript();
+            }}
+        >
+            Create main.as
+        </vscode-button>
+        <vscode-button
+            disabled={value == null || waiting}
+            appearance="secondary"
+            class="remove-button"
+            on:click|stopPropagation={() => {
+                removeScript();
+            }}
+        >
+            Remove script
+        </vscode-button>
+    </span>
+{/if}
+
+<style>
+    * {
+        margin: var(--global-margin);
+        /* padding: 0; */
+        box-sizing: border-box;
+    }
+
+    span.label {
+        justify-self: var(--label-justify);
+        height: var(--global-block-height);
+        display: flex;
+        justify-content: center;
+    }
+
+    span.control-wrapper {
+        margin: unset;
+        /* position: relative; */
+        display: flex;
+        flex-direction: column;
+    }
+
+    .value-text {
+        height: var(--global-block-height);
+        display: flex;
+        justify-items: center;
+        position: relative;
+    }
+
+    .text-center {
+        height: 1rem;
+    }
+
+    .missing-file {
+        color: red;
+    }
+
+    vscode-progress-ring {
+        position: absolute;
+        left: calc(100% - var(--global-block-height));
+        top: 0;
+        margin: unset;
+        height: var(--global-block-height);
+        width: var(--global-block-height);
+    }
+
+    vscode-button {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        height: var(--global-block-height);
+    }
+</style>

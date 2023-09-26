@@ -157,10 +157,18 @@
             return;
         }
 
+        const lastPath = path[0];
+
         if (path.length === 1) {
-            obj[path[0]] = value;
+            // if (value == null) {
+            //     // delete obj[lastPath];
+            //     const { [lastPath]: removed, ...rest } = obj;
+            //     obj = rest;
+            // } else {
+            // }
+            obj[lastPath] = value;
         } else {
-            applyValueByPath(obj[path[0]], path.slice(1), value);
+            applyValueByPath(obj[lastPath], path.slice(1), value);
         }
     }
 

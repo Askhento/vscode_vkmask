@@ -2,20 +2,25 @@
     import { createEventDispatcher } from "svelte";
     import { onMount, tick } from "svelte";
     import { logger } from "../logger";
+    import { getFileUri } from "../utils/getFileUri";
     const print = logger("FilePickerControl.svelte");
     import { getContext } from "svelte";
+    import { RequestCommand, RequestTarget } from "src/types";
     //@ts-expect-error
-    const { assets, settings } = getContext("stores");
 
-    // import { settings } from "../stores.js";
+    const { assets, settings, messageHandler } = getContext("stores");
+
+    const missingTextureData =
+        "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAaCAYAAACpSkzOAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAKDSURBVHgB3VVdbtNAEJ5dr+PWkYhRfqAJglRKW27FGbhBuUGvhAQXaAWCtigpCkkpqHUeYlO762XHzc6ugxAvxA/9pJU9++14x/PL5vOrV0zBUQEqms1nsFgswGA4HML21jbJp+dnIKUEUACe8GB/NCIuTX/B5OKC5FbUgv7THWAAE2DsUIBSh1ovYqsDCqpgzrtSqlyWY5Vzak17xQ6ZUkccX2DDwB8RyyQB18Jms0nyXZ5DUlgrt4KAzPQ8DxKta9g8zyq6vu+XvIGYfLV+HfT70H/UInmsfZ6k9vDB3j4IfQECY/Xp7JS4MAxh9/kLkmMd67HzbQ41YXMXsTXx5OQjBaHAvCkKIjEObiLJQlpFxoBzaydmY+HoIudmpei02yR803UUO3W0q+sodOros47JnZRkxEsdM4MkTXVMJyRHUQQDXUd0MdSE2i5ib9+9pyh0211ohtZVs8tLyHR9mDg9Gwyc9C5gOptSCMPtEHqdLuliDV39/GFaBog8y+2tejX8BslKF6vLI0cXcQmZw+Ui17xvL8K93PK1uU4E2FZWQDfcZrck+76AQNo/zLIMpHdvG3aGIGiQWznjFV1ssEHD6rL57DvF6F/pjS1HrtJbCAEHoz3i/kjvVgsGO32SH2B6Hx9/UCYF8ekONq7bTNlUzNZ6/3LnHPv70MR9Ueb6Cjgmov84JjDmZDTUhPpidP5lTK5dLpfgjvbHOkV9pxaub67L1mPQ7XToHbvATRyTjF0CO7iBaOoeZRDrg+6cf9LrVepoOp3SmMBYuboJpBXdhjbS5bkeTjFsHhOuCvlap/SkUAVNTbOwqeK+WdyzHNd/5HKl1Y4ufuueU7EevW9+A/ImPneuprflAAAAAElFTkSuQmCC";
 
     export let label = "empty",
-        value = undefined,
+        value,
         params,
         path;
 
     const dispatch = createEventDispatcher();
     $: {
+        checkAssetExists();
         dispatch("changed", {
             value,
             path,
@@ -32,7 +37,8 @@
     let inputElement;
     let useBuiltins;
 
-    let dropdwonFocusLock = false;
+    let waiting = false;
+    let currentAsset;
 
     $: {
         extensions = new Set(params.extensions);
@@ -109,16 +115,71 @@
         );
     }
 
-    function isImage(fsPath: string) {
-        return fsPath.endsWith("png") || fsPath.endsWith("jpg");
+    function checkAssetExists() {
+        if (!typedAssets) {
+            currentAsset = null;
+            return;
+        }
+
+        const assetIndex = typedAssets.findIndex((element) => {
+            return element.path === value;
+        });
+
+        if (assetIndex < 0) {
+            currentAsset = null;
+            return;
+        }
+
+        currentAsset = typedAssets[assetIndex];
+
+        print("current asset", currentAsset);
+    }
+
+    async function uploadAsset() {
+        waiting = true;
+        // print("params file picker", params);
+        const { payload } = await messageHandler.request({
+            command: RequestCommand.getUploadedAsset,
+            target: RequestTarget.extension,
+            payload: {
+                extensions: [params.extensions.map((ext) => `*.${ext}`)],
+                to: params.directory,
+            },
+        });
+
+        if (payload) {
+            value = payload;
+            // print("asset", value);
+        }
+
+        waiting = false;
+    }
+
+    async function removeAsset() {
+        waiting = true;
+
+        await messageHandler.request({
+            command: RequestCommand.removeAsset,
+            target: RequestTarget.extension,
+            payload: [value],
+        });
+
+        value = null;
+        waiting = false;
     }
 
     onMount(async () => {
+        checkAssetExists();
         await tick();
 
         setControlElementValue(value);
         setDropDownValue(value);
     });
+
+    $: {
+        checkAssetExists();
+        $assets;
+    }
 
     // from dropdown
 
@@ -142,89 +203,130 @@
     let inputTimer; // prevent closing dropdown
 </script>
 
+<!-- {#key typedAssets} -->
 {#if label !== undefined}
     <span class="label"><span>{label}</span></span>
 
     <!-- <input class="value" type="text" bind:value /> -->
     <!-- add REd color if file not found in options -->
     <span class="control-wrapper">
-        <vscode-dropdown
-            class:error={filteredAssets.length === 0}
-            position="above"
-            bind:this={dropdown}
-            on:focusout|capture={(e) => {
-                // print("focus out");
-                //   e.preventDefault();
-                e.stopPropagation(); // this is to be able to print while dropdown opened
-                inputTimer = setTimeout(() => {
-                    if (!dropdown) return;
-                    const event = new KeyboardEvent("keydown", {
-                        key: "Escape",
-                    });
-                    dropdown.dispatchEvent(event);
-                }, 150);
-            }}
-            on:click|preventDefault={(e) => {
-                // print("dropdown click");
-                //   setTimeout(function () {
-                //     inputElement.focus();
-                //   }, 1000);
-            }}
-            on:change={(e) => {
-                //   value = e.target.value;
-                //   print("drop change", e.target.value);
-                // print("change dropdonw");
-                value = dropdown.value;
-                searchValue = "";
-                inputElement.value = "";
-            }}
-            on:keydown={(e) => {
-                if (e.key === "Escape") {
-                    // print("escape!");
-                    e.preventDefault();
-                    dropdown.value = value;
-                    return;
-                }
-                if (e.key.length === 1) {
-                    inputElement.focus(); // on time !
-
-                    setTimeout(() => {
+        <div class="dropdown-wrapper">
+            <!-- <span class="file-preview">
+            </span> -->
+            {#if currentAsset && currentAsset.preview}
+                <a href={getFileUri(currentAsset.absPath)}>
+                    <img
+                        src={"data:image/png;base64," + currentAsset.preview}
+                        class="file-preview"
+                    />
+                </a>
+            {:else}
+                <img src={missingTextureData} />
+            {/if}
+            <vscode-dropdown
+                class:error={filteredAssets.length === 0}
+                position="above"
+                bind:this={dropdown}
+                on:focusout|capture={(e) => {
+                    // print("focus out");
+                    //   e.preventDefault();
+                    e.stopPropagation(); // this is to be able to print while dropdown opened
+                    inputTimer = setTimeout(() => {
+                        if (!dropdown) return;
+                        const event = new KeyboardEvent("keydown", {
+                            key: "Escape",
+                        });
+                        dropdown.dispatchEvent(event);
+                    }, 150);
+                }}
+                on:click|preventDefault={(e) => {
+                    // print("dropdown click");
+                    //   setTimeout(function () {
+                    //     inputElement.focus();
+                    //   }, 1000);
+                }}
+                on:change={(e) => {
+                    //   value = e.target.value;
+                    //   print("drop change", e.target.value);
+                    // print("change dropdonw");
+                    value = dropdown.value;
+                    searchValue = "";
+                    inputElement.value = "";
+                }}
+                on:keydown={(e) => {
+                    if (e.key === "Escape") {
+                        // print("escape!");
+                        e.preventDefault();
+                        dropdown.value = value;
+                        return;
+                    }
+                    if (e.key.length === 1) {
+                        inputElement.focus(); // on time !
+                        setTimeout(() => {
+                            if (inputTimer) clearTimeout(inputTimer);
+                        }, 0);
+                    }
+                    //   if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+                    //   setTimeout(function () {
+                    //     const option = dropdown.querySelector("vscode-option.selected");
+                    //     option.scrollIntoView({
+                    //       behavior: "smooth",
+                    //       block: "nearest",
+                    //     });
+                    //   }, 10);
+                }}
+            >
+                <vscode-text-field
+                    class:error={filteredAssets.length === 0}
+                    bind:this={inputElement}
+                    on:click|stopPropagation|capture={(e) => {
                         if (inputTimer) clearTimeout(inputTimer);
-                    }, 0);
-                }
-                //   if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
-                //   setTimeout(function () {
-                //     const option = dropdown.querySelector("vscode-option.selected");
-                //     option.scrollIntoView({
-                //       behavior: "smooth",
-                //       block: "nearest",
-                //     });
-                //   }, 10);
+                        // print("click text filed inside ");
+                        // keeps dropdown opened
+                    }}
+                    on:input={(e) => {
+                        // print("oninput", e);
+                        searchValue = e.target.value;
+                        // print(searchValue);
+                    }}
+                />
+                {#each filteredAssets as asset, i}
+                    <vscode-option class:builtin={!asset.projectFile}>
+                        {#if asset.absPath && asset.type === "image"}
+                            <img
+                                src={"data:image/png;base64," + asset.preview}
+                                class="option-file-preview"
+                            />
+                        {/if}
+                        <span class="option-text">{asset.path}</span>
+                    </vscode-option>
+                {/each}
+            </vscode-dropdown>
+            {#if waiting}
+                <vscode-progress-ring />
+            {/if}
+        </div>
+
+        <vscode-button
+            appearance={value == null ? "primary" : "secondary"}
+            disabled={waiting}
+            class="upload-button"
+            on:click|stopPropagation={() => {
+                uploadAsset();
             }}
         >
-            <vscode-text-field
-                class:error={filteredAssets.length === 0}
-                bind:this={inputElement}
-                on:click|stopPropagation|capture={(e) => {
-                    if (inputTimer) clearTimeout(inputTimer);
-                    // print("click text filed inside ");
-                    // keeps dropdown opened
-                }}
-                on:input={(e) => {
-                    // print("oninput", e);
-                    searchValue = e.target.value;
-                    // print(searchValue);
-                }}
-            />
-            {#each filteredAssets as asset, i}
-                <vscode-option class:builtin={!asset.projectFile}>
-                    {#if asset.absPath && asset.type === "image"}
-                        <img src={"data:image/png;base64," + asset.preview} class="file-preview" />
-                    {/if}
-                    <span class="option-text">{asset.path}</span>
-                </vscode-option>
-            {/each}
-        </vscode-dropdown>
+            Upload {params.label}
+        </vscode-button>
+        <vscode-button
+            disabled={value == null || waiting}
+            appearance="secondary"
+            class="remove-button"
+            on:click|stopPropagation={() => {
+                removeAsset();
+            }}
+        >
+            Remove {params.label}
+        </vscode-button>
     </span>
     <!-- svelte-ignore missing-declaration -->
     <!-- <vscode-text-field
@@ -304,6 +406,8 @@
       /> -->
 {/if}
 
+<!-- {/key} -->
+
 <style>
     * {
         margin: var(--global-margin);
@@ -321,25 +425,67 @@
     span.control-wrapper {
         margin: unset;
         /* position: relative; */
-        /* display: flex; */
+        display: flex;
+        flex-direction: column;
+    }
+
+    div.dropdown-wrapper {
+        margin: unset;
+        display: flex;
+        flex-direction: row;
+        position: relative;
+    }
+
+    vscode-progress-ring {
+        position: absolute;
+        left: calc(100%);
+        top: var(--global-margin);
+        margin: unset;
+        height: var(--global-block-height);
+        width: var(--global-block-height);
     }
 
     vscode-option {
         margin: unset;
+        /* display: flex;
+        justify-items: center;
+        align-items: center;
+        align-content: center; */
+        /* justify-content: center; */
         /* width: 100%; */
+    }
+
+    vscode-option::part(content) {
+        display: flex;
+        align-content: center;
+    }
+
+    img.option-file-preview {
+        margin: unset;
+        display: inline-block;
+        height: var(--global-block-height);
+        width: var(--global-block-height);
     }
 
     span.option-text {
         vertical-align: middle;
     }
 
-    img.file-preview {
+    .file-preview {
         display: inline-block;
         height: var(--global-block-height);
         width: var(--global-block-height);
-        margin: unset;
+        /* margin: unset; */
+        /* flex-basis: var(--global-block-height); */
     }
 
+    img {
+        /* margin: unset; */
+        /* justify-self: center; */
+    }
+    a {
+        margin: unset;
+    }
     vscode-option.builtin {
         background-color: var(--vscode-inputValidation-warningBackground);
     }

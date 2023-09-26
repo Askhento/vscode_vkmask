@@ -33,6 +33,10 @@ export const RequestCommand = {
 
     showError: "showError",
 
+    getCreatedAssets: "getCreatedAssets",
+    getUploadedAsset: "getUploadedAsset",
+    removeAsset: "removeAsset",
+
     openProject: "openProject",
     createProject: "createProject",
     createConfig: "createConfig",

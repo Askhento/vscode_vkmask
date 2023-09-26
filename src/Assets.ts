@@ -4,7 +4,7 @@ import * as vscode from "vscode";
 import { EventEmitter } from "events";
 import { logger } from "./Logger";
 const print = (...args: any) => logger.log(__filename, ...args);
-
+import { copyRecursiveSync } from "./utils/copyFilesRecursive";
 import sharp from "sharp";
 
 import { XMLParser } from "fast-xml-parser"; // https://github.com/NaturalIntelligence/fast-xml-parser/blob/c7b3cea4ead020c21d39e135a50348208829e971/docs/v4/2.XMLparseOptions.md
@@ -33,16 +33,12 @@ class AssetWatcher extends EventEmitter {
         ignoreDeclaration: true,
     });
     directory: string = "";
+    extensionPath: string = "";
+
     public onAssetsChange: (() => void) | undefined;
 
     constructor() {
         super();
-
-        if (vscode.workspace.workspaceFolders?.length) {
-            this.directory = vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath;
-        }
-
-        this.attach();
     }
 
     async searchBuiltinAssets(extensionUri: vscode.Uri) {
@@ -125,7 +121,13 @@ class AssetWatcher extends EventEmitter {
         };
     }
 
-    attach() {
+    attach(context: vscode.ExtensionContext) {
+        this.extensionPath = context.extensionPath;
+
+        if (vscode.workspace.workspaceFolders?.length) {
+            this.directory = vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath;
+        }
+
         if (!this.directory) {
             print("dirrectory is undefined, unable to attach");
             return;
@@ -153,6 +155,8 @@ class AssetWatcher extends EventEmitter {
             //         type: this.readFileType(fspath),
             //     }
         });
+
+        // watcher.onDidChange
 
         watcher.onDidDelete((e) => {
             const fspath = this.getRelative(e.fsPath);
@@ -198,6 +202,58 @@ class AssetWatcher extends EventEmitter {
         return "";
     }
 
+    async uploadAssets(extensions: string[], to: string[]) {
+        const filters: any = Object.fromEntries(extensions.map((ext) => [ext, ext]));
+
+        const options: vscode.OpenDialogOptions = {
+            canSelectMany: false,
+            openLabel: "Open",
+            canSelectFiles: true,
+            canSelectFolders: false,
+            filters,
+            title: "Select assets",
+        };
+
+        const fileUri = await vscode.window.showOpenDialog(options);
+
+        if (!fileUri || !fileUri[0]) {
+            return "";
+        }
+
+        const file = fileUri[0].fsPath;
+        const base = path.basename(file);
+        const relative = path.join(...to, base);
+        const dest = path.join(this.directory, relative);
+
+        // fs.copyFileSync(file, dest);
+        // copyRecursiveSync(file, dest);
+        fs.cpSync(file, dest, {}); // it works !!! even with missing destination
+        return relative;
+    }
+
+    async copyAssets(from: string[], to: string[]) {
+        const fullFrom = path.join(this.extensionPath, ...from);
+        const fullTo = path.join(this.directory, ...to);
+
+        try {
+            fs.copyFileSync(fullFrom, fullTo);
+            return path.join(...to);
+        } catch (error) {
+            return "";
+        }
+    }
+
+    async removeAsset(asset: string[]) {
+        const fullPath = path.join(this.directory, ...asset);
+
+        try {
+            fs.unlinkSync(fullPath);
+            return fullPath;
+        } catch (error) {
+            return "";
+        }
+    }
+
     getAbsPath(file: string) {
         return path.resolve(file);
     }
@@ -212,4 +268,4 @@ class AssetWatcher extends EventEmitter {
 }
 
 // Exports class singleton to prevent multiple
-export const assetWatcher = new AssetWatcher();
+export const Assets = new AssetWatcher();

@@ -18,3 +18,8 @@
 --global-border-raduis : 2px;
 --global-border-width : 1px;
 }
+
+
+body {
+    /* padding : unset; */
+}

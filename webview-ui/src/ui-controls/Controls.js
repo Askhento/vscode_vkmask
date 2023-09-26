@@ -19,6 +19,9 @@ import TagsControl from "./TagsControl.svelte";
 import VectorControl from "./VectorControl.svelte";
 import ObjectControl from "./ObjectControl.svelte";
 import ArrayControl from "./ArrayControl.svelte";
+import MainScriptControl from "./MainScriptControl.svelte";
+import IconControl from "./IconControl.svelte";
+import TexturePickerControl from "./TexturePickerControl.svelte";
 
 export const uiControlsMap = {
     [uiDescriptions.bool({}).name]: SwitchControl,
@@ -34,6 +37,9 @@ export const uiControlsMap = {
     [uiDescriptions.array4d({}).name]: VectorControl,
     [uiDescriptions.object({}).name]: ObjectControl,
     [uiDescriptions.array({}).name]: ArrayControl,
+    [uiDescriptions.mainScript({}).name]: MainScriptControl,
+    [uiDescriptions.icon({}).name]: IconControl,
+    [uiDescriptions.texture({}).name]: TexturePickerControl,
 };
 
 function getInnerZType(schema) {

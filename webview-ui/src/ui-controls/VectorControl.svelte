@@ -12,8 +12,8 @@
     // !!! just a hack
     onMount(() => {
         // console.log("mounted vector");
-        if (value === undefined || value.length === 0) value = params.default;
     });
+    if (value == null || value.length === 0) value = params.defValue;
 
     const dispatch = createEventDispatcher();
     $: {

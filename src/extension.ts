@@ -19,7 +19,7 @@ import { logger } from "./Logger";
 import type { LogEntry } from "./Logger";
 const print = (...args: any) => logger.log(__filename, ...args);
 
-import { assetWatcher } from "./AssetWatcher";
+import { Assets } from "./Assets";
 import { userSettings } from "./UserSettings";
 import { jsonPrettyArray } from "./utils/jsonStringify";
 import {
@@ -43,6 +43,7 @@ export async function activate(context: vscode.ExtensionContext) {
         error = null;
     logger.setMode(context.extensionMode);
 
+    Assets.attach(context);
     //  !!!!
     // assetWatcher.searchBuiltinAssets(context.extensionUri);
 
@@ -214,13 +215,13 @@ export async function activate(context: vscode.ExtensionContext) {
                 messageHandler.bindViewMessageHandler(provider.webview, provider.viewId)
             );
 
-            assetWatcher.on("assetsChanged", async () => {
+            Assets.on("assetsChanged", async () => {
                 const buildins = (await userSettings.getSettings()["vkmask.use-builtins"]
                     .value) as boolean;
 
                 messageHandler.send({
                     command: RequestCommand.updateAssets,
-                    payload: await assetWatcher.getAssets(true),
+                    payload: await Assets.getAssets(true),
                     target: provider.viewId,
                 });
             });
@@ -231,13 +232,13 @@ export async function activate(context: vscode.ExtensionContext) {
         print("extension receives data", data);
         const { command, target, payload, requestId, origin } = data;
 
-        // simple requests
         switch (command) {
+            // simple requests
             case RequestCommand.getAssets:
                 // reply with assets
                 messageHandler.send({
                     ...data,
-                    payload: await assetWatcher.getAssets(true),
+                    payload: await Assets.getAssets(true),
                     target: origin,
                 });
                 break;
@@ -308,11 +309,8 @@ export async function activate(context: vscode.ExtensionContext) {
                 });
                 break;
 
-            default:
-                break;
-        }
+            // more complex  stuff
 
-        switch (command) {
             case RequestCommand.updateEffects:
                 maskConfig.updateEffects(payload);
                 sendEffects(
@@ -342,6 +340,29 @@ export async function activate(context: vscode.ExtensionContext) {
 
             case RequestCommand.createProject:
                 createProject();
+                break;
+
+            case RequestCommand.getUploadedAsset:
+                messageHandler.send({
+                    ...data,
+                    target: origin,
+                    payload: await Assets.uploadAssets(payload.extensions, payload.to),
+                });
+                break;
+            case RequestCommand.getCreatedAssets:
+                messageHandler.send({
+                    ...data,
+                    target: origin,
+                    payload: await Assets.copyAssets(payload.from, payload.to),
+                });
+                break;
+
+            case RequestCommand.removeAsset:
+                messageHandler.send({
+                    ...data,
+                    target: origin,
+                    payload: await Assets.removeAsset(payload),
+                });
                 break;
 
             default:

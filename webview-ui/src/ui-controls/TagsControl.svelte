@@ -16,16 +16,20 @@
     let tagOptions = [];
 
     $: {
-        tags = value?.split(";");
+        tagOptions = [...$allTags];
+        if (value) {
+            tags = value.split(";");
+        }
 
-        tagOptions = [...$allTags]
-            .filter((tag) => tags.indexOf(tag) < 0)
-            .map((tag) => [
-                () => {
-                    addTag(tag);
-                },
-                tag,
-            ]);
+        if (tags && tags.length) {
+            tagOptions = tagOptions.filter((tag) => tags.indexOf(tag) < 0);
+        }
+        tagOptions = tagOptions.map((tag) => [
+            () => {
+                addTag(tag);
+            },
+            tag,
+        ]);
         tagOptions = [
             [
                 () => {
@@ -77,9 +81,8 @@
 
 <span class="label"><span>{label}</span></span>
 
-{#if tags}
-    <span class="control-wrapper">
-        <!-- <vscode-button
+<span class="control-wrapper">
+    <!-- <vscode-button
             class="add-tag-btn"
             on:click|stopPropagation={() => {
                 addTag();
@@ -88,52 +91,51 @@
             <span class="codicon codicon-add" />
             Add new tag
         </vscode-button> -->
-        <Dropdown options={tagOptions} name={"Add tag"} icon="add" />
-        {#each tags as tag, index}
-            <vscode-text-field
-                value={tags[index]}
-                bind:this={tagElems[index]}
-                on:keydown={(e) => {
-                    switch (e.key) {
-                        case "Backspace":
-                            if (e.target) {
-                                const newValue = e.target.value;
-                                if (newValue === "" && index > 0) {
-                                    removeTag(index);
-                                }
+    <Dropdown options={tagOptions} name={"Add tag"} icon="add" />
+    {#each tags as tag, index}
+        <vscode-text-field
+            value={tags[index]}
+            bind:this={tagElems[index]}
+            on:keydown={(e) => {
+                switch (e.key) {
+                    case "Backspace":
+                        if (e.target) {
+                            const newValue = e.target.value;
+                            if (newValue === "" && index > 0) {
+                                removeTag(index);
                             }
-                            break;
-                        case "Escape":
-                            e.target.value = tag;
-                            e.target.blur();
-                            break;
-                        case "Enter":
-                            e.target.blur();
-                        default:
-                            break;
-                    }
-                }}
-                on:change={(e) => {
-                    if (e.target) {
-                        tags[index] = e.target.value;
-                        // console.log("changed tag", tags[index]);
-                        joinTags();
-                    }
+                        }
+                        break;
+                    case "Escape":
+                        e.target.value = tag;
+                        e.target.blur();
+                        break;
+                    case "Enter":
+                        e.target.blur();
+                    default:
+                        break;
+                }
+            }}
+            on:change={(e) => {
+                if (e.target) {
+                    tags[index] = e.target.value;
+                    // console.log("changed tag", tags[index]);
+                    joinTags();
+                }
+            }}
+        >
+            <vscode-button
+                class="remove-tag-btn"
+                appearance="icon"
+                on:click|stopPropagation={() => {
+                    removeTag(index);
                 }}
             >
-                <vscode-button
-                    class="remove-tag-btn"
-                    appearance="icon"
-                    on:click|stopPropagation={() => {
-                        removeTag(index);
-                    }}
-                >
-                    <span class="codicon codicon-close" />
-                </vscode-button>
-            </vscode-text-field>
-        {/each}
-    </span>
-{/if}
+                <span class="codicon codicon-close" />
+            </vscode-button>
+        </vscode-text-field>
+    {/each}
+</span>
 
 <style>
     * {
