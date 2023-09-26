@@ -75,6 +75,7 @@
     async function removeScript() {
         waiting = true;
 
+        // !!!! only if asset exist
         await messageHandler.request({
             command: RequestCommand.removeAsset,
             target: RequestTarget.extension,

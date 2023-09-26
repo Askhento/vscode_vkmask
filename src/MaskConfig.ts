@@ -498,7 +498,10 @@ export class MaskConfig extends EventEmitter {
     public async updateMaskSettings(maskSettingsObject: object[]) {
         if (!this.maskJSON) return;
 
-        this.maskJSON = { ...this.maskJSON, ...maskSettingsObject };
+        // this.maskJSON = { ...this.maskJSON, ...maskSettingsObject };
+        const { effects, plugins } = this.maskJSON;
+
+        this.maskJSON = { ...maskSettingsObject, effects, plugins };
 
         const editor = await this.writeConfig();
 

@@ -11,6 +11,7 @@
 
     const origin = RequestTarget.projectManager;
 
+    import { applyValueByPath2 } from "../utils/applyValueByPath";
     import ObjectControl from "../ui-controls/ObjectControl.svelte";
     import { MaskSettingsParserForUI } from "../ui-controls/Controls.js";
     import type { RecentProjectInfo } from "src/RecentProjectInfo";
@@ -139,7 +140,9 @@
         console.log("onChange: ", event);
         const { path, value, structural } = event.detail;
 
-        applyValueByPath(maskSettings, path, value);
+        // print("val by path 2");
+        // applyValueByPath(maskSettings, path, value);
+        maskSettings = applyValueByPath2(maskSettings, path, value);
         print("updated maskSettings", maskSettings);
         sendMaskSettings();
 

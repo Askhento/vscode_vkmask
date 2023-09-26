@@ -35,6 +35,7 @@
     } from "../ui-controls/Controls.js";
     import { effectNames, pluginNames } from "../../../src/ztypes.js";
     import { onMount, tick } from "svelte";
+    import { applyValueByPath2 } from "../utils/applyValueByPath";
 
     provideVSCodeDesignSystem().register(allComponents);
 
@@ -324,19 +325,19 @@
 
         switch (selection.type) {
             case SelectionType.effect:
-                applyValueByPath(effects[selection.id], path, value);
+                effects[selection.id] = applyValueByPath2(effects[selection.id], path, value);
                 print("updated effects", effects[selection.id]);
                 sendEffects();
                 break;
 
             case SelectionType.plugin:
-                applyValueByPath(plugins[selection.id], path, value);
+                plugins[selection.id] = applyValueByPath2(plugins[selection.id], path, value);
                 print("updated plugins", plugins[selection.id]);
                 sendPlugins();
                 break;
 
             case SelectionType.maskSettings:
-                applyValueByPath(maskSettings, path, value);
+                maskSettings = applyValueByPath2(maskSettings, path, value);
                 print("updated maskSettings", maskSettings);
                 sendMaskSettings();
                 break;
