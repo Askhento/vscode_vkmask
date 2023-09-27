@@ -6,14 +6,14 @@
         path,
         params;
 
-    let step = 0.01;
+    let steps = params.steps ?? 100;
+    // console.log("steps", steps, params);
+    let step = (params.max - params.min) / steps;
 
     value = value ?? params.defValue;
     // value = 0.5;
 
     // $: console.log("from slider", params);
-
-    $: step = (params.max - params.min) / 20.0;
 
     const dispatch = createEventDispatcher();
 

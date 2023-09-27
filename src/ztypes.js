@@ -23,6 +23,7 @@ export const uiDescriptions = {
         min = 0,
         max = 1,
         defValue = 0,
+        steps = 100,
         valueLabel = "",
         showAlways = true,
         valueTemplate = (val) => {
@@ -33,6 +34,7 @@ export const uiDescriptions = {
         name: "numberSlider",
         label,
         group,
+        steps,
         min: min,
         max: max,
         defValue,
@@ -917,13 +919,25 @@ const ZPerspectivePlugin = z
     .object({
         name: z.literal("perspective").describe(uiDescriptions.none({})),
         fov: ZNumberSlider.describe(
-            uiDescriptions.numberSlider({ min: 30, max: 90, defValue: 30, showAlways: false })
+            uiDescriptions.numberSlider({
+                min: 30,
+                max: 90,
+                defValue: 30,
+                steps: 15,
+                showAlways: false,
+            })
         ),
         near_clip: ZNumberSlider.describe(
             uiDescriptions.numberSlider({ min: 0.1, max: 5000, defValue: 0.1, showAlways: false })
         ),
         far_clip: ZNumberSlider.describe(
-            uiDescriptions.numberSlider({ min: 0.1, max: 5000, defValue: 3000, showAlways: false })
+            uiDescriptions.numberSlider({
+                min: 1,
+                max: 5000,
+                defValue: 3000,
+                steps: 100,
+                showAlways: false,
+            })
         ),
     })
     .describe(uiDescriptions.object({}));
