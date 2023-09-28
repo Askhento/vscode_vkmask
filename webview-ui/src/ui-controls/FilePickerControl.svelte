@@ -224,7 +224,7 @@
                         />
                     </a>
                 {:else}
-                    <img src={missingTextureData} />
+                    <img class="file-preview" src={missingTextureData} />
                 {/if}
             {/if}
 
@@ -498,6 +498,9 @@
     }
     a {
         margin: unset;
+        display: contents;
+        height: var(--global-block-height);
+        width: var(--global-block-height);
     }
     vscode-option.builtin {
         background-color: var(--vscode-inputValidation-warningBackground);
