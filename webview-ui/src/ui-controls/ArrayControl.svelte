@@ -111,8 +111,14 @@
         grid-column: 1/3;
         display: grid;
         grid-template-columns:
-            var(--project-manager-grid-label-column-size)
-            minmax(auto, var(--project-manager-grid-value-column-size));
+            minmax(
+                var(--project-manager-grid-label-min-width),
+                var(--project-manager-grid-label-column-size)
+            )
+            minmax(
+                var(--project-manager-value-min-width),
+                var(--project-manager-grid-value-column-size)
+            );
         column-gap: var(--global-grid-column-gap);
         /* row-gap: var(--global-grid-row-gap); */
     }
@@ -141,6 +147,7 @@
         padding: 0;
         margin-top: var(--global-margin);
     }
+
     .label {
         justify-self: var(--label-justify);
         color: var(--vscode-descriptionForeground);
@@ -148,6 +155,18 @@
         justify-self: self-start;
         cursor: pointer;
     }
+
+    /* span.label {
+        height: var(--global-block-height);
+        display: flex;
+        justify-content: var(--label-justify);
+    }
+
+    span.label > span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    } */
 
     vscode-divider {
         grid-column: 1/3;

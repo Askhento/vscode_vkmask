@@ -7,6 +7,7 @@
 
     export let label, value, path, params;
 
+    if (value == null) value = params.defValue;
     let color, alpha;
 
     // console.log(TextureObject._def.typeName);
@@ -118,12 +119,17 @@
     display: inline-block;
     flex: 1 0 0px;
   } */
+
     span.label {
-        margin: var(--global-margin);
-        justify-self: var(--label-justify);
         height: var(--global-block-height);
         display: flex;
-        justify-content: center;
+        justify-content: var(--label-justify);
+    }
+
+    span.label > span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     input.color {

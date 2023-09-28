@@ -52,19 +52,30 @@
         /* padding: 0; */
         box-sizing: border-box;
     }
+
     span.label {
-        justify-self: var(--label-justify);
         height: var(--global-block-height);
         display: flex;
-        justify-content: center;
+        justify-content: var(--label-justify);
+    }
+
+    span.label > span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     vscode-text-field {
         /* margin: unset; */
         height: var(--global-block-height);
         text-align: center;
-        /* width: 100%; */
+        /* min-width: 0; */
     }
+
+    vscode-text-field::part(root) {
+        min-width: 0;
+    }
+
     /* input {
         color: var(--vscode-editor-foreground);
         background-color: var(--vscode-input-background);

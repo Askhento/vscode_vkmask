@@ -204,8 +204,14 @@
         /* margin: 0 0 0 0.5em; */
         display: grid;
         grid-template-columns:
-            var(--project-manager-grid-label-column-size)
-            minmax(auto, var(--project-manager-grid-value-column-size));
+            minmax(
+                var(--project-manager-grid-label-min-width),
+                var(--project-manager-grid-label-column-size)
+            )
+            minmax(
+                var(--project-manager-value-min-width),
+                var(--project-manager-grid-value-column-size)
+            );
         column-gap: var(--global-grid-column-gap);
         row-gap: var(--global-grid-row-gap);
         margin-bottom: var(--global-grid-row-gap);

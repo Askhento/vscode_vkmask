@@ -123,16 +123,21 @@
     }
 
     span.label {
-        justify-self: var(--label-justify);
+        /* justify-self: var(--label-justify); */
         height: var(--global-block-height);
         display: flex;
-        justify-content: center;
+        justify-content: var(--label-justify);
+    }
+
+    span.label > span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     input.slider {
         display: block;
         margin: 0;
-
         /* flex: 2 0 0px; */
     }
 

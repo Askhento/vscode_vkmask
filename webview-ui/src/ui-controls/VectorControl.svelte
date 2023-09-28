@@ -27,7 +27,7 @@
 </script>
 
 {#if label && value}
-    <span class="label"><div class="label-text">{label}</div></span>
+    <span class="label"><span class="label-text">{label}</span></span>
     <div class="vector-control-wrapper">
         {#each value as v, index}
             <!-- <vscode-text-area
@@ -90,6 +90,7 @@
         justify-content: start;
         flex-wrap: wrap;
         margin: 0;
+        min-width: var(--global-min-width);
     }
 
     input.value {
@@ -109,12 +110,19 @@
         text-align: center;
         flex-grow: 1;
         height: var(--global-block-height);
+        min-width: var(--global-min-width);
     }
+
     span.label {
-        justify-self: var(--label-justify);
         height: var(--global-block-height);
         display: flex;
-        justify-content: center;
+        justify-content: var(--label-justify);
+    }
+
+    span.label > span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     /* .label-text {

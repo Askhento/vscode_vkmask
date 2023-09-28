@@ -424,10 +424,15 @@
     }
 
     span.label {
-        justify-self: var(--label-justify);
         height: var(--global-block-height);
         display: flex;
-        justify-content: center;
+        justify-content: var(--label-justify);
+    }
+
+    span.label > span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     span.control-wrapper {
@@ -505,6 +510,7 @@
         height: var(--global-block-height);
         /* width: 100%; */
         width: calc(var(--project-manager-grid-value-column-size) - 2 * var(--global-margin));
+        min-width: 0;
     }
     /* vscode-dropdown.error {
     color: var(--vscode-errorForeground);
