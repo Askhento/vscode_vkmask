@@ -129,7 +129,7 @@
                 uploadScript();
             }}
         >
-            Upload main script
+            <span class="btn-text">Upload main script</span>
         </vscode-button>
         <vscode-button
             appearance={value == null ? "primary" : "secondary"}
@@ -139,7 +139,7 @@
                 createScript();
             }}
         >
-            Create main.as
+            <span class="btn-text">Create main.as</span>
         </vscode-button>
         <vscode-button
             disabled={value == null || waiting}
@@ -149,7 +149,7 @@
                 removeScript();
             }}
         >
-            Remove script
+            <span class="btn-text">Remove script</span>
         </vscode-button>
     </span>
 {/if}
@@ -205,8 +205,24 @@
     }
 
     vscode-button {
-        overflow: hidden;
-        text-overflow: ellipsis;
         height: var(--global-block-height);
+    }
+
+    vscode-button::part(content) {
+        min-width: 0;
+    }
+
+    vscode-button::part(control) {
+        overflow: hidden;
+    }
+
+    .btn-text {
+        margin: unset;
+        padding: unset;
+        /* display: inline-block; */
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 </style>

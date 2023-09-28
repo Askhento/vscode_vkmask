@@ -323,7 +323,7 @@
                 uploadAsset();
             }}
         >
-            Upload {params.label}
+            <span class="btn-text">Upload {params.label}</span>
         </vscode-button>
         <vscode-button
             disabled={value == null || waiting}
@@ -333,7 +333,7 @@
                 removeAsset();
             }}
         >
-            Remove {params.label}
+            <span class="btn-text">Remove {params.label}</span>
         </vscode-button>
     </span>
     <!-- svelte-ignore missing-declaration -->
@@ -492,10 +492,6 @@
         /* flex-basis: var(--global-block-height); */
     }
 
-    img {
-        /* margin: unset; */
-        /* justify-self: center; */
-    }
     a {
         margin: unset;
         display: contents;
@@ -541,6 +537,24 @@
 
     vscode-text-field.error {
         animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    vscode-button::part(content) {
+        min-width: 0;
+    }
+
+    vscode-button::part(control) {
+        overflow: hidden;
+    }
+
+    .btn-text {
+        margin: unset;
+        padding: unset;
+        /* display: inline-block; */
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     /* 

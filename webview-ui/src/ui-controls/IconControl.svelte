@@ -143,7 +143,7 @@
                     uploadIcon();
                 }}
             >
-                Upload icon
+                <span class="btn-text">Upload icon</span>
             </vscode-button>
         {:else}
             <vscode-button
@@ -154,7 +154,7 @@
                     removeIcon();
                 }}
             >
-                Remove icon
+                <span class="btn-text">Remove icon</span>
             </vscode-button>
         {/if}
         <!-- <vscode-button
@@ -178,10 +178,6 @@
         margin: var(--global-margin);
         /* padding: 0; */
         box-sizing: border-box;
-    }
-
-    a {
-        margin: unset;
     }
 
     span.label {
@@ -211,10 +207,24 @@
     }
 
     img.file-preview {
+        margin: unset;
         display: inline-block;
         height: var(--global-block-height);
         width: var(--global-block-height);
+        /* margin: unset; */
+        /* flex-basis: var(--global-block-height); */
+        min-width: var(--global-block-height);
+
+        /* flex-basis: var(--global-block-height); */
+    }
+
+    a {
         margin: unset;
+        display: contents;
+        height: var(--global-block-height);
+        width: var(--global-block-height);
+        /* flex-basis: var(--global-block-height); */
+        /* min-width: var(--global-block-height); */
     }
 
     vscode-progress-ring {
@@ -227,9 +237,26 @@
     }
 
     vscode-button {
-        overflow: hidden;
-        text-overflow: ellipsis;
-        height: var(--global-block-height);
         flex-grow: 1;
+        min-width: 0;
+        height: var(--global-block-height);
+    }
+
+    vscode-button::part(content) {
+        min-width: 0;
+    }
+
+    vscode-button::part(control) {
+        overflow: hidden;
+    }
+
+    .btn-text {
+        margin: unset;
+        padding: unset;
+        /* display: inline-block; */
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 </style>
