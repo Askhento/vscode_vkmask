@@ -158,11 +158,13 @@
     async function removeAsset() {
         waiting = true;
 
-        await messageHandler.request({
-            command: RequestCommand.removeAsset,
-            target: RequestTarget.extension,
-            payload: [value],
-        });
+        // !!! will not remove for now !!!
+        /// other effects could use the same asset
+        // await messageHandler.request({
+        //     command: RequestCommand.removeAsset,
+        //     target: RequestTarget.extension,
+        //     payload: [value],
+        // });
 
         value = null;
         waiting = false;
