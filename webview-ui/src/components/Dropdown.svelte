@@ -31,7 +31,7 @@
                 on:click={toggleMenu}
             >
                 <span style="pointer-events: none;" slot="start" class="codicon codicon-{icon}" />
-                {name}
+                <span class="btn-text">{name}</span>
             </vscode-button>
             <div class="dropdown-menu" class:active={menuActive} bind:this={menuElem}>
                 {#each options as [action, label, icon]}
@@ -118,5 +118,28 @@
 
     .dropdown-menu > vscode-button:hover {
         background-color: var(--dropdown-background);
+    }
+
+    vscode-button {
+        min-width: 0;
+        height: var(--global-block-height);
+    }
+
+    vscode-button::part(content) {
+        min-width: 0;
+    }
+
+    vscode-button::part(control) {
+        overflow: hidden;
+    }
+
+    .btn-text {
+        margin: unset;
+        padding: unset;
+        /* display: inline-block; */
+        width: 100%;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 </style>
