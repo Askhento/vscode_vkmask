@@ -187,6 +187,12 @@
         position: relative;
     }
 
+    .value-text > span {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
     .text-center {
         height: 1rem;
     }
