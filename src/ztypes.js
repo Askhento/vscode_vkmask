@@ -576,9 +576,25 @@ const ZFacemodelEffect = ZBaseEffect.extend({
     texture: ZTextureObject,
 }).describe(uiDescriptions.object({}));
 
+const ZPatchAnchor = z.enum([
+    "free",
+    "face",
+    "right_eye",
+    "left_eye",
+    "middle_eyes",
+    "forehead",
+    "nose",
+    "mouth",
+    "right_cheek",
+    "left_cheek",
+    "lower_lip",
+    "upper_lip",
+    "fullscreen",
+]);
+
 const ZPatchEffect = ZBaseEffect.extend({
     name: z.literal("patch").describe(uiDescriptions.none({})),
-    anchor: ZFaceAnchor.describe(
+    anchor: ZPatchAnchor.describe(
         uiDescriptions.enum({
             options: Object.keys(ZFaceAnchor.Values),
             defValue: ZFaceAnchor.Values.forehead,
