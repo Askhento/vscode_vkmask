@@ -18,6 +18,7 @@
         "workspaceContains:mask.json"
     ],
     "main": "./out/extension.js",
+    "l10n": "./l10n",
     "contributes": {
         "configuration": {
             "title": "vkmask",
@@ -55,6 +56,11 @@
             "view/title": [
                 {
                     "command": "vkmask.dumpLogs",
+                    "when": "view == vkmask.projectManager && vkmask.appState != 'ERROR' ",
+                    "group": "navigation"
+                },
+                {
+                    "command": "vkmask.jsEval",
                     "when": "view == vkmask.projectManager && vkmask.appState != 'ERROR' ",
                     "group": "navigation"
                 },
@@ -188,9 +194,15 @@
             },
             {
                 "command": "vkmask.dumpLogs",
-                "title": "Dump vkmask logs to logsDump.json file",
+                "title": "%command.dumpLogs%",
                 "shortTitle": "Dump vkmask logs",
                 "icon": "$(zap)"
+            },
+            {
+                "command": "vkmask.jsEval",
+                "title": "test eval",
+                "shortTitle": "test js eval",
+                "icon": "$(beaker)"
             },
             {
                 "command": "vkmask.resetSidebar",
@@ -274,7 +286,9 @@
         "dev:webview": "cd webview-ui && npm run dev",
         "build:webview": "cd webview-ui && npm run build",
         "publish-patch": "npm version patch ; vsce package --out ./vsix-packages",
-        "publish-minor": "npm version minor ; vsce package --out ./vsix-packages"
+        "publish-minor": "npm version minor ; vsce package --out ./vsix-packages",
+        "l10n": "npx @vscode/l10n-dev export --outDir ./l10n ./src ; npm run update-locale",
+        "update-locale": "node ./l10n/update-missing-locale.mjs"
     },
     "devDependencies": {
         "@types/glob": "^8.0.0",
@@ -283,6 +297,7 @@
         "@types/vscode": "^1.74.0",
         "@typescript-eslint/eslint-plugin": "^5.45.0",
         "@typescript-eslint/parser": "^5.45.0",
+        "@vscode/l10n-dev": "^0.0.29",
         "@vscode/test-electron": "^2.2.0",
         "eslint": "^8.28.0",
         "glob": "^8.0.3",

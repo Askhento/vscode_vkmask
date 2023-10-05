@@ -39,6 +39,17 @@ import { delayPromise } from "./utils/delayPromise";
 import { copyRecursiveSync } from "./utils/copyFilesRecursive";
 
 export async function activate(context: vscode.ExtensionContext) {
+    const localizedString = vscode.l10n.t(
+        "Your extension got activated with the {0} language!",
+        vscode.env.language
+    );
+    vscode.window.showInformationMessage(localizedString);
+
+    const anotherString = vscode.l10n.t("another {0} language!", vscode.env.language);
+    vscode.window.showInformationMessage(anotherString);
+
+    const lolSTring = vscode.l10n.t("lol {0} hehehehe!", vscode.env.language);
+
     let appState = AppState.loading,
         error = null;
     logger.setMode(context.extensionMode);
@@ -590,11 +601,32 @@ export async function activate(context: vscode.ExtensionContext) {
 
             const result = (await vscode.commands.executeCommand(commandID)) as string;
 
-            if (result) vscode.window.showErrorMessage(result);
+            if (result) vscode.window.showInformationMessage(result);
             print(result);
             // vscode.commands.executeCommand("workbench.action.openSettingsJson", {
             //     revealSetting: { key: "editor.renderWhitespace" },
             // });
+        })
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand("vkmask.jsEval", async () => {
+            // ??? add parameters ???
+            const code = await vscode.window.showInputBox({
+                placeHolder: "Enter command",
+                prompt: "Paste or type any js one liner",
+                value: "",
+            });
+
+            if (code === "" || code === undefined) {
+                vscode.window.showErrorMessage("Empty/Undefined input");
+                return;
+            }
+
+            const result = eval(code);
+
+            if (result) vscode.window.showInformationMessage(result);
+            print(result);
         })
     );
 
