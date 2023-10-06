@@ -43,12 +43,6 @@ export async function activate(context: vscode.ExtensionContext) {
         "Your extension got activated with the {0} language!",
         vscode.env.language
     );
-    vscode.window.showInformationMessage(localizedString);
-
-    const anotherString = vscode.l10n.t("another {0} language!", vscode.env.language);
-    vscode.window.showInformationMessage(anotherString);
-
-    const lolSTring = vscode.l10n.t("lol {0} hehehehe!", vscode.env.language);
 
     let appState = AppState.loading,
         error = null;
@@ -714,6 +708,12 @@ export async function activate(context: vscode.ExtensionContext) {
 
         // this will ensure all the componenets will show up no matter if they closed before.
         webviewProviders.forEach((provider) => {
+            // !!! Hide unfinished views for now !
+            if (provider.viewId === ViewIds.assetsManager || provider.viewId === ViewIds.plugins) {
+                vscode.commands.executeCommand(provider.viewId + ".removeView");
+                return;
+            }
+
             vscode.commands.executeCommand(provider.viewId + ".focus");
         });
         // await vscode.commands.executeCommand(`vkmask.inspector.focus`);

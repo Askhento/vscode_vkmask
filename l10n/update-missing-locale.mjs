@@ -20,7 +20,7 @@ bundles.forEach((bundleName) => {
 
     Object.keys(bundle).forEach((key) => {
         if (key in mainBundle) return;
-        console.log(`\x1b[33m Unknown key in ${bundleName}. \n\t${key} : ${bundle[key]}\x1b[0m`);
+        console.log(`\x1b[33m Unknown key in ${bundlePath}. \n\t${key} : ${bundle[key]}\x1b[0m`);
     });
 
     Object.keys(mainBundle).forEach((key) => {
