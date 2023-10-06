@@ -12,7 +12,7 @@ const mainBundlePath = path.join(__dirname, "bundle.l10n.json");
 const mainBundle = JSON.parse(fs.readFileSync(mainBundlePath).toString());
 
 bundles.forEach((bundleName) => {
-    console.log(`Reading ${bundleName} ...`);
+    console.log(`\nReading ${bundleName} ...`);
     const bundlePath = path.join(__dirname, bundleName);
     const bundle = JSON.parse(fs.readFileSync(bundlePath));
     // console.log(bundleName);

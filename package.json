@@ -287,8 +287,9 @@
         "build:webview": "cd webview-ui && npm run build",
         "publish-patch": "npm version patch ; vsce package --out ./vsix-packages",
         "publish-minor": "npm version minor ; vsce package --out ./vsix-packages",
-        "l10n": "npx @vscode/l10n-dev export --outDir ./l10n ./src ; npm run update-locale",
-        "update-locale": "node ./l10n/update-missing-locale.mjs"
+        "cfg-locale": "node ./parseLocale.mjs",
+        "src-locale": "npx @vscode/l10n-dev export --outDir ./l10n ./src ; node ./l10n/update-missing-locale.mjs",
+        "update-locale": "npm run cfg-locale && npm run src-locale"
     },
     "devDependencies": {
         "@types/glob": "^8.0.0",
