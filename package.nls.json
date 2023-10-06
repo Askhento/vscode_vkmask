@@ -1,3 +1,14 @@
 {
-    "command.dumpLogs": "Dump vkmask logs to logsDump.json file"
+    "command.dumpLogs": "Dump vkmask logs to logsDump.json file",
+    "name.projectManager": "Project Manager",
+    "title.vkmask_primary_bar": "VK Mask",
+    "contextTitle.projectManager": "VKMask project manager",
+    "contextTitle.effects": "VKMask effects",
+    "name.effects": "Effects",
+    "contextTitle.plugins": "VKMask plugins",
+    "name.plugins": "Plugins",
+    "contextTitle.inspector": "VKMask inspector",
+    "name.inspector": "Inspector",
+    "contextTitle.assetsManager": "VKMask assets manager",
+    "name.assetsManager": "Assets Manager"
 }

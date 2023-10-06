@@ -221,7 +221,7 @@
             "activitybar": [
                 {
                     "id": "vkmask_primary_bar",
-                    "title": "VK mask",
+                    "title": "%title.vkmask_primary_bar%",
                     "icon": "./res/smile-svgrepo-com.svg"
                 }
             ],
@@ -237,37 +237,37 @@
             "vkmask_primary_bar": [
                 {
                     "type": "webview",
-                    "contextualTitle": "vkmask project manager",
+                    "contextualTitle": "%contextTitle.projectManager%",
                     "id": "vkmask.projectManager",
-                    "name": "Project Manager",
+                    "name": "%name.projectManager%",
                     "icon": "./node_modules/@vscode/codicons/src/icons/add.svg"
                 },
                 {
                     "type": "webview",
-                    "contextualTitle": "vkmask effects",
+                    "contextualTitle": "%contextTitle.effects%",
                     "id": "vkmask.effects",
-                    "name": "Effects",
+                    "name": "%name.effects%",
                     "icon": "./node_modules/@vscode/codicons/src/icons/add.svg"
                 },
                 {
                     "type": "webview",
-                    "contextualTitle": "vkmask plugins",
+                    "contextualTitle": "%contextTitle.plugins%",
                     "id": "vkmask.plugins",
-                    "name": "Plugins",
+                    "name": "%name.plugins%",
                     "icon": "./node_modules/@vscode/codicons/src/icons/add.svg"
                 },
                 {
                     "type": "webview",
-                    "contextualTitle": "vkmask inspector",
+                    "contextualTitle": "%contextTitle.inspector%",
                     "id": "vkmask.inspector",
-                    "name": "Inspector",
+                    "name": "%name.inspector%",
                     "icon": "./node_modules/@vscode/codicons/src/icons/arrow-circle-up.svg"
                 },
                 {
                     "type": "webview",
-                    "contextualTitle": "vkmask assets manager",
+                    "contextualTitle": "%contextTitle.assetsManager%",
                     "id": "vkmask.assetsManager",
-                    "name": "Asset Manager",
+                    "name": "%name.assetsManager%",
                     "icon": "${zap}"
                 }
             ]

@@ -1,3 +1,14 @@
 {
-    "command.dumpLogs": "Извлечь логи в  logsDump.json файл"
+    "command.dumpLogs": "Извлечь логи в  logsDump.json файл",
+    "name.projectManager": "Менеджер проекта",
+    "title.vkmask_primary_bar": "ВК Маски",
+    "contextTitle.projectManager": "ВК Маски менеджер проекта",
+    "contextTitle.effects": "ВК Маски эффекты",
+    "name.effects": "Эффекты",
+    "contextTitle.plugins": "ВК Маски плагины",
+    "name.plugins": "Плагины",
+    "contextTitle.inspector": "ВК Маски инспектор",
+    "name.inspector": "Инспектор",
+    "contextTitle.assetsManager": "ВК Маски менеджер ресурсов",
+    "name.assetsManager": "Менеджер Ресурсов"
 }
