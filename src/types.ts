@@ -37,6 +37,8 @@ export const RequestCommand = {
     getUploadedAsset: "getUploadedAsset",
     removeAsset: "removeAsset",
 
+    getLocalization: "getLocalization",
+
     openProject: "openProject",
     createProject: "createProject",
     createConfig: "createConfig",

@@ -1,4 +1,6 @@
 <script lang="ts">
+    import * as l10n from "@vscode/l10n";
+
     import { createEventDispatcher } from "svelte";
     import { logger } from "../logger";
     const print = logger("IconControl.svelte");
@@ -109,7 +111,7 @@
 </script>
 
 {#if label !== undefined}
-    <span class="label"><span>{label}</span></span>
+    <span class="label"><span>{l10n.t(label)}</span></span>
 
     <span class="control-wrapper">
         <!-- <div class="value-text">
@@ -143,7 +145,7 @@
                     uploadIcon();
                 }}
             >
-                <span class="btn-text">Upload icon</span>
+                <span class="btn-text">{l10n.t("Upload icon")}</span>
             </vscode-button>
         {:else}
             <vscode-button
@@ -154,7 +156,7 @@
                     removeIcon();
                 }}
             >
-                <span class="btn-text">Remove icon</span>
+                <span class="btn-text">{l10n.t("Remove icon")}</span>
             </vscode-button>
         {/if}
         <!-- <vscode-button

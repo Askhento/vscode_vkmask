@@ -1,6 +1,7 @@
 <script lang="ts">
+    import * as l10n from "@vscode/l10n";
     import { createEventDispatcher } from "svelte";
-    import { onMount, tick } from "svelte";
+    // import { onMount, tick } from "svelte";
     import { logger } from "../logger";
     const print = logger("MainScriptControl.svelte");
     import { getContext } from "svelte";
@@ -105,12 +106,12 @@
 </script>
 
 {#if label !== undefined}
-    <span class="label"><span>{label}</span></span>
+    <span class="label"><span>{l10n.t(label)}</span></span>
 
     <span class="control-wrapper">
         <div class="value-text">
             {#if value == null}
-                <span class="text-center">Upload or create a scirpt file</span>
+                <span class="text-center">{l10n.t("Upload or create a scirpt file")}</span>
             {:else if scriptAsset}
                 <vscode-link href={getScriptUri()}>{value}</vscode-link>
             {:else}
@@ -129,7 +130,7 @@
                 uploadScript();
             }}
         >
-            <span class="btn-text">Upload main script</span>
+            <span class="btn-text">{l10n.t("Upload main script")}</span>
         </vscode-button>
         <vscode-button
             appearance={value == null ? "primary" : "secondary"}
@@ -139,7 +140,7 @@
                 createScript();
             }}
         >
-            <span class="btn-text">Create main.as</span>
+            <span class="btn-text">{l10n.t("Create main.as")}</span>
         </vscode-button>
         <vscode-button
             disabled={value == null || waiting}
@@ -149,7 +150,7 @@
                 removeScript();
             }}
         >
-            <span class="btn-text">Remove script</span>
+            <span class="btn-text">{l10n.t("Remove script")}</span>
         </vscode-button>
     </span>
 {/if}

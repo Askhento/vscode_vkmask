@@ -44,6 +44,8 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.env.language
     );
 
+    vscode.window.showInformationMessage(localizedString);
+
     let appState = AppState.loading,
         error = null;
     logger.setMode(context.extensionMode);
@@ -368,6 +370,38 @@ export async function activate(context: vscode.ExtensionContext) {
                     target: origin,
                     payload: await Assets.removeAsset(payload),
                 });
+                break;
+
+            case RequestCommand.getLocalization:
+                // Check if a l10n path is configured, if not, we will use the default language
+                if (vscode.l10n.uri?.fsPath) {
+                    const bundle = fs.readFileSync(vscode.l10n.uri?.fsPath, { encoding: "utf-8" });
+
+                    messageHandler.send({
+                        ...data,
+                        target: origin,
+                        payload: bundle,
+                    });
+                    // panel.webview.postMessage({
+                    //     command,
+                    //     requestId, // The requestId is used to identify the response
+                    //     payload: fileContent,
+                    // } as MessageHandlerData<string>);
+                } else {
+                    messageHandler.send({
+                        ...data,
+                        target: origin,
+                        payload: "",
+                    });
+
+                    //     // No localization file means we should use the default language
+                    //     panel.webview.postMessage({
+                    //     command,
+                    //     requestId, // The requestId is used to identify the response
+                    //     payload: undefined,
+                    //     } as MessageHandlerData<undefined>);
+                }
+
                 break;
 
             default:

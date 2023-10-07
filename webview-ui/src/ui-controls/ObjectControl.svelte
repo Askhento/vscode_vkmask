@@ -2,6 +2,8 @@
 </script>
 
 <script>
+    import * as l10n from "@vscode/l10n";
+
     import { createEventDispatcher, onMount } from "svelte";
     import { fly, slide } from "svelte/transition";
 
@@ -102,7 +104,7 @@
                             class="codicon codicon-chevron-{groupData.expanded ? 'down' : 'right'}"
                         />
 
-                        <span>{groupName}</span>
+                        <span>{l10n.t(groupName)}</span>
                     </div>
                 {/if}
                 {#if uiElementsGroupData[groupName].expanded}

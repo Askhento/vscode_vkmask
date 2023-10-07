@@ -1,4 +1,5 @@
 <script lang="ts">
+    import * as l10n from "@vscode/l10n";
     import { setContext } from "svelte";
     import { writable } from "svelte/store";
     import { provideVSCodeDesignSystem, allComponents } from "@vscode/webview-ui-toolkit";
@@ -187,7 +188,25 @@
         }
     }
 
+    async function getLocatization() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getLocalization,
+        });
+
+        if (payload) {
+            print("LOCALE", payload);
+            l10n.config({
+                contents: payload,
+            });
+
+            // setIsReady(true);
+        }
+    }
+
     async function init() {
+        await getLocatization();
+
         await getAppState();
 
         await getSettings();

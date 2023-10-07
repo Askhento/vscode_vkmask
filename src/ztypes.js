@@ -1,4 +1,5 @@
 // !!! changed to js so that i dont get errors with rollup
+// import * as l10n from "@vscode/l10n";
 
 /*
     to get values stored in checks  
@@ -68,12 +69,13 @@ export const uiDescriptions = {
         max: max,
         defValue,
     }),
-    enum: ({ label, group = "main", options, defValue, showAlways = true }) => ({
+    enum: ({ label, group = "main", options, optionLabels, defValue, showAlways = true }) => ({
         showAlways,
         name: "enum",
         label,
         group,
         options,
+        optionLabels,
         defValue,
     }),
     filepath: ({
@@ -985,11 +987,19 @@ export const ZPlugins = ZPlugin.array().describe(uiDescriptions.array({}));
 export const pluginNames = [...new Set(ZPlugin.options.map((val) => val.shape.name.value))];
 
 const UserHintOptions = ["none", "open_mouth", "tap_change", "with_friends", "start_recording"];
+const UserHintOptionsLabels = [
+    "None",
+    "Open mouth",
+    "Tap on screen",
+    "Try with friends",
+    "Start recording",
+];
 
-const ZEnum = (defValue, label, options = [], showAlways = false) => {
+const ZEnum = (defValue, label, options = [], optionLabels = [], showAlways = false) => {
     return z.enum(options).describe(
         uiDescriptions.enum({
             options,
+            optionLabels,
             defValue,
             showAlways,
             label,
@@ -997,10 +1007,18 @@ const ZEnum = (defValue, label, options = [], showAlways = false) => {
     );
 };
 
-const ZNumberEnum = (defValue, label, group = "main", options = [], showAlways = false) => {
+const ZNumberEnum = (
+    defValue,
+    label,
+    group = "main",
+    options = [],
+    optionLabels = [],
+    showAlways = false
+) => {
     return z.number().describe(
         uiDescriptions.enum({
             options,
+            optionLabels,
             defValue,
             showAlways,
             label,
@@ -1014,8 +1032,8 @@ const ZIcon = z.string().describe(uiDescriptions.icon({}));
 
 const MaskSettings = {
     name: ZText.describe(uiDescriptions.text({ defValue: "defaultName", label: "Name" })),
-    user_hint: ZEnum(UserHintOptions[0], "User Hint", UserHintOptions),
-    facemodel_version: ZNumberEnum(0, "Facemodel version", "Advanced", [0, 1]), // !!!! STRING !!!!
+    user_hint: ZEnum(UserHintOptions[0], "User Hint", UserHintOptions, UserHintOptionsLabels),
+    facemodel_version: ZNumberEnum(0, "Facemodel version", "Advanced", [0, 1], ["old", "new"]),
     // num_faces: ZEnum(1, [0, 1, 2]),
     mouse_input: z.boolean().describe(
         uiDescriptions.bool({
@@ -1102,34 +1120,34 @@ export const ZMaskConfigPreprocess = z.preprocess(
         .passthrough()
 );
 
-const maskTest = {
-    name: "test",
-    effects: [
-        {
-            name: "some",
-            material: "textueeeee",
-        },
-        {
-            name: "facemodel",
-            texture: "textureeee",
-        },
-        {
-            name: "test_deep",
-            texture: {
-                diffuse: "somth_tex",
-                animation: {
-                    num_frames: 100500,
-                    fps: 25,
-                },
-            },
-        },
-    ],
-    plugins: [
-        {
-            name: "mirror",
-            enabled: true,
-        },
-    ],
-};
+// const maskTest = {
+//     name: "test",
+//     effects: [
+//         {
+//             name: "some",
+//             material: "textueeeee",
+//         },
+//         {
+//             name: "facemodel",
+//             texture: "textureeee",
+//         },
+//         {
+//             name: "test_deep",
+//             texture: {
+//                 diffuse: "somth_tex",
+//                 animation: {
+//                     num_frames: 100500,
+//                     fps: 25,
+//                 },
+//             },
+//         },
+//     ],
+//     plugins: [
+//         {
+//             name: "mirror",
+//             enabled: true,
+//         },
+//     ],
+// };
 
 // console.log(ZMaskConfigPreprocess.parse(maskTest))

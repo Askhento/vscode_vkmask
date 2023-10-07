@@ -1,3 +1,42 @@
 {
-    "Your extension got activated with the {0} language!": "Расширение активировано с  {0} языком!"
+    "Your extension got activated with the {0} language!": "Расширение активировано с  {0} языком!",
+
+
+    "--- wbviews --- ": " ---- webviews ----",
+
+    "Name": "Имя",
+
+    "User Hint": "Подсказка",
+
+    "Facemodel version": "Версия модели лица",
+    "new": "новая",
+    "old": "старая",
+
+
+    "Mouse input": "Нажатие экрана",
+
+    "Icon": "Иконка",
+    "Upload icon": "Загрузить иконку",
+    "Remove icon": "Удалить иконку",
+
+    "Advanced": "Супер пупер настройки",
+
+
+    "Script": "Скрипт",
+    "Upload main script": "Загрузить главный скрипт",
+    "Upload or create a scirpt file": "Загрузи или создай файл скрипта",
+    "Create main.as": "Создать main.as",
+    "Remove script": "Удалить скрипт",
+
+
+
+    "face": "лицо",
+
+    "None": "Пусто",
+    "Open mouth": "Открой рот",
+    "Tap on screen": "Нажми на экран",
+    "Try with friends": "Попробуй с друзьями",
+    "Start recording": "Начни запись"
+
+
 }

@@ -1,13 +1,18 @@
 <script lang="ts">
+    import * as l10n from "@vscode/l10n";
+
     import { createEventDispatcher } from "svelte";
 
     export let label, value, path, params;
+
+    if (value == null) value = params.defValue;
     let options = params.options;
     // $: console.log(
     //     "option contorl",
     //     value,
     //     options,
-    //     options.findIndex((op) => op === value)
+    //     options.findIndex((op) => op === value),
+    //     params
     // );
 
     const dispatch = createEventDispatcher();
@@ -21,7 +26,7 @@
 </script>
 
 <span class="label">
-    <span>{label}</span>
+    <span>{l10n.t(label)}</span>
 </span>
 <!-- <select class="options" name="" id="" bind:value>
     {#each options as option, i}
@@ -37,8 +42,8 @@
         value = options[parseInt(e.target.value)];
     }}
 >
-    {#each options as option, i}
-        <vscode-option class="option" value={i}>{option}</vscode-option>
+    {#each params.optionLabels ?? options as option, i}
+        <vscode-option class="option" value={i}>{l10n.t(option)}</vscode-option>
     {/each}
 </vscode-dropdown>
 

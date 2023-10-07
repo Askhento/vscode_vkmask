@@ -1,9 +1,9 @@
 <script lang="ts">
+    import * as l10n from "@vscode/l10n";
+
     import { createEventDispatcher } from "svelte";
 
-    export let label = "empty",
-        path,
-        value;
+    export let label, path, params, value;
 
     function onChange(e) {
         // console.log();
@@ -19,7 +19,7 @@
     }
 </script>
 
-<span class="label"><span>{label}</span></span>
+<span class="label"><span>{l10n.t(label)}</span></span>
 
 <vscode-checkbox checked={value} on:change={onChange} />
 
