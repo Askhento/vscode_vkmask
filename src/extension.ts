@@ -95,15 +95,23 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.window.registerWebviewViewProvider(projectManager.viewId, projectManager)
     );
 
-    const assetsManagerBuildPath = path.join(webviewsBuildPath, "assetsManager");
-    const assetsManager = new AssetsManagerViewProvider(
-        context.extensionUri,
-        assetsManagerBuildPath
-    );
-    webviewProviders.push(assetsManager);
-    context.subscriptions.push(
-        vscode.window.registerWebviewViewProvider(assetsManager.viewId, assetsManager)
-    );
+    // {
+    // "type": "webview",
+    // "contextualTitle": "%contextTitle.assetsManager%",
+    // "id": "vkmask.assetsManager",
+    // "name": "%name.assetsManager%",
+    // "icon": "${zap}"
+    // }
+
+    // const assetsManagerBuildPath = path.join(webviewsBuildPath, "assetsManager");
+    // const assetsManager = new AssetsManagerViewProvider(
+    //     context.extensionUri,
+    //     assetsManagerBuildPath
+    // );
+    // webviewProviders.push(assetsManager);
+    // context.subscriptions.push(
+    //     vscode.window.registerWebviewViewProvider(assetsManager.viewId, assetsManager)
+    // );
 
     const inspectorBuildPath = path.join(webviewsBuildPath, "inspector");
     const inspector = new InspectorViewProvider(context.extensionUri, inspectorBuildPath);
@@ -742,11 +750,11 @@ export async function activate(context: vscode.ExtensionContext) {
 
         // this will ensure all the componenets will show up no matter if they closed before.
         webviewProviders.forEach((provider) => {
-            // !!! Hide unfinished views for now !
-            if (provider.viewId === ViewIds.assetsManager || provider.viewId === ViewIds.plugins) {
-                vscode.commands.executeCommand(provider.viewId + ".removeView");
-                return;
-            }
+            // // !!! Hide unfinished views for now !
+            // if (provider.viewId === ViewIds.assetsManager || provider.viewId === ViewIds.plugins) {
+            //     vscode.commands.executeCommand(provider.viewId + ".removeView");
+            //     return;
+            // }
 
             vscode.commands.executeCommand(provider.viewId + ".focus");
         });
