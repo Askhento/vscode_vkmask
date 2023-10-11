@@ -1,4 +1,6 @@
 <script lang="js">
+    import * as l10n from "@vscode/l10n";
+
     import { createEventDispatcher, tick } from "svelte";
     import Dropdown from "../components/Dropdown.svelte";
     import { getContext } from "svelte";
@@ -7,9 +9,7 @@
 
     // console.log("tags all ", $allTags);
 
-    export let label = "empty",
-        value,
-        path;
+    export let label, value, path;
 
     let tags = [];
     let tagElems = [];
@@ -17,7 +17,7 @@
 
     $: {
         tagOptions = [...$allTags];
-        if (value) {
+        if (value != null) {
             tags = value.split(";");
         }
 
@@ -35,7 +35,7 @@
                 () => {
                     addTag();
                 },
-                "+ Add new tag",
+                `+ ${l10n.t("Add new tag")}`,
             ],
             ...tagOptions,
         ];
@@ -79,7 +79,7 @@
     }
 </script>
 
-<span class="label"><span>{label}</span></span>
+<span class="label"><span>{l10n.t(label)}</span></span>
 
 <span class="control-wrapper">
     <!-- <vscode-button

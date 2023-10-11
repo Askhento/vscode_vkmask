@@ -1,4 +1,6 @@
 <script lang="ts">
+    import * as l10n from "@vscode/l10n";
+
     import { createEventDispatcher } from "svelte";
     import { onMount, tick } from "svelte";
     import { logger } from "../logger";
@@ -103,7 +105,11 @@
     }
     function setControlElementValue(newValue) {
         // this is inner slot which stores value of whole element
-        if (controlElement) controlElement.innerText = newValue ?? `Select ${params.label}...`;
+        if (!controlElement) return;
+
+        let innerText = newValue ?? `${l10n.t("Select asset")}...`;
+        if (!typedAssets.length) innerText = `${l10n.t("No assets available")}...`;
+        controlElement.innerText = innerText;
     }
 
     function setDropDownValue(newValue) {
@@ -207,7 +213,7 @@
 
 <!-- {#key typedAssets} -->
 {#if label !== undefined}
-    <span class="label"><span>{label}</span></span>
+    <span class="label"><span>{l10n.t(label)}</span></span>
 
     <!-- <input class="value" type="text" bind:value /> -->
     <!-- add REd color if file not found in options -->
@@ -323,7 +329,7 @@
                 uploadAsset();
             }}
         >
-            <span class="btn-text">Upload {params.label}</span>
+            <span class="btn-text">{`${l10n.t("Upload")}`}</span>
         </vscode-button>
         <vscode-button
             disabled={value == null || waiting}
@@ -333,7 +339,7 @@
                 removeAsset();
             }}
         >
-            <span class="btn-text">Remove {params.label}</span>
+            <span class="btn-text">{`${l10n.t("Remove")}`}</span>
         </vscode-button>
     </span>
     <!-- svelte-ignore missing-declaration -->

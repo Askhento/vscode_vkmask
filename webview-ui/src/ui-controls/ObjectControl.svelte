@@ -84,7 +84,7 @@
     {#if nesting}
         <span class="object-label" class:expanded on:click={toggle}>
             <i class="codicon codicon-chevron-{expanded ? 'down' : 'right'}" />
-            <span>{label}</span>
+            <span>{l10n.t(label)}</span>
         </span>
     {/if}
     {#key uiElementsGroupData}
@@ -122,7 +122,11 @@
                                     }}
                                 >
                                     <span slot="start" class="codicon codicon-add" />
-                                    Add {data.uiDescription.label ?? key}
+                                    <span class="btn-text"
+                                        >{`${l10n.t("Add new")} ${
+                                            l10n.t(data.uiDescription.label) ?? key
+                                        }`}</span
+                                    >
                                 </vscode-button>
                             {:else}
                                 <svelte:component
@@ -257,6 +261,24 @@
         margin: var(--global-margin);
     }
 
+    vscode-button::part(content) {
+        min-width: 0;
+    }
+
+    vscode-button::part(control) {
+        overflow: hidden;
+    }
+
+    .btn-text {
+        margin: unset;
+        padding: unset;
+        /* display: inline-block; */
+        width: 100%;
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
     /* .add-key-wrapper {
         padding: 0.2em 0 0 0.5em;
         margin: 0 0 0 0.5em;

@@ -1,4 +1,7 @@
 <script>
+    import * as l10n from "@vscode/l10n";
+    import { tick } from "svelte";
+
     let menuElem,
         menuButton,
         menuActive = false;
@@ -12,6 +15,15 @@
         if (e.target !== menuButton) menuActive = false;
     }
 
+    // !! this does not work due to blur event fire before
+    // element choosen
+    // on:blur={async () => {
+    //     await tick();
+    //     setTimeout(() => {
+    //         menuActive = false;
+    //     }, 0);
+    // }}
+
     function toggleMenu() {
         menuActive = !menuActive;
     }
@@ -22,16 +34,9 @@
 {#if options}
     {#key options}
         <div class="dropdown" style={extraStyle}>
-            <vscode-button
-                class="menu-button"
-                bind:this={menuButton}
-                on:blur={() => {
-                    //   menuActive = false;
-                }}
-                on:click={toggleMenu}
-            >
+            <vscode-button class="menu-button" bind:this={menuButton} on:click={toggleMenu}>
                 <span style="pointer-events: none;" slot="start" class="codicon codicon-{icon}" />
-                <span class="btn-text">{name}</span>
+                <span style="pointer-events: none;" class="btn-text">{l10n.t(name)}</span>
             </vscode-button>
             <div class="dropdown-menu" class:active={menuActive} bind:this={menuElem}>
                 {#each options as [action, label, icon]}

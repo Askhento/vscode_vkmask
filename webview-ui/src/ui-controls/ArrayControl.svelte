@@ -1,4 +1,6 @@
 <script>
+    import * as l10n from "@vscode/l10n";
+
     import { logger } from "../logger";
     const print = logger("ArrayControl.svelte");
 
@@ -46,7 +48,7 @@
 
 <span class="label" class:expanded on:click={toggle}>
     <i class="codicon codicon-chevron-{expanded ? 'down' : 'right'}" />
-    {label}
+    {l10n.t(label)}
 </span>
 
 <div class="elements-wrapper">
@@ -67,7 +69,7 @@
                     this={data.uiElement}
                     expanded={true}
                     value={value[index]}
-                    label={(params.elementName ?? "element") + "_" + index}
+                    label={(params.elementName ?? "element") + " " + index}
                     path={[...path, index]}
                     params={data.uiDescription}
                     uiElements={data.value}

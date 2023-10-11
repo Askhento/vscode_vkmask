@@ -1,18 +1,13 @@
 <script>
+    import * as l10n from "@vscode/l10n";
+
     import { onMount } from "svelte";
     import { createEventDispatcher } from "svelte";
 
-    export let label = "empty",
-        value,
-        path,
-        params;
+    export let label, value, path, params;
 
     let dispalyValues = value;
 
-    // !!! just a hack
-    onMount(() => {
-        // console.log("mounted vector");
-    });
     if (value == null || value.length === 0) value = params.defValue;
 
     const dispatch = createEventDispatcher();
@@ -27,7 +22,7 @@
 </script>
 
 {#if label && value}
-    <span class="label"><span class="label-text">{label}</span></span>
+    <span class="label"><span class="label-text">{l10n.t(label)}</span></span>
     <div class="vector-control-wrapper">
         {#each value as v, index}
             <!-- <vscode-text-area

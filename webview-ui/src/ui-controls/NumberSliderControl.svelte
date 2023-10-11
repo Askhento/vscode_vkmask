@@ -1,10 +1,9 @@
 <script lang="ts">
+    import * as l10n from "@vscode/l10n";
+
     import { createEventDispatcher, onMount, tick } from "svelte";
 
-    export let label = "empty",
-        value,
-        path,
-        params;
+    export let label, value, path, params;
 
     let steps = params.steps ?? 100;
     // console.log("steps", steps, params);
@@ -46,7 +45,7 @@
             }
         }}
     /> -->
-<span class="label"><span>{label}</span></span>
+<span class="label"><span>{l10n.t(label)}</span></span>
 
 <span class="control-wrapper">
     <div class="display-value">{params.valueTemplate?.(value) ?? value}</div>

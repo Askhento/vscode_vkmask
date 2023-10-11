@@ -9,6 +9,8 @@
 
   */
     // import "../common/global.css";
+
+    import * as l10n from "@vscode/l10n";
     import ErrorMessage from "../components/ErrorMessage.svelte";
     import { setContext } from "svelte";
     import { writable } from "svelte/store";
@@ -468,7 +470,25 @@
     //     }
     // }
 
+    async function getLocatization() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getLocalization,
+        });
+
+        if (payload) {
+            // print("LOCALE", payload);
+            l10n.config({
+                contents: payload,
+            });
+
+            // setIsReady(true);
+        }
+    }
+
     async function init() {
+        await getLocatization();
+
         await getAppState();
 
         if (appState === AppState.error) return;
@@ -502,7 +522,7 @@
 </div> -->
 
 {#if appState === AppState.running}
-    <h3>{selection.type.toUpperCase()}</h3>
+    <h3>{l10n.t(selection.type).toUpperCase()}</h3>
     {#key selection}
         {#if selection.type === SelectionType.effect}
             {#if effects}
@@ -511,7 +531,7 @@
                         <ObjectControl
                             expanded={true}
                             value={effects[selection.id]}
-                            label={effects[selection.id].name}
+                            label={uiElements.uiDescription.label ?? effects[selection.id].name}
                             path={[]}
                             uiElements={uiElements.value}
                             on:changed={onChanged}
@@ -528,7 +548,7 @@
                         <ObjectControl
                             expanded={true}
                             value={plugins[selection.id]}
-                            label={plugins[selection.id].name}
+                            label={uiElements.uiDescription.label ?? plugins[selection.id].name}
                             path={[]}
                             uiElements={uiElements.value}
                             on:changed={onChanged}

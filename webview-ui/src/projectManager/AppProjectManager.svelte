@@ -195,7 +195,7 @@
         });
 
         if (payload) {
-            print("LOCALE", payload);
+            // print("LOCALE", payload);
             l10n.config({
                 contents: payload,
             });

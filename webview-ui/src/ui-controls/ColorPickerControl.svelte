@@ -1,8 +1,9 @@
 <script>
     // https://github.com/EugeneDae/vscode-mac-color-picker - native color picker for macos
     import { createEventDispatcher } from "svelte";
+    import * as l10n from "@vscode/l10n";
 
-    import { onMount } from "svelte";
+    // import { onMount } from "svelte";
     import NumberSliderControl from "./NumberSliderControl.svelte";
 
     export let label, value, path, params;
@@ -57,7 +58,8 @@
     }
 </script>
 
-<span class="label"><span>{label}</span></span>
+<span class="label"><span>{l10n.t(label)}</span></span>
+
 <!-- <span class="color">{value}</span> -->
 <!-- <div class="color-control-wrapper"> -->
 <input
@@ -65,7 +67,7 @@
     type="color"
     value={color}
     on:change={(e) => {
-        console.log("color picker on change!!!!");
+        // console.log("color picker on change!!!!");
         color = e.target.value;
         hexToRGB();
         onChange();
@@ -75,7 +77,7 @@
 <!-- </div> -->
 {#if params.alpha}
     <NumberSliderControl
-        label={"alpha"}
+        label={"Alpha"}
         params={{
             min: 0,
             max: 1,
