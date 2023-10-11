@@ -44,4 +44,8 @@
     * {
         box-sizing: border-box;
     }
+
+    section {
+        padding-left: var(--global-body-padding);
+    }
 </style>
