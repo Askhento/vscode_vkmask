@@ -173,6 +173,11 @@
     vscode-divider {
         grid-column: 1/3;
     }
+
+    vscode-divider {
+        width: 100vw;
+        /* margin-left: calc(0px - var(--global-body-padding)); */
+    }
     /* span {
     padding: 0 0 0 1.5em;
     background: url(tutorial/icons/folder.svg) 0 0.1em no-repeat;
