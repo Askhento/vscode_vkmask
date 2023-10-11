@@ -267,7 +267,6 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "npm run clear && npm run build && npm run build:webview",
         "build": "tsc -p ./",
         "clear": "rimraf ./out",
         "watch": "sleep 5 && set NODE_ENV=dev && tsc -watch -p ./",

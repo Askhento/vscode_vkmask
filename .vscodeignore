@@ -9,3 +9,6 @@ vsc-extension-quickstart.md
 **/.eslintrc.json
 **/*.map
 **/*.ts
+gen_package_json_util.js
+l10n/update-missing-locale.mjs
+parseLocale.mjs
