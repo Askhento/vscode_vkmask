@@ -140,6 +140,12 @@
     "Add tag": "Добавить тэг",
     "Add new tag": "Добавить новый тэг",
     "Add new": "Добавить новый",
+    "Add texture": "Добавить текстуру",
+    "Add materials": "Добавить материалы",
+    "Add material": "Добавить материал",
+
+    "Materials": "Материалы",
+    "material": "материал",
 
     "Model 3d": "3D Модель",
     "Model 3d Asset": "Ресурс 3D Модели",
@@ -156,8 +162,7 @@
     "Perspective": "Перспектива",
     "Effect": "Эффект",
     "EFFECT": "ЭФФЕКТ",
-    "PLUGIN": "ПЛАГИН",
+    "PLUGIN": "ПЛАГИН"
 
-    "Materials": "Материалы"
 
 }

@@ -8,7 +8,7 @@
     import { fly, slide } from "svelte/transition";
 
     export let expanded = false;
-    export let nesting = true;
+    export let nesting = false;
     export let value;
     export let label;
     export let path;
@@ -80,7 +80,7 @@
 </script>
 
 <div class="control-wrapper" class:add-key-color={addKeyHover}>
-    <vscode-divider role="separator" />
+    <!-- <vscode-divider role="separator" /> -->
     {#if nesting}
         <span class="object-label" class:expanded on:click={toggle}>
             <i class="codicon codicon-chevron-{expanded ? 'down' : 'right'}" />
@@ -91,7 +91,7 @@
         {#if expanded}
             {#each Object.entries(uiElementsGroupData) as [groupName, groupData]}
                 {#if groupName !== "main"}
-                    <vscode-divider role="separator" />
+                    <vscode-divider class="divider" role="separator" />
                     <div
                         class="group-label"
                         on:click={() => {
@@ -123,9 +123,9 @@
                                 >
                                     <span slot="start" class="codicon codicon-add" />
                                     <span class="btn-text"
-                                        >{`${l10n.t("Add new")} ${
-                                            l10n.t(data.uiDescription.label) ?? key
-                                        }`}</span
+                                        >{l10n.t(
+                                            `Add ${(data.uiDescription.label ?? key).toLowerCase()}`
+                                        )}</span
                                     >
                                 </vscode-button>
                             {:else}
@@ -282,7 +282,7 @@
 
     vscode-divider {
         width: 100vw;
-        /* margin-left: calc(0px - var(--global-body-padding)); */
+        margin-left: calc(0px - var(--global-body-padding));
     }
     /* .add-key-wrapper {
         padding: 0.2em 0 0 0.5em;

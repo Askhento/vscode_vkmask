@@ -457,20 +457,20 @@ export const ZTextureObject = z.preprocess(
                     defValue: ZBlendModes.Values.replace,
                 })
             ),
-            u_transform: ZArray3D.describe(
-                uiDescriptions.array3d({
-                    defValue: [1, 0, 0],
-                    showAlways: false,
-                    label: "U transform",
-                })
-            ),
-            v_transform: ZArray3D.describe(
-                uiDescriptions.array3d({
-                    defValue: [0, 1, 0],
-                    showAlways: false,
-                    label: "V transform",
-                })
-            ),
+            // u_transform: ZArray3D.describe(
+            //     uiDescriptions.array3d({
+            //         defValue: [1, 0, 0],
+            //         showAlways: false,
+            //         label: "U transform",
+            //     })
+            // ),
+            // v_transform: ZArray3D.describe(
+            //     uiDescriptions.array3d({
+            //         defValue: [0, 1, 0],
+            //         showAlways: false,
+            //         label: "V transform",
+            //     })
+            // ),
             render_order: ZNumberSlider.describe(
                 uiDescriptions.numberSlider({
                     max: 100,
@@ -1190,9 +1190,10 @@ const ZIcon = z.string().describe(uiDescriptions.icon({}));
 
 const MaskSettings = {
     name: ZText.describe(uiDescriptions.text({ defValue: "defaultName", label: "Name" })),
+    icon: ZIcon,
     user_hint: ZEnum(UserHintOptions[0], "User Hint", UserHintOptions, UserHintOptionsLabels),
+    num_faces: ZNumberEnum(1, "Number faces", "main", [0, 1, 2], ["0", "1", "2"]),
     facemodel_version: ZNumberEnum(0, "Facemodel version", "Advanced", [0, 1], ["old", "new"]),
-    // num_faces: ZEnum(1, [0, 1, 2]),
     mouse_input: z.boolean().describe(
         uiDescriptions.bool({
             label: "Mouse input",
@@ -1201,7 +1202,6 @@ const MaskSettings = {
             group: "Advanced",
         })
     ),
-    icon: ZIcon,
     // icon: ZTextureAsset.describe(uiDescriptions.filepath({ ...AssetTypes.texture, label: "Icon" })),
     script: ZMainScriptAsset,
 };

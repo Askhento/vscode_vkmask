@@ -69,7 +69,7 @@
                     this={data.uiElement}
                     expanded={true}
                     value={value[index]}
-                    label={(params.elementName ?? "element") + " " + index}
+                    label={l10n.t(params.elementName ?? "element") + " " + index}
                     path={[...path, index]}
                     params={data.uiDescription}
                     uiElements={data.value}
@@ -89,7 +89,7 @@
         {/if}
         <vscode-button class="add-btn" on:click={addElement}>
             <span slot="start" class="codicon codicon-add" />
-            {"Add new " + params.elementName}
+            <span class="btn-text">{l10n.t("Add " + params.elementName)}</span>
         </vscode-button>
         <!-- {#if value.length}
         <vscode-button on:click={removeElement}>
@@ -175,9 +175,29 @@
     }
 
     vscode-divider {
-        width: 100vw;
-        /* margin-left: calc(0px - var(--global-body-padding)); */
+        width: 99vw;
+        margin-left: calc(0px - var(--global-body-padding));
     }
+
+    vscode-button::part(content) {
+        min-width: 0;
+    }
+
+    vscode-button::part(control) {
+        overflow: hidden;
+    }
+
+    .btn-text {
+        margin: unset;
+        padding: unset;
+        /* display: inline-block; */
+        width: 100%;
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+
     /* span {
     padding: 0 0 0 1.5em;
     background: url(tutorial/icons/folder.svg) 0 0.1em no-repeat;

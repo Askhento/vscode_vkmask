@@ -10,7 +10,7 @@
 --project-manager-value-min-width : 6rem;
 --global-box-height : 40px;
 --global-margin : 5px;
---global-grid-column-gap : 0.5rem;
+--global-grid-column-gap : 0.25rem;
 --global-grid-row-gap : 0.5rem;
 --global-block-height : 1.5rem;
 
@@ -22,13 +22,15 @@
 
 --missing-asset-color: red;
 
---global-body-padding: 25px;
+--global-body-padding: 1.5rem;
 }
 
 
 body {
-    padding-right: var(--global-body-padding);
-    padding-left : 0;
-
+    padding: 0 var(--global-body-padding);
+    /* padding-left : 0; */
+             overflow-x:hidden;
+            /* width: 100vw; */
+    
 }
 
