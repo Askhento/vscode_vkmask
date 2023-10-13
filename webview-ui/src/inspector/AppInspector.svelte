@@ -520,70 +520,68 @@
     <div>some error</div>
   {/if}
 </div> -->
-
-{#if appState === AppState.running}
-    <h3>{l10n.t(selection.type).toUpperCase()}</h3>
-    {#key selection}
-        {#if selection.type === SelectionType.effect}
-            {#if effects}
-                {#key effects}
-                    {#if uiElements}
-                        <ObjectControl
-                            expanded={true}
-                            value={effects[selection.id]}
-                            label={uiElements.uiDescription.label ?? effects[selection.id].name}
-                            path={[]}
-                            uiElements={uiElements.value}
-                            on:changed={onChanged}
-                        />
-                    {:else}
-                        <div>unknownEffect</div>
-                    {/if}
-                {/key}
+<div class="inspector-wrapper">
+    {#if appState === AppState.running}
+        <h3>{l10n.t(selection.type).toUpperCase()}</h3>
+        {#key selection}
+            {#if selection.type === SelectionType.effect}
+                {#if effects}
+                    {#key effects}
+                        {#if uiElements}
+                            <ObjectControl
+                                expanded={true}
+                                value={effects[selection.id]}
+                                label={uiElements.uiDescription.label ?? effects[selection.id].name}
+                                path={[]}
+                                uiElements={uiElements.value}
+                                on:changed={onChanged}
+                            />
+                        {:else}
+                            <div>unknownEffect</div>
+                        {/if}
+                    {/key}
+                {/if}
+            {:else if selection.type === SelectionType.plugin}
+                {#if plugins}
+                    {#key plugins}
+                        {#if uiElements}
+                            <ObjectControl
+                                expanded={true}
+                                value={plugins[selection.id]}
+                                label={uiElements.uiDescription.label ?? plugins[selection.id].name}
+                                path={[]}
+                                uiElements={uiElements.value}
+                                on:changed={onChanged}
+                            />
+                        {:else}
+                            <div>unknownPlugin</div>
+                        {/if}
+                    {/key}
+                {/if}
+            {:else if selection.type === SelectionType.asset}
+                <div>asset type not implememted error</div>
+                <!-- <pre> {JSON.stringify(maskSettings, null, "\t")}</pre> -->
+            {:else}
+                <div>select anything to see...</div>
+                <!-- <pre>{JSON.stringify(selection, null, "\t")}</pre> -->
             {/if}
-        {:else if selection.type === SelectionType.plugin}
-            {#if plugins}
-                {#key plugins}
-                    {#if uiElements}
-                        <ObjectControl
-                            expanded={true}
-                            value={plugins[selection.id]}
-                            label={uiElements.uiDescription.label ?? plugins[selection.id].name}
-                            path={[]}
-                            uiElements={uiElements.value}
-                            on:changed={onChanged}
-                        />
-                    {:else}
-                        <div>unknownPlugin</div>
-                    {/if}
-                {/key}
-            {/if}
-        {:else if selection.type === SelectionType.asset}
-            <div>asset type not implememted error</div>
-            <!-- <pre> {JSON.stringify(maskSettings, null, "\t")}</pre> -->
-        {:else}
-            <div>select anything to see...</div>
-            <!-- <pre>{JSON.stringify(selection, null, "\t")}</pre> -->
-        {/if}
-    {/key}
-{:else if appState === AppState.error}
-    {#key error}
-        <div>should be erro</div>
-        <ErrorMessage {error} />
-    {/key}
-{/if}
-
-<!-- <style>
-    /* :global(div) {
-        background-color: brown;
-    } */
-
-    
-</style> -->
+        {/key}
+    {:else if appState === AppState.error}
+        {#key error}
+            <div>should be erro</div>
+            <ErrorMessage {error} />
+        {/key}
+    {/if}
+</div>
 
 <style>
     div {
         background-color: transparent;
+    }
+
+    .inspector-wrapper {
+        padding-left: var(--global-body-padding-left);
+        padding-right: var(--global-body-padding-right);
     }
     /* :global(div) {
         color: aqua;

@@ -34,7 +34,7 @@
         }
         onSelect();
     }}
-    >{name ?? "unknown-effect"}
+    ><span class="effect-name-text">{name ?? "unknown-effect"}</span>
     <span class="effect-btn-wrapper">
         {#if tag}
             <span class="effect-tag">
@@ -81,8 +81,9 @@
         height: 25px;
     }
 
-    vscode-option.effect-name:hover {
-        background-color: var(--vscode-button-hoverBackground);
+    vscode-option.effect-name:hover:not(.selected) {
+        background-color: var(--vscode-list-hoverBackground);
+        border-color: transparent;
     }
 
     .effect-btn-wrapper {
@@ -99,8 +100,26 @@
         /* align-content: center; */
         align-items: center; /* ailgned text !!! */
     }
+
+    vscode-option::part(content) {
+        /* justify-content: center; */
+        align-content: center;
+        display: flex;
+        flex-wrap: wrap;
+        height: 100%;
+    }
+
+    /* .effect-name-text {
+        text-align: center;
+        text-justify: center;
+        justify-content: center;
+        display: inline-block;
+        height: 100%;
+    } */
+
     .effect-tag {
-        color: var(--vscode-textCodeBlock-background);
+        color: var(--vscode-descriptionForeground);
+
         text-align: center;
         text-justify: center;
         justify-content: center;

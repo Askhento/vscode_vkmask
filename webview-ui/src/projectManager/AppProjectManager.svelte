@@ -219,39 +219,46 @@
 </script>
 
 <!-- <pre> {JSON.stringify(maskSettings, null, "\t")}</pre> -->
-{#key appState}
-    {#if appState === AppState.loading}
-        <vscode-progress-ring />Loading...
-    {:else if appState === AppState.running}
-        {#if maskSettings}
-            {#key maskSettings}
-                {#if uiElements}
-                    <ObjectControl
-                        expanded={true}
-                        nesting={false}
-                        value={maskSettings}
-                        label={"MaskSettings"}
-                        path={[]}
-                        uiElements={uiElements.value}
-                        on:changed={onChanged}
-                    />
-                {:else}
-                    <div>ui not parsed</div>
-                {/if}
+<div class="project-manager-wrapper">
+    {#key appState}
+        {#if appState === AppState.loading}
+            <vscode-progress-ring />Loading...
+        {:else if appState === AppState.running}
+            {#if maskSettings}
+                {#key maskSettings}
+                    {#if uiElements}
+                        <ObjectControl
+                            expanded={true}
+                            nesting={false}
+                            value={maskSettings}
+                            label={"MaskSettings"}
+                            path={[]}
+                            uiElements={uiElements.value}
+                            on:changed={onChanged}
+                        />
+                    {:else}
+                        <div>ui not parsed</div>
+                    {/if}
+                {/key}
+            {/if}
+        {:else if appState === AppState.welcome}
+            {#key recentProjectInfo}
+                <WelcomeScreen {recentProjectInfo} />
             {/key}
+        {:else if appState === AppState.error}
+            <div>some Error occured! (todo: handle this)</div>
         {/if}
-    {:else if appState === AppState.welcome}
-        {#key recentProjectInfo}
-            <WelcomeScreen {recentProjectInfo} />
-        {/key}
-    {:else if appState === AppState.error}
-        <div>some Error occured! (todo: handle this)</div>
-    {/if}
-{/key}
+    {/key}
+</div>
 
 <style>
     div {
         background-color: transparent;
+    }
+
+    .project-manager-wrapper {
+        padding-left: var(--global-body-padding-left);
+        padding-right: var(--global-body-padding-right);
     }
     /* 
     vscode-progress-ring {

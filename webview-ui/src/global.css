@@ -22,15 +22,17 @@
 
 --missing-asset-color: red;
 
---global-body-padding: 1.5rem;
+--global-body-padding-right: 1.5rem;
+--global-body-padding-left: 1rem;
+
 }
 
 
 body {
-    padding: 0 var(--global-body-padding);
+    padding: 0 ;
     /* padding-left : 0; */
-             overflow-x:hidden;
+    overflow-x: hidden;
             /* width: 100vw; */
-    
+
 }
 

@@ -22,7 +22,7 @@
         }
         onSelect();
     }}
-    >{name ?? "unknown-plugin"}
+    ><span class="plugin-name-text">{name ?? "unknown-plugin"}</span>
     <span class="plugin-btn-wrapper">
         <vscode-button
             class="plugin-btn"
@@ -50,8 +50,9 @@
         height: 25px;
     }
 
-    vscode-option.plugin-name:hover {
-        background-color: var(--vscode-button-hoverBackground);
+    vscode-option.plugin-name:hover:not(.selected) {
+        background-color: var(--vscode-list-hoverBackground);
+        border-color: transparent;
     }
 
     .plugin-btn-wrapper {
@@ -68,13 +69,22 @@
         /* align-content: center; */
         align-items: center; /* ailgned text !!! */
     }
-    .plugin-tag {
+
+    vscode-option::part(content) {
+        /* justify-content: center; */
+        align-content: center;
+        display: flex;
+        flex-wrap: wrap;
+        height: 100%;
+    }
+
+    /* .plugin-tag {
         color: var(--vscode-textCodeBlock-background);
         text-align: center;
         text-justify: center;
         justify-content: center;
         display: inline-block;
-    }
+    } */
     .plugin-btn {
         display: inline-block;
     }
