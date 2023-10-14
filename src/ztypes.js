@@ -1189,17 +1189,17 @@ const ZMainScriptAsset = z.string().describe(uiDescriptions.mainScript({}));
 const ZIcon = z.string().describe(uiDescriptions.icon({}));
 
 const MaskSettings = {
-    name: ZText.describe(uiDescriptions.text({ defValue: "defaultName", label: "Name" })),
+    // name: ZText.describe(uiDescriptions.text({ defValue: "defaultName", label: "Name" })),
     icon: ZIcon,
     user_hint: ZEnum(UserHintOptions[0], "User Hint", UserHintOptions, UserHintOptionsLabels),
-    num_faces: ZNumberEnum(1, "Number faces", "main", [0, 1, 2], ["0", "1", "2"]),
-    facemodel_version: ZNumberEnum(0, "Facemodel version", "Advanced", [0, 1], ["old", "new"]),
+    // num_faces: ZNumberEnum(1, "Number faces", "main", [0, 1, 2], ["0", "1", "2"]),
+    // facemodel_version: ZNumberEnum(0, "Facemodel version", "Advanced", [0, 1], ["old", "new"]),
     mouse_input: z.boolean().describe(
         uiDescriptions.bool({
             label: "Mouse input",
             defValue: false,
             showAlways: false,
-            group: "Advanced",
+            group: "Permissions",
         })
     ),
     // icon: ZTextureAsset.describe(uiDescriptions.filepath({ ...AssetTypes.texture, label: "Icon" })),

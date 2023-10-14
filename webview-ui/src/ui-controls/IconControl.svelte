@@ -221,6 +221,7 @@
         /* margin: unset; */
         /* flex-basis: var(--global-block-height); */
         min-width: var(--global-block-height);
+        border-radius: var(--global-image-radius);
 
         /* flex-basis: var(--global-block-height); */
     }

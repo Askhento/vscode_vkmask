@@ -494,6 +494,8 @@
         display: inline-block;
         height: var(--global-block-height);
         width: var(--global-block-height);
+        border-radius: var(--global-image-radius);
+
         /* margin: unset; */
         /* flex-basis: var(--global-block-height); */
     }
