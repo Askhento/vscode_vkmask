@@ -126,7 +126,7 @@
         
         </div> -->
 
-        <span>
+        <span class="file-preview-wrapper">
             {#if iconAsset && iconAsset.preview}
                 <a href={getIconUri()}>
                     <img src={"data:image/png;base64," + iconAsset.preview} class="file-preview" />
@@ -199,6 +199,11 @@
         position: relative;
         display: flex;
         flex-direction: row;
+
+        /* justify-content: center; */
+        /* align-items: center; */
+        /* align-content: center; */
+        /* justify-items: center; */
     }
 
     .value-text {
@@ -218,6 +223,15 @@
         min-width: var(--global-block-height);
 
         /* flex-basis: var(--global-block-height); */
+    }
+
+    span.file-preview-wrapper {
+        /* margin: unset; */
+        /* padding: unset; */
+        height: var(--global-block-height);
+        display: flex;
+        align-content: center;
+        justify-content: center;
     }
 
     a {
