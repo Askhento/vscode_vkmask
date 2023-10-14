@@ -78,6 +78,11 @@
         height: 100%;
     }
 
+    .plugin-name-text {
+        display: inline-block;
+        padding-left: var(--global-body-padding-left);
+    }
+
     /* .plugin-tag {
         color: var(--vscode-textCodeBlock-background);
         text-align: center;

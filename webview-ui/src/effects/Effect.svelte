@@ -103,19 +103,18 @@
 
     vscode-option::part(content) {
         /* justify-content: center; */
+        left: var(--global-body-padding-left);
         align-content: center;
         display: flex;
         flex-wrap: wrap;
+
         height: 100%;
     }
 
-    /* .effect-name-text {
-        text-align: center;
-        text-justify: center;
-        justify-content: center;
+    .effect-name-text {
         display: inline-block;
-        height: 100%;
-    } */
+        padding-left: var(--global-body-padding-left);
+    }
 
     .effect-tag {
         color: var(--vscode-descriptionForeground);

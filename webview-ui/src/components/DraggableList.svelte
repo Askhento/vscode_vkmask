@@ -45,9 +45,9 @@
         box-sizing: border-box;
     }
 
-    section {
+    /* section {
         padding-left: var(--global-body-padding-left);
-    }
+    } */
 
     /* section {
         padding-left: var(--global-body-padding);
