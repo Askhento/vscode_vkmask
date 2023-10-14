@@ -162,7 +162,14 @@
     "Perspective": "Перспектива",
     "Effect": "Эффект",
     "EFFECT": "ЭФФЕКТ",
-    "PLUGIN": "ПЛАГИН"
+    "PLUGIN": "ПЛАГИН",
+    "EMPTY": "ПУСТО",
 
+    "select anything to see": "Ничего не выделено",
+    "unkown effect": "неизвестный эффект",
+    "unkown plugin": "неизвестный плагин",
+
+    "Create your first effect!": "Создайте свой первый эффект!",
+    "Create your first plugin!": "Создайте свой первый плагин!"
 
 }

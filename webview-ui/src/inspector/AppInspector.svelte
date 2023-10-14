@@ -239,10 +239,10 @@
     function selectedIsKnown() {
         switch (selection.type) {
             case SelectionType.effect:
-                return effectNamesSet.has(effects[selection.id]?.name);
+                return effectNamesSet.has(effects?.[selection.id].name);
 
             case SelectionType.plugin:
-                return pluginNamesSet.has(plugins[selection.id]?.name);
+                return pluginNamesSet.has(plugins?.[selection.id].name);
 
             case SelectionType.maskSettings:
                 return true;
@@ -302,7 +302,7 @@
 
     async function processSelection(newSelection) {
         selection = newSelection;
-        print("new selection", selection);
+        // print("new selection", selection);
         uiElements = null; // this prevents new effects be applied to old uiElements
         switch (selection.type) {
             case SelectionType.effect:
@@ -477,12 +477,9 @@
         });
 
         if (payload) {
-            // print("LOCALE", payload);
             l10n.config({
                 contents: payload,
             });
-
-            // setIsReady(true);
         }
     }
 
@@ -537,7 +534,7 @@
                                 on:changed={onChanged}
                             />
                         {:else}
-                            <div>unknownEffect</div>
+                            <div>{l10n.t("unkown effect")}</div>
                         {/if}
                     {/key}
                 {/if}
@@ -554,7 +551,7 @@
                                 on:changed={onChanged}
                             />
                         {:else}
-                            <div>unknownPlugin</div>
+                            <div>{l10n.t("unknown plugin")}</div>
                         {/if}
                     {/key}
                 {/if}
@@ -562,13 +559,13 @@
                 <div>asset type not implememted error</div>
                 <!-- <pre> {JSON.stringify(maskSettings, null, "\t")}</pre> -->
             {:else}
-                <div>select anything to see...</div>
+                <div>{`${l10n.t("select anything to see")}..`}.</div>
                 <!-- <pre>{JSON.stringify(selection, null, "\t")}</pre> -->
             {/if}
         {/key}
     {:else if appState === AppState.error}
         {#key error}
-            <div>should be erro</div>
+            <!-- <div>should be error</div> -->
             <ErrorMessage {error} />
         {/key}
     {/if}

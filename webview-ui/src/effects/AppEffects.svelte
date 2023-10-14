@@ -10,6 +10,7 @@
     import Effect from "./Effect.svelte";
     import { logger, logDump } from "../logger";
     import AddEffect from "./AddEffect.svelte";
+    import * as l10n from "@vscode/l10n";
     const print = logger("AppEffects.svelte");
     const origin = RequestTarget.effects;
 
@@ -34,7 +35,7 @@
                 break;
 
             case RequestCommand.updateSelection:
-                proccessSelection(payload);
+                processSelection(payload);
                 break;
 
             default:
@@ -51,7 +52,7 @@
     }
 
     function processEffects(newEffects) {
-        print("new effects", newEffects);
+        // print("new effects", newEffects);
         $effects = newEffects.map((e, id) => {
             // print("process effect ", id, selection.id === id);
             return {
@@ -64,7 +65,7 @@
                     sendEffects();
                 },
                 onClickDelete: (id) => {
-                    print("ondelte", id);
+                    // print("ondelte", id);
                     $effects.splice(id, 1);
                     $effects = $effects;
                     sendEffects();
@@ -85,15 +86,13 @@
         // print(effects);
     }
 
-    function getEffects() {
-        messageHandler
-            .request({
-                target: RequestTarget.extension,
-                command: RequestCommand.getEffects,
-            })
-            .then(({ payload }) => {
-                processEffects(payload);
-            });
+    async function getEffects() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getEffects,
+        });
+
+        processEffects(payload);
     }
 
     function sendEffects() {
@@ -112,34 +111,62 @@
         });
     }
 
-    function getSelection() {
-        messageHandler
-            .request({
-                target: RequestTarget.extension,
-                command: RequestCommand.getSelection,
-            })
-            .then(({ payload }) => {
-                print("received selection");
-                proccessSelection(payload);
-                getEffects();
-                // switch (selection.type) {
-                //     case SelectionType.effect:
-                //         break;
-                //     case SelectionType.plugin:
-                //         break;
-                //     default:
-                //         break;
-                // }
+    // function getSelection() {
+    //     messageHandler
+    //         .request({
+    //             target: RequestTarget.extension,
+    //             command: RequestCommand.getSelection,
+    //         })
+    //         .then(({ payload }) => {
+    //             print("received selection");
+    //             proccessSelection(payload);
+    //             getEffects();
+    //             // switch (selection.type) {
+    //             //     case SelectionType.effect:
+    //             //         break;
+    //             //     case SelectionType.plugin:
+    //             //         break;
+    //             //     default:
+    //             //         break;
+    //             // }
+    //         });
+    // }
+
+    async function getSelection() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getSelection,
+        });
+
+        processSelection(payload);
+    }
+
+    async function getLocatization() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getLocalization,
+        });
+
+        if (payload) {
+            l10n.config({
+                contents: payload,
             });
+        }
     }
 
-    function proccessSelection(newSelection) {
+    function processSelection(newSelection) {
         $selection = newSelection;
-        print("new selection", $selection);
+        // print("new selection", $selection);
     }
 
-    getSelection();
-    print("INIT");
+    async function init() {
+        await getLocatization();
+        await getEffects();
+        await getSelection();
+    }
+
+    // print("INIT");
+    init();
 </script>
 
 <!-- <AddEffect /> -->
@@ -161,7 +188,7 @@
                 }}
             />
         {:else}
-            <h4>Create your first effect!</h4>
+            <h4>{l10n.t("Create your first effect!")}</h4>
         {/if}
     {/key}
 {/key}

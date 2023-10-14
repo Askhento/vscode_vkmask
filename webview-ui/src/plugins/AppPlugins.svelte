@@ -1,4 +1,6 @@
 <script lang="ts">
+    import * as l10n from "@vscode/l10n";
+
     import { setContext } from "svelte";
     import { writable } from "svelte/store";
     import { provideVSCodeDesignSystem, allComponents } from "@vscode/webview-ui-toolkit";
@@ -34,7 +36,7 @@
                 break;
 
             case RequestCommand.updateSelection:
-                proccessSelection(payload);
+                processSelection(payload);
                 break;
 
             default:
@@ -83,15 +85,13 @@
         });
     }
 
-    function getPlugins() {
-        messageHandler
-            .request({
-                target: RequestTarget.extension,
-                command: RequestCommand.getPlugins,
-            })
-            .then(({ payload }) => {
-                processPlugins(payload);
-            });
+    async function getPlugins() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getPlugins,
+        });
+
+        processPlugins(payload);
     }
 
     function sendPlugins() {
@@ -110,24 +110,39 @@
         });
     }
 
-    function getSelection() {
-        messageHandler
-            .request({
-                target: RequestTarget.extension,
-                command: RequestCommand.getSelection,
-            })
-            .then(({ payload }) => {
-                proccessSelection(payload);
-                getPlugins();
+    async function getSelection() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getSelection,
+        });
+
+        processSelection(payload);
+    }
+
+    async function getLocatization() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getLocalization,
+        });
+
+        if (payload) {
+            l10n.config({
+                contents: payload,
             });
+        }
     }
-
-    function proccessSelection(newSelection) {
+    function processSelection(newSelection) {
         $selection = newSelection;
-        print("new selection", $selection);
+        // print("new select/ion", $selection);
     }
 
-    getSelection();
+    async function init() {
+        await getLocatization();
+        await getPlugins();
+        await getSelection();
+    }
+
+    init();
 </script>
 
 <!-- <AddPlugin /> -->
@@ -143,7 +158,7 @@
                 }}
             />
         {:else}
-            <h4>Create your first plugin!</h4>
+            <h4>{l10n.t("Create your first plugin!")}</h4>
         {/if}
     {/key}
 {/key}
