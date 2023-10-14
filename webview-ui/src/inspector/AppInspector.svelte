@@ -50,7 +50,8 @@
         effects,
         plugins,
         maskSettings,
-        uiElements;
+        uiElements,
+        selectionName;
 
     let appState = AppState.running,
         error: AppError | null;
@@ -261,14 +262,18 @@
         }
         let parseResult;
 
+        selectionName = null;
+
         switch (selection.type) {
             case SelectionType.effect:
                 print("will parse effect", effects[selection.id]);
                 parseResult = EffectParserForUI.safeParse(effects[selection.id]);
+                selectionName = effects[selection.id]?.name;
                 break;
             case SelectionType.plugin:
                 print("will parse plugin", plugins[selection.id]);
                 parseResult = PluginParserForUI.safeParse(plugins[selection.id]);
+                selectionName = plugins[selection.id]?.name;
                 break;
             case SelectionType.maskSettings:
                 print("will parse mask settings", maskSettings);
@@ -519,7 +524,12 @@
 </div> -->
 <div class="inspector-wrapper">
     {#if appState === AppState.running}
-        <h3>{l10n.t(selection.type).toUpperCase()}</h3>
+        <div class="header-wrapper">
+            <h3>{l10n.t(selection.type).toUpperCase()}</h3>
+            {#if selectionName}
+                <h4>{selectionName}</h4>
+            {/if}
+        </div>
         {#key selection}
             {#if selection.type === SelectionType.effect}
                 {#if effects}
@@ -578,9 +588,17 @@
         background-color: transparent;
     }
 
+    .header-wrapper {
+        display: flex;
+        flex-direction: row;
+    }
     .inspector-wrapper {
         padding-left: var(--global-body-padding-left);
         padding-right: var(--global-body-padding-right);
+    }
+
+    h4 {
+        padding-left: var(--global-body-padding-left);
     }
     /* :global(div) {
         color: aqua;
