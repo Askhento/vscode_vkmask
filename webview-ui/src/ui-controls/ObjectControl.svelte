@@ -8,7 +8,7 @@
     import { fly, slide } from "svelte/transition";
 
     export let expanded = false;
-    export let nesting = false;
+    export let nesting = true;
     export let value;
     export let label;
     export let path;
@@ -80,8 +80,8 @@
 </script>
 
 <div class="control-wrapper" class:add-key-color={addKeyHover}>
-    <!-- <vscode-divider role="separator" /> -->
     {#if nesting}
+        <vscode-divider role="separator" />
         <span class="object-label" class:expanded on:click={toggle}>
             <i class="codicon codicon-chevron-{expanded ? 'down' : 'right'}" />
             <span>{l10n.t(label)}</span>
