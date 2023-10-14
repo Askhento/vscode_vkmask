@@ -262,8 +262,6 @@
         }
         let parseResult;
 
-        selectionName = null;
-
         switch (selection.type) {
             case SelectionType.effect:
                 print("will parse effect", effects[selection.id]);
@@ -307,6 +305,8 @@
 
     async function processSelection(newSelection) {
         selection = newSelection;
+        selectionName = null;
+
         // print("new selection", selection);
         uiElements = null; // this prevents new effects be applied to old uiElements
         switch (selection.type) {

@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as l10n from "@vscode/l10n";
-
+    import InfoBox from "../components/InfoBox.svelte";
     import { createEventDispatcher } from "svelte";
     import { logger } from "../logger";
     const print = logger("IconControl.svelte");
@@ -31,10 +31,7 @@
             command: RequestCommand.getUploadedAsset,
             target: RequestTarget.extension,
             payload: {
-                extensions: [
-                    ["*.png", "*.png"],
-                    ["*.jpg", "*.jpg"],
-                ],
+                extensions: [["*.png", "*.png"]],
                 to: [""],
             },
         });
@@ -169,6 +166,17 @@
         >
             Create icon
         </vscode-button> -->
+
+        <!-- <vscode-button
+            class="info-btn"
+            appearance="icon"
+            on:click|stopPropagation={() => {
+                // removeTag(index);
+            }}
+        >
+        </vscode-button> -->
+
+        <InfoBox />
         {#if waiting}
             <vscode-progress-ring />
         {/if}
@@ -246,7 +254,7 @@
 
     vscode-progress-ring {
         position: absolute;
-        left: calc(100%);
+        left: calc(100% - 5px);
         top: var(--global-margin);
         margin: unset;
         height: var(--global-block-height);
