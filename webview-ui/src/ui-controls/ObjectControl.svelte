@@ -282,7 +282,7 @@
 
     vscode-divider {
         width: 100vw;
-        margin-left: calc(0px - var(--global-body-padding));
+        margin-left: calc(0px - var(--global-body-padding-left));
     }
     /* .add-key-wrapper {
         padding: 0.2em 0 0 0.5em;
