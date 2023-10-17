@@ -19,6 +19,7 @@
 
     let waiting = false;
     let iconAsset = null;
+    let containerHover = true;
 
     $: {
         checkIconExists();
@@ -110,7 +111,15 @@
 {#if label !== undefined}
     <span class="label"><span>{l10n.t(label)}</span></span>
 
-    <span class="control-wrapper">
+    <span
+        class="control-wrapper"
+        on:mouseleave={() => {
+            // containerHover = false;
+        }}
+        on:mouseover={() => {
+            containerHover = true;
+        }}
+    >
         <!-- <div class="value-text">
             {#if value == null}
                 <span class="text-center">Upload or create a scirpt file</span>
@@ -176,7 +185,7 @@
         >
         </vscode-button> -->
 
-        <InfoBox />
+        <InfoBox visible={containerHover} />
         {#if waiting}
             <vscode-progress-ring />
         {/if}

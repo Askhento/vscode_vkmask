@@ -115,6 +115,13 @@ export async function activate(context: vscode.ExtensionContext) {
 
     const inspectorBuildPath = path.join(webviewsBuildPath, "inspector");
     const inspector = new InspectorViewProvider(context.extensionUri, inspectorBuildPath);
+
+    setTimeout(() => {
+        print(inspector._view);
+        inspector._view.title = "test title";
+        inspector._view.description = "wzp desdctiption";
+    }, 3000);
+
     webviewProviders.push(inspector);
     context.subscriptions.push(
         vscode.window.registerWebviewViewProvider(inspector.viewId, inspector)

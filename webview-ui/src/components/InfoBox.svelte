@@ -1,31 +1,36 @@
 <script lang="ts">
-    let infoOpened = false;
+    export let infoOpened = false,
+        visible = true;
     const warnings = ["wrong size", "not enogh text", "i dont know anything"];
 </script>
 
-<div class="info-btn">
-    <span
-        on:mouseenter={() => {
-            infoOpened = true;
-        }}
-        on:mouseleave={() => {
-            infoOpened = false;
-        }}
-        class="codicon codicon-info"
-    />
-    {#if infoOpened}
-        <div class="info-box-wrapper">
-            <div>Icon does not have some props:</div>
-            <ul>
-                {#each warnings as warning}
-                    <li class="warning-text">
-                        {warning}
-                    </li>
-                {/each}
-            </ul>
+{#if visible}
+    <div class="info-btn">
+        <div class="icon-wrapper">
+            <span
+                on:mouseenter={() => {
+                    infoOpened = true;
+                }}
+                on:mouseleave={() => {
+                    infoOpened = false;
+                }}
+                class="codicon codicon-info"
+            />
         </div>
-    {/if}
-</div>
+        {#if infoOpened}
+            <div class="info-box-wrapper">
+                <div>Icon does not have some props:</div>
+                <ul>
+                    {#each warnings as warning}
+                        <li class="warning-text">
+                            {warning}
+                        </li>
+                    {/each}
+                </ul>
+            </div>
+        {/if}
+    </div>
+{/if}
 
 <style>
     .info-box-wrapper {
@@ -51,17 +56,40 @@
         left: calc(100%);
         /* top: var(--global-margin); */
         height: var(--global-block-height);
+        width: var(--global-block-height);
         margin: var(--global-margin);
         margin-left: 0;
+        /* margin: 0; */
         padding: 0;
     }
 
-    .info-btn > span {
-        cursor: pointer;
-        margin: var(--global-margin);
+    .icon-wrapper {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        flex-wrap: wrap;
+        height: var(--global-block-height);
+        width: var(--global-block-height);
     }
 
-    .info-btn > span:hover {
+    .icon-wrapper > span {
+        cursor: pointer;
+        width: fit-content;
+        height: fit-content;
+        margin: 0;
+    }
+
+    /* .codicon-info:before {
+        color: red;
+        display: block;
+
+        margin: var(--global-margin);
+
+        height: var(--global-block-height);
+        width: var(--global-block-height);
+    } */
+
+    .icon-wrapper > span:hover {
         color: var(--badge-background);
     }
 </style>

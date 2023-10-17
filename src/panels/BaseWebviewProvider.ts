@@ -12,7 +12,7 @@ import { getUri } from "../utils/getUri";
 import { getNonce } from "../utils/getNonce";
 
 export class BaseWebviewProvider implements WebviewViewProvider {
-    private _view?: WebviewView;
+    public _view?: WebviewView;
     public webview: Webview;
     public onResolveWebviewView: () => void | undefined;
 
