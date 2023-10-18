@@ -222,6 +222,7 @@
                 {
                     "id": "vkmask_primary_bar",
                     "title": "%title.vkmask_primary_bar%",
+
                     "icon": "./res/smile-svgrepo-com.svg"
                 }
             ],

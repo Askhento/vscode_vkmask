@@ -1,12 +1,23 @@
 <script lang="ts">
+    import * as l10n from "@vscode/l10n";
+
     export let infoOpened = false,
-        visible = true;
-    const warnings = ["wrong size", "not enogh text", "i dont know anything"];
+        visible = false,
+        error = true;
+
+    const infoHeader = "Icon should meet these requirements :";
+    const infoList = [
+        "PNG format",
+        "Should not contain transparent layer",
+        "Should preview what masks look like",
+        "Max size 60Kb",
+    ];
+    const errors = ["wrong size", "not enogh text", "i dont know anything"];
 </script>
 
-{#if visible}
+{#if visible || error}
     <div class="info-btn">
-        <div class="icon-wrapper">
+        <div class:error class="icon-wrapper">
             <span
                 on:mouseenter={() => {
                     infoOpened = true;
@@ -19,11 +30,18 @@
         </div>
         {#if infoOpened}
             <div class="info-box-wrapper">
-                <div>Icon does not have some props:</div>
+                <div>{l10n.t(infoHeader)}</div>
                 <ul>
-                    {#each warnings as warning}
-                        <li class="warning-text">
-                            {warning}
+                    {#each infoList as info}
+                        <li class="info-text">
+                            {l10n.t(info)}
+                        </li>
+                    {/each}
+                </ul>
+                <ul>
+                    {#each errors as error}
+                        <li class="error">
+                            {l10n.t(error)} (TODO)
                         </li>
                     {/each}
                 </ul>
@@ -36,7 +54,7 @@
     .info-box-wrapper {
         padding: var(--global-margin);
         position: absolute;
-        width: 200px;
+        width: var(--global-grid-value-column-size);
         height: fit-content;
         background-color: var(--dropdown-background);
         border: solid 1px var(--vscode-dropdown-border);
@@ -77,6 +95,11 @@
         width: fit-content;
         height: fit-content;
         margin: 0;
+    }
+
+    .error {
+        color: red;
+        /* color: var(--vscode-inputValidation-errorBackground); */
     }
 
     /* .codicon-info:before {

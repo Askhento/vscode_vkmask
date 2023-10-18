@@ -19,7 +19,7 @@
 
     let waiting = false;
     let iconAsset = null;
-    let containerHover = true;
+    let containerHover = false;
 
     $: {
         checkIconExists();
@@ -114,7 +114,7 @@
     <span
         class="control-wrapper"
         on:mouseleave={() => {
-            // containerHover = false;
+            containerHover = false;
         }}
         on:mouseover={() => {
             containerHover = true;

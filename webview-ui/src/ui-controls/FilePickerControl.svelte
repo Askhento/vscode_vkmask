@@ -516,7 +516,7 @@
         /* width: 200px; */
         height: var(--global-block-height);
         /* width: 100%; */
-        width: calc(var(--project-manager-grid-value-column-size) - 2 * var(--global-margin));
+        width: calc(var(--global-grid-value-column-size) - 2 * var(--global-margin));
         min-width: 0;
     }
     /* vscode-dropdown.error {
@@ -526,7 +526,7 @@
 
     vscode-dropdown.missing-asset::part(control) {
         color: red;
-        /* width: var(--project-manager-grid-value-column-size); */
+        /* width: var(--global-grid-value-column-size); */
     }
 
     vscode-text-field {

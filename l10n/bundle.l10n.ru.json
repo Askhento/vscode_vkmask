@@ -187,6 +187,13 @@
     "unkown plugin": "неизвестный плагин",
 
     "Create your first effect!": "Создайте свой первый эффект!",
-    "Create your first plugin!": "Создайте свой первый плагин!"
+    "Create your first plugin!": "Создайте свой первый плагин!",
+
+
+    "Icon should meet these requirements :": "Иконка должна соответсвовать требованиям :",
+    "PNG format": "PNG формат",
+    "Should not contain transparent layer": "Не должная содержать прозрачность",
+    "Should preview what masks look like": "Должна передавать содержимое маски ",
+    "Max size 60Kb": "Максимальный размер 60Кбайт"
 
 }

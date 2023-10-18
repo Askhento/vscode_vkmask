@@ -4,13 +4,13 @@
 
 :root {
 --main-bg-color: rgb(75, 88, 78);
---project-manager-grid-label-min-width : 2rem;
---project-manager-grid-label-column-size : 9rem;
---project-manager-grid-value-column-size : 15rem;
---project-manager-value-min-width : 6rem;
+--global-grid-label-min-width : 2rem;
+--global-grid-label-column-size : 9rem;
+--global-grid-value-column-size : 15rem;
+--global-value-min-width : 6rem;
 --global-box-height : 40px;
 --global-margin : 5px;
---global-grid-column-gap : 0.25rem;
+--global-grid-column-gap : 0;
 --global-grid-row-gap : 0.5rem;
 --global-block-height : 1.5rem;
 
