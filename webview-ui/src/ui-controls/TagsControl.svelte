@@ -91,7 +91,7 @@
             <span class="codicon codicon-add" />
             Add new tag
         </vscode-button> -->
-    <Dropdown options={tagOptions} name={"Add tag"} icon="add" />
+    <Dropdown options={tagOptions} name={"Add tag"} icon="" />
     {#each tags as tag, index}
         <vscode-text-field
             value={tags[index]}

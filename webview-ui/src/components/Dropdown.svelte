@@ -138,6 +138,11 @@
         overflow: hidden;
     }
 
+    vscode-button > .codicon {
+        color: red;
+        width: fit-content;
+    }
+
     .btn-text {
         margin: unset;
         padding: unset;
