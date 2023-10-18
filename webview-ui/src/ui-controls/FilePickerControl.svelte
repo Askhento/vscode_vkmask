@@ -514,6 +514,7 @@
         /* margin: unset;
         position: relative; */
         /* width: 200px; */
+
         height: var(--global-block-height);
         /* width: 100%; */
         width: calc(var(--global-grid-value-column-size) - 2 * var(--global-margin));
@@ -524,8 +525,13 @@
     animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   } */
 
+    vscode-dropdown::part(control) {
+        border-radius: var(--global-border-raduis);
+    }
+
     vscode-dropdown.missing-asset::part(control) {
         color: red;
+
         /* width: var(--global-grid-value-column-size); */
     }
 

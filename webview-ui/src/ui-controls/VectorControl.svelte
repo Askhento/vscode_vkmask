@@ -91,7 +91,7 @@
     input.value {
         color: var(--input-foreground);
         background: var(--input-background);
-        border-radius: calc(var(--corner-radius) * 1px);
+        border-radius: var(--global-border-raduis);
         border: calc(var(--border-width) * 1px) solid var(--dropdown-border);
         font-style: inherit;
         font-variant: inherit;

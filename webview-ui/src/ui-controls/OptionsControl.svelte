@@ -67,6 +67,9 @@
         height: var(--global-block-height);
         min-width: 0;
     }
+    vscode-dropdown::part(control) {
+        border-radius: var(--global-border-raduis);
+    }
 
     .option {
         margin: 0;
