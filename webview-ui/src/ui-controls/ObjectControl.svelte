@@ -47,7 +47,7 @@
     });
 
     function groupElements() {
-        console.log("objectcontol rerender", uiElementsGroupData);
+        // console.log("objectcontol rerender", uiElementsGroupData);
         uiElementsGroupData = {};
         Object.entries(uiElements).forEach(([key, el]) => {
             const group = el.uiDescription.group;
@@ -61,6 +61,7 @@
 
             uiElementsGroupData[group]["elements"][key] = el;
         });
+        // console.log("group data: ", uiElementsGroupData);
     }
     // function splitElements() {
     //     uiElementsHidden = {};

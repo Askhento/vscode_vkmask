@@ -402,7 +402,7 @@ const ZBlendModes = z.enum([
 const ZBlendModesLabels = [
     "Replace",
     "Alpha",
-    "Add",
+    "Additive",
     "Add alpha",
     "Multiply",
     "Lighten",
@@ -444,11 +444,6 @@ export const ZTextureObject = z.preprocess(
     z
         .object({
             diffuse: ZTextureAsset({ label: "Diffuse" }),
-            // !!! probably will miss texture property
-            // texture: ZTextureAsset,
-            normal: ZTextureAsset({ label: "Normal" }),
-            color: ZColorAlpha,
-            lit: ZBool.describe(uiDescriptions.bool({ label: "Lit" })),
             blend_mode: ZBlendModes.describe(
                 uiDescriptions.enum({
                     label: "Blend mode",
@@ -457,29 +452,34 @@ export const ZTextureObject = z.preprocess(
                     defValue: ZBlendModes.Values.replace,
                 })
             ),
-            // u_transform: ZArray3D.describe(
-            //     uiDescriptions.array3d({
-            //         defValue: [1, 0, 0],
-            //         showAlways: false,
-            //         label: "U transform",
-            //     })
-            // ),
-            // v_transform: ZArray3D.describe(
-            //     uiDescriptions.array3d({
-            //         defValue: [0, 1, 0],
-            //         showAlways: false,
-            //         label: "V transform",
-            //     })
-            // ),
-            render_order: ZNumberSlider.describe(
-                uiDescriptions.numberSlider({
-                    max: 100,
-                    min: -100,
-                    defValue: 0,
+            color: ZColorAlpha,
+            lit: ZBool.describe(uiDescriptions.bool({ label: "Lit" })),
+            // !!! probably will miss texture property
+            // texture: ZTextureAsset,
+            // normal: ZTextureAsset({ label: "Normal" }),
+            u_transform: ZArray3D.describe(
+                uiDescriptions.array3d({
+                    defValue: [1, 0, 0],
                     showAlways: false,
-                    label: "Render order",
+                    label: "U transform",
                 })
             ),
+            v_transform: ZArray3D.describe(
+                uiDescriptions.array3d({
+                    defValue: [0, 1, 0],
+                    showAlways: false,
+                    label: "V transform",
+                })
+            ),
+            // render_order: ZNumberSlider.describe(
+            //     uiDescriptions.numberSlider({
+            //         max: 100,
+            //         min: -100,
+            //         defValue: 0,
+            //         showAlways: false,
+            //         label: "Render order",
+            //     })
+            // ),
         })
         .describe(uiDescriptions.object({ showAlways: false, label: "Texture" }))
 );
@@ -671,9 +671,11 @@ const ZFacemodelEffect = ZBaseEffect.extend({
     name: z.literal("facemodel").describe(uiDescriptions.none({})),
     mouth: ZBool.describe(uiDescriptions.bool({ defValue: true, label: "Mouth" })),
     eyes: ZBool.describe(uiDescriptions.bool({ defValue: true, label: "Eyes" })),
-    position: ZArray3D.describe(uiDescriptions.array3d({ label: "Position" })),
-    scale: ZArray3D.describe(uiDescriptions.array3d({ defValue: [1, 1, 1], label: "Scale" })),
-    rotation: ZArray3D.describe(uiDescriptions.array3d({ label: "Rotation" })),
+    position: ZArray3D.describe(uiDescriptions.array3d({ label: "Position", group: "Transform" })),
+    scale: ZArray3D.describe(
+        uiDescriptions.array3d({ defValue: [1, 1, 1], label: "Scale", group: "Transform" })
+    ),
+    rotation: ZArray3D.describe(uiDescriptions.array3d({ label: "Rotation", group: "Transform" })),
     texture: ZTextureObject,
 }).describe(uiDescriptions.object({ label: "Facemodel" }));
 
@@ -735,10 +737,14 @@ const ZPatchEffect = ZBaseEffect.extend({
             defValue: ZPatchFitMode.Values.none,
         })
     ),
-    size: ZArray2D.describe(uiDescriptions.array2d({ defValue: [1, 1], label: "Size" })),
-    offset: ZArray3D.describe(uiDescriptions.array3d({ label: "Offset" })),
-    rotation: ZArray3D.describe(uiDescriptions.array3d({ label: "Rotation" })),
-    allow_rotation: ZBool.describe(uiDescriptions.bool({ label: "Allow rotation" })),
+    size: ZArray2D.describe(
+        uiDescriptions.array2d({ defValue: [1, 1], label: "Size", group: "Transform" })
+    ),
+    offset: ZArray3D.describe(uiDescriptions.array3d({ label: "Offset", group: "Transform" })),
+    allow_rotation: ZBool.describe(
+        uiDescriptions.bool({ label: "Allow rotation", group: "Transform" })
+    ),
+    rotation: ZArray3D.describe(uiDescriptions.array3d({ label: "Rotation", group: "Transform" })),
     pass: ZRenderPathAsset({ label: "Render Path" }),
     texture: ZTextureObject,
 }).describe(uiDescriptions.object({ label: "Patch" }));
@@ -777,9 +783,11 @@ const ZModel3dEffect = ZBaseEffect.extend({
         })
     ),
     model: ZModel3dAsset({ label: "Model 3d Asset" }),
-    position: ZArray3D.describe(uiDescriptions.array3d({ label: "Position" })),
-    scale: ZArray3D.describe(uiDescriptions.array3d({ defValue: [1, 1, 1], label: "Scale" })),
-    rotation: ZArray3D.describe(uiDescriptions.array3d({ label: "Rotation" })),
+    position: ZArray3D.describe(uiDescriptions.array3d({ label: "Position", group: "Transform" })),
+    scale: ZArray3D.describe(
+        uiDescriptions.array3d({ defValue: [1, 1, 1], label: "Scale", group: "Transform" })
+    ),
+    rotation: ZArray3D.describe(uiDescriptions.array3d({ label: "Rotation", group: "Transform" })),
     material: ZMaterialArray,
 }).describe(uiDescriptions.object({ label: "Model 3d" }));
 
@@ -793,9 +801,11 @@ const ZPlaneEffect = ZBaseEffect.extend({
             defValue: ZFaceAnchor.Values.forehead,
         })
     ),
-    position: ZArray3D.describe(uiDescriptions.array3d({ label: "Position" })),
-    scale: ZArray3D.describe(uiDescriptions.array3d({ defValue: [1, 1, 1], lable: "Scale" })),
-    rotation: ZArray3D.describe(uiDescriptions.array3d({ label: "Rotation" })),
+    position: ZArray3D.describe(uiDescriptions.array3d({ label: "Position", group: "Transform" })),
+    scale: ZArray3D.describe(
+        uiDescriptions.array3d({ defValue: [1, 1, 1], lable: "Scale", group: "Transform" })
+    ),
+    rotation: ZArray3D.describe(uiDescriptions.array3d({ label: "Rotation", group: "Transform" })),
     material: ZMaterialArray,
 }).describe(uiDescriptions.object({ label: "Plane" }));
 
