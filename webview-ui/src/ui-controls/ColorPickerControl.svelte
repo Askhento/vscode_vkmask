@@ -49,7 +49,7 @@
     rgbToHex();
     const dispatch = createEventDispatcher();
 
-    function onChange() {
+    function sendVAlue() {
         if (path == undefined) return;
         dispatch("changed", {
             value,
@@ -67,10 +67,10 @@
     type="color"
     value={color}
     on:change={(e) => {
-        // console.log("color picker on change!!!!");
+        console.log("color picker on change!!!!");
         color = e.target.value;
         hexToRGB();
-        onChange();
+        sendVAlue();
     }}
 />
 
@@ -91,7 +91,7 @@
             console.log("color alpha slider changed", alpha);
             alpha = e.detail.value;
             hexToRGB();
-            onChange();
+            sendVAlue();
         }}
     />
     <!-- <input
