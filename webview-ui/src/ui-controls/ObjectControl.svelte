@@ -113,7 +113,7 @@
                         {#each Object.entries(groupData.elements) as [key, data]}
                             {#if data.value === null && (data.uiDescription.name === "object" || data.uiDescription.name === "array")}
                                 <span class="missing-key-label"
-                                    ><span>{data.uiDescription.label ?? key}</span></span
+                                    ><span>{l10n.t(data.uiDescription.label ?? key)}</span></span
                                 >
                                 <vscode-button
                                     class="add-key-btn"

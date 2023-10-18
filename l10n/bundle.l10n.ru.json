@@ -160,6 +160,7 @@
     "Add texture": "Добавить текстуру",
     "Add materials": "Добавить материалы",
     "Add material": "Добавить материал",
+    "Add animation": "Добавить анимацию",
 
     "Materials": "Материалы",
     "material": "материал",
@@ -188,6 +189,7 @@
 
     "Create your first effect!": "Создайте свой первый эффект!",
     "Create your first plugin!": "Создайте свой первый плагин!",
+
 
 
     "Icon should meet these requirements :": "Иконка должна соответсвовать требованиям :",
