@@ -425,6 +425,60 @@ const ZBlendModesLabels = [
     "Luminosity",
 ];
 
+const ZAnimationType = z.enum(["once", "loop"]);
+
+const ZAnimationTypeLabels = ["Once", "Loop"];
+
+const ZEventTrigger = z.enum([
+    "none",
+    "mouth_open",
+    "mouth_close",
+    "face_found",
+    "face_lost",
+    "tap",
+]);
+
+const ZEventTriggerLabels = ["None", "Mouth Open", "Mouth Close", "Face Found", "Face Lost", "Tap"];
+
+const ZTextureAnimation = z
+    .object({
+        type: ZAnimationType.describe(
+            uiDescriptions.enum({
+                label: "Type",
+                options: Object.keys(ZAnimationType.Values),
+                optionLabels: ZAnimationTypeLabels,
+                defValue: ZAnimationType.Values.mouth_open,
+            })
+        ),
+        trigget_start: ZEventTrigger.describe(
+            uiDescriptions.enum({
+                label: "Start trigger",
+                options: Object.keys(ZEventTrigger.Values),
+                optionLabels: ZEventTriggerLabels,
+                defValue: ZEventTrigger.Values.mouth_open,
+            })
+        ),
+        trigget_stop: ZEventTrigger.describe(
+            uiDescriptions.enum({
+                label: "Stop trigger",
+                options: Object.keys(ZEventTrigger.Values),
+                optionLabels: ZEventTriggerLabels,
+                defValue: ZEventTrigger.Values.mouth_close,
+            })
+        ),
+        fps: ZNumberSlider.describe(
+            uiDescriptions.numberSlider({
+                defValue: 30,
+                min: 0,
+                max: 240,
+                valueLabel: "1/s",
+                // valueTemplate: (val) => Math.floor(val * 100),
+                label: "Fps",
+            })
+        ),
+    })
+    .describe(uiDescriptions.object({ label: "Animation" }));
+
 export const ZTextureObject = z.preprocess(
     (val) => {
         if (isObject(val)) {
@@ -471,6 +525,7 @@ export const ZTextureObject = z.preprocess(
                     label: "V transform",
                 })
             ),
+            animation: ZTextureAnimation,
             // render_order: ZNumberSlider.describe(
             //     uiDescriptions.numberSlider({
             //         max: 100,
