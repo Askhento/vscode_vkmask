@@ -16,7 +16,7 @@
     function handleFinalize(e) {
         elements = e.detail.items;
         const dragId = e.detail.info.id;
-        // console.log("fin", e);
+        console.log("grag drop", e);
         onDrop(elements, dragId);
     }
 

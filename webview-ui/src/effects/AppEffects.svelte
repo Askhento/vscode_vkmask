@@ -9,7 +9,7 @@
     import type { Selection } from "../../../src/types";
     import Effect from "./Effect.svelte";
     import { logger, logDump } from "../logger";
-    import AddEffect from "./AddEffect.svelte";
+    // import AddEffect from "./AddEffect.svelte";
     import * as l10n from "@vscode/l10n";
     const print = logger("AppEffects.svelte");
     const origin = RequestTarget.effects;
@@ -67,7 +67,7 @@
                 onClickDelete: (id) => {
                     // print("ondelte", id);
                     $effects.splice(id, 1);
-                    processEffects($effects);
+                    processEffects($effects.map((e) => e.value));
                     sendEffects();
                     if ($selection.type === SelectionType.effect) {
                         if ($selection.id === id) {
@@ -180,12 +180,29 @@
                 name="Effects"
                 onDrop={(newElements, dragId) => {
                     // !!! check type of selection
-                    if (dragId === $selection.id) {
-                        print("selected drag");
+                    const newId = newElements.findIndex((e) => e.id === dragId);
+                    // print("newId", newId);
+                    let selectionUpdated = false;
+                    if ($selection.type === SelectionType.effect) {
+                        if (dragId === $selection.id) {
+                            // print("selected drag");
+                            $selection.id = newId;
+                            selectionUpdated = true;
+                        } else if (dragId > $selection.id && newId <= $selection.id) {
+                            $selection.id++;
+                            selectionUpdated = true;
+                        } else if (dragId < $selection.id && newId >= $selection.id) {
+                            $selection.id--;
+                            selectionUpdated = true;
+                        }
+                    }
+                    if (selectionUpdated) {
+                        $selection = $selection;
+                        sendSelect();
                     }
                     $effects = newElements.map((e, index) => ({ ...e, id: index }));
                     sendEffects();
-                    console.log("drop", $effects);
+                    // console.log("drop", $effects);
                 }}
             />
         {:else}

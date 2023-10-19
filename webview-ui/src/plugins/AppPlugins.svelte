@@ -67,7 +67,8 @@
                 onClickDelete: (id) => {
                     // print("ondelte", id);
                     $plugins.splice(id, 1);
-                    $plugins = $plugins;
+                    // $plugins = $plugins;
+                    processPlugins($plugins.map((p) => p.value));
                     sendPlugins();
                     if ($selection.type === SelectionType.plugin) {
                         if ($selection.id === id) {
@@ -153,8 +154,29 @@
                 elements={$plugins}
                 elementComponent={Plugin}
                 name="Plugins"
-                onDrop={(newElements) => {
+                onDrop={(newElements, dragId) => {
+                    const newId = newElements.findIndex((e) => e.id === dragId);
+                    // print("newId", newId);
+                    let selectionUpdated = false;
+                    if ($selection.type === SelectionType.plugin) {
+                        if (dragId === $selection.id) {
+                            // print("selected drag");
+                            $selection.id = newId;
+                            selectionUpdated = true;
+                        } else if (dragId > $selection.id && newId <= $selection.id) {
+                            $selection.id++;
+                            selectionUpdated = true;
+                        } else if (dragId < $selection.id && newId >= $selection.id) {
+                            $selection.id--;
+                            selectionUpdated = true;
+                        }
+                    }
+                    if (selectionUpdated) {
+                        $selection = $selection;
+                        sendSelect();
+                    }
                     $plugins = newElements.map((e, index) => ({ ...e, id: index }));
+                    sendPlugins();
                 }}
             />
         {:else}
