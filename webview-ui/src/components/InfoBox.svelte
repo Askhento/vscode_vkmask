@@ -15,7 +15,8 @@
     const errors = ["wrong size", "not enogh text", "i dont know anything"];
 </script>
 
-{#if visible || error}
+{#if visible}
+    <!-- || error -->
     <div class="info-btn">
         <div class:error class="icon-wrapper">
             <span

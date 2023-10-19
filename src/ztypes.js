@@ -800,7 +800,7 @@ const ZPatchEffect = ZBaseEffect.extend({
         uiDescriptions.bool({ label: "Allow rotation", group: "Transform" })
     ),
     rotation: ZArray3D.describe(uiDescriptions.array3d({ label: "Rotation", group: "Transform" })),
-    pass: ZRenderPathAsset({ label: "Render Path" }),
+    // pass: ZRenderPathAsset({ label: "Render Path" }),
     texture: ZTextureObject,
 }).describe(uiDescriptions.object({ label: "Patch" }));
 

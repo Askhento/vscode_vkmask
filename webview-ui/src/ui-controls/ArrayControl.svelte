@@ -169,8 +169,8 @@
     }
 
     vscode-divider {
-        width: 99vw;
-        margin-left: calc(0px - var(--global-body-padding));
+        width: 200vw;
+        margin-left: -50vw;
     }
 
     vscode-button::part(content) {

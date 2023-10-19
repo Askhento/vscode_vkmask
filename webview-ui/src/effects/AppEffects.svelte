@@ -67,7 +67,7 @@
                 onClickDelete: (id) => {
                     // print("ondelte", id);
                     $effects.splice(id, 1);
-                    $effects = $effects;
+                    processEffects($effects);
                     sendEffects();
                     if ($selection.type === SelectionType.effect) {
                         if ($selection.id === id) {
@@ -75,6 +75,7 @@
                         } else if ($selection.id > id) {
                             $selection.id--;
                         }
+                        $selection = $selection;
                         sendSelect();
                     }
                 },
