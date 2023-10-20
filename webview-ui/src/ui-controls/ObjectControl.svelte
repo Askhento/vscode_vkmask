@@ -51,14 +51,39 @@
         uiElementsGroupData = {};
         Object.entries(uiElements).forEach(([key, el]) => {
             const group = el.uiDescription.group;
+            const compGroup = el.uiDescription.compositionGroup;
             if (group === undefined) {
                 console.log("ObjectControl : element have undefined group! ", el);
                 return;
             }
             if (!(group in uiElementsGroupData)) {
-                uiElementsGroupData[group] = { expanded: true, elements: {} };
+                uiElementsGroupData[group] = {
+                    expanded: true,
+                    elements: {},
+                    compositionGroups: {},
+                };
             }
 
+            if (compGroup != null) {
+                console.log(compGroup, el);
+                if (!(compGroup in uiElementsGroupData[group].compositionGroups)) {
+                    uiElementsGroupData[group].compositionGroups[compGroup] = {
+                        uiElement: el.uiElement,
+                        value: {
+                            [key]: el,
+                        },
+                    };
+                }
+                uiElementsGroupData[group].compositionGroups[compGroup].value[key] = el;
+                // this={data.uiElement}
+                // expanded={true}
+                // value={value[key]}
+                // label={data.uiDescription.label ?? key}
+                // path={[...path, key]}
+                // params={data.uiDescription}
+                // uiElements={data.value}
+                return;
+            }
             uiElementsGroupData[group]["elements"][key] = el;
         });
         // console.log("group data: ", uiElementsGroupData);
@@ -141,6 +166,15 @@
                                     on:changed
                                 />
                             {/if}
+                        {/each}
+                        {#each Object.entries(groupData.compositionGroups) as [key, data]}
+                            <svelte:component
+                                this={data.uiElement}
+                                expanded={true}
+                                value={data.value}
+                                path={[...path, key]}
+                                on:changed
+                            />
                         {/each}
                     </div>
                 {/if}

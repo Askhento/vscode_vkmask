@@ -39,12 +39,12 @@ import { delayPromise } from "./utils/delayPromise";
 import { copyRecursiveSync } from "./utils/copyFilesRecursive";
 
 export async function activate(context: vscode.ExtensionContext) {
-    const localizedString = vscode.l10n.t(
-        "Your extension got activated with the {0} language!",
-        vscode.env.language
-    );
+    // const localizedString = vscode.l10n.t(
+    //     "Your extension got activated with the {0} language!",
+    //     vscode.env.language
+    // );
 
-    vscode.window.showInformationMessage(localizedString);
+    // vscode.window.showInformationMessage(localizedString);
 
     let appState = AppState.loading,
         error = null;

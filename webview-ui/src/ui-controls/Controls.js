@@ -22,6 +22,7 @@ import ArrayControl from "./ArrayControl.svelte";
 import MainScriptControl from "./MainScriptControl.svelte";
 import IconControl from "./IconControl.svelte";
 import TexturePickerControl from "./TexturePickerControl.svelte";
+import UVControl from "./UVControl.svelte";
 
 export const uiControlsMap = {
     [uiDescriptions.bool({}).name]: SwitchControl,
@@ -40,6 +41,7 @@ export const uiControlsMap = {
     [uiDescriptions.mainScript({}).name]: MainScriptControl,
     [uiDescriptions.icon({}).name]: IconControl,
     [uiDescriptions.texture({}).name]: TexturePickerControl,
+    [uiDescriptions.uv_transform({}).name]: UVControl,
 };
 
 function getInnerZType(schema) {

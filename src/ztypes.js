@@ -166,6 +166,19 @@ export const uiDescriptions = {
         max: max,
         defValue,
     }),
+    uv_transform: ({
+        label = "UV transform",
+        group = "main",
+        defValue = [0, 0, 0],
+        showAlways = true,
+    }) => ({
+        showAlways,
+        name: "uv_transform",
+        label,
+        group,
+        compositionGroup: "uv_transform",
+        defValue,
+    }),
     bool: ({ label, group = "main", defValue = false, showAlways = true }) => ({
         showAlways,
         name: "bool",
@@ -511,20 +524,16 @@ export const ZTextureObject = z.preprocess(
             // !!! probably will miss texture property
             // texture: ZTextureAsset,
             // normal: ZTextureAsset({ label: "Normal" }),
-            u_transform: ZArray3D.describe(
-                uiDescriptions.array3d({
-                    defValue: [1, 0, 0],
-                    showAlways: false,
-                    label: "U transform",
-                })
-            ),
-            v_transform: ZArray3D.describe(
-                uiDescriptions.array3d({
-                    defValue: [0, 1, 0],
-                    showAlways: false,
-                    label: "V transform",
-                })
-            ),
+            // u_transform: ZArray3D.describe(
+            //     uiDescriptions.uv_transform({
+            //         defValue: [1, 0, 0],
+            //     })
+            // ),
+            // v_transform: ZArray3D.describe(
+            //     uiDescriptions.uv_transform({
+            //         defValue: [0, 1, 0],
+            //     })
+            // ),
             animation: ZTextureAnimation,
             // render_order: ZNumberSlider.describe(
             //     uiDescriptions.numberSlider({
