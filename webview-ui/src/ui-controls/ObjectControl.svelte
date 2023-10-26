@@ -181,6 +181,7 @@
                             />
                         {/each}
                     </div>
+                    <!-- group-wrapper -->
                 {/if}
             {/each}
         {/if}
@@ -254,6 +255,9 @@
         column-gap: var(--global-grid-column-gap);
         row-gap: var(--global-grid-row-gap);
         margin-bottom: var(--global-grid-row-gap);
+    }
+
+    .info-hit-box {
     }
 
     .object-label {

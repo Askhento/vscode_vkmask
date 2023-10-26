@@ -6,6 +6,7 @@
     const print = logger("MainScriptControl.svelte");
     import { getContext } from "svelte";
     import { RequestCommand, RequestTarget } from "src/types";
+    import InfoBox from "../components/InfoBox.svelte";
     //@ts-expect-error
     const { assets, settings, messageHandler } = getContext("stores");
 
@@ -16,6 +17,7 @@
 
     let waiting = false;
     let scriptPath = "";
+    let infoVisible = false;
     let scriptAsset = null;
 
     $: {
@@ -108,9 +110,25 @@
 </script>
 
 {#if label !== undefined}
-    <span class="label"><span>{l10n.t(label)}</span></span>
+    <span
+        class="label"
+        on:mouseleave={() => {
+            infoVisible = false;
+        }}
+        on:mouseover={() => {
+            infoVisible = true;
+        }}><span>{l10n.t(label)}</span></span
+    >
 
-    <span class="control-wrapper">
+    <span
+        class="control-wrapper"
+        on:mouseleave={() => {
+            infoVisible = false;
+        }}
+        on:mouseover={() => {
+            infoVisible = true;
+        }}
+    >
         <div class="value-text">
             {#if value == null}
                 <span class="text-center">{l10n.t("Upload or create a scirpt file")}</span>
@@ -154,6 +172,7 @@
         >
             <span class="btn-text">{l10n.t("Remove script")}</span>
         </vscode-button>
+        <InfoBox info={params.info} visible={infoVisible} />
     </span>
 {/if}
 
@@ -178,7 +197,7 @@
 
     span.control-wrapper {
         margin: unset;
-        /* position: relative; */
+        position: relative;
         display: flex;
         flex-direction: column;
     }

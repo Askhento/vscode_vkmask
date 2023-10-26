@@ -17,9 +17,11 @@
         params,
         path;
 
+    params.info.errors = ["wrong size", "not enogh text", "i dont know anything"];
+
     let waiting = false;
     let iconAsset = null;
-    let containerHover = false;
+    let infoVisible = false;
 
     $: {
         checkIconExists();
@@ -111,15 +113,23 @@
 </script>
 
 {#if label !== undefined}
-    <span class="label"><span>{l10n.t(label)}</span></span>
+    <span
+        class="label"
+        on:mouseleave={() => {
+            infoVisible = false;
+        }}
+        on:mouseover={() => {
+            infoVisible = true;
+        }}><span>{l10n.t(label)}</span></span
+    >
 
     <span
         class="control-wrapper"
         on:mouseleave={() => {
-            containerHover = false;
+            infoVisible = false;
         }}
         on:mouseover={() => {
-            containerHover = true;
+            infoVisible = true;
         }}
     >
         <!-- <div class="value-text">
@@ -187,7 +197,7 @@
         >
         </vscode-button> -->
 
-        <InfoBox visible={containerHover} />
+        <InfoBox visible={infoVisible} info={params.info} />
         {#if waiting}
             <vscode-progress-ring />
         {/if}

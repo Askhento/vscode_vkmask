@@ -117,16 +117,19 @@ export const uiDescriptions = {
         group = "Advanced",
         defValue = "main.as",
         showAlways = true,
+        info,
     }) => ({
         name: "script",
         label,
         group,
         defValue,
         showAlways,
+        info,
     }),
-    icon: ({ label = "Icon", group = "main", defValue = "", showAlways = true }) => ({
+    icon: ({ label = "Icon", group = "main", defValue = "", showAlways = true, info }) => ({
         name: "icon",
         label,
+        info,
         group,
         defValue,
         showAlways,
@@ -1259,8 +1262,24 @@ const ZNumberEnum = (
     );
 };
 
-const ZMainScriptAsset = z.string().describe(uiDescriptions.mainScript({}));
-const ZIcon = z.string().describe(uiDescriptions.icon({}));
+const iconInfo = {
+    clickLink:
+        "https://dev.vk.com/ru/masks/publication/resources#%D0%98%D0%BA%D0%BE%D0%BD%D0%BA%D0%B0",
+
+    infoList: [
+        "PNG format",
+        "Should not contain transparent layer",
+        "Should preview what masks look like",
+        "Max size 60Kb",
+    ],
+    infoHeader: "Icon should meet these requirements :",
+};
+const ZIcon = z.string().describe(uiDescriptions.icon({ info: iconInfo }));
+
+const scriptInfo = {
+    clickLink: "https://dev.vk.com/ru/masks/development/script-creation",
+};
+const ZMainScriptAsset = z.string().describe(uiDescriptions.mainScript({ info: scriptInfo }));
 
 const MaskSettings = {
     // name: ZText.describe(uiDescriptions.text({ defValue: "defaultName", label: "Name" })),

@@ -1,35 +1,37 @@
-<script lang="ts">
+<script>
     import * as l10n from "@vscode/l10n";
 
-    export let infoOpened = false,
-        visible = false,
-        error = true;
+    export let visible,
+        info = {};
+    let { errors = [], clickLink = "#", infoHeader = "", infoList = [] } = info;
 
-    const infoHeader = "Icon should meet these requirements :";
-    const infoList = [
-        "PNG format",
-        "Should not contain transparent layer",
-        "Should preview what masks look like",
-        "Max size 60Kb",
-    ];
-    const errors = ["wrong size", "not enogh text", "i dont know anything"];
+    let infoOpened = false;
+
+    //  let infoOpened = false,
+    //     visible = false,
+    //     errors = [],
+    //     clickLink = "#";
+
+    // export let infoHeader = "";
+    // export let infoList = [];
 </script>
 
-{#if visible}
-    <!-- || error -->
+{#if visible || errors.length}
     <div class="info-btn">
-        <div class:error class="icon-wrapper">
-            <span
-                on:mouseenter={() => {
-                    infoOpened = true;
-                }}
-                on:mouseleave={() => {
-                    infoOpened = false;
-                }}
-                class="codicon codicon-info"
-            />
+        <div class:error={errors.length} class="icon-wrapper">
+            <a href={clickLink}>
+                <span
+                    on:mouseenter={() => {
+                        infoOpened = true;
+                    }}
+                    on:mouseleave={() => {
+                        infoOpened = false;
+                    }}
+                    class="codicon codicon-info"
+                />
+            </a>
         </div>
-        {#if infoOpened}
+        {#if infoOpened && (infoList.length || errors.length)}
             <div class="info-box-wrapper">
                 <div>{l10n.t(infoHeader)}</div>
                 <ul>
@@ -82,6 +84,18 @@
         padding: 0;
     }
 
+    a:link {
+        text-decoration: inherit;
+        color: inherit;
+        /* cursor: auto; */
+    }
+
+    a:visited {
+        text-decoration: inherit;
+        color: inherit;
+        /* cursor: auto; */
+    }
+
     .icon-wrapper {
         display: flex;
         justify-content: center;
@@ -91,8 +105,8 @@
         width: var(--global-block-height);
     }
 
-    .icon-wrapper > span {
-        cursor: pointer;
+    .icon-wrapper > a > span {
+        /* cursor: pointer; */
         width: fit-content;
         height: fit-content;
         margin: 0;
@@ -113,7 +127,7 @@
         width: var(--global-block-height);
     } */
 
-    .icon-wrapper > span:hover {
+    .icon-wrapper > a > span:hover {
         color: var(--badge-background);
     }
 </style>
