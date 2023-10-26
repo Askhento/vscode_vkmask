@@ -328,26 +328,34 @@
 
     async function onChanged(event) {
         console.log("onChange: ", event);
-        const { path, value, structural } = event.detail;
+        const changes = event.detail;
+        // Array.isArray()
+        //
+        let needRerender = false;
 
         switch (selection.type) {
             case SelectionType.effect:
-                effects[selection.id] = applyValueByPath2(effects[selection.id], path, value);
+                let tempEffects = effects[selection.id];
+                changes.forEach(({ path, value, structural }) => {
+                    tempEffects = applyValueByPath2(tempEffects, path, value);
+                    needRerender = needRerender || structural;
+                });
+                effects[selection.id] = tempEffects;
                 print("updated effects", effects[selection.id]);
                 sendEffects();
                 break;
 
-            case SelectionType.plugin:
-                plugins[selection.id] = applyValueByPath2(plugins[selection.id], path, value);
-                print("updated plugins", plugins[selection.id]);
-                sendPlugins();
-                break;
+            // case SelectionType.plugin:
+            //     plugins[selection.id] = applyValueByPath2(plugins[selection.id], path, value);
+            //     print("updated plugins", plugins[selection.id]);
+            //     // sendPlugins();
+            //     break;
 
-            case SelectionType.maskSettings:
-                maskSettings = applyValueByPath2(maskSettings, path, value);
-                print("updated maskSettings", maskSettings);
-                sendMaskSettings();
-                break;
+            // case SelectionType.maskSettings:
+            //     maskSettings = applyValueByPath2(maskSettings, path, value);
+            //     print("updated maskSettings", maskSettings);
+            //     // sendMaskSettings();
+            //     break;
 
             default:
                 print("selection type not implemented " + selection.type);
@@ -359,7 +367,7 @@
         // //??? rerender inspector ???
         // // will need to rerender only if changed inspector structure
         // // !!!!!!!!!!!!!!!!!!!!!!!!
-        if (!structural) return;
+        if (!needRerender) return;
         parseUI();
         rerenderInspector();
     }

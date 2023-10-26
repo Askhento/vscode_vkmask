@@ -12,10 +12,12 @@
 
     const dispatch = createEventDispatcher();
     $: {
-        dispatch("changed", {
-            value,
-            path,
-        });
+        dispatch("changed", [
+            {
+                value,
+                path,
+            },
+        ]);
     }
 </script>
 

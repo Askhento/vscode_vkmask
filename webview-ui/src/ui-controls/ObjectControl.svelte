@@ -29,11 +29,13 @@
     const dispatch = createEventDispatcher();
 
     function onChanged() {
-        dispatch("changed", {
-            value,
-            path,
-            structural: true,
-        });
+        dispatch("changed", [
+            {
+                value,
+                path,
+                structural: true,
+            },
+        ]);
     }
 
     let uiElementsVisible = {};
@@ -69,6 +71,7 @@
                 if (!(compGroup in uiElementsGroupData[group].compositionGroups)) {
                     uiElementsGroupData[group].compositionGroups[compGroup] = {
                         uiElement: el.uiElement,
+                        label: el.uiDescription.label,
                         value: {
                             [key]: el,
                         },
@@ -171,8 +174,9 @@
                             <svelte:component
                                 this={data.uiElement}
                                 expanded={true}
+                                label={data.label}
                                 value={data.value}
-                                path={[...path, key]}
+                                {path}
                                 on:changed
                             />
                         {/each}

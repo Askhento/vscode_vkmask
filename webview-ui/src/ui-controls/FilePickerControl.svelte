@@ -23,10 +23,12 @@
     const dispatch = createEventDispatcher();
     $: {
         checkAssetExists();
-        dispatch("changed", {
-            value,
-            path,
-        });
+        dispatch("changed", [
+            {
+                value,
+                path,
+            },
+        ]);
     }
     let extensions;
     let fileTypes;

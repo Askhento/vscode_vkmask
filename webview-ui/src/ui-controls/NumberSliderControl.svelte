@@ -1,7 +1,7 @@
 <script lang="ts">
     import * as l10n from "@vscode/l10n";
 
-    import { createEventDispatcher, onMount, tick } from "svelte";
+    import { createEventDispatcher } from "svelte";
 
     export let label, value, path, params;
 
@@ -18,10 +18,12 @@
 
     function sendValue() {
         // console.log("should send value");
-        dispatch("changed", {
-            value,
-            path,
-        });
+        dispatch("changed", [
+            {
+                value,
+                path,
+            },
+        ]);
     }
 </script>
 

@@ -23,7 +23,7 @@
         color =
             "#" + componentToHex(value[0]) + componentToHex(value[1]) + componentToHex(value[2]);
         if (params.alpha != undefined) alpha = value[3];
-        // console.log("RGBtoHEX ", params, value, alpha);
+        console.log("RGBtoHEX ", params, value, alpha);
     }
 
     //   function roundColor(num) {
@@ -51,10 +51,12 @@
 
     function onChange() {
         if (path == undefined) return;
-        dispatch("changed", {
-            value,
-            path,
-        });
+        dispatch("changed", [
+            {
+                value,
+                path,
+            },
+        ]);
     }
 </script>
 
@@ -65,10 +67,10 @@
 <input
     class="color"
     type="color"
-    value={color}
+    bind:value={color}
     on:change={(e) => {
-        console.log("color picker on change!!!!");
-        color = e.target.value;
+        // console.log("color picker on change!!!!");
+        // color = e.target.value;
         hexToRGB();
         onChange();
     }}
@@ -85,11 +87,11 @@
             valueTemplate: (val) => Math.floor(val * 100),
             valueLabel: "%",
         }}
-        value={alpha}
+        bind:value={alpha}
         on:changed={(e) => {
             // <!-- bind:value={alpha} -->
-            console.log("color alpha slider changed", alpha);
-            alpha = e.detail.value;
+            // alpha = e.detail.value;
+            // console.log("color alpha slider changed", alpha, e);
             hexToRGB();
             onChange();
         }}

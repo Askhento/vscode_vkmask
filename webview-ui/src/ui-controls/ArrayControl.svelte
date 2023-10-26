@@ -20,11 +20,13 @@
 
     const dispatch = createEventDispatcher();
     function onChanged() {
-        dispatch("changed", {
-            value,
-            path,
-            structural: true,
-        });
+        dispatch("changed", [
+            {
+                value,
+                path,
+                structural: true,
+            },
+        ]);
     }
 
     function addElement() {

@@ -17,11 +17,13 @@
 
     const dispatch = createEventDispatcher();
     $: {
-        dispatch("changed", {
-            value,
-            path,
-            structural: true,
-        });
+        dispatch("changed", [
+            {
+                value,
+                path,
+                structural: true,
+            },
+        ]);
     }
 </script>
 

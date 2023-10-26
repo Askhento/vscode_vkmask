@@ -15,10 +15,12 @@
 
     function sendValue() {
         console.log("should send value");
-        dispatch("changed", {
-            value,
-            path,
-        });
+        dispatch("changed", [
+            {
+                value,
+                path,
+            },
+        ]);
     }
 
     // on:change={(e) => {

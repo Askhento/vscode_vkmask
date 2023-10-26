@@ -168,7 +168,7 @@ export const uiDescriptions = {
     }),
     uv_transform: ({
         label = "UV transform",
-        group = "main",
+        group = "UV transform",
         defValue = [0, 0, 0],
         showAlways = true,
     }) => ({
@@ -524,16 +524,16 @@ export const ZTextureObject = z.preprocess(
             // !!! probably will miss texture property
             // texture: ZTextureAsset,
             // normal: ZTextureAsset({ label: "Normal" }),
-            // u_transform: ZArray3D.describe(
-            //     uiDescriptions.uv_transform({
-            //         defValue: [1, 0, 0],
-            //     })
-            // ),
-            // v_transform: ZArray3D.describe(
-            //     uiDescriptions.uv_transform({
-            //         defValue: [0, 1, 0],
-            //     })
-            // ),
+            u_transform: ZArray3D.describe(
+                uiDescriptions.uv_transform({
+                    defValue: [1, 0, 0],
+                })
+            ),
+            v_transform: ZArray3D.describe(
+                uiDescriptions.uv_transform({
+                    defValue: [0, 1, 0],
+                })
+            ),
             animation: ZTextureAnimation,
             // render_order: ZNumberSlider.describe(
             //     uiDescriptions.numberSlider({

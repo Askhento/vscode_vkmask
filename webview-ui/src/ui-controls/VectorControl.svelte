@@ -11,11 +11,13 @@
     if (value == null || value.length === 0) value = params.defValue;
 
     const dispatch = createEventDispatcher();
-    $: {
-        dispatch("changed", {
-            value: value.map(parseFloat), // !!!! hack
-            path,
-        });
+    function onChanged() {
+        dispatch("changed", [
+            {
+                value, // !!!! hack
+                path,
+            },
+        ]);
     }
 
     // todo : add slider to move all values at the same time
@@ -60,6 +62,7 @@
                         return;
                     }
                     value[index] = parsed;
+                    onChanged();
                 }}
             />
             <!-- {/each}
