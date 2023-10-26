@@ -5,15 +5,17 @@
     import * as l10n from "@vscode/l10n";
 
     import { createEventDispatcher, onMount } from "svelte";
-    import { fly, slide } from "svelte/transition";
 
-    export let expanded = false;
     export let nesting = true;
     export let value;
     export let label;
     export let path;
+    export let params;
+    export let expanded = params.defExpanded;
     export let uiElements;
 
+    console.log("obj params", params);
+    console.log("exp", expanded);
     function toggle() {
         expanded = !expanded;
     }
@@ -160,7 +162,6 @@
                             {:else}
                                 <svelte:component
                                     this={data.uiElement}
-                                    expanded={true}
                                     value={value[key]}
                                     label={data.uiDescription.label ?? key}
                                     path={[...path, key]}
@@ -173,7 +174,6 @@
                         {#each Object.entries(groupData.compositionGroups) as [key, data]}
                             <svelte:component
                                 this={data.uiElement}
-                                expanded={true}
                                 label={data.label}
                                 value={data.value}
                                 {path}

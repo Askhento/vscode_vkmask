@@ -189,12 +189,13 @@ export const uiDescriptions = {
         group,
         defValue,
     }),
-    object: ({ label, group = "main", defValue = {}, showAlways = true }) => ({
+    object: ({ label, group = "main", defValue = {}, showAlways = true, defExpanded = true }) => ({
         showAlways,
         name: "object",
         label,
         group,
         defValue,
+        defExpanded,
     }),
     array: ({
         label = "array",
@@ -493,7 +494,7 @@ const ZTextureAnimation = z
             })
         ),
     })
-    .describe(uiDescriptions.object({ label: "Animation" }));
+    .describe(uiDescriptions.object({ label: "Animation", defExpanded: false }));
 
 export const ZTextureObject = z.preprocess(
     (val) => {
@@ -1335,10 +1336,15 @@ export const ZMaskConfigPreprocess = z.preprocess(
                                 .preprocess((val) => {
                                     if (isObject(val)) {
                                         // keep only diffuse, not texture in object
-                                        return replaceObjectSynonim(val, "texture", "diffuse");
+                                        val = replaceObjectSynonim(val, "texture", "diffuse");
+                                        if (!isObject(val.animation)) {
+                                            val.animation = {};
+                                        }
+                                        return val;
                                     }
                                     return {
                                         diffuse: val,
+                                        animation: {},
                                     };
                                 }, z.object({}).passthrough())
                                 .optional(),

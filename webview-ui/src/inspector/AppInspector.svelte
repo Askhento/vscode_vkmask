@@ -548,6 +548,7 @@
                                 nesting={false}
                                 value={effects[selection.id]}
                                 label={uiElements.uiDescription.label ?? effects[selection.id].name}
+                                params={uiElements.uiDescription}
                                 path={[]}
                                 uiElements={uiElements.value}
                                 on:changed={onChanged}
@@ -566,6 +567,7 @@
                                 nesting={false}
                                 value={plugins[selection.id]}
                                 label={uiElements.uiDescription.label ?? plugins[selection.id].name}
+                                params={uiElements.uiDescription}
                                 path={[]}
                                 uiElements={uiElements.value}
                                 on:changed={onChanged}

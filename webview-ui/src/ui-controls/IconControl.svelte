@@ -17,6 +17,7 @@
         params,
         path;
 
+    // can modify if needed!
     params.info.errors = ["wrong size", "not enogh text", "i dont know anything"];
 
     let waiting = false;
