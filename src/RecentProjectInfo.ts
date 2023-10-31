@@ -33,7 +33,7 @@ export class RecentProjects {
 
         let newInfo = oldInfo.filter((info) => newPath !== info.path);
         newInfo.push(newEntry);
-        newInfo.sort((a, b) => a.dateModified - b.dateModified);
+        newInfo.sort((a, b) => b.dateModified - a.dateModified);
         newInfo = newInfo.slice(0, this.maxInfoCount);
 
         console.log("ProjectInfo : ", newInfo);
@@ -52,10 +52,12 @@ export class RecentProjects {
             this.infoStorageKey
         )) as RecentProjectInfo[];
         if (storedInfo === undefined) storedInfo = [];
-        let newInfo = storedInfo.filter((info) => {
-            const maskJsonFile = path.join(info.path, "mask.json");
-            return fs.existsSync(maskJsonFile);
-        });
+        let newInfo = storedInfo
+            .filter((info) => {
+                const maskJsonFile = path.join(info.path, "mask.json");
+                return fs.existsSync(maskJsonFile);
+            })
+            .sort((a, b) => b.dateModified - a.dateModified);
         return newInfo;
     }
 

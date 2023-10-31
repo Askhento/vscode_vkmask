@@ -1,4 +1,6 @@
 <script lang="ts">
+    import * as l10n from "@vscode/l10n";
+
     import { vscode } from "../utils/vscode";
     import { RequestTarget, RequestCommand, SelectionType } from "../../../src/types";
     import type { RecentProjectInfo } from "../../../src/RecentProjectInfo";
@@ -54,7 +56,7 @@
         const month = monthNames[date.getMonth()];
         const year = date.getFullYear();
 
-        return `${day} ${month} ${year}`;
+        return `${day} ${l10n.t(month)} ${year}`;
     }
 
     // function getOpenFileLink(dir) {
@@ -70,25 +72,27 @@
     getRecentProjectInfo();
 </script>
 
-<h4>No project opened yet.</h4>
+<!-- <p /> -->
+<p>{l10n.t("Creat new or open existing project")}.</p>
+
 <div class="welcome-wrapper">
     <vscode-button on:click={sendCreateNewProject}>
-        <span class="button-text">Create new project</span>
-        <span slot="start" class="codicon codicon-add" />
+        <span class="button-text">{l10n.t("Create new project")}</span>
+        <!-- <span slot="start" class="codicon codicon-add" /> -->
     </vscode-button>
     <vscode-button
         on:click={() => {
             sendOpenProject("");
         }}
     >
-        <span class="button-text">Open existing project</span>
-        <span slot="start" class="codicon codicon-folder-opened" />
+        <span class="button-text">{l10n.t("Open project")}</span>
+        <!-- <span slot="start" class="codicon codicon-folder-opened" /> -->
     </vscode-button>
 </div>
 
 {#key recentProjectInfo}
     {#if recentProjectInfo.length}
-        <h4>Recent projects:</h4>
+        <p>{l10n.t("Recent")}:</p>
         {#each recentProjectInfo as info}
             <div class="recent-projects-wrapper">
                 <vscode-link
@@ -147,18 +151,27 @@
         flex-direction: column;
     }
 
-    h4 {
+    p {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
 
     vscode-button {
-        display: block;
+        display: flex;
+        justify-content: center;
         margin-top: 0.5rem;
         /* max-width: max-content; */
         /* width: fit-content; */
-        width: 11rem;
+        width: 100%;
+    }
+
+    vscode-button::part(content) {
+        min-width: 0;
+    }
+
+    vscode-button::part(control) {
+        overflow: hidden;
     }
 
     .button-text {

@@ -196,6 +196,26 @@
     "PNG format": "PNG формат",
     "Should not contain transparent layer": "Не должная содержать прозрачность",
     "Should preview what masks look like": "Должна передавать содержимое маски ",
-    "Max size 60Kb": "Максимальный размер 60Кбайт"
+    "Max size 60Kb": "Максимальный размер 60Кбайт",
+
+    "January": "Январь",
+    "February": "Февраль",
+    "March": "Март",
+    "April": "Апрель",
+    "May": "Май",
+    "June": "Июнь",
+    "July": "Июль",
+    "August": "Август",
+    "September": "Сентябрь",
+    "October": "Октябрь",
+    "November": "Ноябрь",
+    "December": "Декабрь",
+
+
+    "Creat new or open existing project": "Создайте новый или откройте существующий проект",
+    "Recent": "Последние",
+    "Create new project": "Создать новый проект",
+    "Open project": "Открыть проект"
+
 
 }
