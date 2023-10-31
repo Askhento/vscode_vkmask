@@ -14,8 +14,8 @@
     export let expanded = params.defExpanded;
     export let uiElements;
 
-    console.log("obj params", params);
-    console.log("exp", expanded);
+    // console.log("obj params", params);
+    // console.log("exp", expanded);
     function toggle() {
         expanded = !expanded;
     }
@@ -70,16 +70,17 @@
 
             if (compGroup != null) {
                 console.log(compGroup, el);
-                if (!(compGroup in uiElementsGroupData[group].compositionGroups)) {
-                    uiElementsGroupData[group].compositionGroups[compGroup] = {
+                if (!(compGroup in uiElementsGroupData[group].elements)) {
+                    uiElementsGroupData[group].elements[compGroup] = {
                         uiElement: el.uiElement,
+                        expanded: true,
                         label: el.uiDescription.label,
                         value: {
                             [key]: el,
                         },
                     };
                 }
-                uiElementsGroupData[group].compositionGroups[compGroup].value[key] = el;
+                uiElementsGroupData[group].elements[compGroup].value[key] = el;
                 // this={data.uiElement}
                 // expanded={true}
                 // value={value[key]}
@@ -87,9 +88,13 @@
                 // path={[...path, key]}
                 // params={data.uiDescription}
                 // uiElements={data.value}
-                return;
+            } else {
+                uiElementsGroupData[group].elements[key] = el;
             }
-            uiElementsGroupData[group]["elements"][key] = el;
+
+            let elExpanded = el.uiDescription.groupExpanded ?? true;
+            // if at least one el not expanded then whole grpuop also
+            uiElementsGroupData[group].expanded = uiElementsGroupData[group].expanded && elExpanded;
         });
         // console.log("group data: ", uiElementsGroupData);
     }
@@ -162,8 +167,8 @@
                             {:else}
                                 <svelte:component
                                     this={data.uiElement}
-                                    value={value[key]}
-                                    label={data.uiDescription.label ?? key}
+                                    value={value[key] ?? data.value}
+                                    label={data.label ?? data.uiDescription.label ?? key}
                                     path={[...path, key]}
                                     params={data.uiDescription}
                                     uiElements={data.value}
@@ -171,7 +176,7 @@
                                 />
                             {/if}
                         {/each}
-                        {#each Object.entries(groupData.compositionGroups) as [key, data]}
+                        <!-- {#each Object.entries(groupData.compositionGroups) as [key, data]}
                             <svelte:component
                                 this={data.uiElement}
                                 label={data.label}
@@ -179,7 +184,7 @@
                                 {path}
                                 on:changed
                             />
-                        {/each}
+                        {/each} -->
                     </div>
                     <!-- group-wrapper -->
                 {/if}

@@ -7,6 +7,8 @@
 
     export let label, value, path;
 
+    path = path.slice(0, -1); // meh :(
+
     let { u_transform, v_transform } = value;
 
     let mat = [

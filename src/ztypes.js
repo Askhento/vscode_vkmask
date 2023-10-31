@@ -105,12 +105,19 @@ export const uiDescriptions = {
         group,
         defValue,
     }),
-    tags: ({ label = "Tag", group = "Tags", defValue = "", showAlways = true }) => ({
+    tags: ({
+        label = "Tag",
+        group = "Tags",
+        defValue = "",
+        showAlways = true,
+        groupExpanded = false,
+    }) => ({
         showAlways,
         name: "tags",
         label,
         group,
         defValue,
+        groupExpanded,
     }),
     mainScript: ({
         label = "Script",
@@ -174,12 +181,14 @@ export const uiDescriptions = {
         group = "UV transform",
         defValue = [0, 0, 0],
         showAlways = true,
+        groupExpanded = false,
     }) => ({
         showAlways,
         name: "uv_transform",
         label,
         group,
         compositionGroup: "uv_transform",
+        groupExpanded,
         defValue,
     }),
     bool: ({ label, group = "main", defValue = false, showAlways = true }) => ({
