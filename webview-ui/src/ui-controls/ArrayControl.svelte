@@ -6,13 +6,15 @@
 
     import { createEventDispatcher } from "svelte";
 
-    export let expanded = false;
+    export let expanded = true;
 
     export let value;
     export let label;
     export let path;
     export let uiElements;
     export let params;
+
+    let nesting = params.group == null;
 
     function toggle() {
         expanded = !expanded;
@@ -46,12 +48,14 @@
     }
 </script>
 
-<vscode-divider role="separator" />
+<!-- <vscode-divider role="separator" /> -->
 
-<span class="label" class:expanded on:click={toggle}>
-    <i class="codicon codicon-chevron-{expanded ? 'down' : 'right'}" />
-    {l10n.t(label)}
-</span>
+{#if nesting}
+    <span class="label" class:expanded on:click={toggle}>
+        <i class="codicon codicon-chevron-{expanded ? 'down' : 'right'}" />
+        {l10n.t(label)}
+    </span>
+{/if}
 
 <div class="elements-wrapper">
     {#if expanded}

@@ -14,6 +14,8 @@
     export let expanded = params.defExpanded;
     export let uiElements;
 
+    if (params.group != null) nesting = false;
+
     // console.log("obj params", params);
     // console.log("exp", expanded);
     function toggle() {
@@ -53,6 +55,21 @@
     function groupElements() {
         // console.log("objectcontol rerender", uiElementsGroupData);
         uiElementsGroupData = {};
+        if (params.groups == null) {
+            console.log("ObjectControl : no groups in ui descriptions", params);
+            return;
+        }
+
+        Object.entries(params.groups).forEach(([groupKey, groupData]) => {
+            const { defExpanded, label } = groupData;
+            uiElementsGroupData[groupKey] = {
+                expanded: defExpanded,
+                label,
+                elements: {},
+                compositionGroups: {},
+            };
+        });
+
         Object.entries(uiElements).forEach(([key, el]) => {
             const group = el.uiDescription.group;
             const compGroup = el.uiDescription.compositionGroup;
@@ -61,11 +78,8 @@
                 return;
             }
             if (!(group in uiElementsGroupData)) {
-                uiElementsGroupData[group] = {
-                    expanded: true,
-                    elements: {},
-                    compositionGroups: {},
-                };
+                console.log("ObjectControl : element no in groups! ", el);
+                return;
             }
 
             if (compGroup != null) {
@@ -140,7 +154,7 @@
                             class="codicon codicon-chevron-{groupData.expanded ? 'down' : 'right'}"
                         />
 
-                        <span>{l10n.t(groupName)}</span>
+                        <span>{l10n.t(groupData.label)}</span>
                     </div>
                 {/if}
                 {#if uiElementsGroupData[groupName].expanded}

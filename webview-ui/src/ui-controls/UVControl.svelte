@@ -24,7 +24,7 @@
 
     let translation = [mat[0][2], mat[1][2]];
 
-    console.log("mat", mat);
+    // console.log("mat", mat);
     let scale = getScale(transformMat),
         rotation = getRotation(transformMat);
 
@@ -34,8 +34,8 @@
     ];
     // console.log("composite values ", rotation);
 
-    console.log("det", det(mat));
-    console.log("inveres", inverse(mat));
+    // console.log("det", det(mat));
+    // console.log("inveres", inverse(mat));
     // console.log("pivot", matMult(translation, inverse(matSub(identity, transformMat))));
 
     // let pivot = getPivot(translation, transformMat)[0];
@@ -166,13 +166,13 @@
         // mat[1][0] *= scale[1];
         // mat[1][1] *= scale[1];
 
-        console.log("set rot", mat);
+        // console.log("set rot", mat);
     }
 
     //
 
     function rotationChanged(e) {
-        console.log("rotaion ", e.detail.value);
+        // console.log("rotaion ", e.detail.value);
 
         setRotation();
         sendValue();
@@ -181,7 +181,7 @@
     }
 
     function scaleChanged(e) {
-        console.log("offset ", e.detail);
+        // console.log("offset ", e.detail);
         setRotation();
         // sendValue();
     }

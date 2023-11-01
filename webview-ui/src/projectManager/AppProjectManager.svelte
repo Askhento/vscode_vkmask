@@ -231,6 +231,7 @@
                             expanded={true}
                             nesting={false}
                             value={maskSettings}
+                            params={uiElements.uiDescription}
                             label={"MaskSettings"}
                             path={[]}
                             uiElements={uiElements.value}
