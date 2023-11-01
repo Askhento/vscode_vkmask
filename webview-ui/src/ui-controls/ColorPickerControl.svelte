@@ -23,7 +23,7 @@
         color =
             "#" + componentToHex(value[0]) + componentToHex(value[1]) + componentToHex(value[2]);
         if (params.alpha != undefined) alpha = value[3];
-        console.log("RGBtoHEX ", params, value, alpha);
+        // console.log("RGBtoHEX ", params, value, alpha);
     }
 
     //   function roundColor(num) {

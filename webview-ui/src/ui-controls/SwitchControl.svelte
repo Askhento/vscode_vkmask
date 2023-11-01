@@ -32,12 +32,13 @@
 
 <style>
     * {
-        margin: var(--global-margin);
+        margin: unset;
         box-sizing: border-box;
     }
 
     vscode-checkbox {
         height: var(--global-block-height);
+        margin-left: var(--global-margin);
     }
 
     /* div.label {
@@ -48,9 +49,13 @@
         height: var(--global-block-height);
         display: flex;
         justify-content: var(--label-justify);
+        align-content: center;
+        align-items: center;
+        margin-right: var(--global-margin);
     }
 
     span.label > span {
+        height: fit-content;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
