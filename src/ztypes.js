@@ -908,6 +908,11 @@ const ZPatchEffect = ZBaseEffect.extend({
                 label: "Tags",
                 defExpanded: false,
             },
+
+            advanced: {
+                label: "Advanced",
+                defExpanded: false,
+            },
         },
     })
 );
