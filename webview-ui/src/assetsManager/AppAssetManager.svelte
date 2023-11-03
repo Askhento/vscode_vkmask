@@ -1,23 +1,26 @@
-<script lang="ts">
+<script>
+    import { setContext, tick } from "svelte";
     import { MessageHandler } from "../common/MessageHandler";
-    import type { MessageHandlerData } from "../common/MessageHandler";
+    import { provideVSCodeDesignSystem, allComponents } from "@vscode/webview-ui-toolkit";
+    import * as l10n from "@vscode/l10n";
 
-    import { RequestTarget, RequestCommand } from "../../../src/types";
-    import type { Selection } from "../../../src/types";
-
+    import { RequestTarget, RequestCommand, SelectionType } from "../../../src/types";
+    import Asset from "./Asset.svelte";
     import { logger, logDump } from "../logger";
     import { writable } from "svelte/store";
     const print = logger("AssetManager.svelte");
+    provideVSCodeDesignSystem().register(allComponents);
 
     const origin = RequestTarget.assetsManager;
 
     const messageHandler = new MessageHandler(handleMessageApp, origin);
-    // Handle messages sent from the extension to the webview
-    let message;
+    const selection = writable();
     const assets = writable([]);
-    let materials = [];
+    let assetGroups = {};
 
-    function handleMessageApp(data: MessageHandlerData<any>) {
+    setContext("stores", { selection, messageHandler });
+
+    function handleMessageApp(data) {
         const { command, payload, target } = data;
         console.log("assets_manager", data);
 
@@ -28,6 +31,10 @@
 
             case RequestCommand.getLogs:
                 returnLogs(data);
+                break;
+
+            case RequestCommand.updateSelection:
+                processSelection(payload);
                 break;
 
             default:
@@ -47,10 +54,37 @@
     function processAssets(newAssets) {
         print("new assets", newAssets);
         $assets = newAssets;
-        materials = $assets.filter((a) => a.type === "xml_material");
+        assetGroups = {
+            materials: {
+                expanded: true,
+                elements: $assets.filter((a) => a.type === "xml_material"),
+            },
+        };
     }
 
-    function returnLogs(data: MessageHandlerData<any>) {
+    async function getSelection() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getSelection,
+        });
+
+        processSelection(payload);
+    }
+
+    function sendSelect() {
+        messageHandler.send({
+            command: RequestCommand.updateSelection,
+            target: RequestTarget.all,
+            payload: $selection,
+        });
+    }
+
+    function processSelection(newSelection) {
+        $selection = newSelection;
+        // print("new selection", $selection);
+    }
+
+    function returnLogs(data) {
         messageHandler.send({
             ...data,
             target: data.origin,
@@ -60,21 +94,69 @@
 
     async function init() {
         await getAssets();
+        await getSelection();
+
+        // await tick();
+        // skippedInit = true;
     }
 
     init();
+
+    // let skippedInit = false;
+
+    // $: {
+    //     if (skippedInit) print("changed selection", $selection);
+    // }
 </script>
 
-{#if assets}
-    {#each materials as asset}
-        <div>{asset.baseName}</div>
-    {/each}
-{:else}
-    <div>empty assets</div>
-{/if}
+{#key $selection}
+    {#if assets}
+        {#each Object.entries(assetGroups) as [groupName, groupData]}
+            <!-- content here -->
+            <vscode-divider class="divider" role="separator" />
+            <div
+                class="group-label"
+                on:click={() => {
+                    groupData.expanded = !groupData.expanded;
+                }}
+            >
+                <i class="codicon codicon-chevron-{groupData.expanded ? 'down' : 'right'}" />
+
+                <span>{l10n.t(groupName)}</span>
+            </div>
+            {#if groupData.expanded}
+                {#each groupData.elements as asset}
+                    <Asset value={asset} onSelect={sendSelect} />
+                {/each}
+            {/if}
+        {/each}
+        <!-- group -->
+    {:else}
+        <div>empty assets</div>
+    {/if}
+{/key}
 
 <style>
     * {
         box-sizing: border-box;
+    }
+
+    .group-label > span {
+        /* color: red; */
+        display: inline-block;
+        margin-left: var(--global-margin);
+    }
+
+    .group-label {
+        cursor: pointer;
+        color: var(--vscode-descriptionForeground);
+        margin: var(--global-margin);
+        display: flex;
+    }
+
+    vscode-divider {
+        width: 200vw;
+        margin-left: -50vw;
+        /* calc(0px - var(--global-body-padding-left)); */
     }
 </style>

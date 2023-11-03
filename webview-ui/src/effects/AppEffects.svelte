@@ -141,6 +141,10 @@
 
         processSelection(payload);
     }
+    function processSelection(newSelection) {
+        $selection = newSelection;
+        // print("new selection", $selection);
+    }
 
     async function getLocatization() {
         const { payload } = await messageHandler.request({
@@ -153,11 +157,6 @@
                 contents: payload,
             });
         }
-    }
-
-    function processSelection(newSelection) {
-        $selection = newSelection;
-        // print("new selection", $selection);
     }
 
     async function init() {
