@@ -38,6 +38,8 @@ import { BaseWebviewProvider } from "./panels/BaseWebviewProvider";
 import { delayPromise } from "./utils/delayPromise";
 import { copyRecursiveSync } from "./utils/copyFilesRecursive";
 
+// import { selection } from "./global";
+
 export async function activate(context: vscode.ExtensionContext) {
     // const localizedString = vscode.l10n.t(
     //     "Your extension got activated with the {0} language!",
@@ -45,6 +47,8 @@ export async function activate(context: vscode.ExtensionContext) {
     // );
 
     // vscode.window.showInformationMessage(localizedString);
+    // selection = { type: SelectionType.empty };
+    globalThis.selection = { type: SelectionType.empty };
 
     let appState = AppState.loading,
         error = null;
@@ -70,7 +74,6 @@ export async function activate(context: vscode.ExtensionContext) {
     });
 
     maskConfig.on("error", onError);
-    // let selection: Selection = { type: SelectionType.empty };
 
     const webviewsBuildPath = path.join("out", "panels", "webview-build");
     const webviewProviders: Array<BaseWebviewProvider> = [];
@@ -188,17 +191,17 @@ export async function activate(context: vscode.ExtensionContext) {
         // deal with config file
         switch (type) {
             case SelectionType.effect:
-                maskConfig.configSelection = newSelection;
+                globalThis.selection = newSelection;
                 maskConfig.showEffect(id);
                 break;
 
             case SelectionType.plugin:
-                maskConfig.configSelection = newSelection;
+                globalThis.selection = newSelection;
                 maskConfig.showPlugin(id);
                 break;
 
             case SelectionType.maskSettings:
-                maskConfig.configSelection = newSelection;
+                globalThis.selection = newSelection;
                 break;
 
             case SelectionType.empty:
@@ -305,7 +308,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 // reply with effects
                 messageHandler.send({
                     ...data,
-                    payload: maskConfig.configSelection,
+                    payload: globalThis.selection,
                     target: origin,
                 });
                 break;
@@ -461,7 +464,7 @@ export async function activate(context: vscode.ExtensionContext) {
         messageHandler.send({
             command: RequestCommand.updateSelection,
             origin: RequestTarget.extension,
-            payload: maskConfig.configSelection,
+            payload: globalThis.selection,
             target,
         });
     }

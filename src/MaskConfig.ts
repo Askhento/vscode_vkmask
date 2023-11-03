@@ -202,7 +202,7 @@ export class MaskConfig extends EventEmitter {
 
         this.setupSelectLock();
         print("clear selection");
-        this.configSelection = { type: SelectionType.empty };
+        globalThis.selection = { type: SelectionType.empty };
         var position = editor.selection.start;
         editor.selection = new vscode.Selection(position, position);
         return editor;
@@ -403,8 +403,8 @@ export class MaskConfig extends EventEmitter {
 
         this.parseConfig();
 
-        if (this.configSelection.type === SelectionType.effect)
-            await this.showEffect(this.configSelection.id, editor);
+        if (globalThis.selection.type === SelectionType.effect)
+            await this.showEffect(globalThis.selection.id, editor);
 
         // if (this.saveDelayPromise !== undefined) this.saveDelayPromise.cancel();
 
@@ -431,17 +431,17 @@ export class MaskConfig extends EventEmitter {
         };
 
         if (
-            this.configSelection !== undefined &&
-            this.configSelection.type === SelectionType.effect
+            globalThis.selection !== undefined &&
+            globalThis.selection.type === SelectionType.effect
         ) {
-            effectObjects.splice(this.configSelection.id + 1, 0, newEffect);
-            this.configSelection = {
+            effectObjects.splice(globalThis.selection.id + 1, 0, newEffect);
+            globalThis.selection = {
                 type: SelectionType.effect,
-                id: this.configSelection.id + 1,
+                id: globalThis.selection.id + 1,
             };
         } else {
             effectObjects.push(newEffect);
-            this.configSelection = {
+            globalThis.selection = {
                 type: SelectionType.effect,
                 id: effectObjects.length - 1,
             };
@@ -461,17 +461,17 @@ export class MaskConfig extends EventEmitter {
         };
 
         if (
-            this.configSelection !== undefined &&
-            this.configSelection.type === SelectionType.plugin
+            globalThis.selection !== undefined &&
+            globalThis.selection.type === SelectionType.plugin
         ) {
-            pluginObjects.splice(this.configSelection.id + 1, 0, newPlugin);
-            this.configSelection = {
+            pluginObjects.splice(globalThis.selection.id + 1, 0, newPlugin);
+            globalThis.selection = {
                 type: SelectionType.plugin,
-                id: this.configSelection.id + 1,
+                id: globalThis.selection.id + 1,
             };
         } else {
             pluginObjects.push(newPlugin);
-            this.configSelection = {
+            globalThis.selection = {
                 type: SelectionType.plugin,
                 id: pluginObjects.length - 1,
             };
@@ -491,8 +491,8 @@ export class MaskConfig extends EventEmitter {
 
         this.parseConfig();
 
-        if (this.configSelection.type !== SelectionType.empty)
-            await this.showPlugin(this.configSelection.id, editor);
+        if (globalThis.selection.type !== SelectionType.empty)
+            await this.showPlugin(globalThis.selection.id, editor);
     }
 
     public async updateMaskSettings(maskSettingsObject: object[]) {
@@ -507,8 +507,8 @@ export class MaskConfig extends EventEmitter {
 
         this.parseConfig();
 
-        if (this.configSelection.type === SelectionType.plugin)
-            await this.showPlugin(this.configSelection.id, editor);
+        if (globalThis.selection.type === SelectionType.plugin)
+            await this.showPlugin(globalThis.selection.id, editor);
     }
 
     public async writeConfig(editor?: vscode.TextEditor) {
