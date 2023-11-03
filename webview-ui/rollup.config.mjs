@@ -99,7 +99,7 @@ function getSvelteEntry(name) {
             sourcemap: true,
             format: "iife",
             name: "app",
-            file: `../out/panels/webview-build/${name}/bundle.js`, //!!!! add path resolve
+            file: `../out/panels/webview-build/${name}/bundle.js`, //!!!! add path resolve, for cross platform
         },
         ...common,
     };
