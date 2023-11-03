@@ -6,7 +6,7 @@ import * as vscode from "vscode";
 import { EffectsViewProvider } from "./panels/EffectsViewProvider";
 import { ProjectManagerViewProvider } from "./panels/ProjectManagerViewProvider";
 import { PluginsViewProvider } from "./panels/PluginsViewProvider";
-import { InspectorViewProvider } from "./panels/InspectorViewProvider";
+import { ParametersViewProvider } from "./panels/ParametersViewProvider";
 import { AssetsManagerViewProvider } from "./panels/AssetsManagerViewProvider";
 import { RecentProjects } from "./RecentProjectInfo";
 // import type { RecentProjectInfo } from "./RecentProjectInfo"
@@ -113,18 +113,18 @@ export async function activate(context: vscode.ExtensionContext) {
     //     vscode.window.registerWebviewViewProvider(assetsManager.viewId, assetsManager)
     // );
 
-    const inspectorBuildPath = path.join(webviewsBuildPath, "inspector");
-    const inspector = new InspectorViewProvider(context.extensionUri, inspectorBuildPath);
+    const parametersBuildPath = path.join(webviewsBuildPath, "parameters");
+    const parameters = new ParametersViewProvider(context.extensionUri, parametersBuildPath);
 
     // setTimeout(() => {
-    //     print(inspector._view);
-    //     inspector._view.title = "test title";
-    //     inspector._view.description = "wzp desdctiption";
+    //     print(parameters._view);
+    //     parameters._view.title = "test title";
+    //     parameters._view.description = "wzp desdctiption";
     // }, 3000);
 
-    webviewProviders.push(inspector);
+    webviewProviders.push(parameters);
     context.subscriptions.push(
-        vscode.window.registerWebviewViewProvider(inspector.viewId, inspector)
+        vscode.window.registerWebviewViewProvider(parameters.viewId, parameters)
     );
 
     // ? eventually will make a class
@@ -210,7 +210,7 @@ export async function activate(context: vscode.ExtensionContext) {
         }
 
         if (type !== SelectionType.empty) {
-            vscode.commands.executeCommand(inspector.viewId + ".focus");
+            vscode.commands.executeCommand(parameters.viewId + ".focus");
         }
     }
 
@@ -336,7 +336,7 @@ export async function activate(context: vscode.ExtensionContext) {
             case RequestCommand.updateEffects:
                 maskConfig.updateEffects(payload);
                 sendEffects(
-                    [RequestTarget.inspector, RequestTarget.effects].filter((t) => t !== origin)
+                    [RequestTarget.parameters, RequestTarget.effects].filter((t) => t !== origin)
                 );
                 break;
             case RequestCommand.updatePlugins:
@@ -349,7 +349,7 @@ export async function activate(context: vscode.ExtensionContext) {
             case RequestCommand.updateSelection:
                 // maskConfig.
                 onSelection(payload);
-                // inform inspector
+                // inform parameters
                 break;
 
             case RequestCommand.showError:
@@ -428,8 +428,8 @@ export async function activate(context: vscode.ExtensionContext) {
         // maskConfig.selection = {type : SelectionType.empty};
         // await maskConfig.clearSelection();
         print("on file save");
-        sendEffects([RequestTarget.effects, RequestTarget.inspector]);
-        sendPlugins([RequestTarget.plugins, RequestTarget.inspector]);
+        sendEffects([RequestTarget.effects, RequestTarget.parameters]);
+        sendPlugins([RequestTarget.plugins, RequestTarget.parameters]);
         sendMaskSettings(RequestTarget.projectManager);
     };
 
@@ -765,7 +765,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
             vscode.commands.executeCommand(provider.viewId + ".focus");
         });
-        // await vscode.commands.executeCommand(`vkmask.inspector.focus`);
+        // await vscode.commands.executeCommand(`vkmask.parameters.focus`);
         // await vscode.commands.executeCommand(`vkmask.assets_manager.focus`);
         // await vscode.commands.executeCommand(`vkmask.assets_manager.removeView`);  // hides a view
         if (maskConfig.parseConfig()) {

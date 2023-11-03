@@ -6,7 +6,7 @@
     import type { Selection } from "../../../src/types";
 
     import { logger, logDump } from "../logger";
-    const print = logger("Inspector.svelte");
+    const print = logger("AssetManager.svelte");
 
     const origin = RequestTarget.assetsManager;
 
@@ -63,13 +63,6 @@
     }
 
     let inputValue = "";
-
-    //   $: {
-    //     vscode.postMessage({
-    //       target: "vkmask.inspector",
-    //       payload: inputValue,
-    //     });
-    //   }
 </script>
 
 <!-- <svelte:window on:message={handleMessageApp} /> -->

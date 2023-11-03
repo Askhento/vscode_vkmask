@@ -1,5 +1,5 @@
 export const ViewIds = {
-    inspector: "vkmask.inspector",
+    parameters: "vkmask.parameters",
     assetsManager: "vkmask.assetsManager",
     effects: "vkmask.effects",
     plugins: "vkmask.plugins",

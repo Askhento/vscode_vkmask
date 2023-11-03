@@ -7,8 +7,8 @@
     "name.effects": "Effects",
     "contextTitle.plugins": "VKMask plugins",
     "name.plugins": "Plugins",
-    "contextTitle.inspector": "VKMask inspector",
-    "name.inspector": "Inspector",
+    "contextTitle.parameters": "VKMask parameters",
+    "name.parameters": "Parameters",
     "contextTitle.assetsManager": "VKMask assets manager",
     "name.assetsManager": "Assets Manager"
 }

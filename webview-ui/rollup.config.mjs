@@ -110,5 +110,5 @@ export default [
     getSvelteEntry("plugins"),
     getSvelteEntry("projectManager"),
     getSvelteEntry("assetsManager"),
-    getSvelteEntry("inspector"),
+    getSvelteEntry("parameters"),
 ];

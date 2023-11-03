@@ -7,8 +7,8 @@
     "name.effects": "Эффекты",
     "contextTitle.plugins": "ВК Маски плагины",
     "name.plugins": "Плагины",
-    "contextTitle.inspector": "ВК Маски инспектор",
-    "name.inspector": "Инспектор",
+    "contextTitle.parameters": "ВК Маски параметры",
+    "name.parameters": "Параметры",
     "contextTitle.assetsManager": "ВК Маски менеджер ресурсов",
     "name.assetsManager": "Менеджер Ресурсов"
 }
