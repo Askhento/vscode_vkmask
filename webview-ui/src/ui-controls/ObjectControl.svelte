@@ -140,7 +140,7 @@
     {#key uiElementsGroupData}
         {#if expanded}
             {#each Object.entries(uiElementsGroupData) as [groupName, groupData]}
-                {#if groupName !== "main"}
+                {#if groupName !== "main" && Object.keys(groupData.elements).length !== 0}
                     <vscode-divider class="divider" role="separator" />
                     <div
                         class="group-label"
