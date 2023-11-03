@@ -55,8 +55,23 @@ export async function activate(context: vscode.ExtensionContext) {
     logger.setMode(context.extensionMode);
 
     Assets.attach(context);
-    //  !!!!
-    // assetWatcher.searchBuiltinAssets(context.extensionUri);
+
+    const createBuiltinAssets = false;
+    // const testMaskResourceAbsDir = "/Applications/test.mask3_macos.app/Contents/Resources/asset";
+    if (createBuiltinAssets) {
+        print("writing down to build-in-assets.json");
+        //todo : fetch buildins from github
+        // const dir = vscode.workspace.workspaceFolders[0].uri.fsPath;
+        const dir = context.extensionUri.fsPath;
+        const assetsToSave = (await Assets.getAssets(false)).map((ass) => {
+            ass.projectFile = false;
+            return ass;
+        });
+        const jsonDump = jsonPrettyArray(assetsToSave, "\t");
+        fs.writeFileSync(dir + "/res/build-in-assets.json", jsonDump, { encoding: "utf-8" });
+    } else {
+        await Assets.searchBuiltinAssets(context.extensionUri);
+    }
 
     const recentProjectInfo = new RecentProjects(context);
 
@@ -98,23 +113,15 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.window.registerWebviewViewProvider(projectManager.viewId, projectManager)
     );
 
-    // {
-    // "type": "webview",
-    // "contextualTitle": "%contextTitle.assetsManager%",
-    // "id": "vkmask.assetsManager",
-    // "name": "%name.assetsManager%",
-    // "icon": "${zap}"
-    // }
-
-    // const assetsManagerBuildPath = path.join(webviewsBuildPath, "assetsManager");
-    // const assetsManager = new AssetsManagerViewProvider(
-    //     context.extensionUri,
-    //     assetsManagerBuildPath
-    // );
-    // webviewProviders.push(assetsManager);
-    // context.subscriptions.push(
-    //     vscode.window.registerWebviewViewProvider(assetsManager.viewId, assetsManager)
-    // );
+    const assetsManagerBuildPath = path.join(webviewsBuildPath, "assetsManager");
+    const assetsManager = new AssetsManagerViewProvider(
+        context.extensionUri,
+        assetsManagerBuildPath
+    );
+    webviewProviders.push(assetsManager);
+    context.subscriptions.push(
+        vscode.window.registerWebviewViewProvider(assetsManager.viewId, assetsManager)
+    );
 
     const parametersBuildPath = path.join(webviewsBuildPath, "parameters");
     const parameters = new ParametersViewProvider(context.extensionUri, parametersBuildPath);
@@ -563,20 +570,6 @@ export async function activate(context: vscode.ExtensionContext) {
     //             sendError(parseResult.message);
     //         }
     //     }
-    // }
-
-    // const createBuiltinAssets = false;
-    // if (createBuiltinAssets) {
-    //     assetWatcher.on("assetsChanged", (e) => {
-    //         //todo : fetch buildins from github
-    //         // const dir = vscode.workspace.workspaceFolders[0].uri.fsPath;
-    //         const dir = context.extensionUri.fsPath;
-
-    //         const jsonDump = jsonPrettyArray(e, "\t");
-    //         fs.writeFileSync(dir + "/res/build-in-assets.json", jsonDump, { encoding: 'utf-8' })
-    //     });
-    // } else {
-    //     assetWatcher.getBuiltinAssets(context.extensionUri)
     // }
 
     effectNames.forEach((name) => {

@@ -17,6 +17,7 @@ import { XMLParser } from "fast-xml-parser"; // https://github.com/NaturalIntell
 */
 
 export interface Asset {
+    baseName: string;
     absPath: string;
     path: string;
     type: string;
@@ -44,11 +45,11 @@ class AssetWatcher extends EventEmitter {
     async searchBuiltinAssets(extensionUri: vscode.Uri) {
         const builtinPath = path.join(extensionUri.fsPath, "res", "build-in-assets.json");
         const builtInRaw = fs.readFileSync(builtinPath, "utf8");
-        const builtInJSON = JSON.parse(builtInRaw) as { assets: Array<Asset> };
+        const builtInJSON = JSON.parse(builtInRaw) as Array<Asset>;
 
         // !!!add error check, file could be missing
-        this.builtInAssets = builtInJSON.assets;
-        // print(this.builtInAssets);
+        this.builtInAssets = builtInJSON;
+        print("builtins assets: ", this.builtInAssets);
     }
 
     async searchAssets() {
@@ -60,7 +61,7 @@ class AssetWatcher extends EventEmitter {
         });
 
         print(`new assets count :  ${newAssets.length}`);
-        print(`builtin assets count :  ${this.builtInAssets.length}`);
+        // print(`builtin assets count :  ${this.builtInAssets.length}`);
 
         this.assets = await Promise.all(newAssets);
         // this.assets = [...this.builtInAssets, ...newAssets];
@@ -70,7 +71,7 @@ class AssetWatcher extends EventEmitter {
         if (!this.assets.length) {
             await this.searchAssets();
         }
-        return builtins ? [...this.builtInAssets, ...this.assets] : this.assets;
+        return builtins ? [...(this.builtInAssets ?? []), ...this.assets] : this.assets;
     }
 
     readFileType(file: string) {
@@ -83,7 +84,7 @@ class AssetWatcher extends EventEmitter {
                 try {
                     const rawXML = fs.readFileSync(file);
                     let xmlObject = this.xmlParser.parse(rawXML);
-                    const xmlType = Object.keys(xmlObject)?.[0];
+                    const xmlType = Object.keys(xmlObject)?.[0] ?? "error";
                     type = "xml_" + xmlType;
                 } catch (e) {
                     type = "xml_error";
@@ -93,6 +94,15 @@ class AssetWatcher extends EventEmitter {
             case ".png":
             case ".jpg":
                 type = "image";
+                break;
+
+            case ".hlsl":
+            case ".glsl":
+                type = "shader";
+                break;
+
+            case ".as":
+                type = "script";
                 break;
 
             case ".mdl":
@@ -107,14 +117,15 @@ class AssetWatcher extends EventEmitter {
     }
 
     async fileToAsset(file: string, projectFile: boolean = false): Promise<Asset> {
-        const path = this.getRelative(file);
         const absPath = this.getAbsPath(file);
         const type = await this.readFileType(file);
         const preview = await this.getPreview(absPath, type);
+        const baseName = path.basename(file);
 
         return {
+            baseName,
             absPath,
-            path,
+            path: this.getRelative(file),
             type,
             preview,
             projectFile,

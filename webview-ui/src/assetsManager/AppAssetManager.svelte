@@ -6,6 +6,7 @@
     import type { Selection } from "../../../src/types";
 
     import { logger, logDump } from "../logger";
+    import { writable } from "svelte/store";
     const print = logger("AssetManager.svelte");
 
     const origin = RequestTarget.assetsManager;
@@ -13,25 +14,16 @@
     const messageHandler = new MessageHandler(handleMessageApp, origin);
     // Handle messages sent from the extension to the webview
     let message;
-    let assets = [];
-
-    messageHandler
-        .request({
-            target: RequestTarget.extension,
-            command: RequestCommand.getAssets,
-        })
-        .then((data) => {
-            //   console.log("assets_manager", data);
-            assets = data.payload;
-        });
+    const assets = writable([]);
+    let materials = [];
 
     function handleMessageApp(data: MessageHandlerData<any>) {
         const { command, payload, target } = data;
         console.log("assets_manager", data);
 
         switch (command) {
-            case "updateAssets":
-                assets = payload;
+            case RequestCommand.updateAssets:
+                processAssets(payload);
                 break;
 
             case RequestCommand.getLogs:
@@ -41,17 +33,21 @@
             default:
                 break;
         }
-        // const data = event.data as MessageHandlerData<any>; // The json data that the extension sent
-        // console.log(event);
-        // if (data.requestId) {
-        //   // responding with payload
-        //   messageHandler.send({
-        //     requestId: data.requestId,
-        //     target: data.origin,
-        //     payload: inputValue,
-        //     command: "",
-        //   });
-        // }
+    }
+
+    async function getAssets() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getAssets,
+        });
+
+        processAssets(payload);
+    }
+
+    function processAssets(newAssets) {
+        print("new assets", newAssets);
+        $assets = newAssets;
+        materials = $assets.filter((a) => a.type === "xml_material");
     }
 
     function returnLogs(data: MessageHandlerData<any>) {
@@ -62,23 +58,16 @@
         });
     }
 
-    let inputValue = "";
+    async function init() {
+        await getAssets();
+    }
+
+    init();
 </script>
 
-<!-- <svelte:window on:message={handleMessageApp} /> -->
-
-<div>HELLO WORLD!</div>
-
-<input bind:value={inputValue} />
-{#if message}
-    <pre>
-        {message}
-    </pre>
-{/if}
-
 {#if assets}
-    {#each assets as asset}
-        <div>{asset.path}</div>
+    {#each materials as asset}
+        <div>{asset.baseName}</div>
     {/each}
 {:else}
     <div>empty assets</div>
@@ -87,8 +76,5 @@
 <style>
     * {
         box-sizing: border-box;
-    }
-    input {
-        background-color: aquamarine;
     }
 </style>

@@ -262,6 +262,13 @@
                     "id": "vkmask.parameters",
                     "name": "%name.parameters%",
                     "icon": "./node_modules/@vscode/codicons/src/icons/arrow-circle-up.svg"
+                },
+                {
+                    "type": "webview",
+                    "contextualTitle": "%contextTitle.assetsManager%",
+                    "id": "vkmask.assetsManager",
+                    "name": "%name.assetsManager%",
+                    "icon": "${zap}"
                 }
             ]
         }

@@ -1,1512 +1,3050 @@
-{
-	"assets": [
-		{
-			"path": "Techniques/DiffSpecAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalSpecAOAlphaMask.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffVColAddAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffSpecAlphaMask.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureAO.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalAlphaMaskTranslucent.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffLightMap.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureEnvCubeAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureEnvCubeAOAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffAddAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedSpecAOAlphaMask.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedAlphaMask.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureNormal.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffMultiply.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffSkyboxHDRScale.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureAOAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalAlphaMask.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPacked.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffUnlitAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalEmissiveAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedSpec.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffVColMultiply.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/BasicVColUnlitAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffEnvCube.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormal.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffEnvCubeAOAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffEmissive.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureOverlay.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffAOAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffAOAlphaMask.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/Water.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/TerrainBlend.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureMultiply.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureEnvCube.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/VegetationDiffAlphaMask.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffAO.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalAOAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/TextureEffect.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffSpec.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedAO.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureAddAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureAdd.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedEmissiveAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalEnvCube.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedEmissive.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/VegetationDiff.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureEnvCubeAO.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureUnlitVCol.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffOverlay.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureUnlitAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffLightMapAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffLitParticleAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedSpecAO.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedAOAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffUnlitAlphaMask.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedAlphaMaskTranslucent.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalEmissive.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedSpecAlphaMask.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffEnvCubeAO.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalSpecAO.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffAlphaMask.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffEnvCubeAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/VegetationDiffUnlit.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedSpecAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/VegetationDiffUnlitAlphaMask.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureVColAddAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedAlphaTranslucent.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedEnvCubeAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalSpecAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureVColAdd.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffUnlit.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/InvisibleOccluder.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureNormalPacked.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalSpecEmissive.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalSpecAOAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureVColMultiply.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalAO.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffAlphaMaskTranslucent.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffAdd.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedSpecAOAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalAOAlphaMask.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffVColAdd.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffSkybox.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffVColUnlitAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffSkyplane.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTexture.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedSpecEmissive.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalSpecAlphaMask.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalAlphaTranslucent.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/Diff.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureUnlit.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedAOAlphaMask.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffSkydome.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureNormalPackedAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalSpec.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalEnvCubeAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureNormalAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalSpecEmissiveAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffEmissiveAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/GlassesDiffEnvAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/YuvUnlit.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedSpecEmissiveAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffNormalPackedEnvCube.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffVCol.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/PBR/DiffNormalSpecEmissiveAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/DiffAlphaTranslucent.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/NoTextureVCol.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/PBR/PBRDiffNormalEmissive.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/PBR/PBRNoTexture.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/PBR/PBRDiffAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/PBR/PBRDiff.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/PBR/PBRMetallicRoughDiffSpecAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/PBR/PBRMetallicRoughDiffNormalSpecEmissiveAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/PBR/PBRNoTextureAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/PBR/PBRMetallicRoughDiffNormalSpecEmissive.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/PBR/DiffNormalSpecEmissive.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/PBR/PBRDiffNormalAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/PBR/PBRMetallicRoughDiffNormalSpec.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/PBR/PBRMetallicRoughDiffSpec.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/PBR/PBRDiffNormal.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "Techniques/PBR/PBRDiffNormalEmissiveAlpha.xml",
-			"type": "xml_technique"
-		},
-		{
-			"path": "PostProcess/FXAA2.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "Materials/GreenTransparent.xml",
-			"type": "xml_material"
-		},
-		{
-			"path": "Facemodel/default_mapping.bin",
-			"type": "unknown"
-		},
-		{
-			"path": "Facemodel/GENERATED_decimated_patched_hole_indices.bin",
-			"type": "unknown"
-		},
-		{
-			"path": "Facemodel/eye1_indices_decimated.bin",
-			"type": "unknown"
-		},
-		{
-			"path": "Materials/DefaultGrey.xml",
-			"type": "xml_material"
-		},
-		{
-			"path": "PostProcess/GreyScale.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "Materials/GreyTransparent.xml",
-			"type": "xml_material"
-		},
-		{
-			"path": "PostProcess/Bloom.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "Facemodel/sym_left_eye_poly.bin",
-			"type": "unknown"
-		},
-		{
-			"path": "Facemodel/sym_right_eye_poly.bin",
-			"type": "unknown"
-		},
-		{
-			"path": "PostProcess/ColorCorrection.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "Facemodel/sym_mouth_poly.bin",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/HotReload.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Facemodel/fm_render_ind.bin",
-			"type": "unknown"
-		},
-		{
-			"path": "PostProcess/FXAA3.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "RenderPaths/copy_viewport_to_texture.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "ScriptEngine/log.txt",
-			"type": "unknown"
-		},
-		{
-			"path": "PostProcess/AutoExposure.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "Materials/LitSmoke.xml",
-			"type": "xml_material"
-		},
-		{
-			"path": "ScriptEngine/Load.as",
-			"type": "unknown"
-		},
-		{
-			"path": "PostProcess/Blur.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "Facemodel/sym_tex_coords_compatible.bin",
-			"type": "unknown"
-		},
-		{
-			"path": "Models/DefaultPlane.mdl",
-			"type": "unknown"
-		},
-		{
-			"path": "PostProcess/GammaCorrection.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "PostProcess/BloomHDR.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "Facemodel/eye2_indices_decimated.bin",
-			"type": "unknown"
-		},
-		{
-			"path": "Models/head_occluder_noears.mdl",
-			"type": "unknown"
-		},
-		{
-			"path": "PostProcess/Tonemap.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "Materials/InvisibleOccluder.xml",
-			"type": "xml_material"
-		},
-		{
-			"path": "ScriptEngine/Utils.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Facemodel/mouth_indices_decimated.bin",
-			"type": "unknown"
-		},
-		{
-			"path": "Materials/VideoFrame.xml",
-			"type": "xml_material"
-		},
-		{
-			"path": "Models/head_occluder.mdl",
-			"type": "unknown"
-		},
-		{
-			"path": "RenderPaths/init_pass.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "RenderPaths/unlit_pass.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "RenderPaths/main_pass.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "RenderPaths/Forward.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "RenderPaths/glasses_pass.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "RenderPaths/copy_texture.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "RenderPaths/start_ar.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "RenderPaths/saveViewport.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "RenderPaths/clear.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "RenderPaths/restoreViewport.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "RenderPaths/viewport_pass.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "RenderPaths/finish_ar.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "RenderPaths/copy_texture_to_viewport.xml",
-			"type": "xml_renderpath"
-		},
-		{
-			"path": "ScriptEngine/Effects/start_animation.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/animation.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/beautify.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/pasteface.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/ar_object.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Fog.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/BRDF.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/postprocess.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Constants.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/Beautify/SoftIntensity.png",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/face_lost.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/GammaCorrection.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/Beautify/FaceBlurMask.png",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/occluder.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/Beautify/FaceBlurMask1.png",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Tonemap.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/nod.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/FXAA2.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/face_found.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Copyface.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/stop_animation.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/pe_sharpen.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/patch.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/animation_visible.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Skybox.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/light.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/copyface.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/model3d.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/hide_action.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/color_filter.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/ar_background.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/plane.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/show_action.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/patch_copy.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/posteffect.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/tap.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/mouth_close.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/colorfilter.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/switch_animation.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/text.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/default.xml",
-			"type": "xml_texture"
-		},
-		{
-			"path": "ScriptEngine/Effects/texture.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/RampExtreme.png",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/mirror_texture.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/RampExtreme.xml",
-			"type": "xml_texture"
-		},
-		{
-			"path": "ScriptEngine/Effects/facemodel.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/vignette.png",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/noise.png",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/Ramp.png",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/Ramp.xml",
-			"type": "xml_texture"
-		},
-		{
-			"path": "Shaders/GLSL/VegetationShadow.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/pe_chromatic.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/FXAA3.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Src/Mask.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/pe_blur.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Src/MaskScene.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/ScreenPos.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/PBRLitSolid.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/PBRDeferred.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Beautify.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/AutoExposure.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/BilateralFilter.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/ColorFilter.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/mouth_open.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/BlendMath.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/PBR.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/ComplexBlend.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/BloomHDR.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Liquify.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Plugins/readconfiguration.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Plugins/spinner3d.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Urho2D.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Plugins/parallax.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/TextureEffectBase.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Plugins/mirror.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/LiquifiedWarp.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/PostProcess.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Plugins/BasePlugin.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/ColorCorrection.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Plugins/perspective.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/pe_noise.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Plugins/fixeddetection.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Lighting.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Src/Triggers/MouthOpenTrigger.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Plugins/customhint.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Water.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Plugins/randomtest.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/CopyFramebuffer.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Plugins/maskswitching.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/MirrorQuad.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/IBL.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Plugins/particles.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/LitSolid.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Plugins/template.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/pe_zoom.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/TerrainBlend.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/LitParticle.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Uniforms.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/ShadowBlur.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/liquifiedwarp.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/Flare.dds",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/RampWide.xml",
-			"type": "xml_texture"
-		},
-		{
-			"path": "Textures/RampWide.png",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/bilateral_lut_3.png",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/Copyface/FaceMask.png",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/bilateral_lut_3.xml",
-			"type": "xml_texture"
-		},
-		{
-			"path": "Textures/Smoke.dds",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Stencil.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/Copyface/FaceMaskNose.png",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/SpotWide.png",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/Spot.png",
-			"type": "unknown"
-		},
-		{
-			"path": "Textures/SpotWide.xml",
-			"type": "xml_texture"
-		},
-		{
-			"path": "Textures/Spot.xml",
-			"type": "xml_texture"
-		},
-		{
-			"path": "Shaders/GLSL/Skydome.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Blur.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Bloom.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Samplers.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/DeferredLight.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Vegetation.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Text.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Basic.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Yuv2Rgb.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/VegetationDepth.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Shadow.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Transform.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Unlit.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/GreyScale.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Pixelize.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/GlassesLitSolid.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/BilateralFilter2.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/PrepassLight.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/GLSL/Depth.glsl",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseAnimationAction.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseEffect.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseVisibleAction.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseFaceEvent.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseAction.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseAnimation.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseAr.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseEvent.as",
-			"type": "unknown"
-		},
-		{
-			"path": "ScriptEngine/Effects/Base/BaseMouthEvent.as",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Stencil.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/ComplexBlend.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/BloomHDR.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/PostProcess.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/MirrorQuad.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/ShadowBlur.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/TextureEffectBase.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Urho2D.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Liquify.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/PBR.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/GlassesLitSolid.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Pixelize.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/GreyScale.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Depth.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/PrepassLight.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/BilateralFilter2.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Blur.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Bloom.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Skydome.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Shadow.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/VegetationDepth.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Yuv2Rgb.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Unlit.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Transform.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Vegetation.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Samplers.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/DeferredLight.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Text.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Basic.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Yuv2Rgb_orig.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Fog.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Uniforms.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/BlendMath.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Tonemap.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/GammaCorrection.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Constants.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/BRDF.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Skybox.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/pe_sharpen.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Copyface.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/FXAA2.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/FXAA3.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/VegetationShadow.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/ClearFramebuffer.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/pe_blur.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/AutoExposure.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Beautify.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/PBRDeferred.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/ScreenPos.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/BilateralFilter.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/TerrainBlend.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/pe_zoom.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/LitSolid.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/ColorFilter.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/LitParticle.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/pe_chromatic.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/PBRLitSolid.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/LiquifiedWarp.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/ColorCorrection.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Water.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/Lighting.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/pe_noise.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/IBL.hlsl",
-			"type": "unknown"
-		},
-		{
-			"path": "Shaders/HLSL/CopyFramebuffer.hlsl",
-			"type": "unknown"
-		}
-	]
-}
+[
+	{
+		"baseName": "DiffSpecAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffSpecAlpha.xml",
+		"path": "Techniques/DiffSpecAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalSpecAOAlphaMask.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalSpecAOAlphaMask.xml",
+		"path": "Techniques/DiffNormalSpecAOAlphaMask.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffVColAddAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffVColAddAlpha.xml",
+		"path": "Techniques/DiffVColAddAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffSpecAlphaMask.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffSpecAlphaMask.xml",
+		"path": "Techniques/DiffSpecAlphaMask.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureAO.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureAO.xml",
+		"path": "Techniques/NoTextureAO.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalAlphaMaskTranslucent.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalAlphaMaskTranslucent.xml",
+		"path": "Techniques/DiffNormalAlphaMaskTranslucent.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffLightMap.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffLightMap.xml",
+		"path": "Techniques/DiffLightMap.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureEnvCubeAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureEnvCubeAlpha.xml",
+		"path": "Techniques/NoTextureEnvCubeAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureEnvCubeAOAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureEnvCubeAOAlpha.xml",
+		"path": "Techniques/NoTextureEnvCubeAOAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffAddAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffAddAlpha.xml",
+		"path": "Techniques/DiffAddAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBRDiffNormal.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/PBR/PBRDiffNormal.xml",
+		"path": "Techniques/PBR/PBRDiffNormal.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBRDiffNormalEmissiveAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/PBR/PBRDiffNormalEmissiveAlpha.xml",
+		"path": "Techniques/PBR/PBRDiffNormalEmissiveAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBRDiffNormalAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/PBR/PBRDiffNormalAlpha.xml",
+		"path": "Techniques/PBR/PBRDiffNormalAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBRMetallicRoughDiffSpecAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/PBR/PBRMetallicRoughDiffSpecAlpha.xml",
+		"path": "Techniques/PBR/PBRMetallicRoughDiffSpecAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBRMetallicRoughDiffNormalSpecEmissiveAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/PBR/PBRMetallicRoughDiffNormalSpecEmissiveAlpha.xml",
+		"path": "Techniques/PBR/PBRMetallicRoughDiffNormalSpecEmissiveAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBRNoTextureAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/PBR/PBRNoTextureAlpha.xml",
+		"path": "Techniques/PBR/PBRNoTextureAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBRMetallicRoughDiffNormalSpecEmissive.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/PBR/PBRMetallicRoughDiffNormalSpecEmissive.xml",
+		"path": "Techniques/PBR/PBRMetallicRoughDiffNormalSpecEmissive.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalSpecEmissive.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/PBR/DiffNormalSpecEmissive.xml",
+		"path": "Techniques/PBR/DiffNormalSpecEmissive.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBRMetallicRoughDiffNormalSpec.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/PBR/PBRMetallicRoughDiffNormalSpec.xml",
+		"path": "Techniques/PBR/PBRMetallicRoughDiffNormalSpec.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBRMetallicRoughDiffSpec.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/PBR/PBRMetallicRoughDiffSpec.xml",
+		"path": "Techniques/PBR/PBRMetallicRoughDiffSpec.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBRDiffNormalEmissive.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/PBR/PBRDiffNormalEmissive.xml",
+		"path": "Techniques/PBR/PBRDiffNormalEmissive.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBRNoTexture.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/PBR/PBRNoTexture.xml",
+		"path": "Techniques/PBR/PBRNoTexture.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBRDiffAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/PBR/PBRDiffAlpha.xml",
+		"path": "Techniques/PBR/PBRDiffAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBRDiff.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/PBR/PBRDiff.xml",
+		"path": "Techniques/PBR/PBRDiff.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalSpecEmissiveAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/PBR/DiffNormalSpecEmissiveAlpha.xml",
+		"path": "Techniques/PBR/DiffNormalSpecEmissiveAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedSpecAOAlphaMask.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedSpecAOAlphaMask.xml",
+		"path": "Techniques/DiffNormalPackedSpecAOAlphaMask.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffUnlitAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffUnlitAlpha.xml",
+		"path": "Techniques/DiffUnlitAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalEnvCube.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalEnvCube.xml",
+		"path": "Techniques/DiffNormalEnvCube.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureOverlay.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureOverlay.xml",
+		"path": "Techniques/NoTextureOverlay.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedAlphaMask.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedAlphaMask.xml",
+		"path": "Techniques/DiffNormalPackedAlphaMask.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureNormal.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureNormal.xml",
+		"path": "Techniques/NoTextureNormal.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffMultiply.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffMultiply.xml",
+		"path": "Techniques/DiffMultiply.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffSkyboxHDRScale.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffSkyboxHDRScale.xml",
+		"path": "Techniques/DiffSkyboxHDRScale.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureAOAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureAOAlpha.xml",
+		"path": "Techniques/NoTextureAOAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalAlphaMask.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalAlphaMask.xml",
+		"path": "Techniques/DiffNormalAlphaMask.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPacked.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPacked.xml",
+		"path": "Techniques/DiffNormalPacked.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalEmissiveAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalEmissiveAlpha.xml",
+		"path": "Techniques/DiffNormalEmissiveAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedSpec.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedSpec.xml",
+		"path": "Techniques/DiffNormalPackedSpec.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffVColMultiply.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffVColMultiply.xml",
+		"path": "Techniques/DiffVColMultiply.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BasicVColUnlitAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/BasicVColUnlitAlpha.xml",
+		"path": "Techniques/BasicVColUnlitAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffEnvCube.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffEnvCube.xml",
+		"path": "Techniques/DiffEnvCube.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormal.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormal.xml",
+		"path": "Techniques/DiffNormal.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffEnvCubeAOAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffEnvCubeAOAlpha.xml",
+		"path": "Techniques/DiffEnvCubeAOAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffEmissive.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffEmissive.xml",
+		"path": "Techniques/DiffEmissive.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffAOAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffAOAlpha.xml",
+		"path": "Techniques/DiffAOAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffAOAlphaMask.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffAOAlphaMask.xml",
+		"path": "Techniques/DiffAOAlphaMask.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureUnlitAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureUnlitAlpha.xml",
+		"path": "Techniques/NoTextureUnlitAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedAO.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedAO.xml",
+		"path": "Techniques/DiffNormalPackedAO.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Water.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/Water.xml",
+		"path": "Techniques/Water.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "TerrainBlend.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/TerrainBlend.xml",
+		"path": "Techniques/TerrainBlend.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureMultiply.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureMultiply.xml",
+		"path": "Techniques/NoTextureMultiply.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureEnvCube.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureEnvCube.xml",
+		"path": "Techniques/NoTextureEnvCube.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "VegetationDiffAlphaMask.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/VegetationDiffAlphaMask.xml",
+		"path": "Techniques/VegetationDiffAlphaMask.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalAlpha.xml",
+		"path": "Techniques/DiffNormalAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffAO.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffAO.xml",
+		"path": "Techniques/DiffAO.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalAOAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalAOAlpha.xml",
+		"path": "Techniques/DiffNormalAOAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "TextureEffect.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/TextureEffect.xml",
+		"path": "Techniques/TextureEffect.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffSpec.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffSpec.xml",
+		"path": "Techniques/DiffSpec.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureAddAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureAddAlpha.xml",
+		"path": "Techniques/NoTextureAddAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureAdd.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureAdd.xml",
+		"path": "Techniques/NoTextureAdd.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedEmissiveAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedEmissiveAlpha.xml",
+		"path": "Techniques/DiffNormalPackedEmissiveAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedEmissive.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedEmissive.xml",
+		"path": "Techniques/DiffNormalPackedEmissive.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "VegetationDiff.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/VegetationDiff.xml",
+		"path": "Techniques/VegetationDiff.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureEnvCubeAO.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureEnvCubeAO.xml",
+		"path": "Techniques/NoTextureEnvCubeAO.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureUnlitVCol.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureUnlitVCol.xml",
+		"path": "Techniques/NoTextureUnlitVCol.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffOverlay.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffOverlay.xml",
+		"path": "Techniques/DiffOverlay.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffLightMapAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffLightMapAlpha.xml",
+		"path": "Techniques/DiffLightMapAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureVColAddAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureVColAddAlpha.xml",
+		"path": "Techniques/NoTextureVColAddAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffLitParticleAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffLitParticleAlpha.xml",
+		"path": "Techniques/DiffLitParticleAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedSpecAO.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedSpecAO.xml",
+		"path": "Techniques/DiffNormalPackedSpecAO.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedAOAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedAOAlpha.xml",
+		"path": "Techniques/DiffNormalPackedAOAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffUnlitAlphaMask.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffUnlitAlphaMask.xml",
+		"path": "Techniques/DiffUnlitAlphaMask.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedAlphaMaskTranslucent.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedAlphaMaskTranslucent.xml",
+		"path": "Techniques/DiffNormalPackedAlphaMaskTranslucent.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalEmissive.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalEmissive.xml",
+		"path": "Techniques/DiffNormalEmissive.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedSpecAlphaMask.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedSpecAlphaMask.xml",
+		"path": "Techniques/DiffNormalPackedSpecAlphaMask.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffEnvCubeAO.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffEnvCubeAO.xml",
+		"path": "Techniques/DiffEnvCubeAO.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalSpecAO.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalSpecAO.xml",
+		"path": "Techniques/DiffNormalSpecAO.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffAlphaMask.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffAlphaMask.xml",
+		"path": "Techniques/DiffAlphaMask.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffEnvCubeAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffEnvCubeAlpha.xml",
+		"path": "Techniques/DiffEnvCubeAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "VegetationDiffUnlit.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/VegetationDiffUnlit.xml",
+		"path": "Techniques/VegetationDiffUnlit.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedSpecAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedSpecAlpha.xml",
+		"path": "Techniques/DiffNormalPackedSpecAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "VegetationDiffUnlitAlphaMask.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/VegetationDiffUnlitAlphaMask.xml",
+		"path": "Techniques/VegetationDiffUnlitAlphaMask.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedAlphaTranslucent.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedAlphaTranslucent.xml",
+		"path": "Techniques/DiffNormalPackedAlphaTranslucent.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedEnvCubeAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedEnvCubeAlpha.xml",
+		"path": "Techniques/DiffNormalPackedEnvCubeAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalSpecEmissive.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalSpecEmissive.xml",
+		"path": "Techniques/DiffNormalSpecEmissive.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalSpecAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalSpecAlpha.xml",
+		"path": "Techniques/DiffNormalSpecAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureVColAdd.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureVColAdd.xml",
+		"path": "Techniques/NoTextureVColAdd.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffUnlit.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffUnlit.xml",
+		"path": "Techniques/DiffUnlit.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "InvisibleOccluder.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/InvisibleOccluder.xml",
+		"path": "Techniques/InvisibleOccluder.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureNormalPacked.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureNormalPacked.xml",
+		"path": "Techniques/NoTextureNormalPacked.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalSpecAOAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalSpecAOAlpha.xml",
+		"path": "Techniques/DiffNormalSpecAOAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureVColMultiply.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureVColMultiply.xml",
+		"path": "Techniques/NoTextureVColMultiply.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalAO.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalAO.xml",
+		"path": "Techniques/DiffNormalAO.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffAlphaMaskTranslucent.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffAlphaMaskTranslucent.xml",
+		"path": "Techniques/DiffAlphaMaskTranslucent.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedSpecAOAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedSpecAOAlpha.xml",
+		"path": "Techniques/DiffNormalPackedSpecAOAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffAdd.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffAdd.xml",
+		"path": "Techniques/DiffAdd.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureUnlit.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureUnlit.xml",
+		"path": "Techniques/NoTextureUnlit.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalAOAlphaMask.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalAOAlphaMask.xml",
+		"path": "Techniques/DiffNormalAOAlphaMask.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffVColAdd.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffVColAdd.xml",
+		"path": "Techniques/DiffVColAdd.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffSkybox.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffSkybox.xml",
+		"path": "Techniques/DiffSkybox.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffVColUnlitAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffVColUnlitAlpha.xml",
+		"path": "Techniques/DiffVColUnlitAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffSkyplane.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffSkyplane.xml",
+		"path": "Techniques/DiffSkyplane.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTexture.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTexture.xml",
+		"path": "Techniques/NoTexture.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedSpecEmissive.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedSpecEmissive.xml",
+		"path": "Techniques/DiffNormalPackedSpecEmissive.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalSpecAlphaMask.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalSpecAlphaMask.xml",
+		"path": "Techniques/DiffNormalSpecAlphaMask.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Diff.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/Diff.xml",
+		"path": "Techniques/Diff.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalAlphaTranslucent.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalAlphaTranslucent.xml",
+		"path": "Techniques/DiffNormalAlphaTranslucent.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffAlphaTranslucent.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffAlphaTranslucent.xml",
+		"path": "Techniques/DiffAlphaTranslucent.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedAOAlphaMask.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedAOAlphaMask.xml",
+		"path": "Techniques/DiffNormalPackedAOAlphaMask.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalSpec.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalSpec.xml",
+		"path": "Techniques/DiffNormalSpec.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureVCol.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureVCol.xml",
+		"path": "Techniques/NoTextureVCol.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedAlpha.xml",
+		"path": "Techniques/DiffNormalPackedAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffSkydome.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffSkydome.xml",
+		"path": "Techniques/DiffSkydome.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureNormalPackedAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureNormalPackedAlpha.xml",
+		"path": "Techniques/NoTextureNormalPackedAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureAlpha.xml",
+		"path": "Techniques/NoTextureAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalEnvCubeAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalEnvCubeAlpha.xml",
+		"path": "Techniques/DiffNormalEnvCubeAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffAlpha.xml",
+		"path": "Techniques/DiffAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "NoTextureNormalAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/NoTextureNormalAlpha.xml",
+		"path": "Techniques/NoTextureNormalAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalSpecEmissiveAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalSpecEmissiveAlpha.xml",
+		"path": "Techniques/DiffNormalSpecEmissiveAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffEmissiveAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffEmissiveAlpha.xml",
+		"path": "Techniques/DiffEmissiveAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "GlassesDiffEnvAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/GlassesDiffEnvAlpha.xml",
+		"path": "Techniques/GlassesDiffEnvAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "YuvUnlit.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/YuvUnlit.xml",
+		"path": "Techniques/YuvUnlit.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedSpecEmissiveAlpha.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedSpecEmissiveAlpha.xml",
+		"path": "Techniques/DiffNormalPackedSpecEmissiveAlpha.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffNormalPackedEnvCube.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffNormalPackedEnvCube.xml",
+		"path": "Techniques/DiffNormalPackedEnvCube.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DiffVCol.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Techniques/DiffVCol.xml",
+		"path": "Techniques/DiffVCol.xml",
+		"type": "xml_technique",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "eye1_indices_decimated.bin",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Facemodel/eye1_indices_decimated.bin",
+		"path": "Facemodel/eye1_indices_decimated.bin",
+		"type": "unknown",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "default_mapping.bin",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Facemodel/default_mapping.bin",
+		"path": "Facemodel/default_mapping.bin",
+		"type": "unknown",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "GENERATED_decimated_patched_hole_indices.bin",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Facemodel/GENERATED_decimated_patched_hole_indices.bin",
+		"path": "Facemodel/GENERATED_decimated_patched_hole_indices.bin",
+		"type": "unknown",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "sym_right_eye_poly.bin",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Facemodel/sym_right_eye_poly.bin",
+		"path": "Facemodel/sym_right_eye_poly.bin",
+		"type": "unknown",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "sym_mouth_poly.bin",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Facemodel/sym_mouth_poly.bin",
+		"path": "Facemodel/sym_mouth_poly.bin",
+		"type": "unknown",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "fm_render_ind.bin",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Facemodel/fm_render_ind.bin",
+		"path": "Facemodel/fm_render_ind.bin",
+		"type": "unknown",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "sym_tex_coords_compatible.bin",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Facemodel/sym_tex_coords_compatible.bin",
+		"path": "Facemodel/sym_tex_coords_compatible.bin",
+		"type": "unknown",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "eye2_indices_decimated.bin",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Facemodel/eye2_indices_decimated.bin",
+		"path": "Facemodel/eye2_indices_decimated.bin",
+		"type": "unknown",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "mouth_indices_decimated.bin",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Facemodel/mouth_indices_decimated.bin",
+		"path": "Facemodel/mouth_indices_decimated.bin",
+		"type": "unknown",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "sym_left_eye_poly.bin",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Facemodel/sym_left_eye_poly.bin",
+		"path": "Facemodel/sym_left_eye_poly.bin",
+		"type": "unknown",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "mask.json",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/mask.json",
+		"path": "mask.json",
+		"type": "unknown",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": ".gitignore",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/.gitignore",
+		"path": ".gitignore",
+		"type": "unknown",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BloomHDR.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/PostProcess/BloomHDR.xml",
+		"path": "PostProcess/BloomHDR.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Blur.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/PostProcess/Blur.xml",
+		"path": "PostProcess/Blur.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "GammaCorrection.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/PostProcess/GammaCorrection.xml",
+		"path": "PostProcess/GammaCorrection.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DefaultPlane.mdl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Models/DefaultPlane.mdl",
+		"path": "Models/DefaultPlane.mdl",
+		"type": "model3d",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Tonemap.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/PostProcess/Tonemap.xml",
+		"path": "PostProcess/Tonemap.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "head_occluder_noears.mdl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Models/head_occluder_noears.mdl",
+		"path": "Models/head_occluder_noears.mdl",
+		"type": "model3d",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "head_occluder.mdl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Models/head_occluder.mdl",
+		"path": "Models/head_occluder.mdl",
+		"type": "model3d",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "AutoExposure.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/PostProcess/AutoExposure.xml",
+		"path": "PostProcess/AutoExposure.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "GreyScale.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/PostProcess/GreyScale.xml",
+		"path": "PostProcess/GreyScale.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Bloom.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/PostProcess/Bloom.xml",
+		"path": "PostProcess/Bloom.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "ColorCorrection.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/PostProcess/ColorCorrection.xml",
+		"path": "PostProcess/ColorCorrection.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "FXAA3.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/PostProcess/FXAA3.xml",
+		"path": "PostProcess/FXAA3.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "FXAA2.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/PostProcess/FXAA2.xml",
+		"path": "PostProcess/FXAA2.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "InvisibleOccluder.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Materials/InvisibleOccluder.xml",
+		"path": "Materials/InvisibleOccluder.xml",
+		"type": "xml_material",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "LitSmoke.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Materials/LitSmoke.xml",
+		"path": "Materials/LitSmoke.xml",
+		"type": "xml_material",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "VideoFrame.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Materials/VideoFrame.xml",
+		"path": "Materials/VideoFrame.xml",
+		"type": "xml_material",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "GreenTransparent.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Materials/GreenTransparent.xml",
+		"path": "Materials/GreenTransparent.xml",
+		"type": "xml_material",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "copy_texture_to_viewport.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/RenderPaths/copy_texture_to_viewport.xml",
+		"path": "RenderPaths/copy_texture_to_viewport.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DefaultGrey.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Materials/DefaultGrey.xml",
+		"path": "Materials/DefaultGrey.xml",
+		"type": "xml_material",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "GreyTransparent.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Materials/GreyTransparent.xml",
+		"path": "Materials/GreyTransparent.xml",
+		"type": "xml_material",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "HotReload.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/HotReload.as",
+		"path": "ScriptEngine/HotReload.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "CODEOWNERS",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/.github/CODEOWNERS",
+		"path": ".github/CODEOWNERS",
+		"type": "unknown",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "bilateral_lut_3.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/bilateral_lut_3.xml",
+		"path": "Textures/bilateral_lut_3.xml",
+		"type": "xml_texture",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "bilateral_lut_3.png",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/bilateral_lut_3.png",
+		"path": "Textures/bilateral_lut_3.png",
+		"type": "image",
+		"preview": "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",
+		"projectFile": false
+	},
+	{
+		"baseName": "Mask.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Src/Mask.as",
+		"path": "ScriptEngine/Src/Mask.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "MaskScene.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Src/MaskScene.as",
+		"path": "ScriptEngine/Src/MaskScene.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "RampWide.png",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/RampWide.png",
+		"path": "Textures/RampWide.png",
+		"type": "image",
+		"preview": "/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCACAAIADASIAAhEBAxEB/8QAGwABAQADAQEBAAAAAAAAAAAAAAYBAwUCBAj/xAAlEAEAAQMCBwADAQAAAAAAAAAABgECAwXSBBcxMlZxlQeFwdH/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8A/KgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAq+XE38Nkny8+05czfw2SfLz7QSgq+XM38Nkny8+1jlzN/DpJ8vPtBKiq5dTbw6SfLz7WOXc18PkfzM+0EsKiv49mlOsQkXzM215r+P5lTrEpD83NtBMikrA5fTrFNfp+uzbXmsHllOsX12nvT8u0E6O/dDJRb3RvWqe+By7Wu6JyO3u0DV6e+CybQcQda6Na7b3aLqdPfC5P8artD1azv0vjrffD30/gOcPrv03jrO/g+Jt94rqfxovw5Mffjvt921oCn5jzfzKSfUz7jmNN/MpJ9TPuSgCr5jTfzKSfUz7mOY038xkn1M+5KgKrmLNvMZJ9TPuY5iTXzCR/Tz7ksAqK/kKaV6y+RfTzbnmv5AmVestkP0s25MgKSs8l9esr1+v7HNueaziWV6yjXa+9Qy7k6A790zlF3dJNar747Lua7pZI7u7X9Xr743JucQB1rpLrt3drWp198Vk/1qu1zVr+/VOOu98RfX+ucA+u/UuOv7+M4m73lur/Wi/Nkyd+S+73dWrWAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/9k=",
+		"projectFile": false
+	},
+	{
+		"baseName": "init_pass.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/RenderPaths/init_pass.xml",
+		"path": "RenderPaths/init_pass.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "unlit_pass.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/RenderPaths/unlit_pass.xml",
+		"path": "RenderPaths/unlit_pass.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Spot.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/Spot.xml",
+		"path": "Textures/Spot.xml",
+		"type": "xml_texture",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Smoke.dds",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/Smoke.dds",
+		"path": "Textures/Smoke.dds",
+		"type": "unknown",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "main_pass.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/RenderPaths/main_pass.xml",
+		"path": "RenderPaths/main_pass.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Forward.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/RenderPaths/Forward.xml",
+		"path": "RenderPaths/Forward.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "SpotWide.png",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/SpotWide.png",
+		"path": "Textures/SpotWide.png",
+		"type": "image",
+		"preview": "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",
+		"projectFile": false
+	},
+	{
+		"baseName": "glasses_pass.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/RenderPaths/glasses_pass.xml",
+		"path": "RenderPaths/glasses_pass.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "RampWide.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/RampWide.xml",
+		"path": "Textures/RampWide.xml",
+		"type": "xml_texture",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "copy_texture.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/RenderPaths/copy_texture.xml",
+		"path": "RenderPaths/copy_texture.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Spot.png",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/Spot.png",
+		"path": "Textures/Spot.png",
+		"type": "image",
+		"preview": "/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCACAAIADASIAAhEBAxEB/8QAGwAAAwEBAQEBAAAAAAAAAAAABAYHAAUBAwj/xAAkEAABBAICAgIDAQAAAAAAAAAAAQIFIQMEIjEyYRFiBhITQf/EABQBAQAAAAAAAAAAAAAAAAAAAAD/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwD8qGMYDGMF6mm/OqUqIAK1quX4aiqFYdHLk/z4GKPh+uIwakPScQEvFDud2ihLYSvEoOCHrxCmw/1AmjoSvEGyw7m9IpVHQ/1Bc8PXiBJ82jlx/wCfIK5qtX4cioUzbh6XiL8hD98QFIwXt6b8CrSqgIBjGMBjGC4/WXPlSqA+0bouzPRXJQ4xUXScTQ0dTaHaKjqSgBI+L64jDqRdJxOrHx3XEYdSOpKAXsEX9QtsX9RrwR3oLbHegEl0X9QTPF/UoLo70CZ470BNNuLpeIvSEX3xKvtx1LQvSEd3xAj0rF0vETpLRdheqtSizysdS0JMzHU6gJ6YLkNZcGVaoEA9aiuciJ2o2QOl40Lsbi/psJ6KFA61NoBghtKm0O0VpeNHKhtam0O0VrUlAFx+lSUMGppUlGj9akoYNPWpKAFwaVJQU3S9HWwa1JQW3WroBedpegXPpUtDW7WroEz61LQCTt6VLQvyGlS0UDc1qWhfkNaloCZyul5UJMzpU6iryutS0JMzrU6gI9PaXlQpuRWuVF7Qpk9rU6ieyWL+ewvsA6Bx/s9F9lKgcNNJ9+Ot8SlwLaaA7Q2GmjtFYaQVIZtNHaKbSAMMfhpKGDTw0lHJj20gw6baQArBhoLbho2BtBbW0AI7DQJnw0dZzaBM7aAX9zDS0L8hhpaGvcbSi9INpQEmVw0okzOGnFBlW0okzLacBNJ7DTiaz2P9Xqvsqk82nE0/Im+QG/HXeJS4F1NJXA5P1eieylQOamgUuGdTR2inUhPobNTR2is1IA7R7qQYdN1IKkfmpLGDTzUlgMGB1BbXUcnBmoLbmoAtzqBM7qM7NQJnzUALuOpRekHUp1tzNS2L8hmpbAXpV1KJMy6nDXK5qUSZnNTgEmedTiafkTvIoM9mpxNZ7J+z1T2ADG5f57CeyhQOzTbJm1Va5FTtBsgd3xsCww2zTbHaK2aSyUQ27TbHaK3fGwKZH7NJYwaezSWT+P3aSxg1N2ksB2wbNJYW3ZrsVMG7SWFN3fYDC7ZrsEz7NLZyXbvsFz7tLYBW5s0ti/IbNLZtvdpbF+Q3aWwBJXZpbEmZ2adZ1ZXd8rEmZ3adYC/PbNOsnsll/psL6GKe3fKxTcqucqr2oHgXH7K4MqXQIYChQ0jTbHaKkaSyMRu87C9EctDjFSlJyAsMfI9chh1JGkslEfKdchh1JSk5AUvBI+wtsj7J9glPsFtlPsA7OkfYJnkfYqOlPsCZ5T7AMO3I0ti9ISPfI5W3KUvIXpCU75AFysjS2JMzI06zSspS8hOkt52Z6o1aA+MhsrnyrdAhjAYxjAYL1Nx+BUtVQEMA2x8x1yGDUmKTkTNrlavy1VQKw72XH/vyBWMExXkFNmPsSvFMOb2qhLZuvIClumPsC55ivInzpuvIGyzDndKoDptzFLyF+QmO+Qu5t7Lk/wB+AVzlcvy5VUArb3H51W1RAQxgMYxgP//Z",
+		"projectFile": false
+	},
+	{
+		"baseName": "start_ar.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/RenderPaths/start_ar.xml",
+		"path": "RenderPaths/start_ar.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "saveViewport.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/RenderPaths/saveViewport.xml",
+		"path": "RenderPaths/saveViewport.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "clear.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/RenderPaths/clear.xml",
+		"path": "RenderPaths/clear.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "restoreViewport.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/RenderPaths/restoreViewport.xml",
+		"path": "RenderPaths/restoreViewport.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "SpotWide.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/SpotWide.xml",
+		"path": "Textures/SpotWide.xml",
+		"type": "xml_texture",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "viewport_pass.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/RenderPaths/viewport_pass.xml",
+		"path": "RenderPaths/viewport_pass.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "finish_ar.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/RenderPaths/finish_ar.xml",
+		"path": "RenderPaths/finish_ar.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Load.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Load.as",
+		"path": "ScriptEngine/Load.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Flare.dds",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/Flare.dds",
+		"path": "Textures/Flare.dds",
+		"type": "unknown",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "MouthOpenTrigger.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Src/Triggers/MouthOpenTrigger.as",
+		"path": "ScriptEngine/Src/Triggers/MouthOpenTrigger.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "default.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/default.xml",
+		"path": "Textures/default.xml",
+		"type": "xml_texture",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "particles.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Plugins/particles.as",
+		"path": "ScriptEngine/Plugins/particles.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "texture.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/texture.as",
+		"path": "ScriptEngine/Effects/texture.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "mirror_texture.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/mirror_texture.as",
+		"path": "ScriptEngine/Effects/mirror_texture.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "maskswitching.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Plugins/maskswitching.as",
+		"path": "ScriptEngine/Plugins/maskswitching.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "template.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Plugins/template.as",
+		"path": "ScriptEngine/Plugins/template.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "RampExtreme.png",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/RampExtreme.png",
+		"path": "Textures/RampExtreme.png",
+		"type": "image",
+		"preview": "/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCACAAIADASIAAhEBAxEB/8QAGAABAQEBAQAAAAAAAAAAAAAAAAYFAQj/xAAjEAEAAQMEAgIDAAAAAAAAAAAABgED0gUXVpUCBAdBMXGi/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/APKgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAq9uJxw2SdXfxNuJxw2SdXfxBKCr24nHDZJ1d/E24nHDZJ1d/EEoKvbiccNknV38TbiccNknV38QSgq9uJxw2SdXfxNuJxw2SdXfxBKCr24nHDZJ1d/E24nHDZJ1d/EEoKvbiccNknV38TbiccNknV38QSgqq/HM3p+YdJKfvS7+Lm3c14fI+sv4glhU1+PJrSla1iEipSn3XTL+LK1KPa1pfhXy1PR9R9Pxp9+x63nbp/VKA19x5xzKSdpfyNx5xzKSdpfySgCr3HnHMpJ2l/I3HnHMpJ2l/JKAKvceccyknaX8jceccyknaX8koAq9x5xzKSdpfyNx5xzKSdpfySgCr3HnHMpJ2l/I3HnHMpJ2l/JKAKvceccyknaX8jceccyknaX8koAqq/I03r+ZjJK/vVL+Tm4k15hI+zv5JYBU1+Q5rWlaVl8irSv1XU7+TK1KQ61qnhXx1PWNR9zxr9ex7Pncp/VassAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB//2Q==",
+		"projectFile": false
+	},
+	{
+		"baseName": "RampExtreme.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/RampExtreme.xml",
+		"path": "Textures/RampExtreme.xml",
+		"type": "xml_texture",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "vignette.png",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/vignette.png",
+		"path": "Textures/vignette.png",
+		"type": "image",
+		"preview": "/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCACAAIADASIAAhEBAxEB/8QAHAABAAMBAQEBAQAAAAAAAAAAAAQGBwUICQEC/8QAJhAAAQIGAwEAAgMBAAAAAAAAAAECAwQFBhEhEiJBMSMyM3GBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAD/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwDyoAAAAA+g1em+MN2/DJ7pqOOey7XLN4Y7fhjt1Tu37AqtdqGXO2VKanMuXZIrE1l7tlamI6q5cKB3JacVHJsttCqGHN2ZtLx1RyZUslHmsObsDe7WqOeGzWKDN8oab8PPVqzuFZs2O2ZzLG78A8OAAAAAAAAAAD2LdM1hjt+GN3PM5c/Zpd1R+rtmP3HGy9wFQqkVVVTivdlSdUX5cc9foH9MXCnapcbbThodCnvw5ANPtiZw5mzZLWmssbvwwa3I2Ht2bBasfq3YHlQAAAAAAAAAAemrpi9XGSXA/L3GpXS7q4yevL3cBUp1cxFIZJm1/IpGAEuSXERCISZRe6AXWgPw9prdrRerTHqEvdprFrO6tA83gAAAAAAAAAD0fdKdXGUV793Gu3Szq4yWvt7uApk1/IpHJU4mIikUASJX+RCOSpNPyIBbaF+7TV7XTq0yygt7tNZtZnVoHmsAAAAAAAAAAeorqg9Xa8MiuGHh7jc7qlujteGO3LAw5+gM3n24epBOvU4eFU5Lk2B+E6Qbl6EJqbOrTYeXIBbreh5e0161YPVujMragZezRsVqy3RugPJAAAAAAAAAAA9qXPKZY7Xhjd0yio5+j0NcUnyhu14ZDdVP2/QGHVWXw52ivxYatcpfq3JKj3aKtMyi8vgHJhQ1VyaLDSoGXNTBElpTt8LRRJJVe3QFrtaUy5mjZLYlMMbrwodq09cs0a9bsnxht14B4KAAAAAAAAAAH0YrMpyhrrwzK5qZy59Tap6X5s+eFMrlNR6O0B51r1JXk7qU+bpa8l6m8Vui8ld1KlN0HsvQDNJSlKr06lwoNJXk3qdqUoPdOhbaLReKt6gS7ZpnHh1NNo0pxhprw5NDpvBG6LnIS/FnzwD5lgAAAAAAAAAD6kRoXJv+HFn5NHouixKiK1P6I8aEjk8Az+o0lH56nBj0NFd+pp0eUa7PwhRJBqr8QDPoFDRF/U71OpKMx1LGyQai/EJsCUa3HwCLISaMRNHagwuLf8EGEif8JCIiNX+gPleAAAAA/9k=",
+		"projectFile": false
+	},
+	{
+		"baseName": "noise.png",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/noise.png",
+		"path": "Textures/noise.png",
+		"type": "image",
+		"preview": "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",
+		"projectFile": false
+	},
+	{
+		"baseName": "Ramp.png",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/Ramp.png",
+		"path": "Textures/Ramp.png",
+		"type": "image",
+		"preview": "/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCACAAIADASIAAhEBAxEB/8QAGwABAAIDAQEAAAAAAAAAAAAAAAUGAQIDBAj/xAAkEAEAAQIFBAMBAAAAAAAAAAAABgECAwQFcdIxMpXRF1aFB//EABQBAQAAAAAAAAAAAAAAAAAAAAD/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwD5UAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFr+OJv9Nkni8fix8czf6bJPF4/EFVFq+Opt9Okni8fixX+eTWnWHyPxmPxBVhaK/wA+mdOsRkXjMbi1rAJjTrE5BT83G4grIslYJLqdYrr1Pzsbi1rCJXTrGNdp+fi8QV0T9YZKKdY3rVN8ji8WlYjJKdY/rFN8licQQYmbovILe7Q9VpvlMT053R3W7e7R9Spvlb/QIoSN2iarb3aZnqb5e/05XaXqFvdkc1TfBu9A8Y9F2TzVvdlsam9lXK7Dvt7rLqb0BaPkeb/cpJ5TH5MfI03+5STymPyVUBavkWbfcZJ5TH5MV/oc1r1mEj8nj8lWAWiv9BmdesukXk8bk1rP5jXrLJBX9LG5KyAslZ3Lq9ZVr1f0cbk1rN5XXrJ9dr+hi8ldAT9ZnKK9ZJrVd89i8mlZdJK9ZBrFd87ickGAmbpRILu7XNVrvm8T253SLW7u7WNSrvmr/aKASN2t6rd3annq75i/25XapqF3dns1XfGu9vGA9F2czV3dmcau99XK7Evu7r7q71aAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP//Z",
+		"projectFile": false
+	},
+	{
+		"baseName": "randomtest.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Plugins/randomtest.as",
+		"path": "ScriptEngine/Plugins/randomtest.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Ramp.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/Ramp.xml",
+		"path": "Textures/Ramp.xml",
+		"type": "xml_texture",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "text.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/text.as",
+		"path": "ScriptEngine/Effects/text.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Utils.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Utils.as",
+		"path": "ScriptEngine/Utils.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "copy_viewport_to_texture.xml",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/RenderPaths/copy_viewport_to_texture.xml",
+		"path": "RenderPaths/copy_viewport_to_texture.xml",
+		"type": "xml_renderpath",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "customhint.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Plugins/customhint.as",
+		"path": "ScriptEngine/Plugins/customhint.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "pasteface.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/pasteface.as",
+		"path": "ScriptEngine/Effects/pasteface.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "plane.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/plane.as",
+		"path": "ScriptEngine/Effects/plane.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "mirror.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Plugins/mirror.as",
+		"path": "ScriptEngine/Plugins/mirror.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "show_action.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/show_action.as",
+		"path": "ScriptEngine/Effects/show_action.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Skybox.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Skybox.glsl",
+		"path": "Shaders/GLSL/Skybox.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Tonemap.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Tonemap.glsl",
+		"path": "Shaders/GLSL/Tonemap.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "GammaCorrection.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/GammaCorrection.glsl",
+		"path": "Shaders/GLSL/GammaCorrection.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "IBL.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/IBL.hlsl",
+		"path": "Shaders/HLSL/IBL.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Constants.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Constants.glsl",
+		"path": "Shaders/GLSL/Constants.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Copyface.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Copyface.glsl",
+		"path": "Shaders/GLSL/Copyface.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "FaceMask.png",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/Copyface/FaceMask.png",
+		"path": "Textures/Copyface/FaceMask.png",
+		"type": "image",
+		"preview": "/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCACAAIADASIAAhEBAxEB/8QAHAABAAIDAQEBAAAAAAAAAAAAAAcIAQMGBAIF/8QAKBAAAQQBAwIGAwEAAAAAAAAAAAECAwQFBgcRCEETFCExMlESFoFx/8QAFAEBAAAAAAAAAAAAAAAAAAAAAP/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/AKqAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABL+02zGQ1vXS46RIafPv9gRAC6eM6acBDGnmpnyP7nrs9N2mZI1SNz2r9gUhBZrXXTZLQpTWsNZ8RGIrvwcVtv1JKNyWtMnEkblaqAecG6nXfbtRwRJy+RyNRCx+gum+fJUYbeYs+E2REcjE+gK1Au7W6btMxsRJHPc77PNk+mnT80bvKzPjd2ApWCZd2Nk7+iqrr0UiTU0X37oQ0AAAAAACWNq948poiFKrWpNU5+K9iJwBcjF9TeHkjb5yq9j+/B67PUvp9karFBI5xSwAWQ1x1I3MnTlq4iv4LXorfyX34K7XbUly1LYmXmSRyuVTQAN1Sw+rZjmiXh7F/JFLC6D6jruJpQ1MtB4zI0RqOT34K6AC6dXqX0++NFlgka76PLkupvDRxr5Sq97u3JTYAS7unvRlNa13U0akNNV+KdyIgAAAAAAAAAAAAA+mse74tVf8Q2pUsO9oXr/AADQDe6pYb7wvT+GpzHt+TVT/UA+QAAAAAAAAAAAAGUTlSZtnNpP3HiexKjYUX1Qhg7zQO5GW0hInlJFWLu0C3OD2I0zQjb40CSuTup0sO1umIm8Jj4l/hCWB6mGpG1uQr+vdUOpr9SGCe1FkYqKBIs21umJW8Lj4k/hzWb2J0zfjd4UCROXuiH4FjqPwTGqsbFVTls71MMWNzcfX9eyqBHe8W0X6e1bFaVHQ/RCypwvB3uv9y8tq+RUtyKkXPo04IDAAAAAAAAAAAAAAZ5MADPJgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/9k=",
+		"projectFile": false
+	},
+	{
+		"baseName": "CopyFramebuffer.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/CopyFramebuffer.hlsl",
+		"path": "Shaders/HLSL/CopyFramebuffer.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "wiggle.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Plugins/wiggle.as",
+		"path": "ScriptEngine/Plugins/wiggle.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "pe_sharpen.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/pe_sharpen.glsl",
+		"path": "Shaders/GLSL/pe_sharpen.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "ar_background.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/ar_background.as",
+		"path": "ScriptEngine/Effects/ar_background.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BRDF.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/BRDF.glsl",
+		"path": "Shaders/GLSL/BRDF.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "SoftIntensity.png",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/Beautify/SoftIntensity.png",
+		"path": "Textures/Beautify/SoftIntensity.png",
+		"type": "image",
+		"preview": "/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCACAAIADASIAAhEBAxEB/8QAHAABAAIDAQEBAAAAAAAAAAAAAAMFAQIEBgcI/8QAJhAAAgIDAQEAAgIBBQAAAAAAAAECBAMRIQUxBhIiQRNCUWGxwf/EABQBAQAAAAAAAAAAAAAAAAAAAAD/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxEAPwD8qAAAAAAAAyZRhEkUBvBHXghvRFhhtljWxb0BPWxfC4qYfnCCng+cLupg+cAlq4PnC1r4taNK2HSXDvxw0gM44aRJ8HwjyT0B8GAAAAAADKAykT447I4I7MGPbAnr49tFxTwfDmp4N64X1Kv84BPTr/OF3Ww6S4R1MGkuFnhxpIDbFj0iX4h8RFlyaAzkyaRxZs301z59f2Vlix96B8oAAAAADaKMIkxx2wJcMNstKeHbXDmq4ttcL+hW3rgHTQrfOHoaVfSXCGhW+cLuvh/VIDbBi0jo4kORRz5sySAzly6RwWM+t9IrNnW+lTZtfegTWbP3pV2LP3pBYs/eldmsf8geZAAAAygMxR118e2iDFHbLehX/ZrgHZ59bbXD0/nVOLhzeXT+cPT06yilwDergUUuHXyKHIo5LNhRT6BtnzqK+lVata30huXNb6Ulu596B0Wrf3pU2LO99Oexa3vpwZc+/wCwJ82ff9nHkykU8myGUwOcAADaK2YJ6+NykgOqnhcpI9T5NLeuHD5FJya4e28ukoxTaAmoVFGK4WXIRMfxxxK67cUU9MCW3aUU+lDdvfenNf8AQ+9KG3d230Drt3N76VNizvfTmzWG39OSeXYE+TNs55T2Ryls0bA3cjVs12AMAADaC2y68qo8k1wr6OB5ciSR9A/HvL5GTiB3eL5/6xi2i/8A44YGv8K2L+ii9X1FHaUgOn0PQUU9M8v6Hpbb6cPoem5N/wAiksWnJvoHXauOTfSvy5m2QTyNsjcgN5TbNGzGzAGdmAAAAAG+OLlJJGhe/jPlzvWY6i3HYF1+LeQ8soylHh7tf4qOD+k0jmTr+RUSbSkkeN938geWUlCXALX2fbX8lGR4+96Mskn0r7NyeWTbbOVybAmyZnJ/SFy2YMAZMAAAAAAAAAAdFCtkuWseHFFylJ60j6VjyVPxjzlGbi7LXV/seP8AMv4PBqyyYlHN6eVcf+nBH/2X/RS3Lme5llksZJTk3t7YFr7PvZr2ST/Z/qUspyk9tmgAAAAAAAAAAAAAAAAA/9k=",
+		"projectFile": false
+	},
+	{
+		"baseName": "posteffect.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/posteffect.as",
+		"path": "ScriptEngine/Effects/posteffect.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BasePlugin.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Plugins/BasePlugin.as",
+		"path": "ScriptEngine/Plugins/BasePlugin.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "FaceBlurMask.png",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/Beautify/FaceBlurMask.png",
+		"path": "Textures/Beautify/FaceBlurMask.png",
+		"type": "image",
+		"preview": "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",
+		"projectFile": false
+	},
+	{
+		"baseName": "tap.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/tap.as",
+		"path": "ScriptEngine/Effects/tap.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "FaceBlurMask1.png",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/Beautify/FaceBlurMask1.png",
+		"path": "Textures/Beautify/FaceBlurMask1.png",
+		"type": "image",
+		"preview": "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",
+		"projectFile": false
+	},
+	{
+		"baseName": "FXAA2.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/FXAA2.glsl",
+		"path": "Shaders/GLSL/FXAA2.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Fog.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Fog.glsl",
+		"path": "Shaders/GLSL/Fog.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "mouth_close.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/mouth_close.as",
+		"path": "ScriptEngine/Effects/mouth_close.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "colorfilter.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/colorfilter.as",
+		"path": "ScriptEngine/Effects/colorfilter.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Uniforms.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Uniforms.glsl",
+		"path": "Shaders/GLSL/Uniforms.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "switch_animation.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/switch_animation.as",
+		"path": "ScriptEngine/Effects/switch_animation.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BlendMath.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/BlendMath.glsl",
+		"path": "Shaders/GLSL/BlendMath.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "animation.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/animation.as",
+		"path": "ScriptEngine/Effects/animation.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "perspective.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Plugins/perspective.as",
+		"path": "ScriptEngine/Plugins/perspective.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "beautify.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/beautify.as",
+		"path": "ScriptEngine/Effects/beautify.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BilateralFilter.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/BilateralFilter.glsl",
+		"path": "Shaders/GLSL/BilateralFilter.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "fixeddetection.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Plugins/fixeddetection.as",
+		"path": "ScriptEngine/Plugins/fixeddetection.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "start_animation.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/start_animation.as",
+		"path": "ScriptEngine/Effects/start_animation.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "parallax.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Plugins/parallax.as",
+		"path": "ScriptEngine/Plugins/parallax.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "pe_noise.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/pe_noise.hlsl",
+		"path": "Shaders/HLSL/pe_noise.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "LiquifiedWarp.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/LiquifiedWarp.hlsl",
+		"path": "Shaders/HLSL/LiquifiedWarp.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "LitParticle.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/LitParticle.hlsl",
+		"path": "Shaders/HLSL/LitParticle.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "model3d.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/model3d.as",
+		"path": "ScriptEngine/Effects/model3d.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "hide_action.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/hide_action.as",
+		"path": "ScriptEngine/Effects/hide_action.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "pe_chromatic.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/pe_chromatic.hlsl",
+		"path": "Shaders/HLSL/pe_chromatic.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Beautify.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Beautify.glsl",
+		"path": "Shaders/GLSL/Beautify.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBRLitSolid.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/PBRLitSolid.hlsl",
+		"path": "Shaders/HLSL/PBRLitSolid.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "ColorCorrection.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/ColorCorrection.hlsl",
+		"path": "Shaders/HLSL/ColorCorrection.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "AutoExposure.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/AutoExposure.glsl",
+		"path": "Shaders/GLSL/AutoExposure.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBRDeferred.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/PBRDeferred.glsl",
+		"path": "Shaders/GLSL/PBRDeferred.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "ScreenPos.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/ScreenPos.glsl",
+		"path": "Shaders/GLSL/ScreenPos.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "FaceMaskNose.png",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Textures/Copyface/FaceMaskNose.png",
+		"path": "Textures/Copyface/FaceMaskNose.png",
+		"type": "image",
+		"preview": "/9j/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCACAAIADASIAAhEBAxEB/8QAHAABAAICAwEAAAAAAAAAAAAAAAYIAgcBBAkF/8QAJxABAAIBAwIGAwEBAAAAAAAAAAEDAgQFEQYHEhMhMVFhCBSBcZH/xAAUAQEAAAAAAAAAAAAAAAAAAAAA/8QAFBEBAAAAAAAAAAAAAAAAAAAAAP/aAAwDAQACEQMRAD8AqoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAzrrysyjHCJmXGGM5ZREe8tydnu3ee/amu26uZr559gQTYui9y3XLHyqM5ifpO9v7L7pfXGWVWUc/S3XS3Q237Tpa8caMPFEfCV16HT1xxjXj/wFGtw7L7pRXM41ZTx9IJvvRe5bVll5tGcRH09ILNDp7I4yrxn+Ip1T0Pt27aWzHKjDxTHwDzisryrynHOJiWDdHeLt1nsWpsuprmK+efSGmc8ZxymJ94BiAAAAAAADu7RXFmvqxn2nKF6+xO10afYKc8cY8U4wofobfJ1VefxPK5f4/8AV+nu22rTWWRGUREe4LAjCqzGzCMsZiYlmADC2zGvCcspiIgGqO+u2UajYLs88Y8UYyonvFcVa+3HH2jKVx/yA6v09O2W6auyJymJjjlTPX3efqrM/meQdYAAAAAAAHKU9G9VarYdZhZVZlGMT8oqAuL0H3s09lFdetsiJ4iPWW0tF3J2jUVxP7GHr9vO6nU20zzXnMf5L6VPUOvqjjG/OP6C/wDre5O0UVzP7GHp9tXded69PVRZXo7InLjj0lVG7qHX2xxlfnP9fNu1Nt082ZzP+yCSdZdV6rf9ZnZbZlOMz8os4AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAf/2Q==",
+		"projectFile": false
+	},
+	{
+		"baseName": "ColorFilter.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/ColorFilter.hlsl",
+		"path": "Shaders/HLSL/ColorFilter.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "readconfiguration.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Plugins/readconfiguration.as",
+		"path": "ScriptEngine/Plugins/readconfiguration.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Water.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Water.hlsl",
+		"path": "Shaders/HLSL/Water.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "spinner3d.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Plugins/spinner3d.as",
+		"path": "ScriptEngine/Plugins/spinner3d.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "color_filter.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/color_filter.as",
+		"path": "ScriptEngine/Effects/color_filter.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Lighting.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Lighting.hlsl",
+		"path": "Shaders/HLSL/Lighting.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "FXAA3.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/FXAA3.glsl",
+		"path": "Shaders/GLSL/FXAA3.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "VegetationShadow.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/VegetationShadow.glsl",
+		"path": "Shaders/GLSL/VegetationShadow.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "TerrainBlend.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/TerrainBlend.hlsl",
+		"path": "Shaders/HLSL/TerrainBlend.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "pe_zoom.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/pe_zoom.hlsl",
+		"path": "Shaders/HLSL/pe_zoom.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "pe_blur.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/pe_blur.glsl",
+		"path": "Shaders/GLSL/pe_blur.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "LitSolid.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/LitSolid.hlsl",
+		"path": "Shaders/HLSL/LitSolid.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "ScreenPos.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/ScreenPos.hlsl",
+		"path": "Shaders/HLSL/ScreenPos.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BilateralFilter.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/BilateralFilter.hlsl",
+		"path": "Shaders/HLSL/BilateralFilter.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "copyface.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/copyface.as",
+		"path": "ScriptEngine/Effects/copyface.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "light.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/light.as",
+		"path": "ScriptEngine/Effects/light.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBRDeferred.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/PBRDeferred.hlsl",
+		"path": "Shaders/HLSL/PBRDeferred.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "animation_visible.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/animation_visible.as",
+		"path": "ScriptEngine/Effects/animation_visible.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "pe_chromatic.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/pe_chromatic.glsl",
+		"path": "Shaders/GLSL/pe_chromatic.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Samplers.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Samplers.hlsl",
+		"path": "Shaders/HLSL/Samplers.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Vegetation.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Vegetation.hlsl",
+		"path": "Shaders/HLSL/Vegetation.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Transform.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Transform.hlsl",
+		"path": "Shaders/HLSL/Transform.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Stencil.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Stencil.glsl",
+		"path": "Shaders/GLSL/Stencil.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Unlit.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Unlit.hlsl",
+		"path": "Shaders/HLSL/Unlit.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "ShadowBlur.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/ShadowBlur.glsl",
+		"path": "Shaders/GLSL/ShadowBlur.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "MirrorQuad.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/MirrorQuad.glsl",
+		"path": "Shaders/GLSL/MirrorQuad.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PostProcess.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/PostProcess.glsl",
+		"path": "Shaders/GLSL/PostProcess.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DeferredLight.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/DeferredLight.hlsl",
+		"path": "Shaders/HLSL/DeferredLight.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Yuv2Rgb.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Yuv2Rgb.hlsl",
+		"path": "Shaders/HLSL/Yuv2Rgb.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Text.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Text.hlsl",
+		"path": "Shaders/HLSL/Text.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BloomHDR.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/BloomHDR.glsl",
+		"path": "Shaders/GLSL/BloomHDR.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Basic.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Basic.hlsl",
+		"path": "Shaders/HLSL/Basic.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "ComplexBlend.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/ComplexBlend.glsl",
+		"path": "Shaders/GLSL/ComplexBlend.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Yuv2Rgb_orig.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Yuv2Rgb_orig.hlsl",
+		"path": "Shaders/HLSL/Yuv2Rgb_orig.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Fog.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Fog.hlsl",
+		"path": "Shaders/HLSL/Fog.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "mouth_open.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/mouth_open.as",
+		"path": "ScriptEngine/Effects/mouth_open.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Skydome.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Skydome.hlsl",
+		"path": "Shaders/HLSL/Skydome.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Blur.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Blur.glsl",
+		"path": "Shaders/GLSL/Blur.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Bloom.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Bloom.hlsl",
+		"path": "Shaders/HLSL/Bloom.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Shadow.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Shadow.hlsl",
+		"path": "Shaders/HLSL/Shadow.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "VegetationDepth.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/VegetationDepth.hlsl",
+		"path": "Shaders/HLSL/VegetationDepth.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Skydome.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Skydome.glsl",
+		"path": "Shaders/GLSL/Skydome.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBR.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/PBR.glsl",
+		"path": "Shaders/GLSL/PBR.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Uniforms.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Uniforms.hlsl",
+		"path": "Shaders/HLSL/Uniforms.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Liquify.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Liquify.glsl",
+		"path": "Shaders/GLSL/Liquify.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Samplers.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Samplers.glsl",
+		"path": "Shaders/GLSL/Samplers.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "DeferredLight.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/DeferredLight.glsl",
+		"path": "Shaders/GLSL/DeferredLight.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Stencil.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Stencil.hlsl",
+		"path": "Shaders/HLSL/Stencil.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Vegetation.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Vegetation.glsl",
+		"path": "Shaders/GLSL/Vegetation.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "ComplexBlend.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/ComplexBlend.hlsl",
+		"path": "Shaders/HLSL/ComplexBlend.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Text.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Text.glsl",
+		"path": "Shaders/GLSL/Text.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BloomHDR.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/BloomHDR.hlsl",
+		"path": "Shaders/HLSL/BloomHDR.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Basic.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Basic.glsl",
+		"path": "Shaders/GLSL/Basic.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PostProcess.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/PostProcess.hlsl",
+		"path": "Shaders/HLSL/PostProcess.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Yuv2Rgb.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Yuv2Rgb.glsl",
+		"path": "Shaders/GLSL/Yuv2Rgb.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "MirrorQuad.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/MirrorQuad.hlsl",
+		"path": "Shaders/HLSL/MirrorQuad.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "ShadowBlur.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/ShadowBlur.hlsl",
+		"path": "Shaders/HLSL/ShadowBlur.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "TextureEffectBase.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/TextureEffectBase.hlsl",
+		"path": "Shaders/HLSL/TextureEffectBase.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "VegetationDepth.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/VegetationDepth.glsl",
+		"path": "Shaders/GLSL/VegetationDepth.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BaseEvent.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/Base/BaseEvent.as",
+		"path": "ScriptEngine/Effects/Base/BaseEvent.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Urho2D.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Urho2D.hlsl",
+		"path": "Shaders/HLSL/Urho2D.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Shadow.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Shadow.glsl",
+		"path": "Shaders/GLSL/Shadow.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Liquify.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Liquify.hlsl",
+		"path": "Shaders/HLSL/Liquify.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Transform.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Transform.glsl",
+		"path": "Shaders/GLSL/Transform.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBR.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/PBR.hlsl",
+		"path": "Shaders/HLSL/PBR.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Unlit.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Unlit.glsl",
+		"path": "Shaders/GLSL/Unlit.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "GlassesLitSolid.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/GlassesLitSolid.hlsl",
+		"path": "Shaders/HLSL/GlassesLitSolid.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Pixelize.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Pixelize.hlsl",
+		"path": "Shaders/HLSL/Pixelize.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "GreyScale.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/GreyScale.glsl",
+		"path": "Shaders/GLSL/GreyScale.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BaseAr.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/Base/BaseAr.as",
+		"path": "ScriptEngine/Effects/Base/BaseAr.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "GreyScale.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/GreyScale.hlsl",
+		"path": "Shaders/HLSL/GreyScale.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Pixelize.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Pixelize.glsl",
+		"path": "Shaders/GLSL/Pixelize.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "GlassesLitSolid.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/GlassesLitSolid.glsl",
+		"path": "Shaders/GLSL/GlassesLitSolid.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BaseMouthEvent.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/Base/BaseMouthEvent.as",
+		"path": "ScriptEngine/Effects/Base/BaseMouthEvent.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Depth.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Depth.hlsl",
+		"path": "Shaders/HLSL/Depth.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PrepassLight.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/PrepassLight.hlsl",
+		"path": "Shaders/HLSL/PrepassLight.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BilateralFilter2.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/BilateralFilter2.glsl",
+		"path": "Shaders/GLSL/BilateralFilter2.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PrepassLight.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/PrepassLight.glsl",
+		"path": "Shaders/GLSL/PrepassLight.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BilateralFilter2.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/BilateralFilter2.hlsl",
+		"path": "Shaders/HLSL/BilateralFilter2.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Depth.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Depth.glsl",
+		"path": "Shaders/GLSL/Depth.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Bloom.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Bloom.glsl",
+		"path": "Shaders/GLSL/Bloom.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Blur.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Blur.hlsl",
+		"path": "Shaders/HLSL/Blur.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Urho2D.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Urho2D.glsl",
+		"path": "Shaders/GLSL/Urho2D.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BaseAnimation.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/Base/BaseAnimation.as",
+		"path": "ScriptEngine/Effects/Base/BaseAnimation.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BaseAction.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/Base/BaseAction.as",
+		"path": "ScriptEngine/Effects/Base/BaseAction.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "liquifiedwarp.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/liquifiedwarp.as",
+		"path": "ScriptEngine/Effects/liquifiedwarp.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "TextureEffectBase.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/TextureEffectBase.glsl",
+		"path": "Shaders/GLSL/TextureEffectBase.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "LiquifiedWarp.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/LiquifiedWarp.glsl",
+		"path": "Shaders/GLSL/LiquifiedWarp.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "ColorCorrection.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/ColorCorrection.glsl",
+		"path": "Shaders/GLSL/ColorCorrection.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BlendMath.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/BlendMath.hlsl",
+		"path": "Shaders/HLSL/BlendMath.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BaseFaceEvent.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/Base/BaseFaceEvent.as",
+		"path": "ScriptEngine/Effects/Base/BaseFaceEvent.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "pe_noise.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/pe_noise.glsl",
+		"path": "Shaders/GLSL/pe_noise.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "facemodel.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/facemodel.as",
+		"path": "ScriptEngine/Effects/facemodel.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Tonemap.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Tonemap.hlsl",
+		"path": "Shaders/HLSL/Tonemap.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Lighting.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Lighting.glsl",
+		"path": "Shaders/GLSL/Lighting.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "GammaCorrection.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/GammaCorrection.hlsl",
+		"path": "Shaders/HLSL/GammaCorrection.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "patch_copy.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/patch_copy.as",
+		"path": "ScriptEngine/Effects/patch_copy.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Constants.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Constants.hlsl",
+		"path": "Shaders/HLSL/Constants.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Water.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/Water.glsl",
+		"path": "Shaders/GLSL/Water.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BRDF.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/BRDF.hlsl",
+		"path": "Shaders/HLSL/BRDF.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BaseVisibleAction.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/Base/BaseVisibleAction.as",
+		"path": "ScriptEngine/Effects/Base/BaseVisibleAction.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "ar_object.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/ar_object.as",
+		"path": "ScriptEngine/Effects/ar_object.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BaseEffect.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/Base/BaseEffect.as",
+		"path": "ScriptEngine/Effects/Base/BaseEffect.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "BaseAnimationAction.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/Base/BaseAnimationAction.as",
+		"path": "ScriptEngine/Effects/Base/BaseAnimationAction.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "CopyFramebuffer.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/CopyFramebuffer.glsl",
+		"path": "Shaders/GLSL/CopyFramebuffer.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Skybox.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Skybox.hlsl",
+		"path": "Shaders/HLSL/Skybox.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "pe_sharpen.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/pe_sharpen.hlsl",
+		"path": "Shaders/HLSL/pe_sharpen.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "IBL.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/IBL.glsl",
+		"path": "Shaders/GLSL/IBL.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "postprocess.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/postprocess.as",
+		"path": "ScriptEngine/Effects/postprocess.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Copyface.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Copyface.hlsl",
+		"path": "Shaders/HLSL/Copyface.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "LitSolid.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/LitSolid.glsl",
+		"path": "Shaders/GLSL/LitSolid.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "FXAA2.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/FXAA2.hlsl",
+		"path": "Shaders/HLSL/FXAA2.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "face_lost.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/face_lost.as",
+		"path": "ScriptEngine/Effects/face_lost.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "FXAA3.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/FXAA3.hlsl",
+		"path": "Shaders/HLSL/FXAA3.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "pe_zoom.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/pe_zoom.glsl",
+		"path": "Shaders/GLSL/pe_zoom.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "VegetationShadow.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/VegetationShadow.hlsl",
+		"path": "Shaders/HLSL/VegetationShadow.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "occluder.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/occluder.as",
+		"path": "ScriptEngine/Effects/occluder.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "TerrainBlend.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/TerrainBlend.glsl",
+		"path": "Shaders/GLSL/TerrainBlend.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "ClearFramebuffer.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/ClearFramebuffer.hlsl",
+		"path": "Shaders/HLSL/ClearFramebuffer.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "nod.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/nod.as",
+		"path": "ScriptEngine/Effects/nod.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "LitParticle.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/LitParticle.glsl",
+		"path": "Shaders/GLSL/LitParticle.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "wiggle.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/wiggle.as",
+		"path": "ScriptEngine/Effects/wiggle.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "AutoExposure.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/AutoExposure.hlsl",
+		"path": "Shaders/HLSL/AutoExposure.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "PBRLitSolid.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/PBRLitSolid.glsl",
+		"path": "Shaders/GLSL/PBRLitSolid.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "Beautify.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/Beautify.hlsl",
+		"path": "Shaders/HLSL/Beautify.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "face_found.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/face_found.as",
+		"path": "ScriptEngine/Effects/face_found.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "stop_animation.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/stop_animation.as",
+		"path": "ScriptEngine/Effects/stop_animation.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "patch.as",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/ScriptEngine/Effects/patch.as",
+		"path": "ScriptEngine/Effects/patch.as",
+		"type": "script",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "ColorFilter.glsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/GLSL/ColorFilter.glsl",
+		"path": "Shaders/GLSL/ColorFilter.glsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	},
+	{
+		"baseName": "pe_blur.hlsl",
+		"absPath": "/Users/askhento/PROJECTOS/urhovk/MaskAssets/mask-assets/Shaders/HLSL/pe_blur.hlsl",
+		"path": "Shaders/HLSL/pe_blur.hlsl",
+		"type": "shader",
+		"preview": "",
+		"projectFile": false
+	}
+]
