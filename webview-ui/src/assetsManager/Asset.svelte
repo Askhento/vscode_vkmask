@@ -28,7 +28,7 @@
             onSelect();
         }}
         ><span class="asset-name-text">{baseName}</span>
-        <span class="asset-btn-wrapper">
+        <!-- <span class="asset-btn-wrapper">
             <vscode-button
                 class="asset-btn"
                 appearance="icon"
@@ -38,7 +38,7 @@
             >
                 <span class="codicon codicon-trash" />
             </vscode-button>
-        </span>
+        </span> -->
     </vscode-option>
 {/key}
 
