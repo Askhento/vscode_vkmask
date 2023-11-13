@@ -632,91 +632,186 @@ const ZCullMode = z.enum(["none", "ccw", "cw"]);
 
 const ZFillMode = z.enum(["solid", "wireframe", "point"]);
 
-const ZMaterialObject = z
-    .object({
-        technique: ZTechniqueAsset({ label: "Technique" }),
-        textures: z
-            .object({
-                diffuse: ZTextureAsset({ label: "Diffuse" }),
-                normal: ZTextureAsset({ label: "Normal" }),
-                specular: ZTextureAsset({ label: "Specular" }),
-                emissive: ZTextureAsset({ label: "Emissive" }),
-                environment: ZTextureAsset({ label: "Environment" }),
-            })
-            .describe(uiDescriptions.object({})),
-        parameters: z
-            .object({
-                MatDiffColor: ZArray4D.describe(
-                    uiDescriptions.array4d({
-                        defValue: [1.0, 1.0, 1.0, 1.0],
-                        label: "Diffuse color",
-                    })
-                ),
-                MatSpecColor: ZArray4D.describe(
-                    uiDescriptions.array4d({
-                        defValue: [0.0, 0.0, 0.0, 1.0],
-                        showAlways: false,
-                        label: "Specular color",
-                    })
-                ),
-                MatEmissiveColor: ZArray3D.describe(
-                    uiDescriptions.array3d({ showAlways: false, label: "Emissive color" })
-                ),
-                MatEnvMapColor: ZArray3D.describe(
-                    uiDescriptions.array3d({
-                        defValue: [1.0, 1.0, 1.0],
-                        showAlways: false,
-                        label: "Environment color",
-                    })
-                ),
-                Roughness: ZNumberSlider.describe(
-                    uiDescriptions.numberSlider({
-                        defValue: 0.5,
-                        showAlways: false,
-                        label: "Roughness",
-                    })
-                ),
-                Metallic: ZNumberSlider.describe(
-                    uiDescriptions.numberSlider({
-                        defValue: 0.5,
-                        showAlways: false,
-                        label: "Metallness",
-                    })
-                ),
-                UOffset: ZArray4D.describe(
-                    uiDescriptions.array4d({
-                        defValue: [1.0, 0.0, 0.0, 0.0],
-                        showAlways: false,
-                        label: "U transform",
-                    })
-                ),
-                VOffset: ZArray4D.describe(
-                    uiDescriptions.array4d({
-                        defValue: [0.0, 1.0, 0.0, 0.0],
-                        showAlways: false,
-                        label: "V transform",
-                    })
-                ),
-            })
-            .describe(uiDescriptions.object({}))
-            .passthrough(),
-        cull: ZCullMode.describe(
-            uiDescriptions.enum({
-                label: "Culling",
-                options: Object.keys(ZCullMode.Values),
-                defValue: ZCullMode.Values.ccw,
-            })
-        ),
-        fill: ZFillMode.describe(
-            uiDescriptions.enum({
-                label: "Fill",
-                options: Object.keys(ZFillMode.Values),
-                defValue: ZFillMode.Values.solid,
-                showAlways: false,
-            })
-        ),
-    })
-    .describe(uiDescriptions.object({}));
+// const ZMaterialObject = z
+//     .object({
+//         technique: ZTechniqueAsset({ label: "Technique" }),
+//         textures: z
+//             .object({
+//                 diffuse: ZTextureAsset({ label: "Diffuse" }),
+//                 normal: ZTextureAsset({ label: "Normal" }),
+//                 specular: ZTextureAsset({ label: "Specular" }),
+//                 emissive: ZTextureAsset({ label: "Emissive" }),
+//                 environment: ZTextureAsset({ label: "Environment" }),
+//             })
+//             .describe(uiDescriptions.object({})),
+//         parameters: z
+//             .object({
+//                 MatDiffColor: ZArray4D.describe(
+//                     uiDescriptions.array4d({
+//                         defValue: [1.0, 1.0, 1.0, 1.0],
+//                         label: "Diffuse color",
+//                     })
+//                 ),
+//                 MatSpecColor: ZArray4D.describe(
+//                     uiDescriptions.array4d({
+//                         defValue: [0.0, 0.0, 0.0, 1.0],
+//                         showAlways: false,
+//                         label: "Specular color",
+//                     })
+//                 ),
+//                 MatEmissiveColor: ZArray3D.describe(
+//                     uiDescriptions.array3d({ showAlways: false, label: "Emissive color" })
+//                 ),
+//                 MatEnvMapColor: ZArray3D.describe(
+//                     uiDescriptions.array3d({
+//                         defValue: [1.0, 1.0, 1.0],
+//                         showAlways: false,
+//                         label: "Environment color",
+//                     })
+//                 ),
+//                 Roughness: ZNumberSlider.describe(
+//                     uiDescriptions.numberSlider({
+//                         defValue: 0.5,
+//                         showAlways: false,
+//                         label: "Roughness",
+//                     })
+//                 ),
+//                 Metallic: ZNumberSlider.describe(
+//                     uiDescriptions.numberSlider({
+//                         defValue: 0.5,
+//                         showAlways: false,
+//                         label: "Metallness",
+//                     })
+//                 ),
+//                 UOffset: ZArray4D.describe(
+//                     uiDescriptions.array4d({
+//                         defValue: [1.0, 0.0, 0.0, 0.0],
+//                         showAlways: false,
+//                         label: "U transform",
+//                     })
+//                 ),
+//                 VOffset: ZArray4D.describe(
+//                     uiDescriptions.array4d({
+//                         defValue: [0.0, 1.0, 0.0, 0.0],
+//                         showAlways: false,
+//                         label: "V transform",
+//                     })
+//                 ),
+//             })
+//             .describe(uiDescriptions.object({}))
+//             .passthrough(),
+//         cull: ZCullMode.describe(
+//             uiDescriptions.enum({
+//                 label: "Culling",
+//                 options: Object.keys(ZCullMode.Values),
+//                 defValue: ZCullMode.Values.ccw,
+//             })
+//         ),
+//         fill: ZFillMode.describe(
+//             uiDescriptions.enum({
+//                 label: "Fill",
+//                 options: Object.keys(ZFillMode.Values),
+//                 defValue: ZFillMode.Values.solid,
+//                 showAlways: false,
+//             })
+//         ),
+//     })
+//     .describe(uiDescriptions.object({}));
+
+export const ZMaterialObject = z.preprocess(
+    (val) => {
+        if (isObject(val)) {
+        } else {
+            //? string
+        }
+        return val;
+    },
+    z
+        .object({
+            technique: ZTechniqueAsset({ label: "Technique" }),
+            textures: z
+                .object({
+                    diffuse: ZTextureAsset({ label: "Diffuse" }),
+                    normal: ZTextureAsset({ label: "Normal" }),
+                    specular: ZTextureAsset({ label: "Specular" }),
+                    emissive: ZTextureAsset({ label: "Emissive" }),
+                    environment: ZTextureAsset({ label: "Environment" }),
+                })
+                .describe(uiDescriptions.object({})),
+            parameters: z
+                .object({
+                    MatDiffColor: ZArray4D.describe(
+                        uiDescriptions.array4d({
+                            defValue: [1.0, 1.0, 1.0, 1.0],
+                            label: "Diffuse color",
+                        })
+                    ),
+                    MatSpecColor: ZArray4D.describe(
+                        uiDescriptions.array4d({
+                            defValue: [0.0, 0.0, 0.0, 1.0],
+                            showAlways: false,
+                            label: "Specular color",
+                        })
+                    ),
+                    MatEmissiveColor: ZArray3D.describe(
+                        uiDescriptions.array3d({ showAlways: false, label: "Emissive color" })
+                    ),
+                    MatEnvMapColor: ZArray3D.describe(
+                        uiDescriptions.array3d({
+                            defValue: [1.0, 1.0, 1.0],
+                            showAlways: false,
+                            label: "Environment color",
+                        })
+                    ),
+                    Roughness: ZNumberSlider.describe(
+                        uiDescriptions.numberSlider({
+                            defValue: 0.5,
+                            showAlways: false,
+                            label: "Roughness",
+                        })
+                    ),
+                    Metallic: ZNumberSlider.describe(
+                        uiDescriptions.numberSlider({
+                            defValue: 0.5,
+                            showAlways: false,
+                            label: "Metallness",
+                        })
+                    ),
+                    UOffset: ZArray4D.describe(
+                        uiDescriptions.array4d({
+                            defValue: [1.0, 0.0, 0.0, 0.0],
+                            showAlways: false,
+                            label: "U transform",
+                        })
+                    ),
+                    VOffset: ZArray4D.describe(
+                        uiDescriptions.array4d({
+                            defValue: [0.0, 1.0, 0.0, 0.0],
+                            showAlways: false,
+                            label: "V transform",
+                        })
+                    ),
+                })
+                .describe(uiDescriptions.object({}))
+                .passthrough(),
+            cull: ZCullMode.describe(
+                uiDescriptions.enum({
+                    label: "Culling",
+                    options: Object.keys(ZCullMode.Values),
+                    defValue: ZCullMode.Values.ccw,
+                })
+            ),
+            fill: ZFillMode.describe(
+                uiDescriptions.enum({
+                    label: "Fill",
+                    options: Object.keys(ZFillMode.Values),
+                    defValue: ZFillMode.Values.solid,
+                    showAlways: false,
+                })
+            ),
+        })
+        .describe(uiDescriptions.object({}))
+);
 
 const ZMaterial = z
     .union([ZMaterialAsset({ label: "Material" }), ZMaterialObject])

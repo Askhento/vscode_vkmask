@@ -59,15 +59,13 @@
     }
 
     function processAssets(newAssets) {
-        print("new assets", newAssets);
+        print("new assets count ", newAssets.length);
+
         $assets = newAssets;
         assetGroups = {
             materials: {
                 expanded: true,
-                elements: $assets.filter(
-                    (a) =>
-                        (a.type === "xml_material" || a.type === "json_material") && a.projectFile
-                ),
+                elements: $assets.filter((a) => a.type === "json_material" && a.projectFile),
             },
         };
     }
@@ -128,8 +126,8 @@
     }
 
     async function init() {
-        await getAssets();
         await getSelection();
+        await getAssets();
 
         // await tick();
         // skippedInit = true;

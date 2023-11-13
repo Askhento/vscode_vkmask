@@ -211,6 +211,10 @@ export async function activate(context: vscode.ExtensionContext) {
                 globalThis.selection = newSelection;
                 break;
 
+            case SelectionType.asset:
+                globalThis.selection = newSelection;
+                break;
+
             case SelectionType.empty:
                 maskConfig.clearSelection();
                 break;
@@ -271,6 +275,15 @@ export async function activate(context: vscode.ExtensionContext) {
                 messageHandler.send({
                     ...data,
                     payload: await Assets.getAssets(true),
+                    target: origin,
+                });
+                break;
+
+            case RequestCommand.readAsset:
+                // reply with assets
+                messageHandler.send({
+                    ...data,
+                    payload: Assets.readAsset(payload.path, payload.assetType),
                     target: origin,
                 });
                 break;
@@ -342,6 +355,9 @@ export async function activate(context: vscode.ExtensionContext) {
                 break;
 
             // more complex  stuff
+            case RequestCommand.writeAsset:
+                Assets.writeAsset(payload.path, payload.data, payload.assetType);
+                break;
 
             case RequestCommand.updateEffects:
                 maskConfig.updateEffects(payload);

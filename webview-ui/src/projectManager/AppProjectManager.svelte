@@ -81,7 +81,7 @@
     }
 
     function processAssets(newAssets) {
-        print("new assets", newAssets);
+        print("new assets count ", newAssets.length);
         $assets = newAssets;
     }
 

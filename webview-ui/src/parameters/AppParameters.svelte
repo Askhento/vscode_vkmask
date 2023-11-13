@@ -34,6 +34,7 @@
         EffectParserForUI,
         MaskSettingsParserForUI,
         PluginParserForUI,
+        AssetParserForUI,
     } from "../ui-controls/Controls.js";
     import { effectNames, pluginNames } from "../../../src/ztypes.js";
     import { onMount, tick } from "svelte";
@@ -49,6 +50,7 @@
     let selection: Selection = { type: SelectionType.empty },
         effects,
         plugins,
+        asset,
         maskSettings,
         uiElements,
         selectionName;
@@ -152,7 +154,7 @@
     }
 
     function processAssets(newAssets) {
-        print("new assets", newAssets);
+        print("new assets count ", newAssets.length);
         $assets = newAssets;
     }
 
@@ -246,11 +248,34 @@
                 return pluginNamesSet.has(plugins?.[selection.id]?.name);
 
             case SelectionType.maskSettings:
+            case SelectionType.asset:
                 return true;
 
             default:
                 return false;
         }
+    }
+
+    async function readAsset() {
+        const { payload } = await messageHandler.request({
+            payload: selection,
+            target: RequestTarget.extension,
+            command: RequestCommand.readAsset,
+        });
+
+        asset = payload;
+    }
+
+    function writeAsset() {
+        messageHandler.send({
+            command: RequestCommand.writeAsset,
+            target: RequestTarget.extension,
+            payload: {
+                path: selection.path,
+                assetType: selection.assetType,
+                data: asset,
+            },
+        });
     }
 
     function parseUI() {
@@ -276,6 +301,11 @@
             case SelectionType.maskSettings:
                 print("will parse mask settings", maskSettings);
                 parseResult = MaskSettingsParserForUI.safeParse(maskSettings);
+                break;
+
+            case SelectionType.asset:
+                print("will parse asset", asset);
+                parseResult = AssetParserForUI.safeParse(asset);
                 break;
 
             default:
@@ -318,6 +348,10 @@
                 await getPlugins();
                 break;
 
+            case SelectionType.asset:
+                await readAsset();
+                break;
+
             default:
                 print("selection type not implemented " + selection.type);
                 return;
@@ -345,11 +379,27 @@
                 sendEffects();
                 break;
 
-            // case SelectionType.plugin:
-            //     plugins[selection.id] = applyValueByPath2(plugins[selection.id], path, value);
-            //     print("updated plugins", plugins[selection.id]);
-            //     // sendPlugins();
-            //     break;
+            case SelectionType.plugin:
+                let tempPlugins = plugins[selection.id];
+                changes.forEach(({ path, value, structural }) => {
+                    tempPlugins = applyValueByPath2(tempPlugins, path, value);
+                    needRerender = needRerender || structural;
+                });
+                plugins[selection.id] = tempPlugins;
+                print("updated plugins", plugins[selection.id]);
+                sendPlugins();
+                break;
+
+            case SelectionType.asset:
+                let tempAsset = asset;
+                changes.forEach(({ path, value, structural }) => {
+                    tempAsset = applyValueByPath2(tempAsset, path, value);
+                    needRerender = needRerender || structural;
+                });
+                asset = tempAsset;
+                print("updated assets", asset);
+                writeAsset();
+                break;
 
             // case SelectionType.maskSettings:
             //     maskSettings = applyValueByPath2(maskSettings, path, value);
@@ -578,8 +628,22 @@
                     {/key}
                 {/if}
             {:else if selection.type === SelectionType.asset}
-                <div>asset type not implememted error</div>
-                <!-- <pre> {JSON.stringify(maskSettings, null, "\t")}</pre> -->
+                {#key asset}
+                    {#if uiElements}
+                        <ObjectControl
+                            expanded={true}
+                            nesting={false}
+                            value={asset}
+                            label={selection.path}
+                            params={uiElements.uiDescription}
+                            path={[]}
+                            uiElements={uiElements.value}
+                            on:changed={onChanged}
+                        />
+                    {:else}
+                        <div>{l10n.t("unknown asset")}</div>
+                    {/if}
+                {/key}
             {:else}
                 <div>{`${l10n.t("select anything to see")}..`}.</div>
                 <!-- <pre>{JSON.stringify(selection, null, "\t")}</pre> -->

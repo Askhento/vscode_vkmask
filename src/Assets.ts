@@ -5,9 +5,11 @@ import { EventEmitter } from "events";
 import { logger } from "./Logger";
 const print = (...args: any) => logger.log(__filename, ...args);
 import { copyRecursiveSync } from "./utils/copyFilesRecursive";
+import { jsonPrettyArray } from "./utils/jsonStringify";
 import sharp from "sharp";
 
 import { XMLParser } from "fast-xml-parser"; // https://github.com/NaturalIntelligence/fast-xml-parser/blob/c7b3cea4ead020c21d39e135a50348208829e971/docs/v4/2.XMLparseOptions.md
+import { AssetTypes } from "./types";
 
 /*
     add exclude 
@@ -72,6 +74,48 @@ class AssetWatcher extends EventEmitter {
             await this.searchAssets();
         }
         return builtins ? [...(this.builtInAssets ?? []), ...this.assets] : this.assets;
+    }
+
+    renameFile(relativePaht, newName) {}
+
+    readAsset(assetRelativePath: string, assetType: string) {
+        const fullPath = path.join(this.directory, assetRelativePath);
+
+        let rawBuffer: Buffer;
+        try {
+            rawBuffer = fs.readFileSync(fullPath);
+        } catch (error) {
+            print("error read file", path, error);
+            return "";
+        }
+
+        const processor = assetProcessors[assetType];
+        if (!processor) {
+            print("reading, missing proccesssor for asset", assetType, assetRelativePath);
+            return "";
+        }
+
+        // !proccessor could have error!
+        return processor.read(rawBuffer);
+    }
+
+    writeAsset(assetRelativePath: string, data: any, assetType: string) {
+        const processor = assetProcessors[assetType];
+        if (!processor) {
+            print("writing, missing proccesssor for asset", assetType, assetRelativePath);
+            return;
+        }
+
+        // ???? maybe use Buffer
+        const processedStr = processor.write(data);
+
+        const fullPath = path.join(this.directory, assetRelativePath);
+
+        try {
+            fs.writeFileSync(fullPath, processedStr);
+        } catch (error) {
+            print("error writing file", assetRelativePath, error);
+        }
     }
 
     readFileType(file: string) {
@@ -291,3 +335,52 @@ class AssetWatcher extends EventEmitter {
 
 // Exports class singleton to prevent multiple
 export const Assets = new AssetWatcher();
+
+export interface AssetProcessor {
+    read: (Buffer) => unknown;
+    write: (any) => string;
+}
+
+export const assetProcessors: Record<string, AssetProcessor> = {
+    [AssetTypes.json_material]: {
+        read: (buffer: Buffer) => {
+            const materialObj = JSON.parse(buffer.toString());
+
+            materialObj.parameters = {};
+
+            Object.keys(materialObj.shaderParameters).forEach((key) => {
+                let values = materialObj.shaderParameters[key].split(" ").map((v) => parseFloat(v));
+
+                if (values.length === 1) values = values[0]; // something  not only arrays!
+
+                materialObj.parameters[key] = values;
+            });
+            // delete materialObj.shaderParameters;
+
+            // ? what if missing
+            materialObj.technique = materialObj.techniques?.[0]?.name;
+
+            return materialObj;
+        },
+        write: (materialObj: any) => {
+            Object.keys(materialObj.parameters).forEach((key) => {
+                const param = materialObj.parameters[key];
+                let str;
+                if (param.length) {
+                    str = param.join(" ").trim();
+                } else {
+                    str = String(param);
+                }
+
+                materialObj.shaderParameters[key] = str;
+            });
+
+            materialObj.techniques = [{ name: materialObj.technique }];
+
+            delete materialObj.technique;
+            delete materialObj.parameters;
+
+            return jsonPrettyArray(materialObj);
+        },
+    },
+};

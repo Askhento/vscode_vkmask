@@ -6,6 +6,7 @@ import {
     ZEffect,
     ZPlugin,
     ZMaskSettings,
+    ZMaterialObject,
 } from "../../../src/ztypes.js";
 import { z } from "zod";
 
@@ -174,3 +175,4 @@ const testModel3d = {
 export const EffectParserForUI = addTypeToSchema(ZEffect); //z.discriminatedUnion("name", EffectsList.map(effect => addTypeToSchema(effect))).array()
 export const PluginParserForUI = addTypeToSchema(ZPlugin);
 export const MaskSettingsParserForUI = addTypeToSchema(ZMaskSettings);
+export const AssetParserForUI = addTypeToSchema(ZMaterialObject);

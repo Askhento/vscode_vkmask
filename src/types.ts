@@ -23,6 +23,9 @@ export const RequestCommand = {
     getAppState: "getAppState",
     getRecentProjectInfo: "getRecentProjectInfo",
 
+    readAsset: "readAsset",
+    writeAsset: "writeAsset",
+
     updateAssets: "updateAssets",
     updateSettings: "updateSettings",
     updateMaskSettings: "updateMaskSettings",
@@ -63,9 +66,12 @@ export const SelectionType = {
 type ObjValues<T> = T[keyof T];
 // type SelectionType = ObjValues<typeof SelectionType>;
 
+// ?? meh (
 export interface Selection {
     type: ObjValues<typeof SelectionType>;
     id?: number;
+    path?: string;
+    assetType?: string;
 }
 
 // errors
@@ -80,3 +86,10 @@ export interface AppError {
     type: ObjValues<typeof ErrorType>;
     value?: any;
 }
+
+export const AssetTypes = {
+    xml_material: "xml_material",
+    json_material: "json_material",
+    model3d: "model3d",
+    image: "image",
+};
