@@ -1,0 +1,25 @@
+{
+    "techniques": [ { "name": "Techniques/Diff.xml" } ],
+    "textures": {
+        "normal": "Textures/Normal.png",
+        "diffuse": "Textures/Normal.jpg",
+        "environment": ""
+    },
+    "shaderParameters": {
+        "UOffset": "1 0 0 0",
+        "VOffset": "0 1 0 0",
+        "MatDiffColor": "1 1 1 1",
+        "MatEmissiveColor": "0 0 0",
+        "MatEnvMapColor": "1 1 1",
+        "MatSpecColor": "0 0 0 1",
+        "Roughness": "0.5",
+        "Metallic": "0"
+    },
+    "cull": "ccw",
+    "shadowcull": "ccw",
+    "fill": "solid",
+    "alphatocoverage": false,
+    "lineantialias": false,
+    "renderorder": 128,
+    "occlusion": true
+}

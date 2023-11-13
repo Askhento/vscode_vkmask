@@ -3,7 +3,7 @@
     import { getContext } from "svelte";
     //@ts-expect-error
     const { selection } = getContext("stores");
-    export let value, onSelect;
+    export let value, onSelect, onDelete;
     let { baseName, path, type } = value;
 
     function checkSelected() {
@@ -28,17 +28,18 @@
             onSelect();
         }}
         ><span class="asset-name-text">{baseName}</span>
-        <!-- <span class="asset-btn-wrapper">
+        <span class="asset-btn-wrapper">
             <vscode-button
                 class="asset-btn"
                 appearance="icon"
                 on:click={() => {
                     // onClickDelete(id);
+                    onDelete();
                 }}
             >
                 <span class="codicon codicon-trash" />
             </vscode-button>
-        </span> -->
+        </span>
     </vscode-option>
 {/key}
 

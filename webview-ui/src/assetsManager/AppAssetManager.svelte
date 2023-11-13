@@ -18,6 +18,13 @@
     const assets = writable([]);
     let assetGroups = {};
 
+    const assetsDefaults = {
+        materials: {
+            from: ["res", "defaultMaterial.json"],
+            to: ["Materials", "defaultMaterial.json"],
+        },
+    };
+
     setContext("stores", { selection, messageHandler });
 
     function handleMessageApp(data) {
@@ -57,7 +64,10 @@
         assetGroups = {
             materials: {
                 expanded: true,
-                elements: $assets.filter((a) => a.type === "xml_material"),
+                elements: $assets.filter(
+                    (a) =>
+                        (a.type === "xml_material" || a.type === "json_material") && a.projectFile
+                ),
             },
         };
     }
@@ -92,6 +102,31 @@
         });
     }
 
+    async function createAsset(assetType) {
+        if (!(assetType in assetsDefaults)) {
+            print(`asset type ${assetType} not in defaults`);
+            return;
+        }
+
+        const { payload } = await messageHandler.request({
+            command: RequestCommand.getCreatedAssets,
+            target: RequestTarget.extension,
+            payload: assetsDefaults[assetType],
+            //{ from: ["res", "empty-project", "main.as"], to: ["main.as"] },
+        });
+
+        print("created asset : ", payload);
+    }
+
+    async function removeAsset(pathArray) {
+        // !!!! only if asset exist
+        await messageHandler.request({
+            command: RequestCommand.removeAsset,
+            target: RequestTarget.extension,
+            payload: [pathArray],
+        });
+    }
+
     async function init() {
         await getAssets();
         await getSelection();
@@ -123,10 +158,27 @@
                 <i class="codicon codicon-chevron-{groupData.expanded ? 'down' : 'right'}" />
 
                 <span>{l10n.t(groupName)}</span>
+                <vscode-button
+                    class="add-btn"
+                    appearance="icon"
+                    on:click|stopPropagation={() => {
+                        console.log("add!");
+                        createAsset(groupName);
+                        // removeElement(index);
+                    }}
+                >
+                    <span class="codicon codicon-add" />
+                </vscode-button>
             </div>
             {#if groupData.expanded}
                 {#each groupData.elements as asset}
-                    <Asset value={asset} onSelect={sendSelect} />
+                    <Asset
+                        value={asset}
+                        onSelect={sendSelect}
+                        onDelete={() => {
+                            removeAsset(asset.path);
+                        }}
+                    />
                 {/each}
             {/if}
         {/each}
@@ -152,6 +204,12 @@
         color: var(--vscode-descriptionForeground);
         margin: var(--global-margin);
         display: flex;
+        /* justify-items: end; */
+    }
+
+    .add-btn {
+        /* align-self: flex-end; */
+        margin-left: auto;
     }
 
     vscode-divider {

@@ -91,6 +91,17 @@ class AssetWatcher extends EventEmitter {
                 }
                 break;
 
+            case ".json":
+                try {
+                    const rawJson = fs.readFileSync(file).toString();
+                    const parsedJson = JSON.parse(rawJson);
+                    const jsonType = parsedJson.techniques ? "material" : "error";
+                    type = "json_" + jsonType;
+                } catch (e) {
+                    type = "json_error";
+                }
+                break;
+
             case ".png":
             case ".jpg":
                 type = "image";
@@ -247,7 +258,7 @@ class AssetWatcher extends EventEmitter {
         const fullTo = path.join(this.directory, ...to);
 
         try {
-            fs.copyFileSync(fullFrom, fullTo);
+            fs.cpSync(fullFrom, fullTo);
             return path.join(...to);
         } catch (error) {
             return "";
