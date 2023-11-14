@@ -729,71 +729,57 @@ export const ZMaterialObject = z.preprocess(
     z
         .object({
             technique: ZTechniqueAsset({ label: "Technique" }),
-            textures: z
-                .object({
-                    diffuse: ZTextureAsset({ label: "Diffuse" }),
-                    normal: ZTextureAsset({ label: "Normal" }),
-                    specular: ZTextureAsset({ label: "Specular" }),
-                    emissive: ZTextureAsset({ label: "Emissive" }),
-                    environment: ZTextureAsset({ label: "Environment" }),
+            diffuse: ZTextureAsset({ label: "Diffuse", group: "diffuse" }),
+            normal: ZTextureAsset({ label: "Normal", group: "normal" }),
+            specular: ZTextureAsset({ label: "Specular", group: "specular" }),
+            emissive: ZTextureAsset({ label: "Emissive", group: "emissive" }),
+            environment: ZTextureAsset({ label: "Environment", group: "environment" }),
+
+            MatDiffColor: ZArray4D.describe(
+                uiDescriptions.colorAlpha({
+                    defValue: [1.0, 1.0, 1.0, 1.0],
+                    group: "diffuse",
+                    label: "Diffuse color",
                 })
-                .describe(uiDescriptions.object({})),
-            parameters: z
-                .object({
-                    MatDiffColor: ZArray4D.describe(
-                        uiDescriptions.array4d({
-                            defValue: [1.0, 1.0, 1.0, 1.0],
-                            label: "Diffuse color",
-                        })
-                    ),
-                    MatSpecColor: ZArray4D.describe(
-                        uiDescriptions.array4d({
-                            defValue: [0.0, 0.0, 0.0, 1.0],
-                            showAlways: false,
-                            label: "Specular color",
-                        })
-                    ),
-                    MatEmissiveColor: ZArray3D.describe(
-                        uiDescriptions.array3d({ showAlways: false, label: "Emissive color" })
-                    ),
-                    MatEnvMapColor: ZArray3D.describe(
-                        uiDescriptions.array3d({
-                            defValue: [1.0, 1.0, 1.0],
-                            showAlways: false,
-                            label: "Environment color",
-                        })
-                    ),
-                    Roughness: ZNumberSlider.describe(
-                        uiDescriptions.numberSlider({
-                            defValue: 0.5,
-                            showAlways: false,
-                            label: "Roughness",
-                        })
-                    ),
-                    Metallic: ZNumberSlider.describe(
-                        uiDescriptions.numberSlider({
-                            defValue: 0.5,
-                            showAlways: false,
-                            label: "Metallness",
-                        })
-                    ),
-                    UOffset: ZArray4D.describe(
-                        uiDescriptions.array4d({
-                            defValue: [1.0, 0.0, 0.0, 0.0],
-                            showAlways: false,
-                            label: "U transform",
-                        })
-                    ),
-                    VOffset: ZArray4D.describe(
-                        uiDescriptions.array4d({
-                            defValue: [0.0, 1.0, 0.0, 0.0],
-                            showAlways: false,
-                            label: "V transform",
-                        })
-                    ),
+            ),
+            MatSpecColor: ZArray4D.describe(
+                uiDescriptions.colorAlpha({
+                    defValue: [0.0, 0.0, 0.0, 1.0],
+                    group: "specular",
+                    showAlways: false,
+                    label: "Specular color",
                 })
-                .describe(uiDescriptions.object({}))
-                .passthrough(),
+            ),
+            MatEmissiveColor: ZArray3D.describe(
+                uiDescriptions.color({
+                    showAlways: false,
+                    group: "emissive",
+                    label: "Emissive color",
+                })
+            ),
+            MatEnvMapColor: ZArray3D.describe(
+                uiDescriptions.color({
+                    defValue: [1.0, 1.0, 1.0],
+                    group: "environment",
+                    showAlways: false,
+                    label: "Environment color",
+                })
+            ),
+            Roughness: ZNumberSlider.describe(
+                uiDescriptions.numberSlider({
+                    defValue: 0.5,
+                    showAlways: false,
+                    label: "Roughness",
+                })
+            ),
+            Metallic: ZNumberSlider.describe(
+                uiDescriptions.numberSlider({
+                    defValue: 0.5,
+                    showAlways: false,
+                    label: "Metallness",
+                })
+            ),
+
             cull: ZCullMode.describe(
                 uiDescriptions.enum({
                     label: "Culling",
@@ -810,12 +796,48 @@ export const ZMaterialObject = z.preprocess(
                 })
             ),
         })
-        .describe(uiDescriptions.object({}))
+        .describe(
+            uiDescriptions.object({
+                label: "Facemodel",
+                groups: {
+                    main: {
+                        label: null,
+                        defExpanded: true,
+                    },
+
+                    diffuse: {
+                        label: "Diffuse",
+                        defExpanded: true,
+                    },
+
+                    normal: {
+                        label: "Normal",
+                        defExpanded: true,
+                    },
+
+                    specular: {
+                        label: "Specular",
+                        defExpanded: true,
+                    },
+
+                    environment: {
+                        label: "Environment",
+                        defExpanded: true,
+                    },
+
+                    emissive: {
+                        label: "Emissive",
+                        defExpanded: true,
+                    },
+                },
+            })
+        )
 );
 
-const ZMaterial = z
-    .union([ZMaterialAsset({ label: "Material" }), ZMaterialObject])
-    .describe(uiDescriptions.union({}));
+const ZMaterial = ZMaterialAsset({ label: "Material" });
+// z
+//     .union([ZMaterialAsset({ label: "Material" }), ZMaterialObject])
+//     .describe(uiDescriptions.union({}));
 
 export const ZMaterialArray = z.preprocess((val) => {
     if (!Array.isArray(val)) return [val];

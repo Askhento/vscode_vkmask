@@ -197,7 +197,7 @@
                 path: [...path, "v_transform"],
             },
         ];
-        console.log("should send value");
+        // console.log("should send value");
         dispatch("changed", msg);
     }
 </script>

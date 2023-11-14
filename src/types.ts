@@ -25,6 +25,7 @@ export const RequestCommand = {
 
     readAsset: "readAsset",
     writeAsset: "writeAsset",
+    renameAsset: "renameAsset",
 
     updateAssets: "updateAssets",
     updateSettings: "updateSettings",
@@ -72,6 +73,7 @@ export interface Selection {
     id?: number;
     path?: string;
     assetType?: string;
+    baseName?: string;
 }
 
 // errors

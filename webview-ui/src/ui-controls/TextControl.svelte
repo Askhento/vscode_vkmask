@@ -14,7 +14,7 @@
     const dispatch = createEventDispatcher();
 
     function sendValue() {
-        console.log("should send value");
+        // console.log("should send value");
         dispatch("changed", [
             {
                 value,

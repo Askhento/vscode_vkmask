@@ -39,6 +39,7 @@
     import { effectNames, pluginNames } from "../../../src/ztypes.js";
     import { onMount, tick } from "svelte";
     import { applyValueByPath2 } from "../utils/applyValueByPath";
+    import TextControl from "../ui-controls/TextControl.svelte";
 
     provideVSCodeDesignSystem().register(allComponents);
 
@@ -274,6 +275,17 @@
                 path: selection.path,
                 assetType: selection.assetType,
                 data: asset,
+            },
+        });
+    }
+
+    function renameAsset(newName) {
+        messageHandler.send({
+            command: RequestCommand.renameAsset,
+            target: RequestTarget.extension,
+            payload: {
+                path: selection.path,
+                newName,
             },
         });
     }
@@ -629,6 +641,20 @@
                 {/if}
             {:else if selection.type === SelectionType.asset}
                 {#key asset}
+                    <div class="grid-container">
+                        <TextControl
+                            label="Name"
+                            value={selection.baseName}
+                            path={null}
+                            on:changed={(e) => {
+                                print("assetname", e.detail);
+                                const newName = e.detail[0].value;
+                                renameAsset(newName);
+                            }}
+                        />
+                    </div>
+                    <vscode-divider role="separator" />
+
                     {#if uiElements}
                         <ObjectControl
                             expanded={true}
@@ -662,6 +688,15 @@
         background-color: transparent;
     }
 
+    div.grid-container {
+        display: grid;
+        grid-template-columns:
+            minmax(var(--global-grid-label-min-width), var(--global-grid-label-column-size))
+            minmax(var(--global-value-min-width), var(--global-grid-value-column-size));
+        column-gap: var(--global-grid-column-gap);
+        row-gap: var(--global-grid-row-gap);
+    }
+
     .header-wrapper {
         display: flex;
         flex-direction: row;
@@ -678,4 +713,9 @@
         color: aqua;
         background-color: var(--main-bg-color);
     } */
+    vscode-divider {
+        width: 200vw;
+        margin-left: -50vw;
+        /* calc(0px - var(--global-body-padding-left)); */
+    }
 </style>

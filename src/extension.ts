@@ -359,6 +359,18 @@ export async function activate(context: vscode.ExtensionContext) {
                 Assets.writeAsset(payload.path, payload.data, payload.assetType);
                 break;
 
+            case RequestCommand.renameAsset:
+                const newPath = await Assets.renameFile(payload.path, payload.newName);
+                // !! check error
+                const newSelection = {
+                    ...globalThis.selection,
+                    path: newPath,
+                    baseName: payload.newName,
+                };
+                onSelection(newSelection);
+                sendSelection();
+                break;
+
             case RequestCommand.updateEffects:
                 maskConfig.updateEffects(payload);
                 sendEffects(

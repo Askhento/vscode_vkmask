@@ -22,7 +22,7 @@
             if (selected) {
                 $selection = { type: SelectionType.empty };
             } else {
-                $selection = { type: SelectionType.asset, path, assetType: type };
+                $selection = { type: SelectionType.asset, path, assetType: type, baseName };
             }
 
             onSelect();

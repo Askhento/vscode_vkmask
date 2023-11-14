@@ -76,7 +76,22 @@ class AssetWatcher extends EventEmitter {
         return builtins ? [...(this.builtInAssets ?? []), ...this.assets] : this.assets;
     }
 
-    renameFile(relativePaht, newName) {}
+    async renameFile(relativePath: string, newName: string) {
+        const oldFullPath = path.join(this.directory, relativePath);
+
+        const base = path.basename(oldFullPath);
+        const newFullPath = oldFullPath.replace(base, newName);
+        const newRelPath = relativePath.replace(base, newName);
+
+        try {
+            fs.renameSync(oldFullPath, newFullPath);
+        } catch (error) {
+            print("error renaming file ", relativePath, newName, error);
+            return "";
+        }
+
+        return newRelPath;
+    }
 
     readAsset(assetRelativePath: string, assetType: string) {
         const fullPath = path.join(this.directory, assetRelativePath);
@@ -348,13 +363,34 @@ export const assetProcessors: Record<string, AssetProcessor> = {
 
             materialObj.parameters = {};
 
-            Object.keys(materialObj.shaderParameters).forEach((key) => {
+            // flattening objects to be able to group controls
+
+            const parameters = [
+                "MatDiffColor",
+                "MatSpecColor",
+                "MatEmissiveColor",
+                "MatEnvMapColor",
+                "Roughness",
+                "Metallic",
+                "UOffset",
+                "VOffset",
+            ];
+
+            parameters.forEach((key) => {
+                if (!(key in materialObj.shaderParameters)) return;
                 let values = materialObj.shaderParameters[key].split(" ").map((v) => parseFloat(v));
-
                 if (values.length === 1) values = values[0]; // something  not only arrays!
-
-                materialObj.parameters[key] = values;
+                materialObj[key] = values;
             });
+
+            const textures = ["diffuse", "normal", "specular", "emissive", "environment"];
+
+            textures.forEach((key) => {
+                if (!(key in materialObj.textures)) return;
+                let value = materialObj.textures[key];
+                materialObj[key] = value;
+            });
+
             // delete materialObj.shaderParameters;
 
             // ? what if missing
@@ -363,16 +399,40 @@ export const assetProcessors: Record<string, AssetProcessor> = {
             return materialObj;
         },
         write: (materialObj: any) => {
-            Object.keys(materialObj.parameters).forEach((key) => {
-                const param = materialObj.parameters[key];
-                let str;
-                if (param.length) {
-                    str = param.join(" ").trim();
-                } else {
-                    str = String(param);
-                }
+            const parameters = [
+                "MatDiffColor",
+                "MatSpecColor",
+                "MatEmissiveColor",
+                "MatEnvMapColor",
+                "Roughness",
+                "Metallic",
+                "UOffset",
+                "VOffset",
+            ];
+            // ? add shaderParameters obj
 
-                materialObj.shaderParameters[key] = str;
+            parameters.forEach((key) => {
+                if (key in materialObj) {
+                    const param = materialObj[key];
+                    let str;
+                    if (param.length) {
+                        str = param.join(" ").trim();
+                    } else {
+                        str = String(param);
+                    }
+
+                    materialObj.shaderParameters[key] = str;
+                    delete materialObj[key];
+                }
+            });
+
+            const textures = ["diffuse", "normal", "specular", "emissive", "environment"];
+
+            textures.forEach((texture) => {
+                if (texture in materialObj) {
+                    materialObj.textures[texture] = materialObj[texture];
+                    delete materialObj[texture];
+                }
             });
 
             materialObj.techniques = [{ name: materialObj.technique }];
