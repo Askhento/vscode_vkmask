@@ -1,9 +1,6 @@
 {
     "techniques": [ { "name": "Techniques/Diff.xml" } ],
     "textures": {
-        "normal": "Textures/Normal.png",
-        "diffuse": "Textures/Normal.jpg",
-        "environment": ""
     },
     "shaderParameters": {
         "UOffset": "1 0 0 0",

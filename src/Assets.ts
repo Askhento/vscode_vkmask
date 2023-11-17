@@ -299,6 +299,8 @@ class AssetWatcher extends EventEmitter {
     }
 
     async uploadAssets(extensions: string[], to: string[]) {
+        // todo : decide what to do when name conflict
+
         const filters: any = Object.fromEntries(extensions.map((ext) => [ext, ext]));
 
         const options: vscode.OpenDialogOptions = {
@@ -329,7 +331,7 @@ class AssetWatcher extends EventEmitter {
 
     async copyAssets(from: string[], to: string[]) {
         const fullFrom = path.join(this.extensionPath, ...from);
-        const fullTo = path.join(this.directory, ...to);
+        const fullTo = this.findNextIncrementName(path.join(this.directory, ...to));
 
         try {
             fs.cpSync(fullFrom, fullTo);
@@ -347,6 +349,16 @@ class AssetWatcher extends EventEmitter {
             return fullPath;
         } catch (error) {
             return "";
+        }
+    }
+
+    findNextIncrementName(desiredPath: string, sep = "_", index = 1) {
+        const { dir, name, ext } = path.parse(desiredPath);
+        while (true) {
+            const exist = fs.existsSync(desiredPath);
+            if (!exist) return desiredPath;
+            desiredPath = path.format({ dir, ext, name: `${name}${sep}${index}` });
+            index++;
         }
     }
 
