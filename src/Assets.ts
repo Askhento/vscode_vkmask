@@ -8,7 +8,7 @@ import { copyRecursiveSync } from "./utils/copyFilesRecursive";
 import { jsonPrettyArray } from "./utils/jsonStringify";
 import sharp from "sharp";
 
-import { XMLParser } from "fast-xml-parser"; // https://github.com/NaturalIntelligence/fast-xml-parser/blob/c7b3cea4ead020c21d39e135a50348208829e971/docs/v4/2.XMLparseOptions.md
+import { XMLParser, XMLBuilder } from "fast-xml-parser"; // https://github.com/NaturalIntelligence/fast-xml-parser/blob/c7b3cea4ead020c21d39e135a50348208829e971/docs/v4/2.XMLparseOptions.md
 import { AssetTypes } from "./types";
 
 /*
@@ -383,6 +383,21 @@ export interface AssetProcessor {
     write: (any) => string;
 }
 
+const matShaderParameters = [
+    "MatDiffColor",
+    "MatSpecColor",
+    "MatEmissiveColor",
+    "MatEnvMapColor",
+    "Roughness",
+    "Metallic",
+    "UOffset",
+    "VOffset",
+];
+const materialTextures = ["diffuse", "normal", "specular", "emissive", "environment"];
+
+const materialParameters = ["cull", "fill"];
+
+// ? for now this is just a proof of concept, should clean up later!
 export const assetProcessors: Record<string, AssetProcessor> = {
     [AssetTypes.json_material]: {
         read: (buffer: Buffer) => {
@@ -392,27 +407,14 @@ export const assetProcessors: Record<string, AssetProcessor> = {
 
             // flattening objects to be able to group controls
 
-            const parameters = [
-                "MatDiffColor",
-                "MatSpecColor",
-                "MatEmissiveColor",
-                "MatEnvMapColor",
-                "Roughness",
-                "Metallic",
-                "UOffset",
-                "VOffset",
-            ];
-
-            parameters.forEach((key) => {
+            matShaderParameters.forEach((key) => {
                 if (!(key in materialObj.shaderParameters)) return;
                 let values = materialObj.shaderParameters[key].split(" ").map((v) => parseFloat(v));
                 if (values.length === 1) values = values[0]; // something  not only arrays!
                 materialObj[key] = values;
             });
 
-            const textures = ["diffuse", "normal", "specular", "emissive", "environment"];
-
-            textures.forEach((key) => {
+            materialTextures.forEach((key) => {
                 if (!(key in materialObj.textures)) return;
                 let value = materialObj.textures[key];
                 materialObj[key] = value;
@@ -426,19 +428,9 @@ export const assetProcessors: Record<string, AssetProcessor> = {
             return materialObj;
         },
         write: (materialObj: any) => {
-            const parameters = [
-                "MatDiffColor",
-                "MatSpecColor",
-                "MatEmissiveColor",
-                "MatEnvMapColor",
-                "Roughness",
-                "Metallic",
-                "UOffset",
-                "VOffset",
-            ];
             // ? add shaderParameters obj
 
-            parameters.forEach((key) => {
+            matShaderParameters.forEach((key) => {
                 if (key in materialObj) {
                     const param = materialObj[key];
                     let str;
@@ -453,11 +445,9 @@ export const assetProcessors: Record<string, AssetProcessor> = {
                 }
             });
 
-            const textures = ["diffuse", "normal", "specular", "emissive", "environment"];
-
-            textures.forEach((texture) => {
+            materialTextures.forEach((texture) => {
                 if (texture in materialObj) {
-                    materialObj.textures[texture] = materialObj[texture];
+                    materialObj.materialTextures[texture] = materialObj[texture];
                     delete materialObj[texture];
                 }
             });
@@ -468,6 +458,120 @@ export const assetProcessors: Record<string, AssetProcessor> = {
             delete materialObj.parameters;
 
             return jsonPrettyArray(materialObj);
+        },
+    },
+
+    [AssetTypes.xml_material]: {
+        read: (buffer: Buffer) => {
+            const xmlParser = new XMLParser({
+                ignoreDeclaration: true,
+                parseAttributeValue: false,
+                ignoreAttributes: false,
+                attributeNamePrefix: "",
+            });
+
+            const materialObj = xmlParser.parse(buffer).material;
+            // print("xml parsed", materialObj);
+
+            if (!materialObj) {
+                print("no material for xml_processor", buffer.toString());
+                return {};
+            }
+
+            const parametersSet = new Set(matShaderParameters);
+
+            if (!Array.isArray(materialObj.parameter)) {
+                materialObj.parameter = [materialObj.parameter];
+            }
+
+            materialObj.parameter.forEach((parObj) => {
+                const { value, name } = parObj;
+                if (!parametersSet.has(name)) return;
+                let values = value.split(" ").map((v) => parseFloat(v));
+                if (values.length === 1) values = values[0]; // something  not only arrays!
+                materialObj[name] = values;
+            });
+
+            if (!Array.isArray(materialObj.texture)) {
+                materialObj.texture = [materialObj.texture];
+            }
+
+            const textureSet = new Set(materialTextures);
+
+            materialObj.texture.forEach((obj) => {
+                const { name, unit } = obj;
+                if (!textureSet.has(unit)) return;
+                materialObj[unit] = name;
+            });
+
+            materialObj.technique = materialObj.technique.name;
+
+            materialParameters.forEach((key) => {
+                if (!(key in materialObj)) return;
+                materialObj[key] = materialObj[key].value;
+            });
+
+            return materialObj;
+        },
+
+        write: (materialObj: any) => {
+            materialParameters.forEach((key) => {
+                if (!(key in materialObj)) return;
+                materialObj[key] = { value: materialObj[key] };
+            });
+
+            materialObj.technique = { name: materialObj.technique };
+
+            materialObj.parameter = [];
+            matShaderParameters.forEach((key) => {
+                if (!(key in materialObj)) return;
+
+                const param = materialObj[key];
+
+                let str;
+                if (param.length) {
+                    str = param.join(" ").trim();
+                } else {
+                    str = String(param);
+                }
+
+                materialObj.parameter.push({
+                    name: key,
+                    value: str,
+                });
+                delete materialObj[key];
+            });
+
+            materialObj.texture = [];
+            materialTextures.forEach((unit) => {
+                if (!(unit in materialObj)) return;
+                materialObj.texture.push({
+                    unit,
+                    name: materialObj[unit],
+                });
+
+                delete materialObj[unit];
+            });
+
+            materialObj = { material: materialObj };
+
+            const xmlBuilder = new XMLBuilder({
+                attributeNamePrefix: "",
+                ignoreAttributes: false,
+                format: true,
+                suppressEmptyNode: true,
+            });
+
+            print("mat obj before build", materialObj);
+
+            try {
+                const res = xmlBuilder.build(materialObj);
+                return res;
+            } catch (error) {
+                print("error writing ", materialObj, error);
+            }
+
+            return "";
         },
     },
 };

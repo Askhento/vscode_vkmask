@@ -65,7 +65,10 @@
         assetGroups = {
             materials: {
                 expanded: true,
-                elements: $assets.filter((a) => a.type === "json_material" && a.projectFile),
+                elements: $assets.filter(
+                    (a) =>
+                        (a.type === "json_material" || a.type === "xml_material") && a.projectFile
+                ),
             },
         };
     }
