@@ -21,6 +21,7 @@ import { AssetTypes } from "./types";
 export interface Asset {
     baseName: string;
     absPath: string;
+    extension: string;
     path: string;
     type: string;
     projectFile?: boolean;
@@ -77,11 +78,21 @@ class AssetWatcher extends EventEmitter {
     }
 
     async renameFile(relativePath: string, newName: string) {
-        const oldFullPath = path.join(this.directory, relativePath);
+        const { dir, name, ext } = path.parse(relativePath);
 
-        const base = path.basename(oldFullPath);
-        const newFullPath = oldFullPath.replace(base, newName);
-        const newRelPath = relativePath.replace(base, newName);
+        const fullDir = path.join(this.directory, dir);
+        const oldFullPath = path.join(this.directory, relativePath);
+        const newFullPath = path.format({
+            dir: fullDir,
+            name: newName,
+            ext,
+        });
+
+        const newRelPath = path.format({
+            dir,
+            name: newName,
+            ext,
+        });
 
         try {
             fs.renameSync(oldFullPath, newFullPath);
@@ -190,12 +201,16 @@ class AssetWatcher extends EventEmitter {
         const absPath = this.getAbsPath(file);
         const type = await this.readFileType(file);
         const preview = await this.getPreview(absPath, type);
-        const baseName = path.basename(file);
+
+        // const baseName = path.basename(file);
+        // const extension = path.extname(file);
+        const { ext, name } = path.parse(file);
 
         return {
-            baseName,
+            baseName: name,
             absPath,
             path: this.getRelative(file),
+            extension: ext,
             type,
             preview,
             projectFile,

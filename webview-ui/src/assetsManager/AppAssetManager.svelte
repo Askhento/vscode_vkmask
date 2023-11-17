@@ -143,47 +143,49 @@
 </script>
 
 {#key $selection}
-    {#if assets}
-        {#each Object.entries(assetGroups) as [groupName, groupData]}
-            <!-- content here -->
-            <vscode-divider class="divider" role="separator" />
-            <div
-                class="group-label"
-                on:click={() => {
-                    groupData.expanded = !groupData.expanded;
-                }}
-            >
-                <i class="codicon codicon-chevron-{groupData.expanded ? 'down' : 'right'}" />
-
-                <span>{l10n.t(groupName)}</span>
-                <vscode-button
-                    class="add-btn"
-                    appearance="icon"
-                    on:click|stopPropagation={() => {
-                        console.log("add!");
-                        createAsset(groupName);
-                        // removeElement(index);
+    {#key $assets}
+        {#if assets}
+            {#each Object.entries(assetGroups) as [groupName, groupData]}
+                <!-- content here -->
+                <vscode-divider class="divider" role="separator" />
+                <div
+                    class="group-label"
+                    on:click={() => {
+                        groupData.expanded = !groupData.expanded;
                     }}
                 >
-                    <span class="codicon codicon-add" />
-                </vscode-button>
-            </div>
-            {#if groupData.expanded}
-                {#each groupData.elements as asset}
-                    <Asset
-                        value={asset}
-                        onSelect={sendSelect}
-                        onDelete={() => {
-                            removeAsset(asset.path);
+                    <i class="codicon codicon-chevron-{groupData.expanded ? 'down' : 'right'}" />
+
+                    <span>{l10n.t(groupName)}</span>
+                    <vscode-button
+                        class="add-btn"
+                        appearance="icon"
+                        on:click|stopPropagation={() => {
+                            console.log("add!");
+                            createAsset(groupName);
+                            // removeElement(index);
                         }}
-                    />
-                {/each}
-            {/if}
-        {/each}
-        <!-- group -->
-    {:else}
-        <div>empty assets</div>
-    {/if}
+                    >
+                        <span class="codicon codicon-add" />
+                    </vscode-button>
+                </div>
+                {#if groupData.expanded}
+                    {#each groupData.elements as asset}
+                        <Asset
+                            value={asset}
+                            onSelect={sendSelect}
+                            onDelete={() => {
+                                removeAsset(asset.path);
+                            }}
+                        />
+                    {/each}
+                {/if}
+            {/each}
+            <!-- group -->
+        {:else}
+            <div>empty assets</div>
+        {/if}
+    {/key}
 {/key}
 
 <style>
