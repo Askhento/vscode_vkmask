@@ -116,12 +116,20 @@
         print("created asset : ", payload);
     }
 
-    async function removeAsset(pathArray) {
+    async function removeAsset(assetPath) {
+        if ($selection.type === SelectionType.asset) {
+            if ($selection.path === assetPath) {
+                $selection = { type: SelectionType.empty };
+                sendSelect();
+            }
+            $selection = $selection;
+        }
+
         // !!!! only if asset exist
-        await messageHandler.request({
+        messageHandler.request({
             command: RequestCommand.removeAsset,
             target: RequestTarget.extension,
-            payload: [pathArray],
+            payload: [assetPath],
         });
     }
 

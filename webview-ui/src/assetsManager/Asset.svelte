@@ -32,7 +32,7 @@
             <vscode-button
                 class="asset-btn"
                 appearance="icon"
-                on:click={() => {
+                on:click|stopPropagation={() => {
                     // onClickDelete(id);
                     onDelete();
                 }}
