@@ -407,18 +407,24 @@ export const assetProcessors: Record<string, AssetProcessor> = {
 
             // flattening objects to be able to group controls
 
-            matShaderParameters.forEach((key) => {
-                if (!(key in materialObj.shaderParameters)) return;
-                let values = materialObj.shaderParameters[key].split(" ").map((v) => parseFloat(v));
-                if (values.length === 1) values = values[0]; // something  not only arrays!
-                materialObj[key] = values;
-            });
+            if (materialObj.shaderParameters) {
+                matShaderParameters.forEach((key) => {
+                    if (!(key in materialObj.shaderParameters)) return;
+                    let values = materialObj.shaderParameters[key]
+                        .split(" ")
+                        .map((v) => parseFloat(v));
+                    if (values.length === 1) values = values[0]; // something  not only arrays!
+                    materialObj[key] = values;
+                });
+            }
 
-            materialTextures.forEach((key) => {
-                if (!(key in materialObj.textures)) return;
-                let value = materialObj.textures[key];
-                materialObj[key] = value;
-            });
+            if (materialObj.textures) {
+                materialTextures.forEach((key) => {
+                    if (!(key in materialObj.textures)) return;
+                    let value = materialObj.textures[key];
+                    materialObj[key] = value;
+                });
+            }
 
             // delete materialObj.shaderParameters;
 
@@ -430,6 +436,8 @@ export const assetProcessors: Record<string, AssetProcessor> = {
         write: (materialObj: any) => {
             // ? add shaderParameters obj
 
+            materialObj.shaderParameters = { ...(materialObj.shaderParameters ?? {}) };
+
             matShaderParameters.forEach((key) => {
                 if (key in materialObj) {
                     const param = materialObj[key];
@@ -439,15 +447,15 @@ export const assetProcessors: Record<string, AssetProcessor> = {
                     } else {
                         str = String(param);
                     }
-
                     materialObj.shaderParameters[key] = str;
                     delete materialObj[key];
                 }
             });
 
+            materialObj.textures = { ...(materialObj.textures ?? {}) };
             materialTextures.forEach((texture) => {
                 if (texture in materialObj) {
-                    materialObj.materialTextures[texture] = materialObj[texture];
+                    materialObj.textures[texture] = materialObj[texture];
                     delete materialObj[texture];
                 }
             });
@@ -471,7 +479,7 @@ export const assetProcessors: Record<string, AssetProcessor> = {
             });
 
             const materialObj = xmlParser.parse(buffer).material;
-            // print("xml parsed", materialObj);
+            print("xml parsed", materialObj);
 
             if (!materialObj) {
                 print("no material for xml_processor", buffer.toString());
@@ -480,29 +488,33 @@ export const assetProcessors: Record<string, AssetProcessor> = {
 
             const parametersSet = new Set(matShaderParameters);
 
-            if (!Array.isArray(materialObj.parameter)) {
-                materialObj.parameter = [materialObj.parameter];
+            if (materialObj.parameter) {
+                if (!Array.isArray(materialObj.parameter)) {
+                    materialObj.parameter = [materialObj.parameter];
+                }
+
+                materialObj.parameter.forEach((parObj) => {
+                    const { value, name } = parObj;
+                    if (!parametersSet.has(name)) return;
+                    let values = value.split(" ").map((v) => parseFloat(v));
+                    if (values.length === 1) values = values[0]; // something  not only arrays!
+                    materialObj[name] = values;
+                });
             }
 
-            materialObj.parameter.forEach((parObj) => {
-                const { value, name } = parObj;
-                if (!parametersSet.has(name)) return;
-                let values = value.split(" ").map((v) => parseFloat(v));
-                if (values.length === 1) values = values[0]; // something  not only arrays!
-                materialObj[name] = values;
-            });
+            if (materialObj.texture) {
+                if (!Array.isArray(materialObj.texture)) {
+                    materialObj.texture = [materialObj.texture];
+                }
 
-            if (!Array.isArray(materialObj.texture)) {
-                materialObj.texture = [materialObj.texture];
+                const textureSet = new Set(materialTextures);
+
+                materialObj.texture.forEach((obj) => {
+                    const { name, unit } = obj;
+                    if (!textureSet.has(unit)) return;
+                    materialObj[unit] = name;
+                });
             }
-
-            const textureSet = new Set(materialTextures);
-
-            materialObj.texture.forEach((obj) => {
-                const { name, unit } = obj;
-                if (!textureSet.has(unit)) return;
-                materialObj[unit] = name;
-            });
 
             materialObj.technique = materialObj.technique.name;
 
