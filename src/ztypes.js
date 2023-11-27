@@ -220,6 +220,7 @@ export const uiDescriptions = {
         elementName,
         defaultElement,
         defValue = [],
+        dependencies,
         showAlways = true,
     }) => ({
         showAlways,
@@ -229,6 +230,25 @@ export const uiDescriptions = {
         elementName: elementName,
         defaultElement: defaultElement,
         defValue,
+        dependencies,
+    }),
+    materialArray: ({
+        label = "array",
+        group = "main",
+        elementName,
+        defaultElement,
+        defValue = [],
+        dependencies,
+        showAlways = true,
+    }) => ({
+        showAlways,
+        name: "array",
+        label,
+        group,
+        elementName: elementName,
+        defaultElement: defaultElement,
+        defValue,
+        dependencies,
     }),
     union: ({}) => ({
         name: "union",
@@ -839,10 +859,31 @@ const ZMaterial = ZMaterialAsset({ label: "Material" });
 //     .union([ZMaterialAsset({ label: "Material" }), ZMaterialObject])
 //     .describe(uiDescriptions.union({}));
 
-export const ZMaterialArray = z.preprocess((val) => {
-    if (!Array.isArray(val)) return [val];
-    return val;
-}, z.array(ZMaterial).describe(uiDescriptions.array({ elementName: "material", label: "Materials", group: "materials", defaultElement: AssetTypes.material.defValue, defValue: [AssetTypes.material.defValue] })));
+export const ZMaterialArray = z.preprocess(
+    (val) => {
+        if (!Array.isArray(val)) return [val];
+        return val;
+    },
+    z.array(ZMaterial).describe(
+        uiDescriptions.materialArray({
+            dependencies: [
+                {
+                    root: "effects",
+                    path: ["model"],
+                    dataSources: [{ root: "effects", path: ["model"] }, { root: "assets" }],
+                    postprocess: (modelName, assets) => {
+                        /// ! just trying out DELETEME
+                    },
+                },
+            ],
+            elementName: "material",
+            label: "Materials",
+            group: "materials",
+            defaultElement: AssetTypes.material.defValue,
+            defValue: [AssetTypes.material.defValue],
+        })
+    )
+);
 
 // console.log(ZMaterialArray.innerType().element.options[1].description)
 
@@ -1701,33 +1742,53 @@ export const ZMaskConfigPreprocess = z.preprocess(
             icon: z.unknown().optional(),
             effects: z
                 .array(
-                    z
-                        .object({
-                            texture: z
-                                .preprocess((val) => {
-                                    if (isObject(val)) {
-                                        // keep only diffuse, not texture in object
-                                        val = replaceObjectSynonim(val, "texture", "diffuse");
-                                        if (!isObject(val.animation)) {
-                                            val.animation = {};
+                    z.union([
+                        z
+                            .object({
+                                name: z.union([z.literal("patch"), z.literal("facemodel")]),
+                                texture: z
+                                    .preprocess((val) => {
+                                        if (isObject(val)) {
+                                            // keep only diffuse, not texture in object
+                                            val = replaceObjectSynonim(val, "texture", "diffuse");
+                                            if (!isObject(val.animation)) {
+                                                val.animation = {};
+                                            }
+                                            return val;
                                         }
-                                        return val;
-                                    }
-                                    return {
-                                        diffuse: val,
-                                        animation: {},
-                                    };
-                                }, z.object({}).passthrough())
-                                .optional(),
+                                        return {
+                                            diffuse: val,
+                                            animation: {},
+                                        };
+                                    }, z.object({}).passthrough())
+                                    .default({ animation: {} }),
+                            })
+                            .passthrough(),
 
-                            material: z
-                                .preprocess((val) => {
-                                    if (!Array.isArray(val)) return [val];
-                                    return val;
-                                }, z.array(z.union([z.string(), z.object({}).passthrough()])))
-                                .optional(),
-                        })
-                        .passthrough()
+                        z
+                            .object({
+                                name: z.union([z.literal("model3d"), z.literal("plane")]),
+                                material: z
+                                    .preprocess((val) => {
+                                        if (!Array.isArray(val)) return [val];
+                                        return val;
+                                    }, z.array(z.union([z.string(), z.object({}).passthrough()])))
+                                    .optional()
+                                    .default([]),
+                            })
+                            .passthrough(),
+                        z
+                            .object({
+                                name: z.union([
+                                    z.literal("light"),
+                                    z.literal("posteffect"),
+                                    z.literal("beautify"),
+                                    z.literal("colorfilter"),
+                                    z.literal("liquifiedwarp"),
+                                ]),
+                            })
+                            .passthrough(),
+                    ])
                 )
                 .default([]),
             plugins: z
