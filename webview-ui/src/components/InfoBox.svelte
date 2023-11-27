@@ -75,7 +75,9 @@
     .info-box-wrapper {
         padding: var(--global-margin);
         position: absolute;
-        width: var(--global-grid-value-column-size);
+        /* width: var(--global-grid-value-column-size); */
+        /* max-width: var(--global-grid-value-column-size); */
+        min-width: max-content;
         height: fit-content;
         background-color: var(--dropdown-background);
         border: solid 1px var(--vscode-dropdown-border);

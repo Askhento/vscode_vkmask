@@ -594,12 +594,12 @@
 </div> -->
 <div class="parameters-wrapper">
     {#if appState === AppState.running}
-        <div class="header-wrapper">
+        <!-- <div class="header-wrapper">
             <h3>{l10n.t(selection.type).toUpperCase()}</h3>
             {#if selectionName}
                 <h4>{selectionName}</h4>
             {/if}
-        </div>
+        </div> -->
         {#key selection}
             {#if selection.type === SelectionType.effect}
                 {#if effects}

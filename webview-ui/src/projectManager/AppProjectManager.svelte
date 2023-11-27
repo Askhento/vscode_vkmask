@@ -151,11 +151,10 @@
 
         maskSettings = tempSettings;
         sendMaskSettings();
-        print("LOL", maskSettings);
         if (true) parseUI();
     }
 
-    $: console.log("mask setting ", maskSettings);
+    // $: console.log("mask setting ", maskSettings);
     async function rerenderSettings() {
         // !!! a hack
         let oldSettings = maskSettings;
