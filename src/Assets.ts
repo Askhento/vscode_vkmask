@@ -10,6 +10,7 @@ import sharp from "sharp";
 
 import { XMLParser, XMLBuilder } from "fast-xml-parser"; // https://github.com/NaturalIntelligence/fast-xml-parser/blob/c7b3cea4ead020c21d39e135a50348208829e971/docs/v4/2.XMLparseOptions.md
 import { AssetTypes } from "./types";
+import { SmartBuffer } from "smart-buffer";
 
 /*
     add exclude 
@@ -26,7 +27,7 @@ export interface Asset {
     type: string;
     projectFile?: boolean;
     preview?: string;
-    meta: object;
+    meta?: object;
 }
 
 const PREWVIEW_SIZE = 128;
@@ -175,7 +176,7 @@ class AssetWatcher extends EventEmitter {
 
             case ".png":
             case ".jpg":
-                type = "image";
+                type = AssetTypes.image;
                 break;
 
             case ".hlsl":
@@ -188,7 +189,7 @@ class AssetWatcher extends EventEmitter {
                 break;
 
             case ".mdl":
-                type = "model3d";
+                type = AssetTypes.model3d;
                 break;
 
             default:
@@ -201,8 +202,16 @@ class AssetWatcher extends EventEmitter {
     async fileToAsset(file: string, projectFile: boolean = false): Promise<Asset> {
         const absPath = this.getAbsPath(file);
         const type = await this.readFileType(file);
-        const preview = await this.getImagePreview(absPath, type);
-        const meta = await this.getImageMeta(absPath, type);
+        // const preview = await this.getImagePreview(absPath, type);
+        // const meta = await this.getImageMeta(absPath, type);
+
+        const typesToProcess = new Set([AssetTypes.image, AssetTypes.model3d]);
+
+        let processOutput = {};
+        if (typesToProcess.has(type) && type in assetProcessors) {
+            const fileBuffer = fs.readFileSync(absPath);
+            processOutput = { ...(await assetProcessors[type].read(fileBuffer)) };
+        }
 
         // const baseName = path.basename(file);
         // const extension = path.extname(file);
@@ -214,9 +223,8 @@ class AssetWatcher extends EventEmitter {
             path: this.getRelative(file),
             extension: ext,
             type,
-            preview,
             projectFile,
-            meta,
+            ...processOutput,
         };
     }
 
@@ -288,13 +296,6 @@ class AssetWatcher extends EventEmitter {
 
     async getImagePreview(absPath: string, type: string) {
         if (type === "image") {
-            // const options = {
-            //     width: PREWVIEW_SIZE,
-            //     height: PREWVIEW_SIZE,
-            //     responseType: "base64",
-            //     jpegOptions: { force: true, quality: 80 },
-            // };
-
             const imageBuffer = fs.readFileSync(absPath);
 
             try {
@@ -343,6 +344,9 @@ class AssetWatcher extends EventEmitter {
         const base = path.basename(file);
         const relative = path.join(...to, base);
         const dest = path.join(this.directory, relative);
+
+        // file already in the folder
+        if (file === dest) return relative;
 
         // fs.copyFileSync(file, dest);
         // copyRecursiveSync(file, dest);
@@ -400,8 +404,8 @@ class AssetWatcher extends EventEmitter {
 export const Assets = new AssetWatcher();
 
 export interface AssetProcessor {
-    read: (Buffer) => unknown;
-    write: (any) => string;
+    read: (Buffer) => any;
+    write: (any) => any;
 }
 
 const matShaderParameters = [
@@ -417,6 +421,33 @@ const matShaderParameters = [
 const materialTextures = ["diffuse", "normal", "specular", "emissive", "environment"];
 
 const materialParameters = ["cull", "fill"];
+
+const elementTypeSizes = {
+    INT: 4, // INT
+    FLOAT: 4, // FLOAT
+    FLOAT_VEC2: 2 * 4, // FLOAT vec2
+    FLOAT_VEC3: 3 * 4, // vec3
+    FLOAT_VEC4: 4 * 4, // vec4
+    UBYTE4: 4, // unsigned
+    UBYTE4_NORM: 4, // unsigned
+};
+
+const LEGACY_VERTEXELEMENTS = [
+    elementTypeSizes.FLOAT_VEC3, // Position
+    elementTypeSizes.FLOAT_VEC3, // Normal
+    elementTypeSizes.UBYTE4_NORM, // Color
+    elementTypeSizes.FLOAT_VEC2, // Texcoord1
+    elementTypeSizes.FLOAT_VEC2, // Texcoord2
+    elementTypeSizes.FLOAT_VEC3, // Cubetexcoord1
+    elementTypeSizes.FLOAT_VEC3, // Cubetexcoord2
+    elementTypeSizes.FLOAT_VEC4, // Tangent
+    elementTypeSizes.FLOAT_VEC4, // Blendweights
+    elementTypeSizes.UBYTE4, // Blendindices
+    elementTypeSizes.FLOAT_VEC4, // Instancematrix1
+    elementTypeSizes.FLOAT_VEC4, // Instancematrix2
+    elementTypeSizes.FLOAT_VEC4, // Instancematrix3
+    elementTypeSizes.INT, // Objectindex
+];
 
 // ? for now this is just a proof of concept, should clean up later!
 export const assetProcessors: Record<string, AssetProcessor> = {
@@ -595,7 +626,7 @@ export const assetProcessors: Record<string, AssetProcessor> = {
                 suppressEmptyNode: true,
             });
 
-            print("mat obj before build", materialObj);
+            // print("mat obj before build", materialObj);
 
             try {
                 const res = xmlBuilder.build(materialObj);
@@ -609,10 +640,91 @@ export const assetProcessors: Record<string, AssetProcessor> = {
     },
 
     [AssetTypes.model3d]: {
-        read: (buffer: Buffer) => {},
+        read: (buffer: Buffer) => {
+            const modelBuffer = SmartBuffer.fromBuffer(buffer);
+
+            const version = modelBuffer.readString(4);
+
+            // !!! only for UMDL
+            // my mac seems to be Little endian
+            const vertBufferCount = modelBuffer.readUInt32LE();
+            const vertCount = modelBuffer.readUInt32LE();
+            const elemMask = modelBuffer.readUInt32LE().toString(2);
+
+            // console.log(`model version = ${version}`);
+            // console.log(`vertBufferCount = ${vertBufferCount}`);
+            // console.log(`vertCount = ${vertCount}`);
+            // console.log(`elemMask = ${elemMask}`);
+
+            // todo : multiple vertBufferCount
+            let vertexSize = 0;
+            for (let i = 0; i < elemMask.length; i++) {
+                // const element = array[i];
+                const elemExist = +elemMask.at(-(i + 1));
+                const elemSize = elemExist * LEGACY_VERTEXELEMENTS[i];
+                vertexSize += elemSize;
+            }
+
+            // console.log(`vertexSize = ${vertexSize} bytes`);
+            const vertDataSize = vertCount * vertexSize;
+
+            const morphableStart = modelBuffer.readUInt32LE();
+            const morphableCount = modelBuffer.readUInt32LE();
+
+            modelBuffer.readOffset += vertDataSize;
+
+            const indexBufferCount = modelBuffer.readUInt32LE();
+            const indexCount = modelBuffer.readUInt32LE();
+            const indexSize = modelBuffer.readUInt32LE();
+
+            // console.log(`indexBufferCount = ${indexBufferCount}`);
+            // console.log(`indexCount = ${indexCount}`);
+            // console.log(`indexSize = ${indexSize} bytes`);
+
+            const indexDataSize = indexSize * indexCount;
+
+            modelBuffer.readOffset += indexDataSize;
+
+            const numGeometries = modelBuffer.readUInt32LE();
+            // console.log(`numGeometries = ${numGeometries}`);
+
+            return {
+                numGeometries,
+                vertCount,
+                indexCount,
+                sizeBytes: Buffer.byteLength(buffer),
+            };
+        },
         write: () => {
             print("NO processor for model3d");
             return "";
         },
+    },
+
+    [AssetTypes.image]: {
+        read: async (imageBuffer: Buffer) => {
+            const thumbnailBuffer = await sharp(imageBuffer);
+
+            const meta = await thumbnailBuffer.metadata();
+
+            const preview = (
+                await thumbnailBuffer
+                    .resize({
+                        fit: "contain",
+                        width: PREWVIEW_SIZE,
+                        height: PREWVIEW_SIZE,
+                        // withoutEnlargement: true,
+                    })
+                    .jpeg({ force: true, quality: 80 })
+                    .toBuffer()
+            ).toString("base64");
+
+            // print(thumbnail);
+            return {
+                preview,
+                meta,
+            };
+        },
+        write: () => {},
     },
 };
