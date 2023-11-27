@@ -1551,7 +1551,7 @@ const ZFixedDetectionPlugin = z
     .object({
         name: z.literal("fixeddetection").describe(uiDescriptions.none({})),
 
-        // !!! need explanation
+        // !!! need explanation for parameters
         rotation: ZArray4D.describe(
             uiDescriptions.array4d({ defValue: [0.1, 0.21, 0.7, 0.2], label: "Rotation" })
         ),
@@ -1619,9 +1619,10 @@ const iconInfo = {
         "PNG format",
         "Should not contain transparent layer",
         "Should preview what masks look like",
-        "Max size 60Kb",
+        "Max size 60KB",
     ],
     infoHeader: "Icon should meet these requirements :",
+    infoErrorHeader: "Errors :",
 };
 const ZIcon = z.string().describe(uiDescriptions.icon({ info: iconInfo }));
 

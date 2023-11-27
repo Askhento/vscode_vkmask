@@ -26,6 +26,7 @@ export interface Asset {
     type: string;
     projectFile?: boolean;
     preview?: string;
+    meta: object;
 }
 
 const PREWVIEW_SIZE = 128;
@@ -200,7 +201,8 @@ class AssetWatcher extends EventEmitter {
     async fileToAsset(file: string, projectFile: boolean = false): Promise<Asset> {
         const absPath = this.getAbsPath(file);
         const type = await this.readFileType(file);
-        const preview = await this.getPreview(absPath, type);
+        const preview = await this.getImagePreview(absPath, type);
+        const meta = await this.getImageMeta(absPath, type);
 
         // const baseName = path.basename(file);
         // const extension = path.extname(file);
@@ -214,6 +216,7 @@ class AssetWatcher extends EventEmitter {
             type,
             preview,
             projectFile,
+            meta,
         };
     }
 
@@ -244,15 +247,17 @@ class AssetWatcher extends EventEmitter {
                 this.assets.splice(index, 0, await this.fileToAsset(e.fsPath, true));
                 this.fireChangedEvent();
             }
-
-            // {
-            //         absPath: this.getAbsPath(e.fsPath),
-            //         path: fspath,
-            //         type: this.readFileType(fspath),
-            //     }
         });
 
-        // watcher.onDidChange
+        watcher.onDidChange(async (e) => {
+            const fspath = this.getRelative(e.fsPath);
+            print("created file ", fspath);
+            const index = this.assets.findIndex((asset) => asset.path === fspath);
+            if (index >= 0) {
+                this.assets.splice(index, 1, await this.fileToAsset(e.fsPath, true));
+                this.fireChangedEvent();
+            }
+        });
 
         watcher.onDidDelete((e) => {
             const fspath = this.getRelative(e.fsPath);
@@ -265,14 +270,30 @@ class AssetWatcher extends EventEmitter {
         });
     }
 
-    async getPreview(absPath: string, type: string) {
+    async getImageMeta(absPath: string, type: string) {
         if (type === "image") {
-            const options = {
-                width: PREWVIEW_SIZE,
-                height: PREWVIEW_SIZE,
-                responseType: "base64",
-                jpegOptions: { force: true, quality: 80 },
-            };
+            const imageBuffer = fs.readFileSync(absPath);
+
+            try {
+                const imgMeta = await (await sharp(imageBuffer)).metadata();
+
+                // print(thumbnail);
+                return imgMeta;
+            } catch (err) {
+                print(err);
+            }
+        }
+        return null;
+    }
+
+    async getImagePreview(absPath: string, type: string) {
+        if (type === "image") {
+            // const options = {
+            //     width: PREWVIEW_SIZE,
+            //     height: PREWVIEW_SIZE,
+            //     responseType: "base64",
+            //     jpegOptions: { force: true, quality: 80 },
+            // };
 
             const imageBuffer = fs.readFileSync(absPath);
 
@@ -583,6 +604,14 @@ export const assetProcessors: Record<string, AssetProcessor> = {
                 print("error writing ", materialObj, error);
             }
 
+            return "";
+        },
+    },
+
+    [AssetTypes.model3d]: {
+        read: (buffer: Buffer) => {},
+        write: () => {
+            print("NO processor for model3d");
             return "";
         },
     },

@@ -1,9 +1,16 @@
 <script>
     import * as l10n from "@vscode/l10n";
+    import { clickOutside } from "../actions/clickOutside.js";
 
     export let visible,
         info = {};
-    let { errors = [], clickLink = "#", infoHeader = "", infoList = [] } = info;
+    let {
+        errors = [],
+        clickLink = "#",
+        infoHeader = "",
+        infoList = [],
+        infoErrorHeader = "",
+    } = info;
 
     let infoOpened = false;
 
@@ -14,25 +21,29 @@
 
     // export let infoHeader = "";
     // export let infoList = [];
+
+    function handleClickOutside() {
+        setTimeout(() => {
+            infoOpened = false;
+        }, 0);
+    }
 </script>
 
 {#if visible || errors.length}
     <div class="info-btn">
         <div class:error={errors.length} class="icon-wrapper">
-            <a href={clickLink}>
-                <span
-                    on:mouseenter={() => {
-                        infoOpened = true;
-                    }}
-                    on:mouseleave={() => {
-                        infoOpened = false;
-                    }}
-                    class="codicon codicon-info"
-                />
-            </a>
+            <span
+                on:click|stopPropagation={() => {
+                    // console.log("span lol");
+                    infoOpened = !infoOpened;
+                }}
+                class="codicon codicon-info"
+            />
+            <!-- <a href={clickLink}>
+            </a> -->
         </div>
         {#if infoOpened && (infoList.length || errors.length)}
-            <div class="info-box-wrapper">
+            <div use:clickOutside on:click_outside={handleClickOutside} class="info-box-wrapper">
                 <div>{l10n.t(infoHeader)}</div>
                 <ul>
                     {#each infoList as info}
@@ -41,19 +52,26 @@
                         </li>
                     {/each}
                 </ul>
-                <ul>
-                    {#each errors as error}
-                        <li class="error">
-                            {l10n.t(error)} (TODO)
-                        </li>
-                    {/each}
-                </ul>
+                {#if errors.length}
+                    <vscode-divider role="separator" />
+                    <div>{l10n.t(infoErrorHeader)}</div>
+                    <ul>
+                        {#each errors as error}
+                            <li class="error">
+                                {l10n.t(error)}
+                            </li>
+                        {/each}
+                    </ul>
+                {/if}
             </div>
         {/if}
     </div>
 {/if}
 
 <style>
+    /* * {
+        box-sizing: border-box;
+    } */
     .info-box-wrapper {
         padding: var(--global-margin);
         position: absolute;
@@ -61,7 +79,7 @@
         height: fit-content;
         background-color: var(--dropdown-background);
         border: solid 1px var(--vscode-dropdown-border);
-        border-radius: var(--global-image-radius);
+        border-radius: var(--global-border-raduis);
         z-index: 1;
         right: 70%;
         top: 70%;
@@ -87,6 +105,9 @@
     a:link {
         text-decoration: inherit;
         color: inherit;
+        height: min-content;
+        display: flex;
+        justify-content: center;
         /* cursor: auto; */
     }
 
@@ -105,7 +126,7 @@
         width: var(--global-block-height);
     }
 
-    .icon-wrapper > a > span {
+    .icon-wrapper > span {
         /* cursor: pointer; */
         width: fit-content;
         height: fit-content;
@@ -127,7 +148,12 @@
         width: var(--global-block-height);
     } */
 
-    .icon-wrapper > a > span:hover {
-        color: var(--badge-background);
+    vscode-divider {
+        width: calc(100% + 2 * var(--global-margin));
+        margin-left: calc(0px - var(--global-margin));
+    }
+    .icon-wrapper > span:hover {
+        opacity: 0.5;
+        /* color: var(--badge-background); */
     }
 </style>

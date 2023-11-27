@@ -39,7 +39,7 @@
     import { effectNames, pluginNames } from "../../../src/ztypes.js";
     import { onMount, tick } from "svelte";
     import { applyValueByPath2 } from "../utils/applyValueByPath";
-    import TextControl from "../ui-controls/TextControl.svelte";
+    import TextControl from "../ui-controls/TextControl.svelte"; // asset name change
 
     provideVSCodeDesignSystem().register(allComponents);
 

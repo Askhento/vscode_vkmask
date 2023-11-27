@@ -16,6 +16,9 @@
 
     let nesting = params.group == null;
 
+    // if (!value) value = params
+
+    print("params", params);
     function toggle() {
         expanded = !expanded;
     }

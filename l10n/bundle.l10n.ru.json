@@ -197,6 +197,9 @@
     "Should not contain transparent layer": "Не должная содержать прозрачность",
     "Should preview what masks look like": "Должна передавать содержимое маски ",
     "Max size 60Kb": "Максимальный размер 60Кбайт",
+    "Used transparency": "Исользована прозрачность",
+    "Maximum size exceeded": "Превышен максимальный размер",
+
 
     "January": "Январь",
     "February": "Февраль",

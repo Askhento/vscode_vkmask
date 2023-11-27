@@ -17,8 +17,7 @@
         params,
         path;
 
-    // can modify if needed!
-    params.info.errors = ["wrong size", "not enogh text", "i dont know anything"];
+    // console.log("INIT icon", value, params);
 
     let waiting = false;
     let iconAsset = null;
@@ -42,7 +41,7 @@
 
         if (payload) {
             value = payload;
-            print("asset", value);
+            // print("asset", value);
             checkIconExists();
         }
 
@@ -78,6 +77,29 @@
         }
 
         iconAsset = $assets[assetIndex];
+        checkIconForErrors();
+        // console.log("iconAsset", iconAsset);
+    }
+
+    function checkIconForErrors() {
+        if (iconAsset == null) {
+            params.info.errors = [];
+            return;
+        }
+
+        if (iconAsset.meta == null) {
+            print("No meta for ", iconAsset);
+            return;
+        }
+
+        const { width, height, format, hasAlpha, size } = iconAsset.meta;
+
+        let errors = [];
+        if (hasAlpha) errors.push(l10n.t("Used transparency"));
+        if (size >= 60000)
+            errors.push(`${l10n.t("Maximum size exceeded")} : ${Math.round(size / 1000)}KB`);
+        // can modify if needed!
+        params.info.errors = errors;
     }
 
     async function removeIcon() {
@@ -90,6 +112,8 @@
         });
 
         value = null;
+        iconAsset = null;
+        params.info.errors = [];
         waiting = false;
     }
 
@@ -197,8 +221,9 @@
             }}
         >
         </vscode-button> -->
-
-        <InfoBox visible={infoVisible} info={params.info} />
+        {#key iconAsset}
+            <InfoBox visible={infoVisible} info={params.info} />
+        {/key}
         {#if waiting}
             <vscode-progress-ring />
         {/if}

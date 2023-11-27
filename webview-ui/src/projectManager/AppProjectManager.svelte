@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as l10n from "@vscode/l10n";
-    import { setContext } from "svelte";
+    import { setContext, tick } from "svelte";
     import { writable } from "svelte/store";
     import { provideVSCodeDesignSystem, allComponents } from "@vscode/webview-ui-toolkit";
     import { MessageHandler } from "../common/MessageHandler";
@@ -139,41 +139,29 @@
 
     async function onChanged(event) {
         console.log("onChange: ", event);
-        const { path, value, structural } = event.detail;
+        // const { path, value, structural } = event.detail;
+        const changes = event.detail;
+        let needRerender = false;
 
-        // print("val by path 2");
-        // applyValueByPath(maskSettings, path, value);
-        maskSettings = applyValueByPath2(maskSettings, path, value);
-        print("updated maskSettings", maskSettings);
+        let tempSettings = maskSettings;
+        changes.forEach(({ path, value, structural }) => {
+            tempSettings = applyValueByPath2(tempSettings, path, value);
+            needRerender = needRerender || structural;
+        });
+
+        maskSettings = tempSettings;
         sendMaskSettings();
-
-        if (structural) {
-            maskSettings = maskSettings;
-        }
-        //!!! structural
+        print("LOL", maskSettings);
+        if (true) parseUI();
     }
 
-    function applyValueByPath(obj, path, value) {
-        // parts = path.split(".");
-        // console.log(obj, path, value);
-        if (path.length === 0) {
-            obj = value;
-            return;
-        }
-
-        const lastPath = path[0];
-
-        if (path.length === 1) {
-            // if (value == null) {
-            //     // delete obj[lastPath];
-            //     const { [lastPath]: removed, ...rest } = obj;
-            //     obj = rest;
-            // } else {
-            // }
-            obj[lastPath] = value;
-        } else {
-            applyValueByPath(obj[lastPath], path.slice(1), value);
-        }
+    $: console.log("mask setting ", maskSettings);
+    async function rerenderSettings() {
+        // !!! a hack
+        let oldSettings = maskSettings;
+        maskSettings = null;
+        await tick();
+        maskSettings = oldSettings;
     }
 
     function parseUI() {
@@ -227,16 +215,18 @@
             {#if maskSettings}
                 {#key maskSettings}
                     {#if uiElements}
-                        <ObjectControl
-                            expanded={true}
-                            nesting={false}
-                            value={maskSettings}
-                            params={uiElements.uiDescription}
-                            label={"MaskSettings"}
-                            path={[]}
-                            uiElements={uiElements.value}
-                            on:changed={onChanged}
-                        />
+                        {#key uiElements}
+                            <ObjectControl
+                                expanded={true}
+                                nesting={false}
+                                value={maskSettings}
+                                params={uiElements.uiDescription}
+                                label={"MaskSettings"}
+                                path={[]}
+                                uiElements={uiElements.value}
+                                on:changed={onChanged}
+                            />
+                        {/key}
                     {:else}
                         <div>ui not parsed</div>
                     {/if}
