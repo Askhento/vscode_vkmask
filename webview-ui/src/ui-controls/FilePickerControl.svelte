@@ -61,7 +61,7 @@
                 }
             })
             .filter((asset) => useBuiltins || asset.projectFile);
-        print("typedassets", typedAssets);
+        // print("typedassets", typedAssets);
 
         filteredAssets = typedAssets
             .filter(filterAssetByQuery)

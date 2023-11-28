@@ -620,6 +620,31 @@ export async function activate(context: vscode.ExtensionContext) {
         );
     });
 
+    const assetsDefaults = {
+        material: {
+            from: ["res", "defaultMaterial.json"],
+            to: ["Materials", "defaultMaterial.json"],
+            assetType: "json_material",
+        },
+    };
+
+    Object.entries(assetsDefaults).forEach(([assetCategory, { from, to, assetType }]) => {
+        context.subscriptions.push(
+            vscode.commands.registerCommand(`vkmask.add_asset.${assetCategory}`, async () => {
+                const relativePath = await Assets.copyAssets(from, to);
+                globalThis.selection = {
+                    type: SelectionType.asset,
+                    assetType,
+                    path: relativePath,
+                    baseName: path.basename(relativePath), // !!! could be error
+                };
+
+                print("asset selection", globalThis.selection);
+                sendSelection();
+            })
+        );
+    });
+
     context.subscriptions.push(
         vscode.commands.registerCommand("vkmask.dumpLogs", async () => {
             const dumpPath = maskConfig.currentConfigDir;

@@ -19,7 +19,7 @@
     let assetGroups = {};
 
     const assetsDefaults = {
-        materials: {
+        material: {
             from: ["res", "defaultMaterial.json"],
             to: ["Materials", "defaultMaterial.json"],
         },
@@ -181,7 +181,7 @@
                     <i class="codicon codicon-chevron-{groupData.expanded ? 'down' : 'right'}" />
 
                     <span>{l10n.t(groupName)}</span>
-                    {#if groupName === "material"}
+                    <!-- {#if groupName === "material"}
                         <vscode-button
                             class="add-btn"
                             appearance="icon"
@@ -193,7 +193,7 @@
                         >
                             <span class="codicon codicon-add" />
                         </vscode-button>
-                    {/if}
+                    {/if} -->
                 </div>
                 {#if groupData.expanded}
                     {#each groupData.elements as asset}

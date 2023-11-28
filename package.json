@@ -50,6 +50,11 @@
                 "icon": "$(add)",
                 "label": "Add plugin",
                 "id": "vkmask.add_plugin_submenu"
+            },
+            {
+                "icon": "$(add)",
+                "label": "Add asset",
+                "id": "vkmask.add_asset_submenu"
             }
         ],
         "menus": {
@@ -83,7 +88,14 @@
                     "submenu": "vkmask.add_plugin_submenu",
                     "when": "view == vkmask.plugins && vkmask.appState != 'ERROR'",
                     "group": "navigation"
+                },
+                {
+                    "submenu": "vkmask.add_asset_submenu",
+                    "when": "view == vkmask.assetsManager && vkmask.appState != 'ERROR'",
+                    "group": "navigation"
                 }
+
+
             ],
             "vkmask.add_effect_submenu": [
                 {
@@ -123,6 +135,11 @@
                 },
                 {
                     "command": "vkmask.add_plugin.fixeddetection"
+                }
+            ],
+            "vkmask.add_asset_submenu": [
+                {
+                    "command": "vkmask.add_asset.material"
                 }
             ]
         },
@@ -187,6 +204,13 @@
                 "title": "fixeddetection",
                 "shortTitle": "Add fixeddetection plugin"
             },
+
+            {
+                "command": "vkmask.add_asset.material",
+                "title": "material",
+                "shortTitle": "Add material asset"
+            },
+
             {
                 "command": "vkmask.execute_command_by_id",
                 "title": "execute command by Id",

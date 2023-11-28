@@ -359,7 +359,7 @@ class AssetWatcher extends EventEmitter {
 
         try {
             fs.cpSync(fullFrom, fullTo);
-            return path.join(...to);
+            return path.relative(this.directory, fullTo);
         } catch (error) {
             return "";
         }
