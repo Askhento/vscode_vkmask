@@ -168,7 +168,7 @@
 
 {#key $selection}
     {#key $assets}
-        {#if assets}
+        {#if $assets.length}
             {#each Object.entries(assetGroups) as [groupName, groupData]}
                 <!-- content here -->
                 <vscode-divider class="divider" role="separator" />

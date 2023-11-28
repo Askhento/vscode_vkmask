@@ -561,7 +561,7 @@ export const ZTextureObject = z.preprocess(
                 })
             ),
             color: ZColorAlpha,
-            lit: ZBool.describe(uiDescriptions.bool({ label: "Lit" })),
+            // lit: ZBool.describe(uiDescriptions.bool({ label: "Lit" })),
             // !!! probably will miss texture property
             // texture: ZTextureAsset,
             // normal: ZTextureAsset({ label: "Normal" }),
