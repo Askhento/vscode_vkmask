@@ -1,8 +1,10 @@
 <script>
     import * as l10n from "@vscode/l10n";
+    import { getContext } from "svelte";
+    const { assets, settings, messageHandler, effects } = getContext("stores");
 
     import { logger } from "../logger";
-    const print = logger("ArrayControl.svelte");
+    const print = logger("MaterialArrayControl.svelte");
 
     import { createEventDispatcher } from "svelte";
 
@@ -19,6 +21,11 @@
     // if (!value) value = params
 
     print("params", params);
+
+    print("Material array");
+
+    $: print("EFFECTS", $effects);
+
     function toggle() {
         expanded = !expanded;
     }

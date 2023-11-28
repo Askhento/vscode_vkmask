@@ -49,7 +49,7 @@
 
     const origin = RequestTarget.parameters;
     let selection: Selection = { type: SelectionType.empty },
-        effects,
+        effects = writable([]),
         plugins,
         asset,
         maskSettings,
@@ -64,7 +64,7 @@
     const allTags = writable(new Set([]));
 
     const messageHandler = new MessageHandler(handleMessageApp, origin);
-    setContext("stores", { assets, settings, messageHandler, allTags });
+    setContext("stores", { assets, settings, messageHandler, allTags, effects });
 
     function handleMessageApp(data: MessageHandlerData<any>) {
         print("recived ", data);
@@ -215,12 +215,12 @@
     }
 
     function processEffects(payload) {
-        effects = payload;
+        $effects = payload;
     }
 
     function updateTags() {
         $allTags = new Set();
-        effects.forEach((effect) => {
+        $effects.forEach((effect) => {
             if ("tag" in effect) {
                 effect.tag
                     .split(";")
@@ -236,14 +236,14 @@
         messageHandler.send({
             command: RequestCommand.updateEffects,
             target: RequestTarget.extension,
-            payload: effects,
+            payload: $effects,
         });
     }
 
     function selectedIsKnown() {
         switch (selection.type) {
             case SelectionType.effect:
-                return effectNamesSet.has(effects?.[selection.id]?.name);
+                return effectNamesSet.has($effects?.[selection.id]?.name);
 
             case SelectionType.plugin:
                 return pluginNamesSet.has(plugins?.[selection.id]?.name);
@@ -301,9 +301,9 @@
 
         switch (selection.type) {
             case SelectionType.effect:
-                print("will parse effect", effects[selection.id]);
-                parseResult = EffectParserForUI.safeParse(effects[selection.id]);
-                selectionName = effects[selection.id]?.name;
+                print("will parse effect", $effects[selection.id]);
+                parseResult = EffectParserForUI.safeParse($effects[selection.id]);
+                selectionName = $effects[selection.id]?.name;
                 break;
             case SelectionType.plugin:
                 print("will parse plugin", plugins[selection.id]);
@@ -381,13 +381,13 @@
 
         switch (selection.type) {
             case SelectionType.effect:
-                let tempEffects = effects[selection.id];
+                let tempEffects = $effects[selection.id];
                 changes.forEach(({ path, value, structural }) => {
                     tempEffects = applyValueByPath2(tempEffects, path, value);
                     needRerender = needRerender || structural;
                 });
-                effects[selection.id] = tempEffects;
-                print("updated effects", effects[selection.id]);
+                $effects[selection.id] = tempEffects;
+                print("updated effects", $effects[selection.id]);
                 sendEffects();
                 break;
 
@@ -602,14 +602,15 @@
         </div> -->
         {#key selection}
             {#if selection.type === SelectionType.effect}
-                {#if effects}
-                    {#key effects}
+                {#if $effects}
+                    {#key $effects}
                         {#if uiElements}
                             <ObjectControl
                                 expanded={true}
                                 nesting={false}
-                                value={effects[selection.id]}
-                                label={uiElements.uiDescription.label ?? effects[selection.id].name}
+                                value={$effects[selection.id]}
+                                label={uiElements.uiDescription.label ??
+                                    $effects[selection.id].name}
                                 params={uiElements.uiDescription}
                                 path={[]}
                                 uiElements={uiElements.value}

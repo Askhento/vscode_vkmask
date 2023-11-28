@@ -259,7 +259,7 @@ class AssetWatcher extends EventEmitter {
 
         watcher.onDidChange(async (e) => {
             const fspath = this.getRelative(e.fsPath);
-            print("created file ", fspath);
+            if (path.basename(fspath) === "mask.json") return;
             const index = this.assets.findIndex((asset) => asset.path === fspath);
             if (index >= 0) {
                 this.assets.splice(index, 1, await this.fileToAsset(e.fsPath, true));

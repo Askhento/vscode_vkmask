@@ -273,7 +273,7 @@
             minmax(var(--global-value-min-width), var(--global-grid-value-column-size));
         column-gap: var(--global-grid-column-gap);
         row-gap: var(--global-grid-row-gap);
-        margin-bottom: 0; /*var(--global-grid-row-gap); */
+        margin-bottom: var(--global-grid-row-gap);
     }
 
     .info-hit-box {
