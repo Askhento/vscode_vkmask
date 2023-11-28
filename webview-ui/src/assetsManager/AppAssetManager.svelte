@@ -181,17 +181,19 @@
                     <i class="codicon codicon-chevron-{groupData.expanded ? 'down' : 'right'}" />
 
                     <span>{l10n.t(groupName)}</span>
-                    <vscode-button
-                        class="add-btn"
-                        appearance="icon"
-                        on:click|stopPropagation={() => {
-                            console.log("add!");
-                            createAsset(groupName);
-                            // removeElement(index);
-                        }}
-                    >
-                        <span class="codicon codicon-add" />
-                    </vscode-button>
+                    {#if groupName === "material"}
+                        <vscode-button
+                            class="add-btn"
+                            appearance="icon"
+                            on:click|stopPropagation={() => {
+                                console.log("add!");
+                                createAsset(groupName);
+                                // removeElement(index);
+                            }}
+                        >
+                            <span class="codicon codicon-add" />
+                        </vscode-button>
+                    {/if}
                 </div>
                 {#if groupData.expanded}
                     {#each groupData.elements as asset}
