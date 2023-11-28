@@ -283,7 +283,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 // reply with assets
                 messageHandler.send({
                     ...data,
-                    payload: Assets.readAsset(payload.path, payload.assetType),
+                    payload: await Assets.readAsset(payload.path, payload.assetType),
                     target: origin,
                 });
                 break;

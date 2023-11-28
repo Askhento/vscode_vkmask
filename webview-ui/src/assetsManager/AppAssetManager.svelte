@@ -58,19 +58,32 @@
         processAssets(payload);
     }
 
+    // const assetGroupKeys = [
+    //     ["json_material", "xml_material"],
+    //     ["model3d"],
+    //     ["image"]
+    // ]
+
+    const assetTypeMap = {
+        json_material: "material",
+        xml_material: "material",
+        model3d: "model3d",
+        image: "image",
+    };
+
     function processAssets(newAssets) {
         print("new assets count ", newAssets.length);
 
         $assets = newAssets;
-        assetGroups = {
-            materials: {
-                expanded: true,
-                elements: $assets.filter(
-                    (a) =>
-                        (a.type === "json_material" || a.type === "xml_material") && a.projectFile
-                ),
-            },
-        };
+        assetGroups = {};
+
+        $assets.forEach((asset) => {
+            if (!asset.projectFile) return;
+            const type = assetTypeMap[asset.type];
+            if (!type) return;
+            if (!(type in assetGroups)) assetGroups[type] = { expanded: true, elements: [] };
+            assetGroups[type].elements.push(asset);
+        });
     }
 
     async function getSelection() {

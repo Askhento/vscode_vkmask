@@ -87,12 +87,7 @@
             return;
         }
 
-        if (iconAsset.meta == null) {
-            print("No meta for ", iconAsset);
-            return;
-        }
-
-        const { width, height, format, hasAlpha, size } = iconAsset.meta;
+        const { width, height, format, hasAlpha, size } = iconAsset;
 
         let errors = [];
         if (hasAlpha) errors.push(l10n.t("Used transparency"));

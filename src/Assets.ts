@@ -27,7 +27,6 @@ export interface Asset {
     type: string;
     projectFile?: boolean;
     preview?: string;
-    meta?: object;
 }
 
 const PREWVIEW_SIZE = 128;
@@ -106,7 +105,7 @@ class AssetWatcher extends EventEmitter {
         return newRelPath;
     }
 
-    readAsset(assetRelativePath: string, assetType: string) {
+    async readAsset(assetRelativePath: string, assetType: string) {
         const fullPath = path.join(this.directory, assetRelativePath);
 
         let rawBuffer: Buffer;
@@ -117,7 +116,7 @@ class AssetWatcher extends EventEmitter {
             return "";
         }
 
-        const processor = assetProcessors[assetType];
+        const processor = await assetProcessors[assetType];
         if (!processor) {
             print("reading, missing proccesssor for asset", assetType, assetRelativePath);
             return "";
@@ -722,7 +721,7 @@ export const assetProcessors: Record<string, AssetProcessor> = {
             // print(thumbnail);
             return {
                 preview,
-                meta,
+                ...meta,
             };
         },
         write: () => {},

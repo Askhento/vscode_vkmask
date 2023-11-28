@@ -40,6 +40,7 @@
     import { onMount, tick } from "svelte";
     import { applyValueByPath2 } from "../utils/applyValueByPath";
     import TextControl from "../ui-controls/TextControl.svelte"; // asset name change
+    import InfoTableControl from "../ui-controls/InfoTableControl.svelte";
 
     provideVSCodeDesignSystem().register(allComponents);
 
@@ -246,6 +247,7 @@
             command: RequestCommand.readAsset,
         });
 
+        console.log("read asset", asset);
         asset = payload;
     }
 
@@ -298,8 +300,16 @@
                 break;
 
             case SelectionType.asset:
-                print("will parse asset", asset);
-                parseResult = AssetParserForUI.safeParse(asset);
+                if (
+                    selection.assetType === "xml_material" ||
+                    selection.assetType === "json_material"
+                ) {
+                    print("will parse asset", asset);
+                    parseResult = AssetParserForUI.safeParse(asset);
+                } else {
+                    return;
+                }
+
                 break;
 
             default:
@@ -624,33 +634,37 @@
                 {/if}
             {:else if selection.type === SelectionType.asset}
                 {#key asset}
-                    <div class="grid-container">
-                        <TextControl
-                            label="Name"
-                            value={selection.baseName}
-                            path={null}
-                            on:changed={(e) => {
-                                print("assetname", e.detail);
-                                const newName = e.detail[0].value;
-                                renameAsset(newName);
-                            }}
-                        />
-                    </div>
-                    <vscode-divider role="separator" />
+                    {#if selection.assetType === "xml_material" || selection.assetType === "json_material"}
+                        <div class="grid-container">
+                            <TextControl
+                                label="Name"
+                                value={selection.baseName}
+                                path={null}
+                                on:changed={(e) => {
+                                    print("assetname", e.detail);
+                                    const newName = e.detail[0].value;
+                                    renameAsset(newName);
+                                }}
+                            />
+                        </div>
+                        <vscode-divider role="separator" />
 
-                    {#if uiElements}
-                        <ObjectControl
-                            expanded={true}
-                            nesting={false}
-                            value={asset}
-                            label={selection.path}
-                            params={uiElements.uiDescription}
-                            path={[]}
-                            uiElements={uiElements.value}
-                            on:changed={onChanged}
-                        />
+                        {#if uiElements}
+                            <ObjectControl
+                                expanded={true}
+                                nesting={false}
+                                value={asset}
+                                label={selection.path}
+                                params={uiElements.uiDescription}
+                                path={[]}
+                                uiElements={uiElements.value}
+                                on:changed={onChanged}
+                            />
+                        {:else}
+                            <div>{l10n.t("unknown asset")}</div>
+                        {/if}
                     {:else}
-                        <div>{l10n.t("unknown asset")}</div>
+                        <InfoTableControl value={asset} />
                     {/if}
                 {/key}
             {:else}
