@@ -1110,7 +1110,7 @@ const ZModel3dEffect = ZBaseEffect.extend({
             defValue: ZFaceAnchor.Values.forehead,
         })
     ),
-    model: ZModel3dAsset({ label: "Model 3d Asset" }),
+    model: ZModel3dAsset({ label: "Model 3d Asset", group: "model" }),
     position: ZArray3D.describe(uiDescriptions.array3d({ label: "Position", group: "transform" })),
     scale: ZArray3D.describe(
         uiDescriptions.array3d({ defValue: [1, 1, 1], label: "Scale", group: "transform" })
@@ -1133,6 +1133,10 @@ const ZModel3dEffect = ZBaseEffect.extend({
 
             transform: {
                 label: "Transform",
+                defExpanded: true,
+            },
+            model: {
+                label: "Model",
                 defExpanded: true,
             },
             materials: {

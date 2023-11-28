@@ -247,7 +247,7 @@
             command: RequestCommand.readAsset,
         });
 
-        console.log("read asset", asset);
+        // console.log("read asset", asset);
         asset = payload;
     }
 

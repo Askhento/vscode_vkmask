@@ -3,7 +3,7 @@
 
     export let value;
 
-    console.log("tableValue", value);
+    // console.log("tableValue", value);
 </script>
 
 {#if value}
@@ -14,6 +14,8 @@
                     <vscode-data-grid-cell grid-column="1">{key}</vscode-data-grid-cell>
                     <vscode-data-grid-cell grid-column="2">{data}</vscode-data-grid-cell>
                 </vscode-data-grid-row>
+            {:else}
+                <img src={"data:image/png;base64," + data} class="file-preview" />
             {/if}
         {/each}
     </vscode-data-grid>
