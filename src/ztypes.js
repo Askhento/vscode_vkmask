@@ -854,7 +854,7 @@ export const ZMaterialObject = z.preprocess(
         )
 );
 
-const ZMaterial = ZMaterialAsset({ label: "Material" });
+const ZMaterial = ZMaterialAsset({ label: "Material", label: "Materials", group: "materials" });
 // z
 //     .union([ZMaterialAsset({ label: "Material" }), ZMaterialObject])
 //     .describe(uiDescriptions.union({}));
@@ -1164,7 +1164,7 @@ const ZPlaneEffect = ZBaseEffect.extend({
         uiDescriptions.array3d({ defValue: [1, 1, 1], lable: "Scale", group: "transform" })
     ),
     rotation: ZArray3D.describe(uiDescriptions.array3d({ label: "Rotation", group: "transform" })),
-    material: ZMaterialArray,
+    material: ZMaterial,
 }).describe(
     uiDescriptions.object({
         label: "Plane",
@@ -1767,7 +1767,7 @@ export const ZMaskConfigPreprocess = z.preprocess(
 
                         z
                             .object({
-                                name: z.union([z.literal("model3d"), z.literal("plane")]),
+                                name: z.literal("model3d"),
                                 material: z
                                     .preprocess((val) => {
                                         if (!Array.isArray(val)) return [val];
@@ -1785,6 +1785,7 @@ export const ZMaskConfigPreprocess = z.preprocess(
                                     z.literal("beautify"),
                                     z.literal("colorfilter"),
                                     z.literal("liquifiedwarp"),
+                                    z.literal("plane"),
                                 ]),
                             })
                             .passthrough(),

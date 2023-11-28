@@ -167,24 +167,6 @@
     //     });
     // }
 
-    async function getMaskSettings() {
-        const { payload } = await messageHandler.request({
-            target: RequestTarget.extension,
-            command: RequestCommand.getMaskSettings,
-        });
-
-        print("new mask settings", payload);
-        maskSettings = payload;
-    }
-
-    function sendMaskSettings() {
-        messageHandler.send({
-            command: RequestCommand.updateMaskSettings,
-            target: RequestTarget.extension,
-            payload: maskSettings,
-        });
-    }
-
     async function getPlugins() {
         const { payload } = await messageHandler.request({
             target: RequestTarget.extension,
@@ -381,24 +363,24 @@
 
         switch (selection.type) {
             case SelectionType.effect:
-                let tempEffects = $effects[selection.id];
+                let tempEffects = $effects;
                 changes.forEach(({ path, value, structural }) => {
                     tempEffects = applyValueByPath2(tempEffects, path, value);
                     needRerender = needRerender || structural;
                 });
-                $effects[selection.id] = tempEffects;
+                $effects = tempEffects;
                 print("updated effects", $effects[selection.id]);
                 sendEffects();
                 break;
 
             case SelectionType.plugin:
-                let tempPlugins = plugins[selection.id];
+                let tempPlugins = plugins;
                 changes.forEach(({ path, value, structural }) => {
                     tempPlugins = applyValueByPath2(tempPlugins, path, value);
                     needRerender = needRerender || structural;
                 });
-                plugins[selection.id] = tempPlugins;
-                print("updated plugins", plugins[selection.id]);
+                plugins = tempPlugins;
+                print("updated plugins", plugins);
                 sendPlugins();
                 break;
 
@@ -612,7 +594,7 @@
                                 label={uiElements.uiDescription.label ??
                                     $effects[selection.id].name}
                                 params={uiElements.uiDescription}
-                                path={[]}
+                                path={[selection.id]}
                                 uiElements={uiElements.value}
                                 on:changed={onChanged}
                             />
@@ -631,7 +613,7 @@
                                 value={plugins[selection.id]}
                                 label={uiElements.uiDescription.label ?? plugins[selection.id].name}
                                 params={uiElements.uiDescription}
-                                path={[]}
+                                path={[selection.id]}
                                 uiElements={uiElements.value}
                                 on:changed={onChanged}
                             />

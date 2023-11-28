@@ -1,12 +1,23 @@
 <script>
     import * as l10n from "@vscode/l10n";
-    import { getContext } from "svelte";
+    import { getContext, tick } from "svelte";
     const { assets, settings, messageHandler, effects } = getContext("stores");
 
     import { logger } from "../logger";
     const print = logger("MaterialArrayControl.svelte");
 
     import { createEventDispatcher } from "svelte";
+    import { getValueByPath, resolveRelative } from "../utils/applyValueByPath";
+    const dispatch = createEventDispatcher();
+    function onChanged() {
+        dispatch("changed", [
+            {
+                value,
+                path,
+                structural: true,
+            },
+        ]);
+    }
 
     export let expanded = true;
 
@@ -22,23 +33,36 @@
 
     print("params", params);
 
-    print("Material array");
+    const relPath = ["..", "model"];
 
-    $: print("EFFECTS", $effects);
+    updateArrayLength();
+
+    async function updateArrayLength() {
+        await tick();
+        const modelPath = getValueByPath($effects, resolveRelative(relPath, path));
+        const assetIndex = $assets.findIndex((v) => v.path === modelPath);
+        print("assetind", assetIndex);
+        if (assetIndex < 0) {
+            if (value.length) {
+                value = [];
+                onChanged();
+            }
+            print("Seems like wrong asset for ", relPath);
+            return;
+        }
+
+        const { numGeometries } = $assets[assetIndex];
+
+        if (value.length === numGeometries) return;
+
+        print("value", value);
+        value = new Array(numGeometries).fill(params.defaultElement).map((v, i) => value[i] ?? v);
+        print("updARR", value);
+        onChanged();
+    }
 
     function toggle() {
         expanded = !expanded;
-    }
-
-    const dispatch = createEventDispatcher();
-    function onChanged() {
-        dispatch("changed", [
-            {
-                value,
-                path,
-                structural: true,
-            },
-        ]);
     }
 
     function addElement() {

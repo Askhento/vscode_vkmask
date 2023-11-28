@@ -39,3 +39,29 @@ export function applyValueByPath2(obj, path, value) {
         return obj;
     }
 }
+
+export function resolveRelative(relPath, currentPath) {
+    const resultPath = [...currentPath];
+    relPath.forEach((el) => {
+        if (el === "..") {
+            resultPath.pop();
+            return;
+        }
+        resultPath.push(el);
+    });
+
+    return resultPath;
+}
+
+export function getValueByPath(obj, path) {
+    let relValue = obj;
+    path.forEach((el) => {
+        try {
+            relValue = relValue[el];
+        } catch (error) {
+            return null;
+        }
+    });
+
+    return relValue;
+}
