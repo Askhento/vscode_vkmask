@@ -6,7 +6,7 @@
         "url": "https://github.com/Askhento/vscode_vkmask"
     },
     "description": "UI for vkontakte AR development ",
-    "version": "0.6.10",
+    "version": "0.6.11",
     "engines": {
         "vscode": "^1.74.0"
     },
@@ -94,8 +94,6 @@
                     "when": "view == vkmask.assetsManager && vkmask.appState != 'ERROR'",
                     "group": "navigation"
                 }
-
-
             ],
             "vkmask.add_effect_submenu": [
                 {
@@ -204,13 +202,11 @@
                 "title": "fixeddetection",
                 "shortTitle": "Add fixeddetection plugin"
             },
-
             {
                 "command": "vkmask.add_asset.material",
                 "title": "material",
                 "shortTitle": "Add material asset"
             },
-
             {
                 "command": "vkmask.execute_command_by_id",
                 "title": "execute command by Id",
