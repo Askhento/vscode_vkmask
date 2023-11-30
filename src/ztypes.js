@@ -1044,6 +1044,17 @@ const ZPatchAnchorLabels = [
     "Upper lip",
 ];
 
+const patchRotationDeps = [
+    {
+        source: ["stores", "effects"],
+        relPath: ["..", "allow_rotation"],
+        postprocess: (_, allowRotation, component) => {
+            component.disabled = !allowRotation;
+            return { needUpdate: false };
+        },
+    },
+];
+
 const ZPatchEffect = ZBaseEffect.extend({
     name: z.literal("patch").describe(uiDescriptions.none({})),
     anchor: ZPatchAnchor.describe(
@@ -1080,7 +1091,13 @@ const ZPatchEffect = ZBaseEffect.extend({
     allow_rotation: ZBool.describe(
         uiDescriptions.bool({ label: "Allow rotation", group: "anchor" })
     ),
-    rotation: ZArray3D.describe(uiDescriptions.array3d({ label: "Rotation", group: "transform" })),
+    rotation: ZArray3D.describe(
+        uiDescriptions.array3d({
+            label: "Rotation",
+            group: "transform",
+            dependencies: patchRotationDeps,
+        })
+    ),
     // pass: ZRenderPathAsset({ label: "Render Path" }),
     texture: ZTextureObject,
 }).describe(
