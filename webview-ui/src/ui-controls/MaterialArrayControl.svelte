@@ -97,22 +97,27 @@
                     uiElements={data.value}
                     on:changed
                 />
-                <vscode-button
-                    class="remove-btn"
-                    style="grid-row : {index + 1} / {index + 2}"
-                    appearance="icon"
-                    on:click={() => {
-                        removeElement(index);
-                    }}
-                >
-                    <span class="codicon codicon-close" />
-                </vscode-button>
+                {#if params.userResizable}
+                    <vscode-button
+                        class="remove-btn"
+                        style="grid-row : {index + 1} / {index + 2}"
+                        appearance="icon"
+                        on:click={() => {
+                            removeElement(index);
+                        }}
+                    >
+                        <span class="codicon codicon-close" />
+                    </vscode-button>
+                {/if}
             {/each}
         {/if}
-        <vscode-button class="add-btn" on:click={addElement}>
-            <span slot="start" class="codicon codicon-add" />
-            <span class="btn-text">{l10n.t("Add " + params.elementName)}</span>
-        </vscode-button>
+
+        {#if params.userResizable}
+            <vscode-button class="add-btn" on:click={addElement}>
+                <span slot="start" class="codicon codicon-add" />
+                <span class="btn-text">{l10n.t("Add " + params.elementName)}</span>
+            </vscode-button>
+        {/if}
         <!-- {#if value.length}
         <vscode-button on:click={removeElement}>
           <span slot="start" class="codicon codicon-remove" />

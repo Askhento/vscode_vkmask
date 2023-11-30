@@ -871,14 +871,6 @@ const ZMaterial = ZMaterialAsset({ label: "Material", label: "Materials", group:
 // async function updateArrayLength() {
 //         const modelPath = getValueByPath($effects, resolveRelative(relPath, path));
 //         print("assetind", assetIndex);
-//         if (assetIndex < 0) {
-//             if (value.length) {
-//                 value = [];
-//                 onChanged();
-//             }
-//             print("Seems like wrong asset for ", relPath);
-//             return;
-//         }
 
 //         const { numGeometries } = $assets[assetIndex];
 
@@ -907,6 +899,15 @@ export const ZMaterialArray = z.preprocess(
                     postprocess: (modelPath, assets, component) => {
                         const { value, params } = component;
                         const assetIndex = assets.findIndex((v) => v.path === modelPath);
+
+                        if (assetIndex < 0) {
+                            if (value.length) {
+                                component.value = [];
+                                return { needUpdate: true };
+                            }
+                            return { needUpdate: false };
+                        }
+
                         const { numGeometries } = assets[assetIndex];
 
                         if (value.length === numGeometries) return { needUpdate: false }; // without this will infinte loop
@@ -914,9 +915,6 @@ export const ZMaterialArray = z.preprocess(
                         component.value = new Array(numGeometries)
                             .fill(params.defaultElement)
                             .map((v, i) => value[i] ?? v);
-
-                        // component.onChanged();
-                        // component.updateValue();
 
                         return { needUpdate: true };
                     },
