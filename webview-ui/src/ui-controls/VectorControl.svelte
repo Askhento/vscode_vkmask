@@ -1,12 +1,13 @@
 <script>
     import * as l10n from "@vscode/l10n";
+    import { createEventDispatcher, onMount, getContext } from "svelte";
+    import { get_current_component } from "svelte/internal";
+    const component = get_current_component();
+    import { applyDeps } from "../common/controlDependencies";
+    const stores = getContext("stores");
+    const { assets, settings, messageHandler, effects } = stores;
 
-    import { onMount } from "svelte";
-    import { createEventDispatcher } from "svelte";
-
-    export let label, value, path, params;
-
-    let dispalyValues = value;
+    export let label, value, path, params, disabled;
 
     if (value == null || value.length === 0) value = params.defValue;
 
@@ -20,6 +21,15 @@
         ]);
     }
 
+    // export function test() {
+    //     console.log("test vector control");
+    // }
+
+    onMount(() => {
+        // component["label"] = "lol";
+        // component.test();
+        applyDeps(component, stores, params.dependencies);
+    });
     // todo : add slider to move all values at the same time
 </script>
 
@@ -41,6 +51,8 @@
             <input
                 class="value"
                 value={v}
+                {disabled}
+                class:input-disabled={disabled}
                 on:keydown={(e) => {
                     switch (e.key) {
                         case "Escape":
@@ -121,6 +133,11 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+
+    input.input-disabled {
+        opacity: var(--disabled-opacity);
+        cursor: not-allowed;
     }
 
     /* .label-text {

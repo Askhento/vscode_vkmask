@@ -1,13 +1,18 @@
 <script>
     import * as l10n from "@vscode/l10n";
-    import { getContext, tick } from "svelte";
-    const { assets, settings, messageHandler, effects } = getContext("stores");
+    import { getContext, onMount, tick } from "svelte";
+
+    import { get_current_component } from "svelte/internal";
+    const component = get_current_component();
+    import { applyDeps } from "../common/controlDependencies";
+    const stores = getContext("stores");
+    // const { assets, settings, messageHandler, effects } = stores;
 
     import { logger } from "../logger";
     const print = logger("MaterialArrayControl.svelte");
 
     import { createEventDispatcher } from "svelte";
-    import { getValueByPath, resolveRelative } from "../utils/applyValueByPath";
+
     const dispatch = createEventDispatcher();
     function onChanged() {
         dispatch("changed", [
@@ -31,35 +36,7 @@
 
     // if (!value) value = params
 
-    print("params", params);
-
-    const relPath = ["..", "model"];
-
-    updateArrayLength();
-
-    async function updateArrayLength() {
-        await tick();
-        const modelPath = getValueByPath($effects, resolveRelative(relPath, path));
-        const assetIndex = $assets.findIndex((v) => v.path === modelPath);
-        print("assetind", assetIndex);
-        if (assetIndex < 0) {
-            if (value.length) {
-                value = [];
-                onChanged();
-            }
-            print("Seems like wrong asset for ", relPath);
-            return;
-        }
-
-        const { numGeometries } = $assets[assetIndex];
-
-        if (value.length === numGeometries) return;
-
-        print("value", value);
-        value = new Array(numGeometries).fill(params.defaultElement).map((v, i) => value[i] ?? v);
-        print("updARR", value);
-        onChanged();
-    }
+    // print("params", params);
 
     function toggle() {
         expanded = !expanded;
@@ -80,6 +57,11 @@
         value = value;
         onChanged();
     }
+
+    onMount(async () => {
+        const { needUpdate } = await applyDeps(component, stores, params.dependencies);
+        if (needUpdate) onChanged();
+    });
 </script>
 
 <!-- <vscode-divider role="separator" /> -->

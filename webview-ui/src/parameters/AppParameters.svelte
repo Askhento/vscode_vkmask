@@ -422,6 +422,7 @@
         // // will need to rerender only if changed parameters structure
         // // !!!!!!!!!!!!!!!!!!!!!!!!
         if (!needRerender) return;
+        print("SHOULD RERENDER");
         parseUI();
         rerenderParameters();
     }

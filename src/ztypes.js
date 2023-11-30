@@ -51,10 +51,19 @@ export const uiDescriptions = {
         max: max,
         defValue,
     }),
-    array3d: ({ label, group = "main", min, max, defValue = [0, 0, 0], showAlways = true }) => ({
+    array3d: ({
+        label,
+        dependencies,
+        group = "main",
+        min,
+        max,
+        defValue = [0, 0, 0],
+        showAlways = true,
+    }) => ({
         showAlways,
         name: "array3d",
         label,
+        dependencies,
         group,
         min: min,
         max: max,
@@ -561,7 +570,7 @@ export const ZTextureObject = z.preprocess(
                 })
             ),
             color: ZColorAlpha,
-            // lit: ZBool.describe(uiDescriptions.bool({ label: "Lit" })),
+            // lit: ZBool.describe(uiDesc riptions.bool({ label: "Lit" })),
             // !!! probably will miss texture property
             // texture: ZTextureAsset,
             // normal: ZTextureAsset({ label: "Normal" }),
@@ -859,6 +868,28 @@ const ZMaterial = ZMaterialAsset({ label: "Material", label: "Materials", group:
 //     .union([ZMaterialAsset({ label: "Material" }), ZMaterialObject])
 //     .describe(uiDescriptions.union({}));
 
+// async function updateArrayLength() {
+//         const modelPath = getValueByPath($effects, resolveRelative(relPath, path));
+//         print("assetind", assetIndex);
+//         if (assetIndex < 0) {
+//             if (value.length) {
+//                 value = [];
+//                 onChanged();
+//             }
+//             print("Seems like wrong asset for ", relPath);
+//             return;
+//         }
+
+//         const { numGeometries } = $assets[assetIndex];
+
+//         if (value.length === numGeometries) return;
+
+//         print("value", value);
+//         value = new Array(numGeometries).fill(params.defaultElement).map((v, i) => value[i] ?? v);
+//         print("updARR", value);
+//         onChanged();
+//     }
+
 export const ZMaterialArray = z.preprocess(
     (val) => {
         if (!Array.isArray(val)) return [val];
@@ -868,14 +899,30 @@ export const ZMaterialArray = z.preprocess(
         uiDescriptions.materialArray({
             dependencies: [
                 {
-                    root: "effects",
-                    path: ["model"],
-                    dataSources: [{ root: "effects", path: ["model"] }, { root: "assets" }],
-                    postprocess: (modelName, assets) => {
-                        /// ! just trying out DELETEME
+                    source: ["stores", "effects"],
+                    relPath: ["..", "model"],
+                },
+                {
+                    source: ["stores", "assets"],
+                    postprocess: (modelPath, assets, component) => {
+                        const { value, params } = component;
+                        const assetIndex = assets.findIndex((v) => v.path === modelPath);
+                        const { numGeometries } = assets[assetIndex];
+
+                        if (value.length === numGeometries) return { needUpdate: false }; // without this will infinte loop
+
+                        component.value = new Array(numGeometries)
+                            .fill(params.defaultElement)
+                            .map((v, i) => value[i] ?? v);
+
+                        // component.onChanged();
+                        // component.updateValue();
+
+                        return { needUpdate: true };
                     },
                 },
             ],
+
             elementName: "material",
             label: "Materials",
             group: "materials",
@@ -1358,7 +1405,20 @@ const ZLightPointEffect = ZLightBase.merge(
             uiDescriptions.numberSlider({ min: 0.0, max: 2000.0, defValue: 500.0, label: "Range" })
         ),
         position: ZArray3D.describe(
-            uiDescriptions.array3d({ label: "Position", group: "transform" })
+            uiDescriptions.array3d({
+                // dependencies: [
+                //     {
+                //         source: ["stores", "effects"],
+                //         relPath: ["..", "range"],
+                //         postprocess: (_, range, component) => {
+                //             component.disabled = range > 500;
+                //             return null;
+                //         },
+                //     },
+                // ],
+                label: "Position",
+                group: "transform",
+            })
         ),
     })
 ).describe(

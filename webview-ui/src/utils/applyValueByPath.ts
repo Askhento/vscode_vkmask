@@ -54,11 +54,15 @@ export function resolveRelative(relPath, currentPath) {
 }
 
 export function getValueByPath(obj, path) {
+    // console.log("getvalue", path);
     let relValue = obj;
+    const currentPath = [];
     path.forEach((el) => {
+        currentPath.push[el];
         try {
             relValue = relValue[el];
         } catch (error) {
+            console.error("getValueError on ", currentPath, obj);
             return null;
         }
     });

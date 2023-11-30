@@ -55,6 +55,7 @@ const common = {
                 // enable run-time checks when not in production
                 dev: !production,
                 enableSourcemap: true,
+                accessors: true,
             },
         }),
         // we'll extract any component CSS out into
