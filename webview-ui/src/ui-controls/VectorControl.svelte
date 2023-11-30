@@ -7,7 +7,11 @@
     const stores = getContext("stores");
     const { assets, settings, messageHandler, effects } = stores;
 
-    export let label, value, path, params, disabled;
+    export let label,
+        value,
+        path,
+        params,
+        disabled = false;
 
     if (value == null || value.length === 0) value = params.defValue;
 

@@ -4,7 +4,7 @@ import { getValueByPath, resolveRelative } from "../utils/applyValueByPath";
 
 export function applyDeps(component, stores, dependencies) {
     if (!dependencies) return;
-    console.log("aplydeps!", dependencies);
+    // console.log("aplydeps!", dependencies);
 
     const dataSources = {
         component,
