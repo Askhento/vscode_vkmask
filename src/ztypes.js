@@ -1498,9 +1498,6 @@ const ZPostEffectTypeLabels = ["Blur", "Dispersion", "Glow", "Noise", "Sharpen"]
 
 const ZPostEffectEffect = ZBaseEffect.extend({
     name: z.literal("posteffect").describe(uiDescriptions.none({})),
-    intensity: ZNumberSlider.describe(
-        uiDescriptions.numberSlider({ defValue: 1, label: "Intensity" })
-    ),
     type: ZPostEffectType.describe(
         uiDescriptions.enum({
             label: "Type",
@@ -1508,6 +1505,9 @@ const ZPostEffectEffect = ZBaseEffect.extend({
             defValue: ZPostEffectType.Values.sharpen,
             optionLabels: ZPostEffectTypeLabels,
         })
+    ),
+    intensity: ZNumberSlider.describe(
+        uiDescriptions.numberSlider({ defValue: 1, label: "Intensity" })
     ),
 }).describe(uiDescriptions.object({ label: "Post effect" }));
 
