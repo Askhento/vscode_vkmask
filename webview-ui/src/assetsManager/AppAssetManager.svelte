@@ -241,6 +241,7 @@
     vscode-divider {
         width: 200vw;
         margin-left: -50vw;
+        margin-top: 0;
         /* calc(0px - var(--global-body-padding-left)); */
     }
 </style>

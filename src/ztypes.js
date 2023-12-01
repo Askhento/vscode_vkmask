@@ -827,7 +827,7 @@ export const ZMaterialObject = z.preprocess(
         })
         .describe(
             uiDescriptions.object({
-                label: "Facemodel",
+                label: "Material",
                 groups: {
                     main: {
                         label: null,
@@ -1002,6 +1002,7 @@ const ZFacemodelEffect = ZBaseEffect.extend({
             texture: {
                 label: "Texture",
                 defExpanded: true,
+                disableMargin: true,
             },
 
             tags: {
@@ -1122,6 +1123,7 @@ const ZPatchEffect = ZBaseEffect.extend({
             texture: {
                 label: "Texture",
                 defExpanded: true,
+                disableMargin: true,
             },
 
             tags: {

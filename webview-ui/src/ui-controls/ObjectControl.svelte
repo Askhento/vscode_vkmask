@@ -13,6 +13,7 @@
     export let params;
     export let expanded = params.defExpanded;
     export let uiElements;
+    export let initialLevel = false;
 
     if (params.group != null) nesting = false;
 
@@ -61,9 +62,10 @@
         }
 
         Object.entries(params.groups).forEach(([groupKey, groupData]) => {
-            const { defExpanded, label } = groupData;
+            const { defExpanded, label, disableMargin } = groupData;
             uiElementsGroupData[groupKey] = {
                 expanded: defExpanded,
+                disableMargin,
                 label,
                 elements: {},
                 compositionGroups: {},
@@ -83,7 +85,7 @@
             }
 
             if (compGroup != null) {
-                console.log(compGroup, el);
+                // console.log(compGroup, el);
                 if (!(compGroup in uiElementsGroupData[group].elements)) {
                     uiElementsGroupData[group].elements[compGroup] = {
                         uiElement: el.uiElement,
@@ -95,13 +97,6 @@
                     };
                 }
                 uiElementsGroupData[group].elements[compGroup].value[key] = el;
-                // this={data.uiElement}
-                // expanded={true}
-                // value={value[key]}
-                // label={data.uiDescription.label ?? key}
-                // path={[...path, key]}
-                // params={data.uiDescription}
-                // uiElements={data.value}
             } else {
                 uiElementsGroupData[group].elements[key] = el;
             }
@@ -158,7 +153,10 @@
                     </div>
                 {/if}
                 {#if uiElementsGroupData[groupName].expanded}
-                    <div class="group-wrapper">
+                    <div
+                        class:main-group-bottom-margin={!groupData.disableMargin}
+                        class="group-wrapper"
+                    >
                         {#each Object.entries(groupData.elements) as [key, data]}
                             {#if data.value === null && (data.uiDescription.name === "object" || data.uiDescription.name === "array")}
                                 <span class="missing-key-label"
@@ -190,15 +188,6 @@
                                 />
                             {/if}
                         {/each}
-                        <!-- {#each Object.entries(groupData.compositionGroups) as [key, data]}
-                            <svelte:component
-                                this={data.uiElement}
-                                label={data.label}
-                                value={data.value}
-                                {path}
-                                on:changed
-                            />
-                        {/each} -->
                     </div>
                     <!-- group-wrapper -->
                 {/if}
@@ -273,6 +262,9 @@
             minmax(var(--global-value-min-width), var(--global-grid-value-column-size));
         column-gap: var(--global-grid-column-gap);
         row-gap: var(--global-grid-row-gap);
+    }
+
+    .main-group-bottom-margin {
         margin-bottom: var(--global-grid-row-gap);
     }
 
@@ -283,6 +275,7 @@
         cursor: pointer;
         color: var(--vscode-descriptionForeground);
         margin: var(--global-margin);
+        margin-left: 0;
         display: flex;
     }
 
