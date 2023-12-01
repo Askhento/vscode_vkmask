@@ -38,7 +38,17 @@
 </script>
 
 {#if label && value}
-    <span class="label"><span class="label-text">{l10n.t(label)}</span></span>
+    <!-- <span class="label"><span class="label-text">{l10n.t(label)}</span></span> -->
+    <div class="labels-wrapper">
+        {#each params.valueLabels as valueLabel, index}
+            <span class="label">
+                {#if index === 0}
+                    <span class="label-text">{l10n.t(label)}</span>
+                {/if}
+                <span>{valueLabel}</span>
+            </span>
+        {/each}
+    </div>
     <div class="vector-control-wrapper">
         {#each value as v, index}
             <!-- <vscode-text-area
@@ -97,6 +107,24 @@
         box-sizing: border-box;
     }
 
+    .labels-wrapper {
+        display: flex;
+        flex-direction: column;
+        /* min-height: fit-content; */
+        justify-content: right;
+        flex-wrap: wrap;
+        margin: 0;
+        min-width: var(--global-min-width);
+
+        /* justify-content: var(--label-justify); */
+    }
+
+    span.label {
+        height: var(--global-block-height);
+        display: flex;
+        justify-content: var(--label-justify);
+    }
+
     .vector-control-wrapper {
         display: flex;
         flex-direction: row;
@@ -125,12 +153,6 @@
         flex-grow: 1;
         height: var(--global-block-height);
         min-width: var(--global-min-width);
-    }
-
-    span.label {
-        height: var(--global-block-height);
-        display: flex;
-        justify-content: var(--label-justify);
     }
 
     span.label > span {

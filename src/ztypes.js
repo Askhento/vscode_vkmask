@@ -42,7 +42,15 @@ export const uiDescriptions = {
         valueLabel,
         valueTemplate,
     }),
-    array2d: ({ label, group = "main", min, max, defValue = [0, 0], showAlways = true }) => ({
+    array2d: ({
+        label,
+        group = "main",
+        min,
+        max,
+        defValue = [0, 0],
+        valueLabels = ["X", "Y"],
+        showAlways = true,
+    }) => ({
         showAlways,
         name: "array2d",
         label,
@@ -50,6 +58,7 @@ export const uiDescriptions = {
         min: min,
         max: max,
         defValue,
+        valueLabels,
     }),
     array3d: ({
         label,
@@ -58,10 +67,12 @@ export const uiDescriptions = {
         min,
         max,
         defValue = [0, 0, 0],
+        valueLabels = ["X", "Y", "Z"],
         showAlways = true,
     }) => ({
         showAlways,
         name: "array3d",
+        valueLabels,
         label,
         dependencies,
         group,
@@ -69,7 +80,15 @@ export const uiDescriptions = {
         max: max,
         defValue,
     }),
-    array4d: ({ label, group = "main", min, max, defValue = [0, 0, 0, 0], showAlways = true }) => ({
+    array4d: ({
+        label,
+        group = "main",
+        min,
+        max,
+        defValue = [0, 0, 0, 0],
+        valueLabels = ["X", "Y", "Z", "W"],
+        showAlways = true,
+    }) => ({
         showAlways,
         name: "array4d",
         label,
@@ -77,6 +96,7 @@ export const uiDescriptions = {
         min: min,
         max: max,
         defValue,
+        valueLabels,
     }),
     enum: ({ label, group = "main", options, optionLabels, defValue, showAlways = true }) => ({
         showAlways,
