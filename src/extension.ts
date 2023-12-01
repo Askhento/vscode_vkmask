@@ -742,16 +742,16 @@ export async function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(
             webviewWatcher.onDidChange((fileUri) => {
                 // print("\nThe file " + fileUri.fsPath + " was modified!");
-                if (watchLock) {
-                    return;
-                }
+                // if (watchLock) {
+                //     return;
+                // }
 
                 if (watchTimeout) clearTimeout(watchTimeout);
                 watchTimeout = setTimeout(() => {
-                    watchLock = false;
+                    // watchLock = false;
                     vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction");
                 }, 1500);
-                watchLock = true;
+                // watchLock = true;
 
                 // .then(() => {
                 //     // sidebar.updateAppState();
