@@ -212,7 +212,7 @@
             }
         });
 
-        print("updated tags: ", $allTags);
+        // print("updated tags: ", $allTags);
     }
 
     function sendEffects() {

@@ -110,19 +110,28 @@
     .labels-wrapper {
         display: flex;
         flex-direction: column;
+
         /* min-height: fit-content; */
-        justify-content: right;
-        flex-wrap: wrap;
+        justify-content: space-around;
+        /* flex-wrap: wrap; */
         margin: 0;
+        margin-right: var(--global-margin);
         min-width: var(--global-min-width);
 
         /* justify-content: var(--label-justify); */
     }
 
     span.label {
+        margin: 0;
         height: var(--global-block-height);
         display: flex;
         justify-content: var(--label-justify);
+        width: 100%;
+    }
+    span.label-text {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
     }
 
     .vector-control-wrapper {
@@ -155,23 +164,8 @@
         min-width: var(--global-min-width);
     }
 
-    span.label > span {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-
     input.input-disabled {
         opacity: var(--disabled-opacity);
         cursor: not-allowed;
     }
-
-    /* .label-text {
-        margin: unset;
-    } */
-
-    /* div {
-        color: aqua;
-        background-color: var(--main-bg-color);
-    } */
 </style>

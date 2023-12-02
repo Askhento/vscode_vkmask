@@ -110,9 +110,9 @@ export class MaskConfig extends EventEmitter {
          * ? lock used to prevent infinte loop on save
          */
         vscode.workspace.onDidSaveTextDocument((document) => {
-            print("saving event");
+            // print("saving event");
             if (this.saveLockCallback !== undefined) {
-                print("save lock return");
+                // print("save lock return");
                 this.saveLockCallback();
                 return;
             }
@@ -128,7 +128,7 @@ export class MaskConfig extends EventEmitter {
     // todo : add clear locks methods
     public setupSelectLock() {
         this.selectionLockCallback = () => {
-            print("selection lock ");
+            // print("selection lock ");
             // this.sendEffects();
             this.selectionLockCallback = undefined;
             //   this.saveConfig();
@@ -137,7 +137,7 @@ export class MaskConfig extends EventEmitter {
 
     public setupEditLock() {
         this.editLockCallback = () => {
-            print("edit lock ");
+            // print("edit lock ");
             // this.parseConfig();
             // this.sendEffects();
             this.editLockCallback = undefined;
@@ -145,7 +145,7 @@ export class MaskConfig extends EventEmitter {
             // this.saveConfig(); // edits completed now need to save so HotReload does it's job
 
             this.selectionLockCallback = () => {
-                print("edit lock -> selection");
+                // print("edit lock -> selection");
 
                 // restore on the second event
                 // ! first cb comes from removing whole json
@@ -162,7 +162,7 @@ export class MaskConfig extends EventEmitter {
 
     public setupSaveLock() {
         this.saveLockCallback = () => {
-            print("save lock");
+            // print("save lock");
             this.saveLockCallback = undefined;
         };
     }
@@ -180,7 +180,7 @@ export class MaskConfig extends EventEmitter {
         if (id === undefined) return;
         const key = "/effects/" + id;
         const pointer = this.maskLinePointers[key];
-        print("showing effect with key - " + key);
+        // print("showing effect with key - " + key);
 
         return this.showConfigAtPointer(pointer, editor);
     }
@@ -189,7 +189,7 @@ export class MaskConfig extends EventEmitter {
         if (id === undefined) return;
         const key = "/plugins/" + id;
         const pointer = this.maskLinePointers[key];
-        print("showing plugin with key - " + key);
+        // print("showing plugin with key - " + key);
 
         return this.showConfigAtPointer(pointer, editor);
     }
@@ -201,7 +201,7 @@ export class MaskConfig extends EventEmitter {
         if (editor === undefined) return;
 
         this.setupSelectLock();
-        print("clear selection");
+        // print("clear selection");
         globalThis.selection = { type: SelectionType.empty };
         var position = editor.selection.start;
         editor.selection = new vscode.Selection(position, position);
@@ -244,7 +244,7 @@ export class MaskConfig extends EventEmitter {
         if (editor === undefined) editor = await this.showConfig();
 
         const saved = await editor.document.save();
-        print("config saved : " + saved);
+        // print("config saved : " + saved);
 
         return editor;
     }
@@ -261,7 +261,7 @@ export class MaskConfig extends EventEmitter {
             print("showconfig pointer is null!!");
             return;
         }
-        print("showing config at - " + pointer.value.line + ", " + pointer.valueEnd.line);
+        // print("showing config at - " + pointer.value.line + ", " + pointer.valueEnd.line);
         let pos = new vscode.Position(pointer.value.line, pointer.value.column);
         let posEnd = new vscode.Position(pointer.valueEnd.line, pointer.valueEnd.column);
         // here we set the cursor
@@ -280,18 +280,12 @@ export class MaskConfig extends EventEmitter {
     ) {
         if (editor === undefined) editor = await this.showConfig();
 
-        console.log("old selection", editor.selection);
-        console.log("locationStart : ", locationStart);
-        console.log("locationEnd : ", locationEnd);
-
         const { line: lineStart, character: charStart } = editor.document.positionAt(locationStart);
         const { line: lineEnd, character: charEnd } = editor.document.positionAt(locationEnd);
 
         let posStart = new vscode.Position(lineStart, charStart);
         let posEnd = new vscode.Position(lineEnd, charEnd);
 
-        console.log("posStart : ", posStart);
-        console.log("posEnd : ", posEnd);
         // vscode.TextEditorCursorStyle.BlockOutline
         // editor.options.cursorStyle
         // here we set the cursor
@@ -579,7 +573,7 @@ export class MaskConfig extends EventEmitter {
 
     public parseConfig(): boolean {
         // ? maybe split to parse locations and actual object
-        print("parsing mask.json");
+        // print("parsing mask.json");
         this.maskJSON = null;
 
         if (!this.updateConfigPath()) return false;
