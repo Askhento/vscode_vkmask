@@ -216,8 +216,20 @@
     on:changed={rotationChanged}
 />
 
-<VectorControl bind:value={scale} {path} label={"Scale"} params={{}} on:changed={scaleChanged} />
-<VectorControl bind:value={pivot} {path} label={"Pivot"} params={{}} on:changed={() => {}} />
+<VectorControl
+    bind:value={scale}
+    {path}
+    label={"Scale"}
+    params={{ valueLabels: ["X", "Y"] }}
+    on:changed={scaleChanged}
+/>
+<VectorControl
+    bind:value={pivot}
+    {path}
+    label={"Pivot"}
+    params={{ valueLabels: ["X", "Y"] }}
+    on:changed={() => {}}
+/>
 
 <!-- <div>{label}</div>
 <div class="control-wrapper">
