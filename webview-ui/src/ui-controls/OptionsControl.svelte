@@ -45,7 +45,11 @@
     }}
 >
     {#each params.optionLabels ?? options as option, i}
-        <vscode-option class="option" value={i}>{l10n.t(option)}</vscode-option>
+        <vscode-option class="option" value={i}
+            ><span class="option-text">
+                {l10n.t(option)}
+            </span></vscode-option
+        >
     {/each}
 </vscode-dropdown>
 
@@ -75,6 +79,22 @@
 
     .option {
         margin: 0;
+        height: var(--global-block-height);
+    }
+
+    .option-text {
+        height: fit-content;
+        margin: 0;
+        margin-left: var(--global-margin);
+    }
+
+    vscode-option::part(content) {
+        /* color: red; */
+        display: flex;
+        /* flex-direction: column; */
+        /* justify-content: center; */
+        align-items: center;
+        width: 100%;
     }
 
     span.label {
