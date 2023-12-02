@@ -33,8 +33,8 @@ export class MessageHandler {
         const requestId = crypto.randomUUID();
 
         this.send({
-            ...data,
             origin: this.origin,
+            ...data,
             requestId,
         });
 

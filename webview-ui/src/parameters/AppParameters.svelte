@@ -65,7 +65,7 @@
     const allTags = writable(new Set([]));
 
     const messageHandler = new MessageHandler(handleMessageApp, origin);
-    setContext("stores", { assets, settings, messageHandler, allTags, effects });
+    setContext("stores", { assets, settings, messageHandler, allTags, effects, selection });
 
     function handleMessageApp(data: MessageHandlerData<any>) {
         print("recived ", data);

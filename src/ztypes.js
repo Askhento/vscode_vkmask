@@ -872,7 +872,7 @@ export const ZMaterialObject = z.preprocess(
         )
 );
 
-const ZMaterial = ZMaterialAsset({ label: "Material", label: "Materials", group: "materials" });
+const ZMaterial = ZMaterialAsset({ label: "Material", group: "materials" });
 // z
 //     .union([ZMaterialAsset({ label: "Material" }), ZMaterialObject])
 //     .describe(uiDescriptions.union({}));
@@ -1284,7 +1284,7 @@ const ZPlaneEffect = ZBaseEffect.extend({
                 defExpanded: true,
             },
             materials: {
-                label: "Materials",
+                label: "Material",
                 defExpanded: true,
             },
             tags: {

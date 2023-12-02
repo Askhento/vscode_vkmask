@@ -8,6 +8,7 @@ export const ViewIds = {
 
 export const RequestTarget = {
     ...ViewIds,
+    control: "control",
     extension: "extension",
     all: "all",
 } as const;

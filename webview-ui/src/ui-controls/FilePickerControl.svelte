@@ -7,10 +7,10 @@
     import { getFileUri } from "../utils/getFileUri";
     const print = logger("FilePickerControl.svelte");
     import { getContext } from "svelte";
-    import { RequestCommand, RequestTarget } from "src/types";
+    import { RequestCommand, RequestTarget, SelectionType } from "src/types";
     //@ts-expect-error
 
-    const { assets, settings, messageHandler } = getContext("stores");
+    const { assets, settings, messageHandler, selection } = getContext("stores");
 
     const whiteData = "R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==";
     const missingTextureData =
@@ -21,6 +21,8 @@
         params,
         path;
 
+    // print("INIT", value, params);
+
     const dispatch = createEventDispatcher();
     $: {
         checkAssetExists();
@@ -28,6 +30,7 @@
             {
                 value,
                 path,
+                structural: true,
             },
         ]);
     }
@@ -165,6 +168,23 @@
         waiting = false;
     }
 
+    function selectAsset() {
+        if (!currentAsset.projectFile) return;
+
+        const newSelection = {
+            ...currentAsset,
+            assetType: currentAsset.type,
+            type: SelectionType.asset,
+        };
+
+        messageHandler.send({
+            command: RequestCommand.updateSelection,
+            origin: RequestTarget.control,
+            target: RequestTarget.all,
+            payload: newSelection,
+        });
+    }
+
     async function removeAsset() {
         waiting = true;
 
@@ -217,137 +237,155 @@
 
 <!-- {#key typedAssets} -->
 {#if label !== undefined}
-    <span class="label"><span>{l10n.t(label)}</span></span>
+    {#key value}
+        <span class="label"><span>{l10n.t(label)}</span></span>
 
-    <!-- <input class="value" type="text" bind:value /> -->
-    <!-- add REd color if file not found in options -->
-    <span class="control-wrapper">
-        <div class="dropdown-wrapper">
-            <!-- <span class="file-preview">
+        <!-- <input class="value" type="text" bind:value /> -->
+        <!-- add REd color if file not found in options -->
+        <span class="control-wrapper">
+            <div class="dropdown-wrapper">
+                <!-- <span class="file-preview">
             </span> -->
-            {#if params.typeName === "texture"}
-                {#if currentAsset && currentAsset.preview}
-                    <a href={getFileUri(currentAsset.absPath)}>
-                        <img
-                            src={"data:image/png;base64," + currentAsset.preview}
-                            class="file-preview"
-                        />
-                    </a>
-                {:else}
-                    <img class="file-preview" src={missingTextureData} />
+                {#if params.typeName === "texture"}
+                    {#if currentAsset && currentAsset.preview}
+                        <a href={getFileUri(currentAsset.absPath)}>
+                            <img
+                                src={"data:image/png;base64," + currentAsset.preview}
+                                class="file-preview"
+                            />
+                        </a>
+                    {:else}
+                        <img class="file-preview" src={missingTextureData} />
+                    {/if}
                 {/if}
-            {/if}
 
-            <vscode-dropdown
-                class:error={filteredAssets.length === 0}
-                position="above"
-                disabled={typedAssets.length === 0 || waiting}
-                class:missing-asset={value && currentAsset == null}
-                bind:this={dropdown}
-                on:focusout|capture={(e) => {
-                    // print("focus out");
-                    //   e.preventDefault();
-                    e.stopPropagation(); // this is to be able to print while dropdown opened
-                    inputTimer = setTimeout(() => {
-                        if (!dropdown) return;
-                        const event = new KeyboardEvent("keydown", {
-                            key: "Escape",
-                        });
-                        dropdown.dispatchEvent(event);
-                    }, 150);
-                }}
-                on:click|preventDefault={(e) => {
-                    // print("dropdown click");
-                    //   setTimeout(function () {
-                    //     inputElement.focus();
-                    //   }, 1000);
-                }}
-                on:change={(e) => {
-                    //   value = e.target.value;
-                    //   print("drop change", e.target.value);
-                    // print("change dropdonw");
-                    value = dropdown.value;
-                    searchValue = "";
-                    inputElement.value = "";
-                }}
-                on:keydown={(e) => {
-                    if (e.key === "Escape") {
-                        // print("escape!");
-                        e.preventDefault();
-                        dropdown.value = value;
-                        return;
-                    }
-                    if (e.key.length === 1) {
-                        inputElement.focus(); // on time !
-                        setTimeout(() => {
+                <vscode-dropdown
+                    class:error={filteredAssets.length === 0}
+                    position="above"
+                    disabled={typedAssets.length === 0 || waiting}
+                    class:missing-asset={value && currentAsset == null}
+                    bind:this={dropdown}
+                    on:focusout|capture={(e) => {
+                        // print("focus out");
+                        //   e.preventDefault();
+                        e.stopPropagation(); // this is to be able to print while dropdown opened
+                        inputTimer = setTimeout(() => {
+                            if (!dropdown) return;
+                            const event = new KeyboardEvent("keydown", {
+                                key: "Escape",
+                            });
+                            dropdown.dispatchEvent(event);
+                        }, 150);
+                    }}
+                    on:click|preventDefault={(e) => {
+                        // print("dropdown click");
+                        //   setTimeout(function () {
+                        //     inputElement.focus();
+                        //   }, 1000);
+                    }}
+                    on:change={(e) => {
+                        //   value = e.target.value;
+                        //   print("drop change", e.target.value);
+                        // print("change dropdonw");
+                        value = dropdown.value;
+                        searchValue = "";
+                        inputElement.value = "";
+                    }}
+                    on:keydown={(e) => {
+                        if (e.key === "Escape") {
+                            // print("escape!");
+                            e.preventDefault();
+                            dropdown.value = value;
+                            return;
+                        }
+                        if (e.key.length === 1) {
+                            inputElement.focus(); // on time !
+                            setTimeout(() => {
+                                if (inputTimer) clearTimeout(inputTimer);
+                            }, 0);
+                        }
+                        //   if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+                        //   setTimeout(function () {
+                        //     const option = dropdown.querySelector("vscode-option.selected");
+                        //     option.scrollIntoView({
+                        //       behavior: "smooth",
+                        //       block: "nearest",
+                        //     });
+                        //   }, 10);
+                    }}
+                >
+                    <vscode-text-field
+                        class:error={filteredAssets.length === 0}
+                        bind:this={inputElement}
+                        on:click|stopPropagation|capture={(e) => {
                             if (inputTimer) clearTimeout(inputTimer);
-                        }, 0);
-                    }
-                    //   if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
-                    //   setTimeout(function () {
-                    //     const option = dropdown.querySelector("vscode-option.selected");
-                    //     option.scrollIntoView({
-                    //       behavior: "smooth",
-                    //       block: "nearest",
-                    //     });
-                    //   }, 10);
+                            // print("click text filed inside ");
+                            // keeps dropdown opened
+                        }}
+                        on:input={(e) => {
+                            // print("oninput", e);
+                            searchValue = e.target.value;
+                            // print(searchValue);
+                        }}
+                    />
+                    {#each filteredAssets as asset, i}
+                        <vscode-option class:builtin={!asset.projectFile}>
+                            {#if asset.absPath && asset.type === "image"}
+                                <img
+                                    src={"data:image/png;base64," + (asset.preview ?? whiteData)}
+                                    class="option-file-preview"
+                                />
+                            {/if}
+                            <span class="option-text">{asset.path}</span>
+                        </vscode-option>
+                    {/each}
+                </vscode-dropdown>
+
+                {#if waiting}
+                    <vscode-progress-ring />
+                {/if}
+            </div>
+
+            <vscode-button
+                appearance={value == null ? "primary" : "secondary"}
+                disabled={waiting}
+                class="upload-button"
+                on:click|stopPropagation={() => {
+                    uploadAsset();
                 }}
             >
-                <vscode-text-field
-                    class:error={filteredAssets.length === 0}
-                    bind:this={inputElement}
-                    on:click|stopPropagation|capture={(e) => {
-                        if (inputTimer) clearTimeout(inputTimer);
-                        // print("click text filed inside ");
-                        // keeps dropdown opened
-                    }}
-                    on:input={(e) => {
-                        // print("oninput", e);
-                        searchValue = e.target.value;
-                        // print(searchValue);
-                    }}
-                />
-                {#each filteredAssets as asset, i}
-                    <vscode-option class:builtin={!asset.projectFile}>
-                        {#if asset.absPath && asset.type === "image"}
-                            <img
-                                src={"data:image/png;base64," + (asset.preview ?? whiteData)}
-                                class="option-file-preview"
-                            />
-                        {/if}
-                        <span class="option-text">{asset.path}</span>
-                    </vscode-option>
-                {/each}
-            </vscode-dropdown>
+                <span class="btn-text">{`${l10n.t("Upload")}`}</span>
+            </vscode-button>
 
-            {#if waiting}
-                <vscode-progress-ring />
+            {#if currentAsset && currentAsset.projectFile}
+                <vscode-button
+                    appearance={value != null ? "primary" : "secondary"}
+                    disabled={waiting}
+                    class="select-button"
+                    on:click|stopPropagation={() => {
+                        selectAsset();
+                    }}
+                >
+                    <span class="btn-text">{`${l10n.t("Select")}`}</span>
+                </vscode-button>
             {/if}
-        </div>
 
-        <vscode-button
-            appearance={value == null ? "primary" : "secondary"}
-            disabled={waiting}
-            class="upload-button"
-            on:click|stopPropagation={() => {
-                uploadAsset();
-            }}
-        >
-            <span class="btn-text">{`${l10n.t("Upload")}`}</span>
-        </vscode-button>
-        <vscode-button
-            disabled={value == null || waiting}
-            appearance="secondary"
-            class="remove-button"
-            on:click|stopPropagation={() => {
-                removeAsset();
-            }}
-        >
-            <span class="btn-text">{`${l10n.t("Remove")}`}</span>
-        </vscode-button>
-    </span>
-    <!-- svelte-ignore missing-declaration -->
-    <!-- <vscode-text-field
+            <vscode-button
+                disabled={value == null || waiting}
+                appearance="secondary"
+                class="remove-button"
+                on:click|stopPropagation={() => {
+                    removeAsset();
+                }}
+            >
+                <span class="btn-text">{`${l10n.t("Remove")}`}</span>
+            </vscode-button>
+        </span>
+    {/key}
+{/if}
+
+<!-- svelte-ignore missing-declaration -->
+<!-- <vscode-text-field
         class:error={filteredAssets.length === 0}
         bind:this={inputElement}
         {value}
@@ -422,7 +460,6 @@
           }
         }}
       /> -->
-{/if}
 
 <!-- {/key} -->
 
