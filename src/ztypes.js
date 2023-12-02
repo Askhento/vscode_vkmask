@@ -255,6 +255,7 @@ export const uiDescriptions = {
         defValue = [],
         dependencies,
         showAlways = true,
+        userResizable = true,
     }) => ({
         showAlways,
         name: "array",
@@ -264,25 +265,9 @@ export const uiDescriptions = {
         defaultElement: defaultElement,
         defValue,
         dependencies,
+        userResizable,
     }),
-    materialArray: ({
-        label = "array",
-        group = "main",
-        elementName,
-        defaultElement,
-        defValue = [],
-        dependencies,
-        showAlways = true,
-    }) => ({
-        showAlways,
-        name: "array",
-        label,
-        group,
-        elementName: elementName,
-        defaultElement: defaultElement,
-        defValue,
-        dependencies,
-    }),
+
     union: ({}) => ({
         name: "union",
     }),
@@ -912,7 +897,7 @@ export const ZMaterialArray = z.preprocess(
         return val;
     },
     z.array(ZMaterial).describe(
-        uiDescriptions.materialArray({
+        uiDescriptions.array({
             dependencies: [
                 {
                     source: ["stores", "effects"],
@@ -950,6 +935,7 @@ export const ZMaterialArray = z.preprocess(
             group: "materials",
             defaultElement: AssetTypes.material.defValue,
             defValue: [AssetTypes.material.defValue],
+            userResizable: false,
         })
     )
 );

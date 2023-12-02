@@ -1,6 +1,14 @@
 <script>
     import * as l10n from "@vscode/l10n";
 
+    import { getContext, onMount, tick } from "svelte";
+
+    import { get_current_component } from "svelte/internal";
+    const component = get_current_component();
+    import { applyDeps } from "../common/controlDependencies";
+    const stores = getContext("stores");
+    // const { assets, settings, messageHandler, effects } = stores;
+
     import { logger } from "../logger";
     const print = logger("ArrayControl.svelte");
 
@@ -18,7 +26,7 @@
 
     // if (!value) value = params
 
-    print("params", params);
+    // print("params", params);
     function toggle() {
         expanded = !expanded;
     }
@@ -49,6 +57,11 @@
         value = value;
         onChanged();
     }
+
+    onMount(async () => {
+        const { needUpdate } = await applyDeps(component, stores, params.dependencies);
+        if (needUpdate) onChanged();
+    });
 </script>
 
 <!-- <vscode-divider role="separator" /> -->
@@ -84,22 +97,27 @@
                     uiElements={data.value}
                     on:changed
                 />
-                <vscode-button
-                    class="remove-btn"
-                    style="grid-row : {index + 1} / {index + 2}"
-                    appearance="icon"
-                    on:click={() => {
-                        removeElement(index);
-                    }}
-                >
-                    <span class="codicon codicon-close" />
-                </vscode-button>
+                {#if params.userResizable}
+                    <vscode-button
+                        class="remove-btn"
+                        style="grid-row : {index + 1} / {index + 2}"
+                        appearance="icon"
+                        on:click={() => {
+                            removeElement(index);
+                        }}
+                    >
+                        <span class="codicon codicon-close" />
+                    </vscode-button>
+                {/if}
             {/each}
         {/if}
-        <vscode-button class="add-btn" on:click={addElement}>
-            <span slot="start" class="codicon codicon-add" />
-            <span class="btn-text">{l10n.t("Add " + params.elementName)}</span>
-        </vscode-button>
+
+        {#if params.userResizable}
+            <vscode-button class="add-btn" on:click={addElement}>
+                <span slot="start" class="codicon codicon-add" />
+                <span class="btn-text">{l10n.t("Add " + params.elementName)}</span>
+            </vscode-button>
+        {/if}
         <!-- {#if value.length}
         <vscode-button on:click={removeElement}>
           <span slot="start" class="codicon codicon-remove" />
