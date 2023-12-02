@@ -49,6 +49,7 @@ export const uiDescriptions = {
         max,
         defValue = [0, 0],
         valueLabels = ["X", "Y"],
+        dependencies,
         showAlways = true,
     }) => ({
         showAlways,
@@ -59,6 +60,7 @@ export const uiDescriptions = {
         max: max,
         defValue,
         valueLabels,
+        dependencies,
     }),
     array3d: ({
         label,
@@ -88,6 +90,7 @@ export const uiDescriptions = {
         defValue = [0, 0, 0, 0],
         valueLabels = ["X", "Y", "Z", "W"],
         showAlways = true,
+        dependencies,
     }) => ({
         showAlways,
         name: "array4d",
@@ -97,6 +100,7 @@ export const uiDescriptions = {
         max: max,
         defValue,
         valueLabels,
+        dependencies,
     }),
     enum: ({ label, group = "main", options, optionLabels, defValue, showAlways = true }) => ({
         showAlways,
@@ -1065,12 +1069,22 @@ const ZPatchAnchorLabels = [
     "Upper lip",
 ];
 
+const patchAnchorDeps = [
+    {
+        source: ["stores", "effects"],
+        relPath: ["..", "anchor"],
+        postprocess: (_, anchor, component) => {
+            if (anchor === ZPatchAnchor.Values.fullscreen) component.disabled = true;
+            return { needUpdate: false };
+        },
+    },
+];
 const patchRotationDeps = [
     {
         source: ["stores", "effects"],
         relPath: ["..", "allow_rotation"],
         postprocess: (_, allowRotation, component) => {
-            component.disabled = !allowRotation;
+            if (!allowRotation) component.disabled = true;
             return { needUpdate: false };
         },
     },
@@ -1106,9 +1120,20 @@ const ZPatchEffect = ZBaseEffect.extend({
         })
     ),
     size: ZArray2D.describe(
-        uiDescriptions.array2d({ defValue: [1, 1], label: "Size", group: "transform" })
+        uiDescriptions.array2d({
+            defValue: [1, 1],
+            label: "Size",
+            group: "transform",
+            dependencies: patchAnchorDeps,
+        })
     ),
-    offset: ZArray3D.describe(uiDescriptions.array3d({ label: "Offset", group: "transform" })),
+    offset: ZArray3D.describe(
+        uiDescriptions.array3d({
+            label: "Offset",
+            group: "transform",
+            dependencies: patchAnchorDeps,
+        })
+    ),
     allow_rotation: ZBool.describe(
         uiDescriptions.bool({ label: "Allow rotation", group: "anchor" })
     ),
@@ -1116,7 +1141,7 @@ const ZPatchEffect = ZBaseEffect.extend({
         uiDescriptions.array3d({
             label: "Rotation",
             group: "transform",
-            dependencies: patchRotationDeps,
+            dependencies: [...patchRotationDeps, ...patchAnchorDeps],
         })
     ),
     // pass: ZRenderPathAsset({ label: "Render Path" }),
