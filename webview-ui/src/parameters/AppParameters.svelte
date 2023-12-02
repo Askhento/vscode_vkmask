@@ -63,6 +63,20 @@
     const assets = writable([]);
     const settings = writable([]);
     const allTags = writable(new Set([]));
+    const selectionStack = writable([]);
+
+    function addToUndo(newSelection) {
+        $selectionStack.push(newSelection);
+        print("sel stack", $selectionStack);
+    }
+
+    function removeUndo() {
+        const prevSelection = $selectionStack.pop();
+        if (!prevSelection) return;
+
+        sendSelect(prevSelection);
+        processSelection(prevSelection);
+    }
 
     const messageHandler = new MessageHandler(handleMessageApp, origin);
     setContext("stores", { assets, settings, messageHandler, allTags, effects, selection });
@@ -72,6 +86,7 @@
         const { payload, command } = data;
         switch (command) {
             case RequestCommand.updateSelection:
+                addToUndo(selection); // old selection
                 processSelection(payload);
                 break;
 
@@ -337,13 +352,21 @@
         processSelection(payload);
     }
 
+    function sendSelect(newSelection) {
+        messageHandler.send({
+            command: RequestCommand.updateSelection,
+            target: RequestTarget.all,
+            payload: newSelection,
+        });
+    }
+
     async function processSelection(newSelection) {
-        selection = newSelection;
         selectionName = null;
+        selection = newSelection;
 
         // print("new selection", selection);
         uiElements = null; // this prevents new effects be applied to old uiElements
-        switch (selection.type) {
+        switch (newSelection.type) {
             case SelectionType.effect:
                 await getEffects();
                 break;
@@ -585,8 +608,19 @@
     <div>some error</div>
   {/if}
 </div> -->
+
 <div class="parameters-wrapper">
     {#if appState === AppState.running}
+        <!-- <vscode-button
+            on:click|stopPropagation={() => {
+                removeUndo();
+            }}
+        >
+            <span slot="start" class="codicon codicon-arrow-circle-left"></span>
+
+            <span class="btn-text">Back</span>
+        </vscode-button> -->
+
         <!-- <div class="header-wrapper">
             <h3>{l10n.t(selection.type).toUpperCase()}</h3>
             {#if selectionName}
@@ -700,6 +734,7 @@
         flex-direction: row;
     }
     .parameters-wrapper {
+        position: relative;
         /* var(--global-body-padding-left) */
         padding-left: 0;
         padding-right: var(--global-body-padding-right);
@@ -716,5 +751,13 @@
         width: 200vw;
         margin-left: -50vw;
         /* calc(0px - var(--global-body-padding-left)); */
+    }
+
+    vscode-button {
+        top: 0;
+        z-index: 100;
+        position: sticky;
+        width: 100%;
+        margin: var(--global-margin);
     }
 </style>
