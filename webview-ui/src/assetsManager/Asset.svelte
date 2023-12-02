@@ -1,20 +1,39 @@
 <script lang="ts">
     import { SelectionType } from "../../../src/types";
-    import { getContext } from "svelte";
+    import { getContext, onMount } from "svelte";
     //@ts-expect-error
-    const { selection } = getContext("stores");
+    const { selection, selectedElem } = getContext("stores");
     export let value, onSelect, onDelete;
     let { baseName, path, type } = value;
+    let optionElement = null;
 
     function checkSelected() {
-        return $selection && $selection.path === path && $selection.type === SelectionType.asset;
+        const sel =
+            $selection && $selection.path === path && $selection.type === SelectionType.asset;
+        if (sel) {
+            setTimeout(() => {
+                // console.log(optionElement);
+                optionElement.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                    inline: "nearest",
+                });
+            }, 0);
+        }
+
+        return sel;
     }
 
-    let selected = checkSelected();
+    let selected = false;
+
+    onMount(() => {
+        selected = checkSelected();
+    });
 </script>
 
 {#key selected}
     <vscode-option
+        bind:this={optionElement}
         class="asset-name"
         {selected}
         on:click={() => {

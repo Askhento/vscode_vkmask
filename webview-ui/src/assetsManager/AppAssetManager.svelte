@@ -29,7 +29,7 @@
 
     function handleMessageApp(data) {
         const { command, payload, target } = data;
-        console.log("assets_manager", data);
+        // console.log("assets_manager", data);
 
         switch (command) {
             case RequestCommand.updateAssets:
@@ -103,8 +103,9 @@
         });
     }
 
-    function processSelection(newSelection) {
+    async function processSelection(newSelection) {
         $selection = newSelection;
+
         // print("new selection", $selection);
     }
 
