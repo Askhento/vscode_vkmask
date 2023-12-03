@@ -1884,7 +1884,7 @@ export const ZMaskConfigPreprocess = z.preprocess(
                                     .preprocess((val) => {
                                         if (!Array.isArray(val)) return [val];
                                         return val;
-                                    }, z.array(z.union([z.string(), z.object({}).passthrough()])))
+                                    }, z.array(z.unknown())) // was union string and object
                                     .optional()
                                     .default([]),
                             })

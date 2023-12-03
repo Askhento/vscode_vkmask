@@ -1,5 +1,6 @@
 <script>
     import * as l10n from "@vscode/l10n";
+    import { reduceError } from "../common/errorParsing";
     import { createEventDispatcher, onMount, getContext } from "svelte";
     import { get_current_component } from "svelte/internal";
     const component = get_current_component();
@@ -11,9 +12,17 @@
         value,
         path,
         params,
+        error,
         disabled = false;
 
-    if (value == null || value.length === 0) value = params.defValue;
+    if (value == null || value.length === 0 || error) value = params.defValue;
+
+    let reducedError = null;
+    if (error) {
+        const { name, _errors, ...formated } = error.format();
+        reducedError = reduceError(formated, []);
+        console.log("vec reduced", reducedError);
+    }
 
     const dispatch = createEventDispatcher();
     function onChanged() {
@@ -35,6 +44,8 @@
         applyDeps(component, stores, params.dependencies);
     });
     // todo : add slider to move all values at the same time
+
+    // title={error != null ? error.format() : null}
 </script>
 
 {#if label && value}
@@ -66,6 +77,8 @@
                 class="value"
                 value={v}
                 {disabled}
+                title={reducedError?.message}
+                class:error={index == reducedError?.path.at(-1)}
                 class:input-disabled={disabled}
                 on:keydown={(e) => {
                     switch (e.key) {
@@ -167,5 +180,9 @@
     input.input-disabled {
         opacity: var(--disabled-opacity);
         cursor: not-allowed;
+    }
+
+    input.error {
+        color: red;
     }
 </style>

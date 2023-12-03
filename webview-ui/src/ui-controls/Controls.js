@@ -136,16 +136,17 @@ function addTypeToSchema(schema) {
         uiElement: uiControlsMap[description.name],
     }));
 
-    // if (schema._def.typeName !== "ZodLiteral") {
-    //     res = res.catch((ctx) => {
-    //         return {
-    //             value: description.defValue,
-    //             uiDescription: description,
-    //             uiElement: uiControlsMap[description.name],
-    //             error: ctx.error,
-    //         };
-    //     });
-    // }
+    if (schema._def.typeName !== "ZodLiteral" && description.name !== "object") {
+        res = res.catch((ctx) => {
+            console.log("error", ctx);
+            return {
+                value: description.defValue,
+                uiDescription: description,
+                uiElement: uiControlsMap[description.name],
+                error: ctx.error,
+            };
+        });
+    }
 
     return res;
 }

@@ -179,6 +179,7 @@
                             {:else}
                                 <svelte:component
                                     this={data.uiElement}
+                                    error={data.error}
                                     value={value[key] ?? data.value}
                                     label={data.label ?? data.uiDescription.label ?? key}
                                     path={[...path, key]}
