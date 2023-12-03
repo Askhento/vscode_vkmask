@@ -77,7 +77,9 @@
                 class="value"
                 value={v}
                 {disabled}
-                title={reducedError?.message}
+                title={params.valueLabels[index] +
+                    " " +
+                    ((index == reducedError?.path.at(-1) && reducedError?.message) || "")}
                 class:error={index == reducedError?.path.at(-1)}
                 class:input-disabled={disabled}
                 on:keydown={(e) => {
