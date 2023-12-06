@@ -1182,16 +1182,105 @@ const ZBeautifyEffect = ZBaseEffect.extend({
 
 const ZColorfilterEffect = ZBaseEffect.extend({
     name: z.literal("colorfilter").describe(uiDescriptions.none({})),
+    anchor: ZPatchAnchor.describe(
+        uiDescriptions.enum({
+            label: "Anchor",
+            group: "anchor",
+            options: Object.keys(ZPatchAnchor.Values),
+            optionLabels: ZPatchAnchorLabels,
+            defValue: ZFaceAnchor.Values.forehead,
+        })
+    ),
+    visible: ZVisibleType.describe(
+        uiDescriptions.enum({
+            label: "Visible",
+            group: "advanced",
+            options: Object.keys(ZVisibleType.Values),
+            optionLabels: ZVisibleTypeLabels,
+            defValue: ZVisibleType.Values.always,
+        })
+    ),
+    fit: ZPatchFitMode.describe(
+        uiDescriptions.enum({
+            label: "Fit",
+            group: "advanced",
+            options: Object.keys(ZPatchFitMode.Values),
+            optionLabels: ZPatchFitModeLabels,
+            defValue: ZPatchFitMode.Values.none,
+        })
+    ),
+    size: ZArray2D.describe(
+        uiDescriptions.array2d({
+            defValue: [1, 1],
+            label: "Size",
+            group: "transform",
+            dependencies: patchAnchorDeps,
+        })
+    ),
+    offset: ZArray3D.describe(
+        uiDescriptions.array3d({
+            label: "Offset",
+            group: "transform",
+            dependencies: patchAnchorDeps,
+        })
+    ),
+    allow_rotation: ZBool.describe(
+        uiDescriptions.bool({ label: "Allow rotation", group: "anchor" })
+    ),
+    rotation: ZArray3D.describe(
+        uiDescriptions.array3d({
+            label: "Rotation",
+            group: "transform",
+            dependencies: patchAnchorDeps,
+        })
+    ),
+
+    lookup: ZTextureAsset({ label: "LUT", group: "colorfilter" }),
     intensity: ZNumberSlider.describe(
         uiDescriptions.numberSlider({
             defValue: 0.75,
             valueLabel: "%",
             valueTemplate: (val) => Math.floor(val * 100),
             label: "Intensity",
+            group: "colorfilter",
         })
     ),
-    lookup: ZTextureAsset({ label: "LUT" }),
-}).describe(uiDescriptions.object({ label: "Color filter" }));
+}).describe(
+    uiDescriptions.object({
+        label: "Color filter",
+        groups: {
+            main: {
+                label: null,
+                defExpanded: true,
+            },
+
+            anchor: {
+                label: "Anchor",
+                defExpanded: true,
+            },
+
+            transform: {
+                label: "Transform",
+                defExpanded: true,
+            },
+
+            colorfilter: {
+                label: "Colorfilter",
+                defExpanded: true,
+            },
+
+            tags: {
+                label: "Tags",
+                defExpanded: false,
+            },
+
+            advanced: {
+                label: "Advanced",
+                defExpanded: false,
+            },
+        },
+    })
+);
 
 const ZModel3dEffect = ZBaseEffect.extend({
     name: z.literal("model3d").describe(uiDescriptions.none({})),

@@ -12,17 +12,21 @@
         value,
         path,
         params,
-        error,
+        error = null,
         disabled = false;
 
     if (value == null || value.length === 0 || error) value = params.defValue;
 
-    let reducedError = null;
-    if (error) {
-        const { name, _errors, ...formated } = error.format();
-        reducedError = reduceError(formated, []);
-        console.log("vec reduced", reducedError);
-    }
+    // title={params.valueLabels[index] +
+    //                 " " +
+    //                 ((index == reducedError?.path.at(-1) && reducedError?.message) || "")}
+    //             class:error={index == reducedError?.path.at(-1)}
+    // let reducedError = null;
+    // if (error) {
+    //     const { name, _errors, ...formated } = error.format();
+    //     reducedError = reduceError(formated, []);
+    //     console.log("vec reduced", reducedError);
+    // }
 
     const dispatch = createEventDispatcher();
     function onChanged() {
@@ -39,7 +43,6 @@
     // }
 
     onMount(() => {
-        // component["label"] = "lol";
         // component.test();
         applyDeps(component, stores, params.dependencies);
     });
@@ -77,10 +80,6 @@
                 class="value"
                 value={v}
                 {disabled}
-                title={params.valueLabels[index] +
-                    " " +
-                    ((index == reducedError?.path.at(-1) && reducedError?.message) || "")}
-                class:error={index == reducedError?.path.at(-1)}
                 class:input-disabled={disabled}
                 on:keydown={(e) => {
                     switch (e.key) {
