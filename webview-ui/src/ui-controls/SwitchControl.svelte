@@ -21,7 +21,7 @@
     }
 </script>
 
-<span class="label" title={label}><span>{l10n.t(label)}</span></span>
+<span class="label" title={l10n.t(label)}><span>{l10n.t(label)}</span></span>
 
 <vscode-checkbox checked={value} on:change={onChange} />
 

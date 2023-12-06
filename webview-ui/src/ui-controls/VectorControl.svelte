@@ -55,7 +55,7 @@
     <!-- <span class="label"><span class="label-text">{l10n.t(label)}</span></span> -->
     <div class="labels-wrapper">
         {#each params.valueLabels as valueLabel, index}
-            <span class="label" title={label}>
+            <span class="label" title={l10n.t(label)}>
                 {#if index === 0}
                     <span class="label-text">{l10n.t(label)}</span>
                 {/if}
