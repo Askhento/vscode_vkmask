@@ -136,38 +136,38 @@ function addTypeToSchema(schema) {
         uiElement: uiControlsMap[description.name],
     }));
 
-    if (schema._def.typeName !== "ZodLiteral" && description.name !== "object") {
-        res = res.catch((ctx) => {
-            console.log("error", ctx);
-            return {
-                value: description.defValue,
-                uiDescription: description,
-                uiElement: uiControlsMap[description.name],
-                error: ctx.error,
-            };
-        });
-    }
+    // if (schema._def.typeName !== "ZodLiteral" && description.name !== "object") {
+    //     res = res.catch((ctx) => {
+    //         console.log("error", ctx);
+    //         return {
+    //             value: description.defValue,
+    //             uiDescription: description,
+    //             uiElement: uiControlsMap[description.name],
+    //             error: ctx.error,
+    //         };
+    //     });
+    // }
 
     return res;
 }
 
-const testModel3d = {
-    name: "model3d",
-    tag: "12312;free",
-    disabled: false,
-    anchor: "forehead",
-    model: "Models/Shine.mdl",
-    material: [
-        "Materials/DefaultGrey.xml",
-        {
-            textures: "Sometexire.png",
-            parameters: [1, 0, 0, 0],
-        },
-    ],
-    position: [0.0, 0.0, 0.0],
-    rotation: [0.0, 0.0, 0.0],
-    scale: [1.0, 1.0, 1.0],
-};
+// const testModel3d = {
+//     name: "model3d",
+//     tag: "12312;free",
+//     disabled: false,
+//     anchor: "forehead",
+//     model: "Models/Shine.mdl",
+//     material: [
+//         "Materials/DefaultGrey.xml",
+//         {
+//             textures: "Sometexire.png",
+//             parameters: [1, 0, 0, 0],
+//         },
+//     ],
+//     position: [0.0, 0.0, 0.0],
+//     rotation: [0.0, 0.0, 0.0],
+//     scale: [1.0, 1.0, 1.0],
+// };
 
 // console.log("mat array", ZMaterialArray._def)
 // console.log("desc", ZModel3dEffect.shape.rotation)

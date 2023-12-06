@@ -1127,7 +1127,7 @@ const ZPatchEffect = ZBaseEffect.extend({
         uiDescriptions.array3d({
             label: "Rotation",
             group: "transform",
-            dependencies: [...patchRotationDeps, ...patchAnchorDeps],
+            dependencies: patchAnchorDeps,
         })
     ),
     // pass: ZRenderPathAsset({ label: "Render Path" }),
