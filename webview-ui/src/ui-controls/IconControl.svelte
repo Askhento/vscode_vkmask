@@ -135,6 +135,7 @@
 {#if label !== undefined}
     <span
         class="label"
+        title={l10n.t(label)}
         on:mouseleave={() => {
             infoVisible = false;
         }}
