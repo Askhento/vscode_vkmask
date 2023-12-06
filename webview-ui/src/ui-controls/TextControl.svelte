@@ -31,7 +31,7 @@
 </script>
 
 {#if label}
-    <span class="label"><span>{l10n.t(label)}</span></span>
+    <span class="label" title={label}><span>{l10n.t(label)}</span></span>
     <vscode-text-field
         class="value"
         type="text"

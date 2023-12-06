@@ -67,7 +67,7 @@
 <!-- <vscode-divider role="separator" /> -->
 
 {#if nesting}
-    <span class="label" class:expanded on:click={toggle}>
+    <span class="label" title={l10n.t(label)} class:expanded on:click={toggle}>
         <i class="codicon codicon-chevron-{expanded ? 'down' : 'right'}" />
         {l10n.t(label)}
     </span>

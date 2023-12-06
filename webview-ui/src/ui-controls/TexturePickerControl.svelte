@@ -108,7 +108,7 @@
 </script>
 
 {#if label !== undefined}
-    <span class="label"><span>{label}</span></span>
+    <span class="label" title={label}><span>{label}</span></span>
 
     <span class="control-wrapper">
         <!-- <div class="value-text">

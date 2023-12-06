@@ -60,7 +60,7 @@
     }
 </script>
 
-<span class="label"><span>{l10n.t(label)}</span></span>
+<span class="label" title={l10n.t(label)}><span>{l10n.t(label)}</span></span>
 
 <!-- <span class="color">{value}</span> -->
 <!-- <div class="color-control-wrapper"> -->

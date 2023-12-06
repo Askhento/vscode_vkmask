@@ -238,7 +238,7 @@
 <!-- {#key typedAssets} -->
 {#if label !== undefined}
     {#key value}
-        <span class="label"><span>{l10n.t(label)}</span></span>
+        <span class="label" title={l10n.t(label)}><span>{l10n.t(label)}</span></span>
 
         <!-- <input class="value" type="text" bind:value /> -->
         <!-- add REd color if file not found in options -->

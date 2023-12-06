@@ -27,7 +27,7 @@
     }
 </script>
 
-<span class="label">
+<span class="label" title={label}>
     <span>{l10n.t(label)}</span>
 </span>
 <!-- <select class="options" name="" id="" bind:value>
