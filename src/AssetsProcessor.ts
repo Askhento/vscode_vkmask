@@ -1,15 +1,13 @@
 import * as path from "path";
 import * as fs from "fs";
-import * as vscode from "vscode";
-import { EventEmitter } from "events";
 import { logger } from "./Logger";
-const print = (...args: any) => logger.log(__filename, ...args);
+const print = (...args: any) => console.log(...args); //logger.log(__filename, ...args);
 import { copyRecursiveSync } from "./utils/copyFilesRecursive";
 import { jsonPrettyArray } from "./utils/jsonStringify";
 import sharp from "sharp";
 
 import { XMLParser, XMLBuilder } from "fast-xml-parser"; // https://github.com/NaturalIntelligence/fast-xml-parser/blob/c7b3cea4ead020c21d39e135a50348208829e971/docs/v4/2.XMLparseOptions.md
-import { AssetTypes } from "./types";
+import { AssetTypes, Asset } from "./types";
 import { SmartBuffer } from "smart-buffer";
 
 /*
@@ -19,142 +17,21 @@ import { SmartBuffer } from "smart-buffer";
     add error type for files which is not possible to parse
 */
 
-export interface Asset {
-    baseName: string;
-    absPath: string;
-    extension: string;
-    path: string;
-    type: string;
-    projectFile?: boolean;
-    preview?: string;
-}
+const PREVIEW_SIZE = 128;
 
-const PREWVIEW_SIZE = 128;
-
-class AssetWatcher extends EventEmitter {
-    public assets: Array<Asset> = [];
-    public builtInAssets: Array<Asset> = [];
+export class AssetsProcessor {
     private xmlParser = new XMLParser({
         ignoreDeclaration: true,
     });
-    directory: string = "";
-    extensionPath: string = "";
 
-    public onAssetsChange: (() => void) | undefined;
-
-    constructor() {
-        super();
-    }
-
-    async searchBuiltinAssets(extensionUri: vscode.Uri) {
-        const builtinPath = path.join(extensionUri.fsPath, "res", "build-in-assets.json");
-        const builtInRaw = fs.readFileSync(builtinPath, "utf8");
-        const builtInJSON = JSON.parse(builtInRaw) as Array<Asset>;
-
-        // !!!add error check, file could be missing
-        this.builtInAssets = builtInJSON;
-        print("builtins assets: ", this.builtInAssets);
-    }
-
-    async searchAssets() {
-        print("Searching assets");
-        const files = await vscode.workspace.findFiles("**");
-
-        const newAssets = files.map(async (file) => {
-            return await this.fileToAsset(file.fsPath, true);
-        });
-
-        print(`new assets count :  ${newAssets.length}`);
-        // print(`builtin assets count :  ${this.builtInAssets.length}`);
-
-        this.assets = await Promise.all(newAssets);
-        // this.assets = [...this.builtInAssets, ...newAssets];
-    }
-
-    async getAssets(builtins = false) {
-        if (!this.assets.length) {
-            await this.searchAssets();
-        }
-        return builtins ? [...(this.builtInAssets ?? []), ...this.assets] : this.assets;
-    }
-
-    async renameFile(relativePath: string, newName: string) {
-        const { dir, name, ext } = path.parse(relativePath);
-
-        const fullDir = path.join(this.directory, dir);
-        const oldFullPath = path.join(this.directory, relativePath);
-        const newFullPath = path.format({
-            dir: fullDir,
-            name: newName,
-            ext,
-        });
-
-        const newRelPath = path.format({
-            dir,
-            name: newName,
-            ext,
-        });
-
-        try {
-            fs.renameSync(oldFullPath, newFullPath);
-        } catch (error) {
-            print("error renaming file ", relativePath, newName, error);
-            return "";
-        }
-
-        return newRelPath;
-    }
-
-    async readAsset(assetRelativePath: string, assetType: string) {
-        const fullPath = path.join(this.directory, assetRelativePath);
-
-        let rawBuffer: Buffer;
-        try {
-            rawBuffer = fs.readFileSync(fullPath);
-        } catch (error) {
-            print("error read file", path, error);
-            return "";
-        }
-
-        const processor = await assetProcessors[assetType];
-        if (!processor) {
-            print("reading, missing proccesssor for asset", assetType, assetRelativePath);
-            return "";
-        }
-
-        // !proccessor could have error!
-        return processor.read(rawBuffer);
-    }
-
-    writeAsset(assetRelativePath: string, data: any, assetType: string) {
-        const processor = assetProcessors[assetType];
-        if (!processor) {
-            print("writing, missing proccesssor for asset", assetType, assetRelativePath);
-            return;
-        }
-
-        // ???? maybe use Buffer
-        const processedStr = processor.write(data);
-
-        const fullPath = path.join(this.directory, assetRelativePath);
-
-        try {
-            fs.writeFileSync(fullPath, processedStr);
-        } catch (error) {
-            print("error writing file", assetRelativePath, error);
-        }
-    }
-
-    readFileType(file: string) {
+    readFileType(ext: string, buffer: Buffer) {
         let type = "unknown";
         // !!!! error handling
-        const ext = path.extname(file);
 
         switch (ext) {
             case ".xml":
                 try {
-                    const rawXML = fs.readFileSync(file);
-                    let xmlObject = this.xmlParser.parse(rawXML);
+                    let xmlObject = this.xmlParser.parse(buffer);
                     const xmlType = Object.keys(xmlObject)?.[0] ?? "error";
                     type = "xml_" + xmlType;
                 } catch (e) {
@@ -164,7 +41,7 @@ class AssetWatcher extends EventEmitter {
 
             case ".json":
                 try {
-                    const rawJson = fs.readFileSync(file).toString();
+                    const rawJson = buffer.toString();
                     const parsedJson = JSON.parse(rawJson);
                     const jsonType = parsedJson.techniques ? "material" : "error";
                     type = "json_" + jsonType;
@@ -198,28 +75,48 @@ class AssetWatcher extends EventEmitter {
         return type;
     }
 
-    async fileToAsset(file: string, projectFile: boolean = false): Promise<Asset> {
-        const absPath = this.getAbsPath(file);
-        const type = await this.readFileType(file);
-        // const preview = await this.getImagePreview(absPath, type);
-        // const meta = await this.getImageMeta(absPath, type);
+    async read(type: string, fileBuffer: Buffer) {
+        if (!(type in assetProcessors)) {
+            print(`read type ${type} not in proccessors`);
+            return {};
+        }
+
+        return await assetProcessors[type].read(fileBuffer);
+    }
+
+    async write(type: string, data: any) {
+        if (!(type in assetProcessors)) {
+            print(`write type ${type} not in proccessors`);
+            return {};
+        }
+
+        return await assetProcessors[type].write(data);
+    }
+
+    async fileToAsset(
+        absPath: string,
+        relativePath: string,
+        projectFile: boolean = false
+    ): Promise<Asset> {
+        const { ext, name } = path.parse(absPath);
+        // const absPath = path.resolve(file);
+        const fileBuffer = fs.readFileSync(absPath);
+        const type = await this.readFileType(ext, fileBuffer);
 
         const typesToProcess = new Set([AssetTypes.image, AssetTypes.model3d]);
 
         let processOutput = {};
-        if (typesToProcess.has(type) && type in assetProcessors) {
-            const fileBuffer = fs.readFileSync(absPath);
-            processOutput = { ...(await assetProcessors[type].read(fileBuffer)) };
+        if (typesToProcess.has(type)) {
+            processOutput = await this.read(type, fileBuffer);
         }
 
         // const baseName = path.basename(file);
         // const extension = path.extname(file);
-        const { ext, name } = path.parse(file);
 
         return {
             baseName: name,
             absPath,
-            path: this.getRelative(file),
+            path: relativePath,
             extension: ext,
             type,
             projectFile,
@@ -227,180 +124,56 @@ class AssetWatcher extends EventEmitter {
         };
     }
 
-    attach(context: vscode.ExtensionContext) {
-        this.extensionPath = context.extensionPath;
-
-        if (vscode.workspace.workspaceFolders?.length) {
-            this.directory = vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath;
-        }
-
-        if (!this.directory) {
-            print("dirrectory is undefined, unable to attach");
-            return;
-        }
-
-        // ! test for multple files deleted
-        // ! possibly add some debounce
-
-        const watcher = vscode.workspace.createFileSystemWatcher(
-            new vscode.RelativePattern(this.directory, "**")
-        );
-
-        watcher.onDidCreate(async (e) => {
-            const fspath = this.getRelative(e.fsPath);
-            print("created file ", fspath);
-            const index = this.assets.findIndex((asset) => asset.path === fspath);
-            if (index < 0) {
-                this.assets.splice(index, 0, await this.fileToAsset(e.fsPath, true));
-                this.fireChangedEvent();
-            }
-        });
-
-        watcher.onDidChange(async (e) => {
-            const fspath = this.getRelative(e.fsPath);
-            if (path.basename(fspath) === "mask.json") return;
-            const index = this.assets.findIndex((asset) => asset.path === fspath);
-            if (index >= 0) {
-                this.assets.splice(index, 1, await this.fileToAsset(e.fsPath, true));
-                this.fireChangedEvent();
-            }
-        });
-
-        watcher.onDidDelete((e) => {
-            const fspath = this.getRelative(e.fsPath);
-            print("deleted file ", fspath);
-            const index = this.assets.findIndex((asset) => asset.path === fspath);
-            if (index >= 0) {
-                this.assets.splice(index, 1);
-                this.fireChangedEvent();
-            }
-        });
-    }
-
     async getImageMeta(absPath: string, type: string) {
-        if (type === "image") {
-            const imageBuffer = fs.readFileSync(absPath);
+        if (type !== "image") return;
+        const imageBuffer = fs.readFileSync(absPath);
 
-            try {
-                const imgMeta = await (await sharp(imageBuffer)).metadata();
+        try {
+            const imgSharp = await sharp(imageBuffer);
+            const { isOpaque } = await imgSharp.stats();
+            const { width, height, size, format } = await imgSharp.metadata();
 
-                // print(thumbnail);
-                return imgMeta;
-            } catch (err) {
-                print(err);
-            }
+            // print(thumbnail);
+            return {
+                width,
+                height,
+                size,
+                format,
+                isOpaque,
+            };
+        } catch (err) {
+            print(err);
         }
-        return null;
+
+        return {};
     }
 
     async getImagePreview(absPath: string, type: string) {
-        if (type === "image") {
-            const imageBuffer = fs.readFileSync(absPath);
+        if (type !== "image") return;
 
-            try {
-                const thumbnailBuffer = await sharp(imageBuffer)
-                    .resize({
-                        fit: "contain",
-                        width: PREWVIEW_SIZE,
-                        height: PREWVIEW_SIZE,
-                        // withoutEnlargement: true,
-                    })
-                    .jpeg({ force: true, quality: 80 })
-                    .toBuffer();
+        const imageBuffer = fs.readFileSync(absPath);
 
-                const thumbnail = thumbnailBuffer.toString("base64");
-                // print(thumbnail);
-                return thumbnail;
-            } catch (err) {
-                print(err);
-            }
+        try {
+            const thumbnailBuffer = await sharp(imageBuffer)
+                .resize({
+                    fit: "contain",
+                    width: PREVIEW_SIZE,
+                    height: PREVIEW_SIZE,
+                    // withoutEnlargement: true,
+                })
+                .jpeg({ force: true, quality: 80 })
+                .toBuffer();
+
+            const thumbnail = thumbnailBuffer.toString("base64");
+            // print(thumbnail);
+            return thumbnail;
+        } catch (err) {
+            print(err);
         }
 
         return "";
     }
-
-    async uploadAssets(extensions: string[], to: string[]) {
-        // todo : decide what to do when name conflict
-
-        const filters: any = Object.fromEntries(extensions.map((ext) => [ext, ext]));
-
-        const options: vscode.OpenDialogOptions = {
-            canSelectMany: false,
-            openLabel: "Open",
-            canSelectFiles: true,
-            canSelectFolders: false,
-            filters,
-            title: "Select assets",
-        };
-
-        const fileUri = await vscode.window.showOpenDialog(options);
-
-        if (!fileUri || !fileUri[0]) {
-            return "";
-        }
-
-        const file = fileUri[0].fsPath;
-        const base = path.basename(file);
-        const relative = path.join(...to, base);
-        const dest = path.join(this.directory, relative);
-
-        // file already in the folder
-        if (file === dest) return relative;
-
-        // fs.copyFileSync(file, dest);
-        // copyRecursiveSync(file, dest);
-        fs.cpSync(file, dest, {}); // it works !!! even with missing destination
-        return relative;
-    }
-
-    async copyAssets(from: string[], to: string[]) {
-        const fullFrom = path.join(this.extensionPath, ...from);
-        const fullTo = this.findNextIncrementName(path.join(this.directory, ...to));
-
-        try {
-            fs.cpSync(fullFrom, fullTo);
-            return path.relative(this.directory, fullTo);
-        } catch (error) {
-            return "";
-        }
-    }
-
-    async removeAsset(asset: string[]) {
-        const fullPath = path.join(this.directory, ...asset);
-
-        try {
-            fs.unlinkSync(fullPath);
-            return fullPath;
-        } catch (error) {
-            return "";
-        }
-    }
-
-    findNextIncrementName(desiredPath: string, sep = "_", index = 1) {
-        const { dir, name, ext } = path.parse(desiredPath);
-        while (true) {
-            const exist = fs.existsSync(desiredPath);
-            if (!exist) return desiredPath;
-            desiredPath = path.format({ dir, ext, name: `${name}${sep}${index}` });
-            index++;
-        }
-    }
-
-    getAbsPath(file: string) {
-        return path.resolve(file);
-    }
-
-    getRelative(file: string) {
-        return path.relative(this.directory, file);
-    }
-
-    fireChangedEvent() {
-        this.emit("assetsChanged", { assets: this.assets });
-    }
 }
-
-// Exports class singleton to prevent multiple
-export const Assets = new AssetWatcher();
 
 export interface AssetProcessor {
     read: (Buffer) => any;
@@ -431,7 +204,7 @@ const elementTypeSizes = {
     UBYTE4_NORM: 4, // unsigned
 };
 
-const LEGACY_VERTEXELEMENTS = [
+export const LEGACY_VERTEXELEMENTS = [
     elementTypeSizes.FLOAT_VEC3, // Position
     elementTypeSizes.FLOAT_VEC3, // Normal
     elementTypeSizes.UBYTE4_NORM, // Color
@@ -702,16 +475,17 @@ export const assetProcessors: Record<string, AssetProcessor> = {
 
     [AssetTypes.image]: {
         read: async (imageBuffer: Buffer) => {
-            const thumbnailBuffer = await sharp(imageBuffer);
+            const imgSharp = await sharp(imageBuffer);
 
-            const meta = await thumbnailBuffer.metadata();
+            const { isOpaque } = await imgSharp.stats();
+            const { width, height, size, format } = await imgSharp.metadata();
 
             const preview = (
-                await thumbnailBuffer
+                await imgSharp
                     .resize({
                         fit: "contain",
-                        width: PREWVIEW_SIZE,
-                        height: PREWVIEW_SIZE,
+                        width: PREVIEW_SIZE,
+                        height: PREVIEW_SIZE,
                         // withoutEnlargement: true,
                     })
                     .jpeg({ force: true, quality: 80 })
@@ -721,7 +495,11 @@ export const assetProcessors: Record<string, AssetProcessor> = {
             // print(thumbnail);
             return {
                 preview,
-                ...meta,
+                width,
+                height,
+                size,
+                format,
+                isOpaque,
             };
         },
         write: () => {},

@@ -96,3 +96,13 @@ export const AssetTypes = {
     model3d: "model3d",
     image: "image",
 };
+
+export interface Asset {
+    baseName: string;
+    absPath: string;
+    extension: string;
+    path: string;
+    type: string;
+    projectFile?: boolean;
+    preview?: string;
+}

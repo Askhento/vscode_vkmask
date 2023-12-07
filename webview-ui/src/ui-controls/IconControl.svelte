@@ -87,10 +87,11 @@
             return;
         }
 
-        const { width, height, format, hasAlpha, size } = iconAsset;
+        const { width, height, format, isOpaque, size } = iconAsset;
 
+        // print(iconAsset);
         let errors = [];
-        if (hasAlpha) errors.push(l10n.t("Used transparency"));
+        if (!isOpaque) errors.push(l10n.t("Used transparency"));
         if (size >= 60000)
             errors.push(`${l10n.t("Maximum size exceeded")} : ${Math.round(size / 1000)}KB`);
         // can modify if needed!

@@ -19,7 +19,7 @@ import { logger } from "./Logger";
 import type { LogEntry } from "./Logger";
 const print = (...args: any) => logger.log(__filename, ...args);
 
-import { Assets } from "./Assets";
+import { assetsWatcher } from "./AssetsWatcher";
 import { userSettings } from "./UserSettings";
 import { jsonPrettyArray } from "./utils/jsonStringify";
 import {
@@ -54,24 +54,9 @@ export async function activate(context: vscode.ExtensionContext) {
         error = null;
     logger.setMode(context.extensionMode);
 
-    Assets.attach(context);
+    assetsWatcher.attach(context.extensionPath);
 
-    const createBuiltinAssets = false;
-    // const testMaskResourceAbsDir = "/Applications/test.mask3_macos.app/Contents/Resources/asset";
-    if (createBuiltinAssets) {
-        print("writing down to build-in-assets.json");
-        //todo : fetch buildins from github
-        // const dir = vscode.workspace.workspaceFolders[0].uri.fsPath;
-        const dir = context.extensionUri.fsPath;
-        const assetsToSave = (await Assets.getAssets(false)).map((ass) => {
-            ass.projectFile = false;
-            return ass;
-        });
-        const jsonDump = jsonPrettyArray(assetsToSave, "\t");
-        fs.writeFileSync(dir + "/res/build-in-assets.json", jsonDump, { encoding: "utf-8" });
-    } else {
-        await Assets.searchBuiltinAssets(context.extensionUri);
-    }
+    await assetsWatcher.getBuiltinAssets();
 
     const recentProjectInfo = new RecentProjects(context);
 
@@ -251,13 +236,13 @@ export async function activate(context: vscode.ExtensionContext) {
                 messageHandler.bindViewMessageHandler(provider.webview, provider.viewId)
             );
 
-            Assets.on("assetsChanged", async () => {
+            assetsWatcher.on("assetsChanged", async () => {
                 const buildins = (await userSettings.getSettings()["vkmask.use-builtins"]
                     .value) as boolean;
 
                 messageHandler.send({
                     command: RequestCommand.updateAssets,
-                    payload: await Assets.getAssets(true),
+                    payload: await assetsWatcher.getAssets(true),
                     target: provider.viewId,
                 });
             });
@@ -274,7 +259,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 // reply with assets
                 messageHandler.send({
                     ...data,
-                    payload: await Assets.getAssets(true),
+                    payload: await assetsWatcher.getAssets(true),
                     target: origin,
                 });
                 break;
@@ -283,7 +268,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 // reply with assets
                 messageHandler.send({
                     ...data,
-                    payload: await Assets.readAsset(payload.path, payload.assetType),
+                    payload: await assetsWatcher.readAsset(payload.path, payload.assetType),
                     target: origin,
                 });
                 break;
@@ -356,11 +341,11 @@ export async function activate(context: vscode.ExtensionContext) {
 
             // more complex  stuff
             case RequestCommand.writeAsset:
-                Assets.writeAsset(payload.path, payload.data, payload.assetType);
+                assetsWatcher.writeAsset(payload.path, payload.data, payload.assetType);
                 break;
 
             case RequestCommand.renameAsset:
-                const newPath = await Assets.renameFile(payload.path, payload.newName);
+                const newPath = await assetsWatcher.renameFile(payload.path, payload.newName);
                 // !! check error
                 const newSelection = {
                     ...globalThis.selection,
@@ -406,14 +391,14 @@ export async function activate(context: vscode.ExtensionContext) {
                 messageHandler.send({
                     ...data,
                     target: origin,
-                    payload: await Assets.uploadAssets(payload.extensions, payload.to),
+                    payload: await assetsWatcher.uploadAssets(payload.extensions, payload.to),
                 });
                 break;
             case RequestCommand.getCreatedAssets:
                 messageHandler.send({
                     ...data,
                     target: origin,
-                    payload: await Assets.copyAssets(payload.from, payload.to),
+                    payload: await assetsWatcher.copyAssets(payload.from, payload.to),
                 });
                 break;
 
@@ -421,7 +406,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 messageHandler.send({
                     ...data,
                     target: origin,
-                    payload: await Assets.removeAsset(payload),
+                    payload: await assetsWatcher.removeAsset(payload),
                 });
                 break;
 
@@ -631,7 +616,7 @@ export async function activate(context: vscode.ExtensionContext) {
     Object.entries(assetsDefaults).forEach(([assetCategory, { from, to, assetType }]) => {
         context.subscriptions.push(
             vscode.commands.registerCommand(`vkmask.add_asset.${assetCategory}`, async () => {
-                const relativePath = await Assets.copyAssets(from, to);
+                const relativePath = await assetsWatcher.copyAssets(from, to);
                 globalThis.selection = {
                     type: SelectionType.asset,
                     assetType,
