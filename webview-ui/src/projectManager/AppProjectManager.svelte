@@ -6,7 +6,13 @@
     import { MessageHandler } from "../common/MessageHandler";
     import type { MessageHandlerData } from "../common/MessageHandler";
     import WelcomeScreen from "./WelcomeScreen.svelte";
-    import { RequestTarget, RequestCommand, SelectionType, AppState } from "../../../src/types";
+    import {
+        RequestTarget,
+        RequestCommand,
+        SelectionType,
+        AppState,
+        ErrorType,
+    } from "../../../src/types";
     import { logger, logDump } from "../logger";
     const print = logger("AppProjectManager.svelte");
 
@@ -21,6 +27,7 @@
 
     let maskSettings, uiElements;
     let appState = AppState.loading;
+    let error = null;
 
     const assets = writable([]);
     const settings = writable([]);
@@ -73,6 +80,7 @@
 
     function processAppState(payload) {
         appState = payload.state;
+        error = payload.error;
         // error = payload.error; // will be undefined
         print("state", payload);
         // if (appState === AppState.error) {
@@ -231,7 +239,7 @@
                     {/if}
                 {/key}
             {/if}
-        {:else if appState === AppState.welcome}
+        {:else if appState === AppState.welcome || error.type === ErrorType.configMissing}
             {#key recentProjectInfo}
                 <WelcomeScreen {recentProjectInfo} />
             {/key}

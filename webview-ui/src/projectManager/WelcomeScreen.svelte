@@ -73,9 +73,9 @@
 </script>
 
 <!-- <p /> -->
-<p>{l10n.t("Creat new or open existing project")}.</p>
 
 <div class="welcome-wrapper">
+    <p>{l10n.t("Create new or open existing project")}.</p>
     <vscode-button on:click={sendCreateNewProject}>
         <span class="button-text">{l10n.t("Create new project")}</span>
         <!-- <span slot="start" class="codicon codicon-add" /> -->
@@ -88,29 +88,39 @@
         <span class="button-text">{l10n.t("Open project")}</span>
         <!-- <span slot="start" class="codicon codicon-folder-opened" /> -->
     </vscode-button>
+
+    {#key recentProjectInfo}
+        {#if recentProjectInfo.length}
+            <p>{l10n.t("Recent")}:</p>
+            {#each recentProjectInfo as info}
+                <div class="recent-projects-wrapper" title={info.path}>
+                    <vscode-link
+                        on:click={() => {
+                            sendOpenProject(info.path);
+                        }}><div class="recent-link">{info.name}</div></vscode-link
+                    >
+
+                    <span class="recent-path">{info.path}</span>
+                    <span class="recent-date">{formatDate(new Date(info.dateModified))}</span>
+                </div>
+            {/each}
+        {/if}
+    {/key}
 </div>
-
-{#key recentProjectInfo}
-    {#if recentProjectInfo.length}
-        <p>{l10n.t("Recent")}:</p>
-        {#each recentProjectInfo as info}
-            <div class="recent-projects-wrapper">
-                <vscode-link
-                    on:click={() => {
-                        sendOpenProject(info.path);
-                    }}>{info.name}</vscode-link
-                >
-
-                <span class="recent-path">{info.path}</span>
-                <span class="recent-date">{formatDate(new Date(info.dateModified))}</span>
-            </div>
-        {/each}
-    {/if}
-{/key}
 
 <style>
     * {
         box-sizing: border-box;
+    }
+
+    .welcome-wrapper {
+        width: 100%;
+        /* margin: unset; */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding-left: var(--global-body-padding-left);
     }
     .recent-projects-wrapper {
         display: flex;
@@ -120,10 +130,23 @@
 
     vscode-link {
         width: fit-content;
+
+        margin-right: 0.5rem;
+    }
+
+    vscode-link::part(content) {
+        width: 100%;
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .recent-link {
+        /* width: 5rem; */
         overflow: visible;
         text-overflow: ellipsis;
         white-space: nowrap;
-        margin-right: 1rem;
     }
 
     .recent-path {
@@ -140,18 +163,12 @@
     .recent-date {
         margin-left: auto;
         white-space: nowrap;
-    }
-
-    .welcome-wrapper {
-        width: 100%;
-        /* margin: unset; */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
+        /* overflow: hidden; */
+        /* text-overflow: ellipsis; */
     }
 
     p {
+        width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
