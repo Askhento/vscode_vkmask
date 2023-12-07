@@ -18,7 +18,7 @@
 --label-justify: end;
 --global-border-raduis : 2px;
 --global-border-width : 1px;
---global-min-width : 0;
+--global-min-width : 2rem;
 
 --missing-asset-color: red;
 

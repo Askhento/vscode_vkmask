@@ -132,15 +132,19 @@
         margin-right: var(--global-margin);
         min-width: var(--global-min-width);
 
+        padding-left: var(--global-body-padding-left);
         /* justify-content: var(--label-justify); */
     }
 
     span.label {
+        /* padding-left: var(--global-body-padding-left); */
+
         margin: 0;
         height: var(--global-block-height);
         display: flex;
         justify-content: var(--label-justify);
         width: 100%;
+        /* min-width: var(--global-min-width); */
     }
     span.label-text {
         overflow: hidden;

@@ -121,7 +121,7 @@
 
     .icon-wrapper {
         display: flex;
-        justify-content: center;
+        justify-content: start;
         align-content: center;
         flex-wrap: wrap;
         height: var(--global-block-height);

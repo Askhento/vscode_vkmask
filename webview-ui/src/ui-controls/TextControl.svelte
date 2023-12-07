@@ -58,6 +58,8 @@
     }
 
     span.label {
+        padding-left: var(--global-body-padding-left);
+
         height: var(--global-block-height);
         display: flex;
         justify-content: var(--label-justify);
