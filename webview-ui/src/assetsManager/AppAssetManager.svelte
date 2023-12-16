@@ -72,18 +72,18 @@
     };
 
     function processAssets(newAssets) {
-        print("new assets count ", newAssets.length);
-
-        $assets = newAssets;
+        $assets = newAssets.filter((asset) => asset.projectFile);
+        print("new project assets count ", $assets.length);
         assetGroups = {};
 
         $assets.forEach((asset) => {
-            if (!asset.projectFile) return;
             const type = assetTypeMap[asset.type];
             if (!type) return;
             if (!(type in assetGroups)) assetGroups[type] = { expanded: true, elements: [] };
             assetGroups[type].elements.push(asset);
         });
+
+        // print("asset groups", assetGroups);
     }
 
     async function getSelection() {
@@ -169,7 +169,7 @@
 
 {#key $selection}
     {#key $assets}
-        {#if $assets.length}
+        {#if Object.keys(assetGroups).length}
             {#each Object.entries(assetGroups) as [groupName, groupData]}
                 <!-- content here -->
                 <vscode-divider class="divider" role="separator" />
@@ -210,7 +210,7 @@
             {/each}
             <!-- group -->
         {:else}
-            <div>empty assets</div>
+            <p>{l10n.t("Click + to add asset")}</p>
         {/if}
     {/key}
 {/key}
