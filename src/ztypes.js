@@ -987,8 +987,10 @@ export const ZBaseEffect = z
 
 const ZFacemodelEffect = ZBaseEffect.extend({
     name: z.literal("facemodel").describe(uiDescriptions.none({})),
-    mouth: ZBool.describe(uiDescriptions.bool({ defValue: true, label: "Mouth" })),
-    eyes: ZBool.describe(uiDescriptions.bool({ defValue: true, label: "Eyes" })),
+    mouth: ZBool.describe(
+        uiDescriptions.bool({ defValue: true, label: "Mouth", group: "visible" })
+    ),
+    eyes: ZBool.describe(uiDescriptions.bool({ defValue: true, label: "Eyes", group: "visible" })),
     position: ZArray3D.describe(uiDescriptions.array3d({ label: "Position", group: "transform" })),
     scale: ZArray3D.describe(
         uiDescriptions.array3d({ defValue: [1, 1, 1], label: "Scale", group: "transform" })
@@ -1001,6 +1003,11 @@ const ZFacemodelEffect = ZBaseEffect.extend({
         groups: {
             main: {
                 label: null,
+                defExpanded: true,
+            },
+
+            visible: {
+                label: "Visible",
                 defExpanded: true,
             },
 
@@ -1175,7 +1182,21 @@ const ZPatchEffect = ZBaseEffect.extend({
 const ZBeautifyEffect = ZBaseEffect.extend({
     name: z.literal("beautify").describe(uiDescriptions.none({})),
     mix: ZNumberSlider.describe(uiDescriptions.numberSlider({ defValue: 0.65, label: "Mix" })),
-}).describe(uiDescriptions.object({ label: "Beautify" }));
+}).describe(
+    uiDescriptions.object({
+        label: "Beautify",
+        groups: {
+            main: {
+                label: "Main",
+                defExpanded: true,
+            },
+            tags: {
+                label: "Tags",
+                defExpanded: false,
+            },
+        },
+    })
+);
 
 // "lookup": "ColorFilter/lookup.png",
 // "intensity":
@@ -1591,20 +1612,20 @@ const ZLight = [ZLightAmbientEffect, ZLightDirectEffect, ZLightPointEffect];
 
 // console.log(ZLightEffect.description)
 
-const testLight = {
-    name: "light",
-    tag: "1233",
-    disabled: true,
-    anchor: "right_eye",
-    type: "ambient",
-    color: [0.88, 0.14, 0.14],
-    brightness: 0.45,
-    specular_intensity: 0.25,
-    range: 1500,
-    position: [0.0, 0.0, 13.0],
-    direction: [0.0, 0.0, 1.0],
-    rotation: [0.0, 0.0, 0.0],
-};
+// const testLight = {
+//     name: "light",
+//     tag: "1233",
+//     disabled: true,
+//     anchor: "right_eye",
+//     type: "ambient",
+//     color: [0.88, 0.14, 0.14],
+//     brightness: 0.45,
+//     specular_intensity: 0.25,
+//     range: 1500,
+//     position: [0.0, 0.0, 13.0],
+//     direction: [0.0, 0.0, 1.0],
+//     rotation: [0.0, 0.0, 0.0],
+// };
 
 // console.log(ZLightEffect.parse(testLight))
 
@@ -1631,7 +1652,21 @@ const ZPostEffectEffect = ZBaseEffect.extend({
     intensity: ZNumberSlider.describe(
         uiDescriptions.numberSlider({ defValue: 1, label: "Intensity" })
     ),
-}).describe(uiDescriptions.object({ label: "Post effect" }));
+}).describe(
+    uiDescriptions.object({
+        label: "Post effect",
+        groups: {
+            main: {
+                label: "Main",
+                defExpanded: true,
+            },
+            tags: {
+                label: "Tags",
+                defExpanded: false,
+            },
+        },
+    })
+);
 
 // "name": "liquifiedwarp",
 // "progress": 0.8,

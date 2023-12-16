@@ -55,7 +55,14 @@
 
     function groupElements() {
         // console.log("objectcontol rerender", uiElementsGroupData);
-        uiElementsGroupData = {};
+        // uiElementsGroupData = {
+        //     main: {
+        //         expanded: true,
+        //         label: "Main",
+        //         elements: {},
+        //         compositionGroups: {},
+        //     },
+        // };
         if (params.groups == null) {
             console.log("ObjectControl : no groups in ui descriptions", params);
             return;
@@ -135,7 +142,7 @@
     {#key uiElementsGroupData}
         {#if expanded}
             {#each Object.entries(uiElementsGroupData) as [groupName, groupData]}
-                {#if groupName !== "main" && Object.keys(groupData.elements).length !== 0}
+                {#if groupData.label != null && Object.keys(groupData.elements).length !== 0}
                     <vscode-divider class="divider" role="separator" />
                     <div
                         class="group-label"
