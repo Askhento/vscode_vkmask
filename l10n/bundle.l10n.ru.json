@@ -183,7 +183,7 @@
     "PLUGIN": "ПЛАГИН",
     "EMPTY": "ПУСТО",
 
-    "select anything to see": "Ничего не выделено",
+    "Nothing selected": "Ничего не выделено",
     "unkown effect": "неизвестный эффект",
     "unkown plugin": "неизвестный плагин",
 
@@ -220,5 +220,8 @@
     "Create new project": "Создать новый проект",
     "Open project": "Открыть проект",
 
-    "Click + to add asset": "Нажми + чтобы добавить ресурс"
+    "Click + to add asset": "Нажми + чтобы добавить ресурс",
+    "Click + to add a plugin": "Нажми + чтобы добавить плагин",
+    "Click + to add an effect": "Нажми + чтобы добавить эффект"
+
 }

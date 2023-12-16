@@ -205,7 +205,7 @@
                 }}
             />
         {:else}
-            <h4>{l10n.t("Create your first effect!")}</h4>
+            <h4>{l10n.t("Click + to add an effect")}</h4>
         {/if}
     {/key}
 {/key}

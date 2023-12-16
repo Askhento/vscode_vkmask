@@ -703,7 +703,7 @@
                     {/if}
                 {/key}
             {:else}
-                <div>{`${l10n.t("select anything to see")}..`}.</div>
+                <div>{`${l10n.t("Nothing selected")}..`}.</div>
                 <!-- <pre>{JSON.stringify(selection, null, "\t")}</pre> -->
             {/if}
         {/key}

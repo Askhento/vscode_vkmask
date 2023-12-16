@@ -180,7 +180,7 @@
                 }}
             />
         {:else}
-            <h4>{l10n.t("Create your first plugin!")}</h4>
+            <h4>{l10n.t("Click + to add a plugin")}</h4>
         {/if}
     {/key}
 {/key}
