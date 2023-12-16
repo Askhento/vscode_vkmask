@@ -13,7 +13,7 @@
         if (sel) {
             setTimeout(() => {
                 // console.log(optionElement);
-                optionElement.scrollIntoView({
+                optionElement?.scrollIntoView({
                     behavior: "smooth",
                     block: "center",
                     inline: "nearest",
