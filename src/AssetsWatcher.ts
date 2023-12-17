@@ -38,8 +38,9 @@ class AssetsWatcher extends EventEmitter {
         }
 
         const file = fileUri[0].fsPath;
-        const base = path.basename(file);
-        const relative = path.join(...to, base);
+        let base = path.basename(file);
+
+        let relative = to.at(-1).includes(".") ? path.join(...to) : path.join(...to, base); // file renaming
         const dest = path.join(this.directory, relative);
 
         // file already in the folder

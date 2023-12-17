@@ -35,7 +35,7 @@
             target: RequestTarget.extension,
             payload: {
                 extensions: [["*.png", "*.png"]],
-                to: [""],
+                to: ["icon.png"],
             },
         });
 
