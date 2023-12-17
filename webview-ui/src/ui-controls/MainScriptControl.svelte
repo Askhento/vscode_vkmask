@@ -78,12 +78,12 @@
     async function removeScript() {
         waiting = true;
 
-        // !!!! only if asset exist
-        await messageHandler.request({
-            command: RequestCommand.removeAsset,
-            target: RequestTarget.extension,
-            payload: [value],
-        });
+        // // !!!! only if asset exist
+        // await messageHandler.request({
+        //     command: RequestCommand.removeAsset,
+        //     target: RequestTarget.extension,
+        //     payload: [value],
+        // });
 
         value = null;
         waiting = false;
@@ -155,7 +155,7 @@
         </vscode-button>
         <vscode-button
             appearance={value == null ? "primary" : "secondary"}
-            disabled={waiting}
+            disabled={waiting || value != null}
             class="create-button"
             on:click|stopPropagation={() => {
                 createScript();
