@@ -254,6 +254,18 @@
         padding: 0;
         box-sizing: border-box;
     }
+
+    /* div.contents {
+        display: contents;
+        position: absolute;
+        width: 100vw;
+        height: 100%;
+    }
+
+    div.contents:hover > :global(*) {
+        background: yellow;
+    } */
+
     .control-wrapper {
         position: relative;
         /* transition: all 0.5s ease; */

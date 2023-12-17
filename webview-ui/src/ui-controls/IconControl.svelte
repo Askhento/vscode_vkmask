@@ -219,7 +219,7 @@
         >
         </vscode-button> -->
         {#key iconAsset}
-            <InfoBox visible={infoVisible} info={params.info} />
+            <InfoBox visible={false} info={params.info} />
         {/key}
         {#if waiting}
             <vscode-progress-ring />
@@ -253,6 +253,7 @@
         position: relative;
         display: flex;
         flex-direction: row;
+        /* pointer-events: auto; */
 
         /* justify-content: center; */
         /* align-items: center; */
@@ -311,6 +312,7 @@
         flex-grow: 1;
         min-width: 0;
         height: var(--global-block-height);
+        /* pointer-events: all; */
     }
 
     vscode-button::part(content) {

@@ -68,6 +68,17 @@
     </div>
 {/if}
 
+<!-- <div
+    class="info-hit-box"
+    on:mouseover={() => {
+        // console.log("info over");
+        visible = true;
+    }}
+    on:mouseleave={() => {
+        visible = false;
+    }}
+></div> -->
+
 <style>
     /* * {
         box-sizing: border-box;
@@ -82,9 +93,24 @@
         background-color: var(--dropdown-background);
         border: solid 1px var(--vscode-dropdown-border);
         border-radius: var(--global-border-raduis);
-        z-index: 1;
         right: 70%;
         top: 70%;
+    }
+
+    .info-hit-box {
+        background: red;
+        opacity: 0.5;
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+        width: 100vw;
+        pointer-events: all;
+    }
+
+    :global(.control-wrapper):has(> div.info-hit-box) {
+        /* background: green; */
+        /* pointer-events: none; */
     }
 
     ul {

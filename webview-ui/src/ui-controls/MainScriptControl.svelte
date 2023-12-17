@@ -173,7 +173,7 @@
         >
             <span class="btn-text">{l10n.t("Remove script")}</span>
         </vscode-button>
-        <InfoBox info={params.info} visible={infoVisible} />
+        <InfoBox info={params.info} visible={true} />
     </span>
 {/if}
 
