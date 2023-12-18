@@ -66,8 +66,12 @@
     const selectionStack = writable([]);
 
     function addToUndo(newSelection: Selection) {
-        if (newSelection.type === SelectionType.empty) return;
-        $selectionStack.push(newSelection);
+        print("add undo", newSelection);
+        if (newSelection.type === SelectionType.empty || selection.type === SelectionType.empty) {
+            $selectionStack = [];
+            return;
+        }
+        $selectionStack.push(selection);
         $selectionStack = $selectionStack;
         print("sel stack", $selectionStack);
     }
@@ -89,7 +93,7 @@
         const { payload, command } = data;
         switch (command) {
             case RequestCommand.updateSelection:
-                addToUndo(selection); // old selection
+                addToUndo(payload); // old selection
                 processSelection(payload);
                 break;
 
@@ -380,10 +384,6 @@
 
             case SelectionType.asset:
                 await readAsset();
-                break;
-
-            case SelectionType.empty:
-                $selectionStack = [];
                 break;
 
             default:
