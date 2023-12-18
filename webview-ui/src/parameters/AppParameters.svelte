@@ -65,14 +65,17 @@
     const allTags = writable(new Set([]));
     const selectionStack = writable([]);
 
-    function addToUndo(newSelection) {
+    function addToUndo(newSelection: Selection) {
+        if (newSelection.type === SelectionType.empty) return;
         $selectionStack.push(newSelection);
+        $selectionStack = $selectionStack;
         print("sel stack", $selectionStack);
     }
 
     function removeUndo() {
         const prevSelection = $selectionStack.pop();
         if (!prevSelection) return;
+        $selectionStack = $selectionStack;
 
         sendSelect(prevSelection);
         processSelection(prevSelection);
@@ -379,6 +382,10 @@
                 await readAsset();
                 break;
 
+            case SelectionType.empty:
+                $selectionStack = [];
+                break;
+
             default:
                 print("selection type not implemented " + selection.type);
                 return;
@@ -611,15 +618,17 @@
 
 <div class="parameters-wrapper">
     {#if appState === AppState.running}
-        <!-- <vscode-button
-            on:click|stopPropagation={() => {
-                removeUndo();
-            }}
-        >
-            <span slot="start" class="codicon codicon-arrow-circle-left"></span>
+        {#if $selectionStack.length !== 0}
+            <vscode-button
+                on:click|stopPropagation={() => {
+                    removeUndo();
+                }}
+            >
+                <span slot="start" class="codicon codicon-arrow-circle-left"></span>
 
-            <span class="btn-text">Back</span>
-        </vscode-button> -->
+                <span class="btn-text">Back</span>
+            </vscode-button>
+        {/if}
 
         <!-- <div class="header-wrapper">
             <h3>{l10n.t(selection.type).toUpperCase()}</h3>
