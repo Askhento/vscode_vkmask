@@ -13,6 +13,7 @@ import { getNonce } from "../utils/getNonce";
 
 export class BaseWebviewProvider implements WebviewViewProvider {
     public _view?: WebviewView;
+    public disposed = false;
     public webview: Webview;
     public onResolveWebviewView: () => void | undefined;
 
@@ -29,6 +30,7 @@ export class BaseWebviewProvider implements WebviewViewProvider {
     ) {
         this._view = webviewView;
         this.webview = webviewView.webview;
+        this.disposed = false;
 
         this.webview.options = {
             // Allow scripts in the webview
@@ -41,6 +43,13 @@ export class BaseWebviewProvider implements WebviewViewProvider {
         this.webview.html = this._getWebviewContent();
 
         if (this.onResolveWebviewView) this.onResolveWebviewView();
+
+        this._view.onDidDispose(() => {
+            this.disposed = true;
+            console.log(" provider view disposed !!!!!!!!!!!!!!!!!", this.viewId);
+        });
+
+        console.log("view prodiver resolver", this.viewId);
     }
 
     /**

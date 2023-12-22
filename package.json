@@ -61,7 +61,7 @@
             "view/title": [
                 {
                     "command": "vkmask.dumpLogs",
-                    "when": "view == vkmask.projectManager && vkmask.appState != 'ERROR' ",
+                    "when": "view == vkmask.projectManager  ",
                     "group": "navigation"
                 },
 

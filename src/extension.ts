@@ -676,18 +676,15 @@ export async function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
         vscode.commands.registerCommand("vkmask.dumpLogs", async () => {
             const dumpPath = maskConfig.currentConfigDir;
-            if (dumpPath === undefined) {
-                vscode.window.showErrorMessage("Seems like no folder opened to save logs.");
-                return;
-            }
-
             const responses = (await Promise.all(
-                Object.values(ViewIds).map((viewId) =>
-                    messageHandler.request({
-                        target: viewId,
+                webviewProviders.map((provider) => {
+                    if (provider.disposed) return Promise.resolve([]);
+                    print("will reqest " + provider.viewId);
+                    return messageHandler.request({
+                        target: provider.viewId,
                         command: RequestCommand.getLogs,
-                    })
-                )
+                    });
+                })
             )) as MessageHandlerData<LogEntry[]>[];
 
             const webviewLogs = responses.map((resp) => resp.payload);
@@ -780,12 +777,6 @@ export async function activate(context: vscode.ExtensionContext) {
                     vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction");
                 }, 1500);
                 // watchLock = true;
-
-                // .then(() => {
-                //     // sidebar.updateAppState();
-                //     // assetWatcher.searchAssets();
-                //     // userSettings.emitChangeEvent();
-                // });
             })
         );
     }

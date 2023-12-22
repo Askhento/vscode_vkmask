@@ -81,10 +81,16 @@ export class Logger {
 
         console.log("dumps", dumps);
         const fullLogDump = dumps.sort((a: LogEntry, b: LogEntry) => a.timestamp - b.timestamp);
+        const jsonDump = jsonPrettyArray(fullLogDump, "\t");
+
+        if (dumpPath === undefined) {
+            vscode.window.showErrorMessage("Seems like no folder opened to save logs.");
+            vscode.workspace.openTextDocument({ content: jsonDump });
+            return;
+        }
 
         vscode.window.showInformationMessage("Dumping logs to " + dumpPath);
 
-        const jsonDump = jsonPrettyArray(fullLogDump, "\t");
         const jsonDumpPath = path.join(dumpPath, "logDump.json");
         fs.writeFileSync(jsonDumpPath, jsonDump, { encoding: "utf-8" });
 
