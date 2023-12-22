@@ -131,13 +131,7 @@ export async function activate(context: vscode.ExtensionContext) {
     );
     webviewPanels.push(liquifiedWarpEditorPanel);
 
-    liquifiedWarpEditorPanel.createOrShow();
-
-    // messageHandler.send({
-    //     command: RequestCommand.showLiquifiedWarpEditor,
-    //     payload: "lol",
-    //     target: liquifiedWarpEditorPanel.viewId,
-    // });
+    // liquifiedWarpEditorPanel.createOrShow();
 
     // webviewPanels.forEach((panel) => {
     //     // ? will cause an error for webview panel already disposed?
@@ -368,6 +362,14 @@ export async function activate(context: vscode.ExtensionContext) {
                         state: appState,
                         error,
                     },
+                });
+                break;
+
+            case "GetExtensionURI": // !!!!!!!! alyarm !!!!!!
+                messageHandler.send({
+                    ...data,
+                    target: origin,
+                    payload: context.extensionPath,
                 });
                 break;
 

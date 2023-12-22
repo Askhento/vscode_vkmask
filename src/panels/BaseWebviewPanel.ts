@@ -98,7 +98,7 @@ export class BaseWebviewPanel {
         // The JS file from the Svelte build output
         const scriptUri = getUri(this.webview, this._extensionUri, [this._buildPath, "bundle.js"]);
 
-        console.log("base panel scriptUri", scriptUri);
+        // console.log("base panel scriptUri", scriptUri);
         const codiconsUri = this.webview.asWebviewUri(
             vscode.Uri.joinPath(
                 this._extensionUri,
@@ -138,6 +138,8 @@ export class BaseWebviewPanel {
         console.log("BASE panel disposed!");
         // Clean up our resources
         this.currentPanel.dispose();
+
+        this.currentPanel = null;
 
         while (this._disposables.length) {
             const x = this._disposables.pop();
