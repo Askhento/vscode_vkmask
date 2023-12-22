@@ -6,7 +6,7 @@
         "url": "https://github.com/Askhento/vscode_vkmask"
     },
     "description": "UI for vkontakte AR development ",
-    "version": "0.6.14",
+    "version": "0.7.0",
     "engines": {
         "vscode": "^1.74.0"
     },
@@ -64,7 +64,6 @@
                     "when": "view == vkmask.projectManager  ",
                     "group": "navigation"
                 },
-
                 {
                     "command": "vkmask.resetSidebar",
                     "when": "view == vkmask.projectManager",
@@ -214,7 +213,6 @@
                 "shortTitle": "Dump vkmask logs",
                 "icon": "$(zap)"
             },
-
             {
                 "command": "vkmask.resetSidebar",
                 "title": "Reset all views in sidebar",
@@ -244,7 +242,6 @@
                 }
             ]
         },
-
         "views": {
             "vkmask_primary_bar": [
                 {
