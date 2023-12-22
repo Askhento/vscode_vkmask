@@ -64,11 +64,7 @@
                     "when": "view == vkmask.projectManager && vkmask.appState != 'ERROR' ",
                     "group": "navigation"
                 },
-                {
-                    "command": "vkmask.jsEval",
-                    "when": "view == vkmask.projectManager && vkmask.appState != 'ERROR' ",
-                    "group": "navigation"
-                },
+
                 {
                     "command": "vkmask.resetSidebar",
                     "when": "view == vkmask.projectManager",
@@ -218,12 +214,7 @@
                 "shortTitle": "Dump vkmask logs",
                 "icon": "$(zap)"
             },
-            {
-                "command": "vkmask.jsEval",
-                "title": "test eval",
-                "shortTitle": "test js eval",
-                "icon": "$(beaker)"
-            },
+
             {
                 "command": "vkmask.resetSidebar",
                 "title": "Reset all views in sidebar",
@@ -253,6 +244,7 @@
                 }
             ]
         },
+
         "views": {
             "vkmask_primary_bar": [
                 {

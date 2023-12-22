@@ -12,3 +12,4 @@ vsc-extension-quickstart.md
 gen_package_json_util.js
 l10n/update-missing-locale.mjs
 parseLocale.mjs
+.workflow.yml

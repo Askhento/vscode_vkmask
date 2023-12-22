@@ -21,6 +21,8 @@ export class MessageHandler {
     ) {
         window.addEventListener("message", (e) => {
             const data: MessageHandlerData<any> = e.data;
+            // console.log("messageHandler", e.data, Object.keys(this.listeners), this.origin);
+
             if (data.requestId && this.listeners[data.requestId] && data.target === this.origin) {
                 this.listeners[data.requestId](data);
                 return;

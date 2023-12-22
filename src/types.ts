@@ -4,6 +4,7 @@ export const ViewIds = {
     effects: "vkmask.effects",
     plugins: "vkmask.plugins",
     projectManager: "vkmask.projectManager",
+    liquifiedWarpEditor: "vkmask.liquifiedWarpEditor",
 } as const;
 
 export const RequestTarget = {
@@ -37,6 +38,7 @@ export const RequestCommand = {
     updateAppState: "updateAppState",
 
     showError: "showError",
+    showLiquifiedWarpEditor: "showLiquifiedWarpEditor",
 
     getCreatedAssets: "getCreatedAssets",
     getUploadedAsset: "getUploadedAsset",

@@ -10,7 +10,7 @@ import { ParametersViewProvider } from "./panels/ParametersViewProvider";
 import { AssetsManagerViewProvider } from "./panels/AssetsManagerViewProvider";
 import { RecentProjects } from "./RecentProjectInfo";
 // import type { RecentProjectInfo } from "./RecentProjectInfo"
-import { MessageHandler, MessageHandlerData } from "./MessageHandler";
+import { messageHandler, MessageHandlerData } from "./MessageHandler";
 
 import { HotReload } from "./HotReload";
 // const { exec } = require('node:child_process');
@@ -35,6 +35,7 @@ import type { AppError } from "./types";
 import { effectNames, pluginNames } from "./ztypes";
 import { MaskConfig } from "./MaskConfig";
 import { BaseWebviewProvider } from "./panels/BaseWebviewProvider";
+import { BaseWebviewPanel } from "./panels/BaseWebviewPanel";
 import { delayPromise } from "./utils/delayPromise";
 import { copyRecursiveSync } from "./utils/copyFilesRecursive";
 
@@ -60,7 +61,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
     const recentProjectInfo = new RecentProjects(context);
 
-    const messageHandler = new MessageHandler();
     const maskConfig = new MaskConfig();
 
     await userSettings.init(context.extensionUri);
@@ -122,6 +122,41 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.window.registerWebviewViewProvider(parameters.viewId, parameters)
     );
 
+    const webviewPanels: Array<BaseWebviewPanel> = [];
+    const liquifiedWarpEditorBuildPath = path.join(webviewsBuildPath, "liquifiedWarpEditor");
+    const liquifiedWarpEditorPanel = new BaseWebviewPanel(
+        context.extensionUri,
+        liquifiedWarpEditorBuildPath,
+        ViewIds.liquifiedWarpEditor
+    );
+    webviewPanels.push(liquifiedWarpEditorPanel);
+
+    liquifiedWarpEditorPanel.createOrShow();
+
+    // messageHandler.send({
+    //     command: RequestCommand.showLiquifiedWarpEditor,
+    //     payload: "lol",
+    //     target: liquifiedWarpEditorPanel.viewId,
+    // });
+
+    // webviewPanels.forEach((panel) => {
+    //     // ? will cause an error for webview panel already disposed?
+    //     context.subscriptions.push(
+    //         messageHandler.bindViewMessageHandler(panel.webview, panel.viewId)
+    //     );
+
+    //     assetsWatcher.on("assetsChanged", async () => {
+    //         const buildins = (await userSettings.getSettings()["vkmask.use-builtins"]
+    //             .value) as boolean;
+
+    //         messageHandler.send({
+    //             command: RequestCommand.updateAssets,
+    //             payload: await assetsWatcher.getAssets(true),
+    //             target: panel.viewId,
+    //         });
+    //     });
+    // });
+
     // ? eventually will make a class
     // ? multiple errors could occur
     // ? multiple time  like removed and added config
@@ -177,14 +212,20 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 
     // ! selection should go outside of maskConfig.
-    function onSelection(newSelection: Selection) {
+    async function onSelection(newSelection: Selection) {
         const { type, id } = newSelection as Selection;
 
         // deal with config file
         switch (type) {
             case SelectionType.effect:
                 globalThis.selection = newSelection;
-                maskConfig.showEffect(id);
+                const isLiquify =
+                    (await maskConfig.getEffects()).at(newSelection.id).name === "liquifiedwarp";
+                if (isLiquify) {
+                    liquifiedWarpEditorPanel.createOrShow();
+                } else {
+                    maskConfig.showEffect(id);
+                }
                 break;
 
             case SelectionType.plugin:
@@ -686,26 +727,26 @@ export async function activate(context: vscode.ExtensionContext) {
         })
     );
 
-    context.subscriptions.push(
-        vscode.commands.registerCommand("vkmask.jsEval", async () => {
-            // ??? add parameters ???
-            const code = await vscode.window.showInputBox({
-                placeHolder: "Enter command",
-                prompt: "Paste or type any js one liner",
-                value: "",
-            });
+    // context.subscriptions.push(
+    //     vscode.commands.registerCommand("vkmask.jsEval", async () => {
+    //         // ??? add parameters ???
+    //         const code = await vscode.window.showInputBox({
+    //             placeHolder: "Enter command",
+    //             prompt: "Paste or type any js one liner",
+    //             value: "",
+    //         });
 
-            if (code === "" || code === undefined) {
-                vscode.window.showErrorMessage("Empty/Undefined input");
-                return;
-            }
+    //         if (code === "" || code === undefined) {
+    //             vscode.window.showErrorMessage("Empty/Undefined input");
+    //             return;
+    //         }
 
-            const result = eval(code);
+    //         const result = eval(code);
 
-            if (result) vscode.window.showInformationMessage(result);
-            print(result);
-        })
-    );
+    //         if (result) vscode.window.showInformationMessage(result);
+    //         print(result);
+    //     })
+    // );
 
     //
     // // "workbench.action.movePanelToSecondarySideBar",
@@ -787,7 +828,7 @@ export async function activate(context: vscode.ExtensionContext) {
         const tabsToClose = vscode.window.tabGroups.all.map((tg) => tg.tabs).flat();
         // ? maybe close only files that are in old project, could be usefull for opened api reference
         await vscode.window.tabGroups.close(tabsToClose);
-        maskConfig.showConfig();
+        // maskConfig.showConfig(); // !!!!!
 
         // this will ensure all the componenets will show up no matter if they closed before.
         webviewProviders.forEach((provider) => {

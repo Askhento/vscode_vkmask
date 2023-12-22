@@ -112,4 +112,5 @@ export default [
     getSvelteEntry("projectManager"),
     getSvelteEntry("assetsManager"),
     getSvelteEntry("parameters"),
+    getSvelteEntry("liquifiedWarpEditor"),
 ];

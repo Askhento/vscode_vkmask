@@ -29,7 +29,7 @@ export class MessageHandler {
 
     bindViewMessageHandler(webview: Webview, id: string): Disposable {
         this.webviews[id] = webview;
-        return webview.onDidReceiveMessage(this.onMessage, this);
+        return webview.onDidReceiveMessage(this.onMessage, this); // !!!! add dispose
     }
 
     async onMessage(data: MessageHandlerData<any>) {
@@ -126,3 +126,5 @@ export class MessageHandler {
         webview.postMessage({ ...data, origin: newOrigin }); // ??? await
     }
 }
+
+export const messageHandler = new MessageHandler();
