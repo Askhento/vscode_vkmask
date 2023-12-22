@@ -46,10 +46,10 @@ export class BaseWebviewProvider implements WebviewViewProvider {
 
         this._view.onDidDispose(() => {
             this.disposed = true;
-            console.log(" provider view disposed !!!!!!!!!!!!!!!!!", this.viewId);
+            // console.log(" provider view disposed !!!!!!!!!!!!!!!!!", this.viewId);
         });
 
-        console.log("view prodiver resolver", this.viewId);
+        // console.log("view prodiver resolver", this.viewId);
     }
 
     /**
