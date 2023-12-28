@@ -32,6 +32,8 @@ const production = !process.env.ROLLUP_WATCH; // !!!!! wtf
 //     };
 // }
 
+// for config autocomplete
+/** @type {import("rollup").RollupOptions} */
 const common = {
     plugins: [
         // !!! this will copy to the same dir for every webivew
