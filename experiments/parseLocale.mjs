@@ -2,6 +2,10 @@ import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
 
+// "cfg-locale": "node ./parseLocale.mjs",
+// "src-locale": "npx @vscode/l10n-dev export --outDir ./l10n ./src ; node ./l10n/update-missing-locale.mjs",
+// "update-locale": "npm run cfg-locale && npm run src-locale"
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const locales = fs.readdirSync(__dirname).filter((file) => file.startsWith("package.nls"));
