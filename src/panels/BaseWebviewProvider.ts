@@ -75,7 +75,8 @@ export class BaseWebviewProvider implements WebviewViewProvider {
             vscode.Uri.joinPath(
                 this._extensionUri,
                 "node_modules",
-                "@vscode/codicons",
+                "@vscode",
+                "codicons",
                 "dist",
                 "codicon.css"
             )

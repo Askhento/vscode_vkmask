@@ -11,5 +11,5 @@ webview-ui/**
 gen_package_json_util.js
 l10n/update-missing-locale.mjs
 parseLocale.mjs
-.workflow.yml
 tsconfig.tsbuildinfo
+experiments
