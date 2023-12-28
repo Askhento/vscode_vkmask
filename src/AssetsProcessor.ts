@@ -4,7 +4,7 @@ import { logger } from "./Logger";
 const print = (...args: any) => console.log(...args); //logger.log(__filename, ...args);
 import { copyRecursiveSync } from "./utils/copyFilesRecursive";
 import { jsonPrettyArray } from "./utils/jsonStringify";
-import sharp from "sharp";
+// import sharp from "sharp";
 
 import { XMLParser, XMLBuilder } from "fast-xml-parser"; // https://github.com/NaturalIntelligence/fast-xml-parser/blob/c7b3cea4ead020c21d39e135a50348208829e971/docs/v4/2.XMLparseOptions.md
 import { AssetTypes, Asset } from "./types";
@@ -124,55 +124,55 @@ export class AssetsProcessor {
         };
     }
 
-    async getImageMeta(absPath: string, type: string) {
-        if (type !== "image") return;
-        const imageBuffer = fs.readFileSync(absPath);
+    // async getImageMeta(absPath: string, type: string) {
+    //     if (type !== "image") return;
+    //     const imageBuffer = fs.readFileSync(absPath);
 
-        try {
-            const imgSharp = await sharp(imageBuffer);
-            const { isOpaque } = await imgSharp.stats();
-            const { width, height, size, format } = await imgSharp.metadata();
+    //     try {
+    //         const imgSharp = await sharp(imageBuffer);
+    //         const { isOpaque } = await imgSharp.stats();
+    //         const { width, height, size, format } = await imgSharp.metadata();
 
-            // print(thumbnail);
-            return {
-                width,
-                height,
-                size,
-                format,
-                isOpaque,
-            };
-        } catch (err) {
-            print(err);
-        }
+    //         // print(thumbnail);
+    //         return {
+    //             width,
+    //             height,
+    //             size,
+    //             format,
+    //             isOpaque,
+    //         };
+    //     } catch (err) {
+    //         print(err);
+    //     }
 
-        return {};
-    }
+    //     return {};
+    // }
 
-    async getImagePreview(absPath: string, type: string) {
-        if (type !== "image") return;
+    // async getImagePreview(absPath: string, type: string) {
+    //     if (type !== "image") return;
 
-        const imageBuffer = fs.readFileSync(absPath);
+    //     const imageBuffer = fs.readFileSync(absPath);
 
-        try {
-            const thumbnailBuffer = await sharp(imageBuffer)
-                .resize({
-                    fit: "contain",
-                    width: PREVIEW_SIZE,
-                    height: PREVIEW_SIZE,
-                    // withoutEnlargement: true,
-                })
-                .jpeg({ force: true, quality: 80 })
-                .toBuffer();
+    //     try {
+    //         const thumbnailBuffer = await sharp(imageBuffer)
+    //             .resize({
+    //                 fit: "contain",
+    //                 width: PREVIEW_SIZE,
+    //                 height: PREVIEW_SIZE,
+    //                 // withoutEnlargement: true,
+    //             })
+    //             .jpeg({ force: true, quality: 80 })
+    //             .toBuffer();
 
-            const thumbnail = thumbnailBuffer.toString("base64");
-            // print(thumbnail);
-            return thumbnail;
-        } catch (err) {
-            print(err);
-        }
+    //         const thumbnail = thumbnailBuffer.toString("base64");
+    //         // print(thumbnail);
+    //         return thumbnail;
+    //     } catch (err) {
+    //         print(err);
+    //     }
 
-        return "";
-    }
+    //     return "";
+    // }
 }
 
 export interface AssetProcessor {
@@ -475,31 +475,36 @@ export const assetProcessors: Record<string, AssetProcessor> = {
 
     [AssetTypes.image]: {
         read: async (imageBuffer: Buffer) => {
-            const imgSharp = await sharp(imageBuffer);
-
-            const { isOpaque } = await imgSharp.stats();
-            const { width, height, size, format } = await imgSharp.metadata();
-
-            const preview = (
-                await imgSharp
-                    .resize({
-                        fit: "contain",
-                        width: PREVIEW_SIZE,
-                        height: PREVIEW_SIZE,
-                        // withoutEnlargement: true,
-                    })
-                    .jpeg({ force: true, quality: 80 })
-                    .toBuffer()
-            ).toString("base64");
-
-            // print(thumbnail);
+            // const imgSharp = await sharp(imageBuffer);
+            // const { isOpaque } = await imgSharp.stats();
+            // const { width, height, size, format } = await imgSharp.metadata();
+            // const preview = (
+            //     await imgSharp
+            //         .resize({
+            //             fit: "contain",
+            //             width: PREVIEW_SIZE,
+            //             height: PREVIEW_SIZE,
+            //             // withoutEnlargement: true,
+            //         })
+            //         .jpeg({ force: true, quality: 80 })
+            //         .toBuffer()
+            // ).toString("base64");
+            // // print(thumbnail);
+            // return {
+            //     preview,
+            //     width,
+            //     height,
+            //     size,
+            //     format,
+            //     isOpaque,
+            // };
             return {
-                preview,
-                width,
-                height,
-                size,
-                format,
-                isOpaque,
+                preview: "",
+                width: 100,
+                height: 100,
+                size: 10,
+                format: "png",
+                isOpaque: true,
             };
         },
         write: () => {},
