@@ -13,3 +13,8 @@ l10n/update-missing-locale.mjs
 parseLocale.mjs
 tsconfig.tsbuildinfo
 experiments
+node_modules/**
+rollup.config.mjs
+
+!node_modules/@vscode/codicons/dist/codicon.css
+!node_modules/@vscode/codicons/dist/codicon.ttf

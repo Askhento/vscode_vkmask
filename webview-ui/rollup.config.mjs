@@ -8,6 +8,9 @@ import typescript from "@rollup/plugin-typescript";
 import css from "rollup-plugin-css-only";
 // import copy from "rollup-plugin-copy";
 import copy from "rollup-plugin-copy-watch";
+// import esbuild from "rollup-plugin-esbuild";
+// import { typescript } from "svelte-preprocess-esbuild";
+// import { transformSync } from "esbuild";
 
 const production = !process.env.ROLLUP_WATCH; // !!!!! wtf
 // ! added sourcemaps
@@ -43,6 +46,7 @@ const common = {
 
             targets: [{ src: "./src/global.css", dest: "../out/panels/webview-build" }],
         }),
+
         typescript({
             tsconfig: "./tsconfig.json",
             rootDirs: ["./src", "../src"],
@@ -53,11 +57,27 @@ const common = {
         svelte({
             include: "src/**/*.svelte",
             preprocess: [sveltePreprocess({ sourceMap: true })],
+            // preprocess: sveltePreprocess({
+            //     typescript({ content, filename }) {
+            //         const { js: code } = transformSync(content, {
+            //             loader: "ts",
+            //             keepNames: true,
+            //             minify: false,
+            //         });
+            //         return { code };
+            //     },
+            // }),
             compilerOptions: {
                 // enable run-time checks when not in production
                 dev: !production,
                 enableSourcemap: true,
                 accessors: true,
+            },
+            onwarn: (warning, handler) => {
+                if (warning.code.startsWith("a11y-")) {
+                    return;
+                }
+                handler(warning);
             },
         }),
         // we'll extract any component CSS out into

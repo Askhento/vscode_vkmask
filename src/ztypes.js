@@ -183,7 +183,6 @@ export const uiDescriptions = {
     }),
     // !!!! color alpha redundant here
     color: ({ label, group = "main", min, max, defValue = [1, 1, 1], showAlways = true }) => ({
-        showAlways,
         name: "color",
         label,
         group,

@@ -49,6 +49,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
     // vscode.window.showInformationMessage(localizedString);
     // selection = { type: SelectionType.empty };
+
+    print("INIT EXT maaan 123 hehe");
+
     globalThis.selection = { type: SelectionType.empty };
 
     let appState = AppState.loading,
@@ -775,10 +778,12 @@ export async function activate(context: vscode.ExtensionContext) {
                 watchTimeout = setTimeout(() => {
                     // watchLock = false;
                     vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction");
-                }, 1500);
+                }, 200);
                 // watchLock = true;
             })
         );
+
+        vscode.commands.executeCommand("workbench.action.webview.openDeveloperTools");
     }
 
     /* 
