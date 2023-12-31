@@ -283,7 +283,7 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "npm run clear && npm run generateBuiltins && npm run build && npm run build:webview",
+        "vscode:prepublish": "npm run clear && npm run generateBuiltins && npm run build",
         "clear": "rimraf ./out",
         "dev": "npm run clear && npm run generateBuiltins && npm run watch",
         "build": "NODE_ENV=production rollup -c",
@@ -291,6 +291,7 @@
         "watch": "set NODE_ENV=dev && rollup -c -w",
         "publish-patch": "npm version patch ; vsce package --out ./vsix-packages",
         "publish-minor": "npm version minor ; vsce package --out ./vsix-packages",
+        "publish": "vsce publish patch",
         "generateBuiltins": "npx ts-node-esm ./src/generateBuiltins.ts "
     },
     "devDependencies": {
@@ -308,6 +309,7 @@
         "@typescript-eslint/parser": "^5.45.0",
         "@vscode/l10n-dev": "^0.0.29",
         "@vscode/test-electron": "^2.2.0",
+        "@vscode/vsce": "^2.22.0",
         "@vscode/webview-ui-toolkit": "^1.4.0",
         "esbuild": "^0.19.10",
         "eslint": "^8.28.0",
