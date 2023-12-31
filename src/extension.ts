@@ -143,7 +143,7 @@ export async function activate(context: vscode.ExtensionContext) {
     //     );
 
     //     assetsWatcher.on("assetsChanged", async () => {
-    //         const buildins = (await userSettings.getSettings()["vkmask.use-builtins"]
+    //         const builtins = (await userSettings.getSettings()["vkmask.use-builtins"]
     //             .value) as boolean;
 
     //         messageHandler.send({
@@ -275,7 +275,7 @@ export async function activate(context: vscode.ExtensionContext) {
             );
 
             assetsWatcher.on("assetsChanged", async () => {
-                const buildins = (await userSettings.getSettings()["vkmask.use-builtins"]
+                const builtins = (await userSettings.getSettings()["vkmask.use-builtins"]
                     .value) as boolean;
 
                 messageHandler.send({
@@ -753,10 +753,6 @@ export async function activate(context: vscode.ExtensionContext) {
     //
     // // "workbench.action.movePanelToSecondarySideBar",
     // // workbench.action.openView
-
-    // // ! does this thing still required???
-    // const hotReloader = new HotReload(context.extensionUri);
-    // hotReloader.copyFilesToMask();
 
     if (context.extensionMode === vscode.ExtensionMode.Development) {
         let watchLock = false;

@@ -25,13 +25,14 @@
         "types": [
             "node"
         ],
+
+        
         // "incremental": true,
         "strictFunctionTypes": false
     },
     "include": [
         "src/**/*.js",
-        "src/**/*.ts"
-    ],
+        "src/**/*.ts",   ],
     // "include": [
     //     "src"
     // ],
@@ -39,5 +40,16 @@
         "**/node_modules",
         "**/.*/",
         "webview-ui"
-    ]
+    ],
+
+     "ts-node": {
+        "moduleTypes": {
+            "*"  : "esm"
+        },
+        "esm": true,
+        "experimentalSpecifierResolution": "node",
+        "transpileOnly": false,
+
+        
+    }
 }

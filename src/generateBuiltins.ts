@@ -1,12 +1,12 @@
 import * as path from "path";
 import * as fs from "fs";
 import { readdir, readFile } from "node:fs/promises";
-import { AssetsProcessor } from "../src/AssetsProcessor";
-import { jsonPrettyArray } from "../src/utils/jsonStringify";
+import { AssetsProcessor } from "./AssetsProcessor";
+import { jsonPrettyArray } from "./utils/jsonStringify";
 // const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 (async () => {
-    const assetsPath = process.argv.at(-1);
+    const assetsPath = path.join("res", "mask-assets"); //process.argv.at(-1);
 
     if (!fs.existsSync(assetsPath)) {
         console.log(`File not exists ${assetsPath}`);
@@ -34,5 +34,5 @@ import { jsonPrettyArray } from "../src/utils/jsonStringify";
     );
     const jsonDump = JSON.stringify(data, null, "\t"); //jsonPrettyArray(data, "\t");
 
-    fs.writeFileSync(path.join(__dirname, "build-in-assets.json"), jsonDump);
+    fs.writeFileSync(path.join("res", "built-in-assets.json"), jsonDump);
 })();

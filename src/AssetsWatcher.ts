@@ -135,7 +135,7 @@ class AssetsWatcher extends EventEmitter {
     }
 
     async getBuiltinAssets() {
-        const builtinPath = path.join(this.extensionPath, "res", "build-in-assets.json");
+        const builtinPath = path.join(this.extensionPath, "res", "built-in-assets.json");
         const builtInRaw = fs.readFileSync(builtinPath, "utf8");
         const builtInJSON = JSON.parse(builtInRaw) as Array<Asset>;
 

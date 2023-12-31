@@ -4,7 +4,7 @@ import { logger } from "./Logger";
 const print = (...args: any) => console.log(...args); //logger.log(__filename, ...args);
 import { copyRecursiveSync } from "./utils/copyFilesRecursive";
 import { jsonPrettyArray } from "./utils/jsonStringify";
-// import sharp from "sharp";
+import sharp from "sharp";
 
 import { XMLParser, XMLBuilder } from "fast-xml-parser"; // https://github.com/NaturalIntelligence/fast-xml-parser/blob/c7b3cea4ead020c21d39e135a50348208829e971/docs/v4/2.XMLparseOptions.md
 import { AssetTypes, Asset } from "./types";
@@ -475,29 +475,29 @@ export const assetProcessors: Record<string, AssetProcessor> = {
 
     [AssetTypes.image]: {
         read: async (imageBuffer: Buffer) => {
-            // const imgSharp = await sharp(imageBuffer);
-            // const { isOpaque } = await imgSharp.stats();
-            // const { width, height, size, format } = await imgSharp.metadata();
-            // const preview = (
-            //     await imgSharp
-            //         .resize({
-            //             fit: "contain",
-            //             width: PREVIEW_SIZE,
-            //             height: PREVIEW_SIZE,
-            //             // withoutEnlargement: true,
-            //         })
-            //         .jpeg({ force: true, quality: 80 })
-            //         .toBuffer()
-            // ).toString("base64");
-            // // print(thumbnail);
-            // return {
-            //     preview,
-            //     width,
-            //     height,
-            //     size,
-            //     format,
-            //     isOpaque,
-            // };
+            const imgSharp = await sharp(imageBuffer);
+            const { isOpaque } = await imgSharp.stats();
+            const { width, height, size, format } = await imgSharp.metadata();
+            const preview = (
+                await imgSharp
+                    .resize({
+                        fit: "contain",
+                        width: PREVIEW_SIZE,
+                        height: PREVIEW_SIZE,
+                        // withoutEnlargement: true,
+                    })
+                    .jpeg({ force: true, quality: 80 })
+                    .toBuffer()
+            ).toString("base64");
+            // print(thumbnail);
+            return {
+                preview,
+                width,
+                height,
+                size,
+                format,
+                isOpaque,
+            };
             return {
                 preview: "",
                 width: 100,

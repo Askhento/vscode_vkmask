@@ -1,6 +1,5 @@
 <script lang="ts">
     import * as l10n from "@vscode/l10n";
-
     import { setContext } from "svelte";
     import { writable } from "svelte/store";
     import { provideVSCodeDesignSystem, allComponents } from "@vscode/webview-ui-toolkit";
