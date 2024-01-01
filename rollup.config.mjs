@@ -10,7 +10,6 @@ import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript"; // esbuild have issues with svelte
 import esbuild from "rollup-plugin-esbuild";
-import json from "@rollup/plugin-json";
 
 import { extensionConfig } from "./rollup.extension.mjs";
 
