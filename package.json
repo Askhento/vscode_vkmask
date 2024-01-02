@@ -286,7 +286,7 @@
         "vscode:prepublish": "npm run clear && npm run generateBuiltins && npm run build",
         "clear": "rimraf ./out",
         "dev": "npm run clear && npm run generateBuiltins && npm run watch",
-        "build": "NODE_ENV=production rollup -c",
+        "build": "set NODE_ENV=production && rollup -c",
         "build-dev": "NODE_ENV=dev rollup -c",
         "watch": "set NODE_ENV=dev && rollup -c -w",
         "publish-patch": "npm version patch ; vsce package --out ./vsix-packages",
