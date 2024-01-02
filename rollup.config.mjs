@@ -3,7 +3,7 @@ import svelte from "rollup-plugin-svelte";
 import sveltePreprocess from "svelte-preprocess";
 
 // extension and common modules
-import { terser } from "@rollup/plugin-terser";
+import terser from "@rollup/plugin-terser";
 import css from "rollup-plugin-css-only";
 import copy from "rollup-plugin-copy-watch";
 import commonjs from "@rollup/plugin-commonjs";
