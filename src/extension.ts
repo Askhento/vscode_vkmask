@@ -560,7 +560,7 @@ export async function activate(context: vscode.ExtensionContext) {
             canSelectFiles: true,
             canSelectFolders: false,
             filters: {
-                "mask.json config": ["mask.json"],
+                "mask.json config": ["json"],
             },
             title: "Select mask.json file",
         };

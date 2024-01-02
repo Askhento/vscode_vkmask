@@ -14,7 +14,7 @@ export const extensionConfig = {
     output: {
         sourcemap: true,
         format: "cjs",
-        file: "out/extension.js",
+        file: "./out/extension.js",
     },
     plugins: [nodeResolve(), commonjs({}), typescript({})], // json()
     watch: {
