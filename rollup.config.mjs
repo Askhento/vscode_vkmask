@@ -9,7 +9,10 @@ import copy from "rollup-plugin-copy-watch";
 import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript"; // esbuild have issues with svelte
-import esbuild from "rollup-plugin-esbuild";
+// import esbuild from "rollup-plugin-esbuild";
+// import { transformSync } from "esbuild";
+
+// import { typescript as svelteTypescript } from "svelte-preprocess-esbuild";
 
 import { extensionConfig } from "./rollup.extension.mjs";
 
@@ -42,9 +45,35 @@ const svelteCommon = {
             sourceMap: true,
             inlineSources: !production,
         }),
+        // esbuild({
+        //     tsconfig: "./webview-ui/tsconfig.json",
+        // }),
         svelte({
             include: "./webview-ui/src/**/*.svelte",
-            preprocess: [sveltePreprocess({ sourceMap: true })],
+            preprocess: [
+                sveltePreprocess({
+                    sourceMap: true,
+                    // typescript: true,
+                    // typescript({ content, filename }) {
+                    //     const { js: code } = transformSync(content, {
+                    //         loader: "ts",
+
+                    //     });
+                    //     return { code };
+                    // },
+                }),
+                // svelteTypescript({
+                //     tsconfig: "./webview-ui/tsconfig.json",
+                //     // define: {
+                //     //     "process.browser": "true",
+                //     // },
+                //     loglevel: "verbose",
+
+                //     define: {
+                //         "process.browser": "true",
+                //     },
+                // }),
+            ],
             // preprocess: sveltePreprocess({
             //     typescript({ content, filename }) {
             //         const { js: code } = transformSync(content, {
@@ -60,6 +89,7 @@ const svelteCommon = {
                 dev: !production,
                 enableSourcemap: true,
                 accessors: true, // svelte component properties from parents
+                loopGuardTimeout: 5000, // prevent infinte loops.
             },
             onwarn: (warning, handler) => {
                 if (warning.code.startsWith("a11y-")) {
