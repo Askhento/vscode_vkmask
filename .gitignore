@@ -8,3 +8,4 @@ node_modules
 tsconfig.tsbuildinfo
 experiments
 package-lock.json
+res/mask-assets
