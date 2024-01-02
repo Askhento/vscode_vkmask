@@ -283,7 +283,7 @@
         }
     },
     "scripts": {
-        "vscode:prepublish": "npm run clear && npm run generateBuiltins && npm run build",
+        "vscode:prepublish": "npm run clear && npm run build",
         "clear": "rimraf ./out",
         "dev": "npm run clear && npm run generateBuiltins && npm run watch",
         "build": "set NODE_ENV=production && rollup -c",
@@ -292,7 +292,8 @@
         "publish-patch": "npm version patch ; vsce package --out ./vsix-packages",
         "publish-minor": "npm version minor ; vsce package --out ./vsix-packages",
         "publish": "vsce publish patch",
-        "generateBuiltins": "npx ts-node-esm ./src/generateBuiltins.ts "
+        "generateBuiltins": "npx ts-node-esm ./src/generateBuiltins.ts",
+        "deploy": "echo todo"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^25.0.7",
