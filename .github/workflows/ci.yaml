@@ -70,6 +70,6 @@ jobs:
         steps:
             - uses: actions/download-artifact@v2
             - run: echo $(find . -iname *.vsix)
-            - run: npx vsce publish --packagePath $(find . -iname *.vsix)
+            - run: npx vsce publish -p ${{ secrets.VSCE_PAT }} --packagePath $(find . -iname *.vsix)
               env:
                   VSCE_PAT: ${{ secrets.VSCE_PAT }}
