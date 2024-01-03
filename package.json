@@ -285,7 +285,7 @@
     "scripts": {
         "vscode:prepublish": "npm run clear && npm run build",
         "clear": "rimraf ./out",
-        "dev": "npm run clear && npm run generateBuiltins && npm run watch",
+        "dev": "npm run clear  && npm run watch",
         "build": "set NODE_ENV=production && rollup -c",
         "build-dev": "NODE_ENV=dev rollup -c",
         "watch": "set NODE_ENV=dev && rollup -c -w",
@@ -297,6 +297,7 @@
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^25.0.7",
+        "@rollup/plugin-json": "^6.1.0",
         "@rollup/plugin-node-resolve": "^15.2.3",
         "@rollup/plugin-terser": "^0.4.4",
         "@rollup/plugin-typescript": "^11.1.5",
