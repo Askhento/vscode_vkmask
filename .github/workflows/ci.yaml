@@ -37,10 +37,10 @@ jobs:
                       platform: win32
                       arch: arm64
                       npm_config_arch: arm
-                    - os: macos-latest
-                      platform: darwin
-                      arch: x64
-                      npm_config_arch: x64
+                    # - os: macos-latest
+                    #   platform: darwin
+                    #   arch: x64
+                    #   npm_config_arch: x64
                     - os: macos-latest
                       platform: darwin
                       arch: arm64
@@ -58,6 +58,8 @@ jobs:
             - shell: pwsh
               run: echo "target=${{ matrix.platform }}-${{ matrix.arch }}" >> $env:GITHUB_ENV
             - run: npx vsce package --target ${{ env.target }}
+              timeout-minutes: 3
+
             - uses: actions/upload-artifact@v2
               with:
                   name: ${{ env.target }}
