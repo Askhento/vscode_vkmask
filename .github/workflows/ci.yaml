@@ -29,14 +29,14 @@ jobs:
                     #   platform: alpine
                     #   arch: x64
                     #   npm_config_arch: x64
-                    - os: windows-latest
-                      platform: win32
-                      arch: x64
-                      npm_config_arch: x64
-                    - os: windows-latest
-                      platform: win32
-                      arch: arm64
-                      npm_config_arch: arm
+                    # - os: windows-latest
+                    #   platform: win32
+                    #   arch: x64
+                    #   npm_config_arch: x64
+                    # - os: windows-latest
+                    #   platform: win32
+                    #   arch: arm64
+                    #   npm_config_arch: arm
                     # - os: macos-latest
                     #   platform: darwin
                     #   arch: x64
@@ -59,6 +59,7 @@ jobs:
               run: echo "target=${{ matrix.platform }}-${{ matrix.arch }}" >> $env:GITHUB_ENV
             - run: npx vsce package --target ${{ env.target }}
               timeout-minutes: 3
+            - run: echo "${{ env.target }} package done"
 
             - uses: actions/upload-artifact@v2
               with:
