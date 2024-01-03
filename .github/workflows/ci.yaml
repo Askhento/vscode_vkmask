@@ -11,6 +11,7 @@ on:
 jobs:
     build:
         strategy:
+            max-parallel: 2
             matrix:
                 include:
                     # - os: ubuntu-latest
@@ -29,14 +30,14 @@ jobs:
                     #   platform: alpine
                     #   arch: x64
                     #   npm_config_arch: x64
-                    # - os: windows-latest
-                    #   platform: win32
-                    #   arch: x64
-                    #   npm_config_arch: x64
-                    # - os: windows-latest
-                    #   platform: win32
-                    #   arch: arm64
-                    #   npm_config_arch: arm
+                    - os: windows-latest
+                      platform: win32
+                      arch: x64
+                      npm_config_arch: x64
+                    - os: windows-latest
+                      platform: win32
+                      arch: arm64
+                      npm_config_arch: arm
                     # - os: macos-latest
                     #   platform: darwin
                     #   arch: x64
