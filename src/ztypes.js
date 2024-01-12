@@ -928,12 +928,12 @@ export const ZMaterialArray = z.preprocess(
                 },
             ],
 
-            elementName: "material",
+            elementName: "locale.materialArray.elementName",
             label: "Materials",
             group: "materials",
             defaultElement: AssetTypes.material.defValue,
             defValue: [AssetTypes.material.defValue],
-            userResizable: false,
+            userResizable: true,
         })
     )
 );
@@ -1897,24 +1897,37 @@ const iconInfo = {
     infoHeader: "Icon should meet these requirements :",
     infoErrorHeader: "Errors :",
 };
-const ZIcon = z.string().describe(uiDescriptions.icon({ info: iconInfo }));
+const ZIcon = z
+    .string()
+    .describe(
+        uiDescriptions.icon({ info: iconInfo, label: "locale.projectManager.iconControl.label" })
+    );
 
 const scriptInfo = {
     clickLink: "https://dev.vk.com/ru/masks/development/script-creation",
 };
-const ZMainScriptAsset = z
-    .string()
-    .describe(uiDescriptions.mainScript({ info: scriptInfo, group: "advanced" }));
+const ZMainScriptAsset = z.string().describe(
+    uiDescriptions.mainScript({
+        info: scriptInfo,
+        group: "advanced",
+        label: "locale.projectManager.mainScript.label",
+    })
+);
 
 const MaskSettings = {
     // name: ZText.describe(uiDescriptions.text({ defValue: "defaultName", label: "Name" })),
     icon: ZIcon,
-    user_hint: ZEnum(UserHintOptions[0], "User Hint", UserHintOptions, UserHintOptionsLabels),
+    user_hint: ZEnum(
+        UserHintOptions[0],
+        "locale.projectManager.userHint.label",
+        UserHintOptions,
+        UserHintOptionsLabels
+    ),
     // num_faces: ZNumberEnum(1, "Number faces", "main", [0, 1, 2], ["0", "1", "2"]),
     // facemodel_version: ZNumberEnum(0, "Facemodel version", "Advanced", [0, 1], ["old", "new"]),
     mouse_input: z.boolean().describe(
         uiDescriptions.bool({
-            label: "Mouse input",
+            label: "locale.projectManager.mouseInput.label",
             defValue: false,
             showAlways: false,
             group: "permissions",
@@ -1930,15 +1943,15 @@ export const ZMaskSettings = z
         uiDescriptions.object({
             groups: {
                 main: {
-                    label: "Main",
+                    label: "locale.projectManager.groups.main.label",
                     defExpanded: true,
                 },
                 permissions: {
-                    label: "Permissions",
+                    label: "locale.projectManager.groups.permissions.label",
                     defExpanded: false,
                 },
                 advanced: {
-                    label: "Advanced",
+                    label: "locale.projectManager.groups.advanced.label",
                     defExpanded: false,
                 },
             },

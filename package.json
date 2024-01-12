@@ -308,6 +308,7 @@
         "@vscode/l10n-dev": "^0.0.29",
         "@vscode/vsce": "^2.22.0",
         "@vscode/webview-ui-toolkit": "^1.4.0",
+        "glob": "^10.3.10",
         "rimraf": "^5.0.1",
         "rollup": "^4.9.1",
         "rollup-plugin-copy-watch": "^0.0.1",

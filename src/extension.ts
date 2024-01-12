@@ -50,8 +50,6 @@ export async function activate(context: vscode.ExtensionContext) {
     // vscode.window.showInformationMessage(localizedString);
     // selection = { type: SelectionType.empty };
 
-    print("INIT EXT maaan 123 hehe");
-
     globalThis.selection = { type: SelectionType.empty };
 
     let appState = AppState.loading,
@@ -458,33 +456,22 @@ export async function activate(context: vscode.ExtensionContext) {
 
             case RequestCommand.getLocalization:
                 // Check if a l10n path is configured, if not, we will use the default language
+                print("locale uri : ", vscode.l10n.uri?.fsPath, vscode.env.language);
+                let bundle;
                 if (vscode.l10n.uri?.fsPath) {
-                    const bundle = fs.readFileSync(vscode.l10n.uri?.fsPath, { encoding: "utf-8" });
-
-                    messageHandler.send({
-                        ...data,
-                        target: origin,
-                        payload: bundle,
-                    });
-                    // panel.webview.postMessage({
-                    //     command,
-                    //     requestId, // The requestId is used to identify the response
-                    //     payload: fileContent,
-                    // } as MessageHandlerData<string>);
+                    bundle = fs.readFileSync(vscode.l10n.uri?.fsPath, { encoding: "utf-8" });
                 } else {
-                    messageHandler.send({
-                        ...data,
-                        target: origin,
-                        payload: "",
-                    });
-
-                    //     // No localization file means we should use the default language
-                    //     panel.webview.postMessage({
-                    //     command,
-                    //     requestId, // The requestId is used to identify the response
-                    //     payload: undefined,
-                    //     } as MessageHandlerData<undefined>);
+                    // default language
+                    bundle = fs.readFileSync(
+                        path.join(context.extensionPath, "l10n", "bundle.l10n.json"),
+                        { encoding: "utf-8" }
+                    );
                 }
+                messageHandler.send({
+                    ...data,
+                    target: origin,
+                    payload: bundle,
+                });
 
                 break;
 

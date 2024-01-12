@@ -1,4 +1,11 @@
 {
-    "Your extension got activated with the {0} language!": "Your USED! activated with the {0} language!",
-    "Upload main script": "IT WORKS!"
+    "locale.projectManager.iconControl.label": "Icon",
+    "locale.projectManager.mainScript.label": "Main Script",
+    "locale.projectManager.userHint.label": "User Hint",
+    "locale.projectManager.mouseInput.label": "Mouse Input",
+    "locale.projectManager.groups.main.label": "Main",
+    "locale.projectManager.groups.permissions.label": "Permissions",
+    "locale.projectManager.groups.advanced.label": "Advanced",
+    "locale.materialArray.elementName": "material",
+    "locale.arrayControl.addButtonHint": "Add "
 }
