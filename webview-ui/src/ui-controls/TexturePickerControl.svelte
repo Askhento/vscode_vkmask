@@ -1,4 +1,6 @@
 <script lang="ts">
+    import * as l10n from "@vscode/l10n";
+
     import { createEventDispatcher } from "svelte";
     import { logger } from "../logger";
     const print = logger("TexturePickerControl.svelte");

@@ -13,295 +13,158 @@
 import { z } from "zod";
 
 export const uiDescriptions = {
-    none: () => ({
+    none: {
         name: "none",
         group: "main",
-    }),
-    numberSlider: ({
-        label,
-        group = "main",
-        min = 0,
-        max = 1,
-        defValue = 0,
-        steps = 100,
-        valueLabel = "",
-        showAlways = true,
-        valueTemplate = (val) => {
+    },
+    numberSlider: {
+        name: "numberSlider",
+        label: "Slider",
+        group: "main",
+        min: 0,
+        max: 1,
+        defValue: 0,
+        steps: 100,
+        valueLabel: "",
+        showAlways: true,
+        valueTemplate: (val) => {
             return val;
         },
-    }) => ({
-        showAlways,
-        name: "numberSlider",
-        label,
-        group,
-        steps,
-        min: min,
-        max: max,
-        defValue,
-        valueLabel,
-        valueTemplate,
-    }),
-    array2d: ({
-        label,
-        group = "main",
-        min,
-        max,
-        defValue = [0, 0],
-        valueLabels = ["X", "Y"],
-        dependencies,
-        showAlways = true,
-    }) => ({
-        showAlways,
+    },
+    array2d: {
         name: "array2d",
-        label,
-        group,
-        min: min,
-        max: max,
-        defValue,
-        valueLabels,
-        dependencies,
-    }),
-    array3d: ({
-        label,
-        dependencies,
-        group = "main",
-        min,
-        max,
-        defValue = [0, 0, 0],
-        valueLabels = ["X", "Y", "Z"],
-        showAlways = true,
-    }) => ({
-        showAlways,
+        label: "Vec2",
+        group: "main",
+        defValue: [0, 0],
+        valueLabels: ["X", "Y"],
+        showAlways: true,
+    },
+    array3d: {
         name: "array3d",
-        valueLabels,
-        label,
-        dependencies,
-        group,
-        min: min,
-        max: max,
-        defValue,
-    }),
-    array4d: ({
-        label,
-        group = "main",
-        min,
-        max,
-        defValue = [0, 0, 0, 0],
-        valueLabels = ["X", "Y", "Z", "W"],
-        showAlways = true,
-        dependencies,
-    }) => ({
-        showAlways,
+        label: "Vec3",
+        group: "main",
+        defValue: [0, 0, 0],
+        valueLabels: ["X", "Y", "Z"],
+        showAlways: true,
+    },
+    array4d: {
         name: "array4d",
-        label,
-        group,
-        min: min,
-        max: max,
-        defValue,
-        valueLabels,
-        dependencies,
-    }),
-    enum: ({ label, group = "main", options, optionLabels, defValue, showAlways = true }) => ({
-        showAlways,
-        name: "enum",
-        label,
-        group,
-        options,
-        optionLabels,
-        defValue,
-    }),
-    filepath: ({
-        label,
-        group = "main",
-        directory = ["/"],
-        extensions,
-        types,
-        typeName,
-        defValue,
-        showAlways = true,
-    }) => ({
-        showAlways,
-        name: "filepath",
-        directory,
-        label,
-        group,
-        extensions,
-        types,
-        typeName,
-        defValue,
-    }),
-    text: ({ label, group = "main", defValue = "", showAlways = true }) => ({
-        showAlways,
-        name: "text",
-        label,
-        group,
-        defValue,
-    }),
-    tags: ({
-        label = "Tag",
-        group = "tags",
-        defValue = "",
-        showAlways = true,
-        groupExpanded = false,
-    }) => ({
-        showAlways,
-        name: "tags",
-        label,
-        group,
-        defValue,
-        groupExpanded,
-    }),
-    mainScript: ({
-        label = "Script",
-        group = "Advanced",
-        defValue = "main.as",
-        showAlways = true,
-        info,
-    }) => ({
-        name: "script",
-        label,
-        group,
-        defValue,
-        showAlways,
-        info,
-    }),
-    icon: ({ label = "Icon", group = "main", defValue = "", showAlways = true, info }) => ({
-        name: "icon",
-        label,
-        info,
-        group,
-        defValue,
-        showAlways,
-    }),
-    texture: ({ label = "Texture", group = "main", defValue = "", showAlways = true }) => ({
-        name: "texture",
-        label,
-        group,
-        defValue,
-        showAlways,
-    }),
-    // !!!! color alpha redundant here
-    color: ({ label, group = "main", min, max, defValue = [1, 1, 1], showAlways = true }) => ({
-        name: "color",
-        label,
-        group,
-        min: min,
-        max: max,
-        defValue,
-        showAlways,
-    }),
-    colorAlpha: ({
-        label = "Color",
-        group = "main",
-        min,
-        max,
-        defValue = [1, 1, 1, 1],
-        showAlways = true,
-    }) => ({
-        showAlways,
-        name: "colorAlpha",
-        label,
-        group,
-        alpha: true,
-        min: min,
-        max: max,
-        defValue,
-    }),
-    uv_transform: ({
-        label = "UV transform",
-        group = "uv_transform",
-        defValue = [0, 0, 0],
-        showAlways = true,
-        groupExpanded = false,
-    }) => ({
-        showAlways,
-        name: "uv_transform",
-        label,
-        group,
-        compositionGroup: "uv_transform",
-        groupExpanded,
-        defValue,
-    }),
-    bool: ({ label, group = "main", defValue = false, showAlways = true }) => ({
-        showAlways,
-        name: "bool",
-        label,
-        group,
-        defValue,
-    }),
-    object: ({
-        label,
-        group = "main",
-        defValue = {},
-        showAlways = true,
-        defExpanded = true,
-        groups = { main: { label: null, defExpanded: true } },
-    }) => ({
-        showAlways,
-        name: "object",
-        label,
-        group,
-        groups,
-        defValue,
-        defExpanded,
-    }),
-    array: ({
-        label = "array",
-        group = "main",
-        elementName,
-        defaultElement,
-        defValue = [],
-        dependencies,
-        showAlways = true,
-        userResizable = true,
-    }) => ({
-        showAlways,
-        name: "array",
-        label,
-        group,
-        elementName: elementName,
-        defaultElement: defaultElement,
-        defValue,
-        dependencies,
-        userResizable,
-    }),
+        label: "Vec4",
+        group: "main",
+        defValue: [0, 0, 0, 0],
+        valueLabels: ["X", "Y", "Z", "W"],
+        showAlways: true,
+    },
 
-    union: ({}) => ({
+    enum: {
+        name: "enum",
+        label: "Enum",
+        group: "main",
+        options: [],
+        optionLabels: [],
+        defValue: null,
+    },
+    filepath: {
+        name: "filepath",
+        label: "Filepath",
+        group: "main",
+        directory: ["/"],
+        extensions: [],
+        types: null,
+        typeName: null,
+        defValue: null,
+    },
+    text: { name: "text", label: "Text", group: "main", defValue: "" },
+    tags: {
+        name: "tags",
+        label: "Tag",
+        group: "tags",
+        defValue: "",
+        groupExpanded: false,
+    },
+    mainScript: {
+        name: "script",
+        label: "Script",
+        group: "Advanced",
+        defValue: "main.as",
+        showAlways: true,
+        info: null,
+    },
+    icon: { name: "icon", label: "Icon", group: "main", defValue: "", info: null },
+    texture: { name: "texture", label: "Texture", group: "main", defValue: "" },
+    // !!!! color alpha redundant here
+    color: { name: "color", label: "Color", group: "main", defValue: [1, 1, 1] },
+    colorAlpha: {
+        name: "colorAlpha",
+        label: "Color",
+        group: "main",
+        defValue: [1, 1, 1, 1],
+        alpha: true,
+    },
+    uv_transform: {
+        name: "uv_transform",
+        label: "UV transform",
+        group: "uv_transform",
+        defValue: [0, 0, 0],
+        groupExpanded: false,
+        compositionGroup: "uv_transform",
+    },
+
+    bool: { name: "bool", label: "", group: "main", defValue: false },
+    object: {
+        name: "object",
+        label: "Object",
+        group: "main",
+        defValue: {},
+        defExpanded: true,
+        groups: { main: { label: null, defExpanded: true } },
+    },
+    array: {
+        label: "Array",
+        group: "main",
+        elementName: "element",
+        defaultElement: "defalult",
+        defValue: [],
+        userResizable: false,
+        name: "array",
+    },
+
+    union: {
         name: "union",
-    }),
-    discriminatedUnion: ({}) => ({
+    },
+    discriminatedUnion: {
         name: "discriminatedUnion",
-    }),
+    },
 };
 
-const ZNumberSlider = z.number().describe(uiDescriptions.numberSlider({ min: 0, max: 1 }));
+const ZNumberSlider = z.number().describe(uiDescriptions.numberSlider);
 
-const ZBool = z.boolean().describe(uiDescriptions.bool({ defValue: false }));
+const ZBool = z.boolean().describe(uiDescriptions.bool);
 const ZArray2D = z
     .number()
     .array()
     .length(2, { message: "Array size must be 2" })
-    .describe(uiDescriptions.array2d({}));
+    .describe(uiDescriptions.array2d);
 const ZArray3D = z
     .number()
     .array()
     .length(3, { message: "Array size must be 3" })
-    .describe(uiDescriptions.array3d({}));
+    .describe(uiDescriptions.array3d);
 const ZArray4D = z
     .number()
     .array()
     .length(4, { message: "Array size must be 4" })
-    .describe(uiDescriptions.array4d({}));
+    .describe(uiDescriptions.array4d);
 const ZColor = z
     .number()
     .array()
     .length(3, { message: "Color size must be 3" })
-    .describe(uiDescriptions.color({ min: 0, max: 1, label: "Color" }));
+    .describe(uiDescriptions.color);
 const ZColorAlpha = z
     .number()
     .array()
     .length(4, { message: "Color size must be 4" })
-    .describe(uiDescriptions.colorAlpha({ min: 0, max: 1, alpha: true, label: "Color" }));
+    .describe(uiDescriptions.colorAlpha);
 
 const ZFaceAnchor = z.enum([
     "free",
@@ -391,13 +254,10 @@ const AssetTypes = {
     },
 };
 
-const ZAsset = z.string().describe(uiDescriptions.filepath({}));
+const ZAsset = z.string().describe(uiDescriptions.filepath);
 
-const ZText = z.string().describe(uiDescriptions.text({}));
-// ? idea to use function, use later to refactor
-// const ZText = (desc = {}) => z.string().describe(uiDescriptions.text(desc));
-// ZText({})
-const ZTags = z.string().describe(uiDescriptions.tags({}));
+const ZText = z.string().describe(uiDescriptions.text);
+const ZTags = z.string().describe(uiDescriptions.tags);
 
 const ZVisibleType = z.enum(["always", "face", "animation", "mouth_open"]);
 const ZVisibleTypeLabels = ["Always", "Face", "Animation", "Mouth open"];
@@ -405,27 +265,17 @@ const ZVisibleTypeLabels = ["Always", "Face", "Animation", "Mouth open"];
 const ZPatchFitMode = z.enum(["none", "crop", "pad"]);
 const ZPatchFitModeLabels = ["None", "Crop", "Pad"];
 
-// const ZTextureAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.texture));
-// const ZModel3dAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.model3d));
-// const ZScriptAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.script));
-// const ZRenderPathAsset = ZAsset.describe(uiDescriptions.filepath(AssetTypes.renderPath));
-
 const ZTechniqueAsset = (desc) =>
-    z.string().describe({ ...uiDescriptions.filepath(AssetTypes.technique), ...desc });
+    z.string().describe({ ...uiDescriptions.filepath, ...AssetTypes.technique, ...desc });
 
 const ZModel3dAsset = (desc) =>
-    z.string().describe({ ...uiDescriptions.filepath(AssetTypes.model3d), ...desc });
-
-const ZRenderPathAsset = (desc) =>
-    z.string().describe({ ...uiDescriptions.filepath(AssetTypes.renderPath), ...desc });
+    z.string().describe({ ...uiDescriptions.filepath, ...AssetTypes.model3d, ...desc });
 
 const ZTextureAsset = (desc) =>
-    z.string().describe({ ...uiDescriptions.filepath(AssetTypes.texture), ...desc });
+    z.string().describe({ ...uiDescriptions.filepath, ...AssetTypes.texture, ...desc });
 
 const ZMaterialAsset = (desc) =>
-    z.string().describe({ ...uiDescriptions.filepath(AssetTypes.material), ...desc });
-
-// const ZMaterialAsset({ label : material}) = ZAsset.describe(uiDescriptions.filepath(AssetTypes.material));
+    z.string().describe({ ...uiDescriptions.filepath, ...AssetTypes.material, ...desc });
 
 // export const ZTextureObject = z.union(
 //     [
@@ -441,7 +291,7 @@ const ZMaterialAsset = (desc) =>
 //             color: ZColorAlpha.default([1.0, 1.0, 1.0, 1.0])
 //         })
 //     ]
-// ).describe(uiDescriptions.object({}))
+// ).describe(uiDescriptions.object)
 
 const ZBlendModes = z.enum([
     "replace",
@@ -512,42 +362,39 @@ const ZEventTriggerLabels = ["None", "Mouth Open", "Mouth Close", "Face Found", 
 
 const ZTextureAnimation = z
     .object({
-        type: ZAnimationType.describe(
-            uiDescriptions.enum({
-                label: "Type",
-                options: Object.keys(ZAnimationType.Values),
-                optionLabels: ZAnimationTypeLabels,
-                defValue: ZAnimationType.Values.mouth_open,
-            })
-        ),
-        trigget_start: ZEventTrigger.describe(
-            uiDescriptions.enum({
-                label: "Start trigger",
-                options: Object.keys(ZEventTrigger.Values),
-                optionLabels: ZEventTriggerLabels,
-                defValue: ZEventTrigger.Values.mouth_open,
-            })
-        ),
-        trigget_stop: ZEventTrigger.describe(
-            uiDescriptions.enum({
-                label: "Stop trigger",
-                options: Object.keys(ZEventTrigger.Values),
-                optionLabels: ZEventTriggerLabels,
-                defValue: ZEventTrigger.Values.mouth_close,
-            })
-        ),
-        fps: ZNumberSlider.describe(
-            uiDescriptions.numberSlider({
-                defValue: 30,
-                min: 0,
-                max: 240,
-                valueLabel: "1/s",
-                // valueTemplate: (val) => Math.floor(val * 100),
-                label: "Fps",
-            })
-        ),
+        type: ZAnimationType.describe({
+            ...uiDescriptions.enum,
+
+            label: "Type",
+            options: Object.keys(ZAnimationType.Values),
+            optionLabels: ZAnimationTypeLabels,
+            defValue: ZAnimationType.Values.mouth_open,
+        }),
+        trigget_start: ZEventTrigger.describe({
+            ...uiDescriptions.enum,
+            label: "Start trigger",
+            options: Object.keys(ZEventTrigger.Values),
+            optionLabels: ZEventTriggerLabels,
+            defValue: ZEventTrigger.Values.mouth_open,
+        }),
+        trigget_stop: ZEventTrigger.describe({
+            ...uiDescriptions.enum,
+            label: "Stop trigger",
+            options: Object.keys(ZEventTrigger.Values),
+            optionLabels: ZEventTriggerLabels,
+            defValue: ZEventTrigger.Values.mouth_close,
+        }),
+        fps: ZNumberSlider.describe({
+            ...uiDescriptions.numberSlider,
+            defValue: 30,
+            min: 0,
+            max: 240,
+            valueLabel: "1/s",
+            // valueTemplate: (val) => Math.floor(val * 100),
+            label: "Fps",
+        }),
     })
-    .describe(uiDescriptions.object({ label: "Animation", group: "animation" }));
+    .describe({ ...uiDescriptions.object, label: "Animation", group: "animation" });
 
 export const ZTextureObject = z.preprocess(
     (val) => {
@@ -568,61 +415,51 @@ export const ZTextureObject = z.preprocess(
     z
         .object({
             diffuse: ZTextureAsset({ label: "Diffuse" }),
-            blend_mode: ZBlendModes.describe(
-                uiDescriptions.enum({
-                    label: "Blend mode",
-                    options: Object.keys(ZBlendModes.Values),
-                    optionLabels: ZBlendModesLabels,
-                    defValue: ZBlendModes.Values.replace,
-                })
-            ),
+            blend_mode: ZBlendModes.describe({
+                ...uiDescriptions.enum,
+                label: "Blend mode",
+                options: Object.keys(ZBlendModes.Values),
+                optionLabels: ZBlendModesLabels,
+                defValue: ZBlendModes.Values.replace,
+            }),
             color: ZColorAlpha,
             // lit: ZBool.describe(uiDesc riptions.bool({ label: "Lit" })),
             // !!! probably will miss texture property
             // texture: ZTextureAsset,
             // normal: ZTextureAsset({ label: "Normal" }),
-            u_transform: ZArray3D.describe(
-                uiDescriptions.uv_transform({
-                    defValue: [1, 0, 0],
-                })
-            ),
-            v_transform: ZArray3D.describe(
-                uiDescriptions.uv_transform({
-                    defValue: [0, 1, 0],
-                })
-            ),
+            u_transform: ZArray3D.describe({ ...uiDescriptions.uv_transform, defValue: [1, 0, 0] }),
+            v_transform: ZArray3D.describe({ ...uiDescriptions.uv_transform, defValue: [0, 1, 0] }),
             animation: ZTextureAnimation,
             // render_order: ZNumberSlider.describe(
-            //     uiDescriptions.numberSlider({
+            //     {...uiDescriptions.numberSlider,
             //         max: 100,
             //         min: -100,
             //         defValue: 0,
             //         showAlways: false,
             //         label: "Render order",
-            //     })
+            //     }
             // ),
         })
-        .describe(
-            uiDescriptions.object({
-                showAlways: false,
-                label: "Texture",
-                group: "texture",
-                groups: {
-                    main: {
-                        label: null,
-                        defExpanded: true,
-                    },
-                    animation: {
-                        label: "Animation",
-                        defExpanded: false,
-                    },
-                    uv_transform: {
-                        label: "UV transform",
-                        defExpanded: false,
-                    },
+        .describe({
+            ...uiDescriptions.object,
+            showAlways: false,
+            label: "Texture",
+            group: "texture",
+            groups: {
+                main: {
+                    label: null,
+                    defExpanded: true,
                 },
-            })
-        )
+                animation: {
+                    label: "Animation",
+                    defExpanded: false,
+                },
+                uv_transform: {
+                    label: "UV transform",
+                    defExpanded: false,
+                },
+            },
+        })
 );
 
 // const testObj = { diffuse: "diff", normal: "somenormal" };
@@ -679,80 +516,80 @@ const ZFillMode = z.enum(["solid", "wireframe", "point"]);
 //                 emissive: ZTextureAsset({ label: "Emissive" }),
 //                 environment: ZTextureAsset({ label: "Environment" }),
 //             })
-//             .describe(uiDescriptions.object({})),
+//             .describe(uiDescriptions.object),
 //         parameters: z
 //             .object({
 //                 MatDiffColor: ZArray4D.describe(
-//                     uiDescriptions.array4d({
+//                     {...uiDescriptions.array4d,
 //                         defValue: [1.0, 1.0, 1.0, 1.0],
 //                         label: "Diffuse color",
-//                     })
+//                     }
 //                 ),
 //                 MatSpecColor: ZArray4D.describe(
-//                     uiDescriptions.array4d({
+//                     {...uiDescriptions.array4d,
 //                         defValue: [0.0, 0.0, 0.0, 1.0],
 //                         showAlways: false,
 //                         label: "Specular color",
-//                     })
+//                     }
 //                 ),
 //                 MatEmissiveColor: ZArray3D.describe(
-//                     uiDescriptions.array3d({ showAlways: false, label: "Emissive color" })
+//                     {...uiDescriptions.array3d,  showAlways: false, label: "Emissive color" }
 //                 ),
 //                 MatEnvMapColor: ZArray3D.describe(
-//                     uiDescriptions.array3d({
+//                     {...uiDescriptions.array3d,
 //                         defValue: [1.0, 1.0, 1.0],
 //                         showAlways: false,
 //                         label: "Environment color",
-//                     })
+//                     }
 //                 ),
 //                 Roughness: ZNumberSlider.describe(
-//                     uiDescriptions.numberSlider({
+//                     {...uiDescriptions.numberSlider,
 //                         defValue: 0.5,
 //                         showAlways: false,
 //                         label: "Roughness",
-//                     })
+//                     }
 //                 ),
 //                 Metallic: ZNumberSlider.describe(
-//                     uiDescriptions.numberSlider({
+//                     {...uiDescriptions.numberSlider,
 //                         defValue: 0.5,
 //                         showAlways: false,
 //                         label: "Metallness",
-//                     })
+//                     }
 //                 ),
 //                 UOffset: ZArray4D.describe(
-//                     uiDescriptions.array4d({
+//                     {...uiDescriptions.array4d,
 //                         defValue: [1.0, 0.0, 0.0, 0.0],
 //                         showAlways: false,
 //                         label: "U transform",
-//                     })
+//                     }
 //                 ),
 //                 VOffset: ZArray4D.describe(
-//                     uiDescriptions.array4d({
+//                     {...uiDescriptions.array4d,
 //                         defValue: [0.0, 1.0, 0.0, 0.0],
 //                         showAlways: false,
 //                         label: "V transform",
-//                     })
+//                     }
 //                 ),
 //             })
-//             .describe(uiDescriptions.object({}))
+//             .describe(uiDescriptions.object)
 //             .passthrough(),
 //         cull: ZCullMode.describe(
-//             uiDescriptions.enum({
+//             {...uiDescriptions.enum,
 //                 label: "Culling",
 //                 options: Object.keys(ZCullMode.Values),
 //                 defValue: ZCullMode.Values.ccw,
-//             })
+//             }
 //         ),
 //         fill: ZFillMode.describe(
-//             uiDescriptions.enum({
+//             {...uiDescriptions.enum,
 //                 label: "Fill",
 //                 options: Object.keys(ZFillMode.Values),
 //                 defValue: ZFillMode.Values.solid,
 //                 showAlways: false,
-//             })
+//             }
 //         ),
 //     })
-//     .describe(uiDescriptions.object({}));
+//     .describe(uiDescriptions.object);
 
 export const ZMaterialObject = z.preprocess(
     (val) => {
@@ -771,109 +608,100 @@ export const ZMaterialObject = z.preprocess(
             emissive: ZTextureAsset({ label: "Emissive", group: "emissive" }),
             environment: ZTextureAsset({ label: "Environment", group: "environment" }),
 
-            MatDiffColor: ZArray4D.describe(
-                uiDescriptions.colorAlpha({
-                    defValue: [1.0, 1.0, 1.0, 1.0],
-                    group: "diffuse",
-                    label: "Diffuse color",
-                })
-            ),
-            MatSpecColor: ZArray4D.describe(
-                uiDescriptions.colorAlpha({
-                    defValue: [0.0, 0.0, 0.0, 1.0],
-                    group: "specular",
-                    showAlways: false,
-                    label: "Specular color",
-                })
-            ),
-            MatEmissiveColor: ZArray3D.describe(
-                uiDescriptions.color({
-                    showAlways: false,
-                    group: "emissive",
-                    label: "Emissive color",
-                })
-            ),
-            MatEnvMapColor: ZArray3D.describe(
-                uiDescriptions.color({
-                    defValue: [1.0, 1.0, 1.0],
-                    group: "environment",
-                    showAlways: false,
-                    label: "Environment color",
-                })
-            ),
-            Roughness: ZNumberSlider.describe(
-                uiDescriptions.numberSlider({
-                    defValue: 0.5,
-                    showAlways: false,
-                    label: "Roughness",
-                })
-            ),
-            Metallic: ZNumberSlider.describe(
-                uiDescriptions.numberSlider({
-                    defValue: 0.5,
-                    showAlways: false,
-                    label: "Metallness",
-                })
-            ),
+            MatDiffColor: ZArray4D.describe({
+                ...uiDescriptions.colorAlpha,
+                defValue: [1.0, 1.0, 1.0, 1.0],
+                group: "diffuse",
+                label: "Diffuse color",
+            }),
+            MatSpecColor: ZArray4D.describe({
+                ...uiDescriptions.colorAlpha,
+                defValue: [0.0, 0.0, 0.0, 1.0],
+                group: "specular",
+                showAlways: false,
+                label: "Specular color",
+            }),
+            MatEmissiveColor: ZArray3D.describe({
+                ...uiDescriptions.color,
+                showAlways: false,
+                group: "emissive",
+                label: "Emissive color",
+            }),
+            MatEnvMapColor: ZArray3D.describe({
+                ...uiDescriptions.color,
+                defValue: [1.0, 1.0, 1.0],
+                group: "environment",
+                showAlways: false,
+                label: "Environment color",
+            }),
+            Roughness: ZNumberSlider.describe({
+                ...uiDescriptions.numberSlider,
+                defValue: 0.5,
+                showAlways: false,
+                label: "Roughness",
+            }),
+            Metallic: ZNumberSlider.describe({
+                ...uiDescriptions.numberSlider,
+                defValue: 0.5,
+                showAlways: false,
+                label: "Metallness",
+            }),
 
-            cull: ZCullMode.describe(
-                uiDescriptions.enum({
-                    label: "Culling",
-                    options: Object.keys(ZCullMode.Values),
-                    defValue: ZCullMode.Values.ccw,
-                })
-            ),
-            fill: ZFillMode.describe(
-                uiDescriptions.enum({
-                    label: "Fill",
-                    options: Object.keys(ZFillMode.Values),
-                    defValue: ZFillMode.Values.solid,
-                    showAlways: false,
-                })
-            ),
+            cull: ZCullMode.describe({
+                ...uiDescriptions.enum,
+                label: "Culling",
+                options: Object.keys(ZCullMode.Values),
+                defValue: ZCullMode.Values.ccw,
+            }),
+            fill: ZFillMode.describe({
+                ...uiDescriptions.enum,
+                label: "Fill",
+                options: Object.keys(ZFillMode.Values),
+                defValue: ZFillMode.Values.solid,
+                showAlways: false,
+            }),
         })
-        .describe(
-            uiDescriptions.object({
-                label: "Material",
-                groups: {
-                    main: {
-                        label: null,
-                        defExpanded: true,
-                    },
-
-                    diffuse: {
-                        label: "Diffuse",
-                        defExpanded: true,
-                    },
-
-                    normal: {
-                        label: "Normal",
-                        defExpanded: true,
-                    },
-
-                    specular: {
-                        label: "Specular",
-                        defExpanded: true,
-                    },
-
-                    environment: {
-                        label: "Environment",
-                        defExpanded: true,
-                    },
-
-                    emissive: {
-                        label: "Emissive",
-                        defExpanded: true,
-                    },
+        .describe({
+            ...uiDescriptions.object,
+            label: "Material",
+            groups: {
+                main: {
+                    label: null,
+                    defExpanded: true,
                 },
-            })
-        )
+
+                diffuse: {
+                    label: "Diffuse",
+                    defExpanded: true,
+                },
+
+                normal: {
+                    label: "Normal",
+                    defExpanded: true,
+                },
+
+                specular: {
+                    label: "Specular",
+                    defExpanded: true,
+                },
+
+                environment: {
+                    label: "Environment",
+                    defExpanded: true,
+                },
+
+                emissive: {
+                    label: "Emissive",
+                    defExpanded: true,
+                },
+            },
+        })
 );
 
 const ZMaterial = ZMaterialAsset({ label: "Material", group: "materials" });
 // z
 //     .union([ZMaterialAsset({ label: "Material" }), ZMaterialObject])
-//     .describe(uiDescriptions.union({}));
+//     .describe(uiDescriptions.union);
 
 // async function updateArrayLength() {
 //         const modelPath = getValueByPath($effects, resolveRelative(relPath, path));
@@ -894,48 +722,47 @@ export const ZMaterialArray = z.preprocess(
         if (!Array.isArray(val)) return [val];
         return val;
     },
-    z.array(ZMaterial).describe(
-        uiDescriptions.array({
-            dependencies: [
-                {
-                    source: ["stores", "effects"],
-                    relPath: ["..", "model"],
-                },
-                {
-                    source: ["stores", "assets"],
-                    postprocess: (modelPath, assets, component) => {
-                        const { value, params } = component;
-                        const assetIndex = assets.findIndex((v) => v.path === modelPath);
+    z.array(ZMaterial).describe({
+        ...uiDescriptions.array,
+        dependencies: [
+            {
+                source: ["stores", "effects"],
+                relPath: ["..", "model"],
+            },
+            {
+                source: ["stores", "assets"],
+                postprocess: (modelPath, assets, component) => {
+                    const { value, params } = component;
+                    const assetIndex = assets.findIndex((v) => v.path === modelPath);
 
-                        if (assetIndex < 0) {
-                            if (value.length) {
-                                component.value = [];
-                                return { needUpdate: true };
-                            }
-                            return { needUpdate: false };
+                    if (assetIndex < 0) {
+                        if (value.length) {
+                            component.value = [];
+                            return { needUpdate: true };
                         }
+                        return { needUpdate: false };
+                    }
 
-                        const { numGeometries } = assets[assetIndex];
+                    const { numGeometries } = assets[assetIndex];
 
-                        if (value.length === numGeometries) return { needUpdate: false }; // without this will infinte loop
+                    if (value.length === numGeometries) return { needUpdate: false }; // without this will infinte loop
 
-                        component.value = new Array(numGeometries)
-                            .fill(params.defaultElement)
-                            .map((v, i) => value[i] ?? v);
+                    component.value = new Array(numGeometries)
+                        .fill(params.defaultElement)
+                        .map((v, i) => value[i] ?? v);
 
-                        return { needUpdate: true };
-                    },
+                    return { needUpdate: true };
                 },
-            ],
+            },
+        ],
 
-            elementName: "locale.materialArray.elementName",
-            label: "Materials",
-            group: "materials",
-            defaultElement: AssetTypes.material.defValue,
-            defValue: [AssetTypes.material.defValue],
-            userResizable: true,
-        })
-    )
+        elementName: "locale.materialArray.elementName",
+        label: "Materials",
+        group: "materials",
+        defaultElement: AssetTypes.material.defValue,
+        defValue: [AssetTypes.material.defValue],
+        userResizable: false,
+    })
 );
 
 // console.log(ZMaterialArray.innerType().element.options[1].description)
@@ -967,66 +794,84 @@ export const ZMaterialArray = z.preprocess(
 
 // export const TextureObject =
 //     z.object({
-//         diffuse: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
-//         texture: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
-//         normal: ZAsset.default(AssetTypes.texture.default).describe(uiDescriptions.filepath({ extensions: AssetTypes.texture.extensions })),
+//         diffuse: ZAsset.default(AssetTypes.texture.default).describe({...uiDescriptions.filepath,  extensions: AssetTypes.texture.extensions }),
+//         texture: ZAsset.default(AssetTypes.texture.default).describe({...uiDescriptions.filepath,  extensions: AssetTypes.texture.extensions }),
+//         normal: ZAsset.default(AssetTypes.texture.default).describe({...uiDescriptions.filepath,  extensions: AssetTypes.texture.extensions }),
 //         color: ZColorAlpha.default([1.0, 1.0, 1.0, 1.0])
-//     }).describe(uiDescriptions.object({}))
+//     }).describe(uiDescriptions.object)
 
 export const ZBaseEffect = z
     .object({
-        name: ZText.describe(uiDescriptions.none({})),
+        name: ZText.describe(uiDescriptions.none),
         tag: ZTags,
         // disabled: ZBool.default(false)
     })
     // ??? does need this ????
-    .describe(uiDescriptions.object({}))
+    .describe(uiDescriptions.object)
     .passthrough();
 
 const ZFacemodelEffect = ZBaseEffect.extend({
-    name: z.literal("facemodel").describe(uiDescriptions.none({})),
-    mouth: ZBool.describe(
-        uiDescriptions.bool({ defValue: true, label: "Mouth", group: "visible" })
-    ),
-    eyes: ZBool.describe(uiDescriptions.bool({ defValue: true, label: "Eyes", group: "visible" })),
-    position: ZArray3D.describe(uiDescriptions.array3d({ label: "Position", group: "transform" })),
-    scale: ZArray3D.describe(
-        uiDescriptions.array3d({ defValue: [1, 1, 1], label: "Scale", group: "transform" })
-    ),
-    rotation: ZArray3D.describe(uiDescriptions.array3d({ label: "Rotation", group: "transform" })),
+    name: z.literal("facemodel").describe(uiDescriptions.none),
+    mouth: ZBool.describe({
+        ...uiDescriptions.bool,
+        defValue: true,
+        label: "Mouth",
+        group: "visible",
+    }),
+    eyes: ZBool.describe({
+        ...uiDescriptions.bool,
+        defValue: true,
+        label: "Eyes",
+        group: "visible",
+    }),
+    position: ZArray3D.describe({
+        ...uiDescriptions.array3d,
+        label: "Position",
+        group: "transform",
+    }),
+    scale: ZArray3D.describe({
+        ...uiDescriptions.array3d,
+        defValue: [1, 1, 1],
+        label: "Scale",
+        group: "transform",
+    }),
+    rotation: ZArray3D.describe({
+        ...uiDescriptions.array3d,
+        label: "Rotation",
+        group: "transform",
+    }),
     texture: ZTextureObject,
-}).describe(
-    uiDescriptions.object({
-        label: "Facemodel",
-        groups: {
-            main: {
-                label: null,
-                defExpanded: true,
-            },
-
-            visible: {
-                label: "Visible",
-                defExpanded: true,
-            },
-
-            transform: {
-                label: "Transform",
-                defExpanded: true,
-            },
-
-            texture: {
-                label: "Texture",
-                defExpanded: true,
-                disableMargin: true,
-            },
-
-            tags: {
-                label: "Tags",
-                defExpanded: false,
-            },
+}).describe({
+    ...uiDescriptions.object,
+    label: "Facemodel",
+    groups: {
+        main: {
+            label: null,
+            defExpanded: true,
         },
-    })
-);
+
+        visible: {
+            label: "Visible",
+            defExpanded: true,
+        },
+
+        transform: {
+            label: "Transform",
+            defExpanded: true,
+        },
+
+        texture: {
+            label: "Texture",
+            defExpanded: true,
+            disableMargin: true,
+        },
+
+        tags: {
+            label: "Tags",
+            defExpanded: false,
+        },
+    },
+});
 
 const ZPatchAnchor = z.enum([
     "free",
@@ -1082,326 +927,332 @@ const patchRotationDeps = [
 ];
 
 const ZPatchEffect = ZBaseEffect.extend({
-    name: z.literal("patch").describe(uiDescriptions.none({})),
-    anchor: ZPatchAnchor.describe(
-        uiDescriptions.enum({
-            label: "Anchor",
-            group: "anchor",
-            options: Object.keys(ZPatchAnchor.Values),
-            optionLabels: ZPatchAnchorLabels,
-            defValue: ZFaceAnchor.Values.forehead,
-        })
-    ),
-    visible: ZVisibleType.describe(
-        uiDescriptions.enum({
-            label: "Visible",
-            group: "advanced",
-            options: Object.keys(ZVisibleType.Values),
-            optionLabels: ZVisibleTypeLabels,
-            defValue: ZVisibleType.Values.always,
-        })
-    ),
-    fit: ZPatchFitMode.describe(
-        uiDescriptions.enum({
-            label: "Fit",
-            group: "advanced",
-            options: Object.keys(ZPatchFitMode.Values),
-            optionLabels: ZPatchFitModeLabels,
-            defValue: ZPatchFitMode.Values.none,
-        })
-    ),
-    size: ZArray2D.describe(
-        uiDescriptions.array2d({
-            defValue: [1, 1],
-            label: "Size",
-            group: "transform",
-            dependencies: patchAnchorDeps,
-        })
-    ),
-    offset: ZArray3D.describe(
-        uiDescriptions.array3d({
-            label: "Offset",
-            group: "transform",
-            dependencies: patchAnchorDeps,
-        })
-    ),
-    allow_rotation: ZBool.describe(
-        uiDescriptions.bool({ label: "Allow rotation", group: "anchor" })
-    ),
-    rotation: ZArray3D.describe(
-        uiDescriptions.array3d({
-            label: "Rotation",
-            group: "transform",
-            dependencies: patchAnchorDeps,
-        })
-    ),
+    name: z.literal("patch").describe(uiDescriptions.none),
+    anchor: ZPatchAnchor.describe({
+        ...uiDescriptions.enum,
+        label: "Anchor",
+        group: "anchor",
+        options: Object.keys(ZPatchAnchor.Values),
+        optionLabels: ZPatchAnchorLabels,
+        defValue: ZFaceAnchor.Values.forehead,
+    }),
+    visible: ZVisibleType.describe({
+        ...uiDescriptions.enum,
+        label: "Visible",
+        group: "advanced",
+        options: Object.keys(ZVisibleType.Values),
+        optionLabels: ZVisibleTypeLabels,
+        defValue: ZVisibleType.Values.always,
+    }),
+    fit: ZPatchFitMode.describe({
+        ...uiDescriptions.enum,
+        label: "Fit",
+        group: "advanced",
+        options: Object.keys(ZPatchFitMode.Values),
+        optionLabels: ZPatchFitModeLabels,
+        defValue: ZPatchFitMode.Values.none,
+    }),
+    size: ZArray2D.describe({
+        ...uiDescriptions.array2d,
+        defValue: [1, 1],
+        label: "Size",
+        group: "transform",
+        dependencies: patchAnchorDeps,
+    }),
+    offset: ZArray3D.describe({
+        ...uiDescriptions.array3d,
+        label: "Offset",
+        group: "transform",
+        dependencies: patchAnchorDeps,
+    }),
+    allow_rotation: ZBool.describe({
+        ...uiDescriptions.bool,
+        label: "Allow rotation",
+        group: "anchor",
+    }),
+    rotation: ZArray3D.describe({
+        ...uiDescriptions.array3d,
+        label: "Rotation",
+        group: "transform",
+        dependencies: patchAnchorDeps,
+    }),
     // pass: ZRenderPathAsset({ label: "Render Path" }),
     texture: ZTextureObject,
-}).describe(
-    uiDescriptions.object({
-        label: "Patch",
-        groups: {
-            main: {
-                label: null,
-                defExpanded: true,
-            },
-
-            anchor: {
-                label: "Anchor",
-                defExpanded: true,
-            },
-
-            transform: {
-                label: "Transform",
-                defExpanded: true,
-            },
-
-            texture: {
-                label: "Texture",
-                defExpanded: true,
-                disableMargin: true,
-            },
-
-            tags: {
-                label: "Tags",
-                defExpanded: false,
-            },
-
-            advanced: {
-                label: "Advanced",
-                defExpanded: false,
-            },
+}).describe({
+    ...uiDescriptions.object,
+    label: "Patch",
+    groups: {
+        main: {
+            label: null,
+            defExpanded: true,
         },
-    })
-);
+
+        anchor: {
+            label: "Anchor",
+            defExpanded: true,
+        },
+
+        transform: {
+            label: "Transform",
+            defExpanded: true,
+        },
+
+        texture: {
+            label: "Texture",
+            defExpanded: true,
+            disableMargin: true,
+        },
+
+        tags: {
+            label: "Tags",
+            defExpanded: false,
+        },
+
+        advanced: {
+            label: "Advanced",
+            defExpanded: false,
+        },
+    },
+});
 
 // ZBaseLightEffect.shape.type.removeDefault().Values
 
 const ZBeautifyEffect = ZBaseEffect.extend({
-    name: z.literal("beautify").describe(uiDescriptions.none({})),
-    mix: ZNumberSlider.describe(uiDescriptions.numberSlider({ defValue: 0.65, label: "Mix" })),
-}).describe(
-    uiDescriptions.object({
-        label: "Beautify",
-        groups: {
-            main: {
-                label: "Main",
-                defExpanded: true,
-            },
-            tags: {
-                label: "Tags",
-                defExpanded: false,
-            },
+    name: z.literal("beautify").describe(uiDescriptions.none),
+    mix: ZNumberSlider.describe({ ...uiDescriptions.numberSlider, defValue: 0.65, label: "Mix" }),
+}).describe({
+    ...uiDescriptions.object,
+    label: "Beautify",
+    groups: {
+        main: {
+            label: "Main",
+            defExpanded: true,
         },
-    })
-);
+        tags: {
+            label: "Tags",
+            defExpanded: false,
+        },
+    },
+});
 
 // "lookup": "ColorFilter/lookup.png",
 // "intensity":
 
 const ZColorfilterEffect = ZBaseEffect.extend({
-    name: z.literal("colorfilter").describe(uiDescriptions.none({})),
-    anchor: ZPatchAnchor.describe(
-        uiDescriptions.enum({
-            label: "Anchor",
-            group: "anchor",
-            options: Object.keys(ZPatchAnchor.Values),
-            optionLabels: ZPatchAnchorLabels,
-            defValue: ZFaceAnchor.Values.forehead,
-        })
-    ),
-    visible: ZVisibleType.describe(
-        uiDescriptions.enum({
-            label: "Visible",
-            group: "advanced",
-            options: Object.keys(ZVisibleType.Values),
-            optionLabels: ZVisibleTypeLabels,
-            defValue: ZVisibleType.Values.always,
-        })
-    ),
-    fit: ZPatchFitMode.describe(
-        uiDescriptions.enum({
-            label: "Fit",
-            group: "advanced",
-            options: Object.keys(ZPatchFitMode.Values),
-            optionLabels: ZPatchFitModeLabels,
-            defValue: ZPatchFitMode.Values.none,
-        })
-    ),
-    size: ZArray2D.describe(
-        uiDescriptions.array2d({
-            defValue: [1, 1],
-            label: "Size",
-            group: "transform",
-            dependencies: patchAnchorDeps,
-        })
-    ),
-    offset: ZArray3D.describe(
-        uiDescriptions.array3d({
-            label: "Offset",
-            group: "transform",
-            dependencies: patchAnchorDeps,
-        })
-    ),
-    allow_rotation: ZBool.describe(
-        uiDescriptions.bool({ label: "Allow rotation", group: "anchor" })
-    ),
-    rotation: ZArray3D.describe(
-        uiDescriptions.array3d({
-            label: "Rotation",
-            group: "transform",
-            dependencies: patchAnchorDeps,
-        })
-    ),
+    name: z.literal("colorfilter").describe(uiDescriptions.none),
+    anchor: ZPatchAnchor.describe({
+        ...uiDescriptions.enum,
+        label: "Anchor",
+        group: "anchor",
+        options: Object.keys(ZPatchAnchor.Values),
+        optionLabels: ZPatchAnchorLabels,
+        defValue: ZFaceAnchor.Values.forehead,
+    }),
+    visible: ZVisibleType.describe({
+        ...uiDescriptions.enum,
+        label: "Visible",
+        group: "advanced",
+        options: Object.keys(ZVisibleType.Values),
+        optionLabels: ZVisibleTypeLabels,
+        defValue: ZVisibleType.Values.always,
+    }),
+    fit: ZPatchFitMode.describe({
+        ...uiDescriptions.enum,
+        label: "Fit",
+        group: "advanced",
+        options: Object.keys(ZPatchFitMode.Values),
+        optionLabels: ZPatchFitModeLabels,
+        defValue: ZPatchFitMode.Values.none,
+    }),
+    size: ZArray2D.describe({
+        ...uiDescriptions.array2d,
+        defValue: [1, 1],
+        label: "Size",
+        group: "transform",
+        dependencies: patchAnchorDeps,
+    }),
+    offset: ZArray3D.describe({
+        ...uiDescriptions.array3d,
+        label: "Offset",
+        group: "transform",
+        dependencies: patchAnchorDeps,
+    }),
+    allow_rotation: ZBool.describe({
+        ...uiDescriptions.bool,
+        label: "Allow rotation",
+        group: "anchor",
+    }),
+    rotation: ZArray3D.describe({
+        ...uiDescriptions.array3d,
+        label: "Rotation",
+        group: "transform",
+        dependencies: patchAnchorDeps,
+    }),
 
     lookup: ZTextureAsset({ label: "LUT", group: "colorfilter" }),
-    intensity: ZNumberSlider.describe(
-        uiDescriptions.numberSlider({
-            defValue: 0.75,
-            valueLabel: "%",
-            valueTemplate: (val) => Math.floor(val * 100),
-            label: "Intensity",
-            group: "colorfilter",
-        })
-    ),
-}).describe(
-    uiDescriptions.object({
-        label: "Color filter",
-        groups: {
-            main: {
-                label: null,
-                defExpanded: true,
-            },
-
-            anchor: {
-                label: "Anchor",
-                defExpanded: true,
-            },
-
-            transform: {
-                label: "Transform",
-                defExpanded: true,
-            },
-
-            colorfilter: {
-                label: "Colorfilter",
-                defExpanded: true,
-            },
-
-            tags: {
-                label: "Tags",
-                defExpanded: false,
-            },
-
-            advanced: {
-                label: "Advanced",
-                defExpanded: false,
-            },
+    intensity: ZNumberSlider.describe({
+        ...uiDescriptions.numberSlider,
+        defValue: 0.75,
+        valueLabel: "%",
+        valueTemplate: (val) => Math.floor(val * 100),
+        label: "Intensity",
+        group: "colorfilter",
+    }),
+}).describe({
+    ...uiDescriptions.object,
+    label: "Color filter",
+    groups: {
+        main: {
+            label: null,
+            defExpanded: true,
         },
-    })
-);
+
+        anchor: {
+            label: "Anchor",
+            defExpanded: true,
+        },
+
+        transform: {
+            label: "Transform",
+            defExpanded: true,
+        },
+
+        colorfilter: {
+            label: "Colorfilter",
+            defExpanded: true,
+        },
+
+        tags: {
+            label: "Tags",
+            defExpanded: false,
+        },
+
+        advanced: {
+            label: "Advanced",
+            defExpanded: false,
+        },
+    },
+});
 
 const ZModel3dEffect = ZBaseEffect.extend({
-    name: z.literal("model3d").describe(uiDescriptions.none({})),
-    anchor: ZFaceAnchor.describe(
-        uiDescriptions.enum({
-            label: "Anchor",
-            group: "anchor",
+    name: z.literal("model3d").describe(uiDescriptions.none),
+    anchor: ZFaceAnchor.describe({
+        ...uiDescriptions.enum,
+        label: "Anchor",
+        group: "anchor",
 
-            options: Object.keys(ZFaceAnchor.Values),
-            optionLabels: ZFaceAnchorLabels,
-            defValue: ZFaceAnchor.Values.forehead,
-        })
-    ),
+        options: Object.keys(ZFaceAnchor.Values),
+        optionLabels: ZFaceAnchorLabels,
+        defValue: ZFaceAnchor.Values.forehead,
+    }),
     model: ZModel3dAsset({ label: "Model 3d Asset", group: "model" }),
-    position: ZArray3D.describe(uiDescriptions.array3d({ label: "Position", group: "transform" })),
-    scale: ZArray3D.describe(
-        uiDescriptions.array3d({ defValue: [1, 1, 1], label: "Scale", group: "transform" })
-    ),
-    rotation: ZArray3D.describe(uiDescriptions.array3d({ label: "Rotation", group: "transform" })),
+    position: ZArray3D.describe({
+        ...uiDescriptions.array3d,
+        label: "Position",
+        group: "transform",
+    }),
+    scale: ZArray3D.describe({
+        ...uiDescriptions.array3d,
+        defValue: [1, 1, 1],
+        label: "Scale",
+        group: "transform",
+    }),
+    rotation: ZArray3D.describe({
+        ...uiDescriptions.array3d,
+        label: "Rotation",
+        group: "transform",
+    }),
     material: ZMaterialArray,
-}).describe(
-    uiDescriptions.object({
-        label: "Model 3d",
-        groups: {
-            main: {
-                label: null,
-                defExpanded: true,
-            },
-
-            anchor: {
-                label: "Anchor",
-                defExpanded: true,
-            },
-
-            transform: {
-                label: "Transform",
-                defExpanded: true,
-            },
-            model: {
-                label: "Model",
-                defExpanded: true,
-            },
-            materials: {
-                label: "Materials",
-                defExpanded: true,
-            },
-            tags: {
-                label: "Tags",
-                defExpanded: false,
-            },
+}).describe({
+    ...uiDescriptions.object,
+    label: "Model 3d",
+    groups: {
+        main: {
+            label: null,
+            defExpanded: true,
         },
-    })
-);
+
+        anchor: {
+            label: "Anchor",
+            defExpanded: true,
+        },
+
+        transform: {
+            label: "Transform",
+            defExpanded: true,
+        },
+        model: {
+            label: "Model",
+            defExpanded: true,
+        },
+        materials: {
+            label: "Materials",
+            defExpanded: true,
+        },
+        tags: {
+            label: "Tags",
+            defExpanded: false,
+        },
+    },
+});
 
 const ZPlaneEffect = ZBaseEffect.extend({
-    name: z.literal("plane").describe(uiDescriptions.none({})),
-    anchor: ZFaceAnchor.describe(
-        uiDescriptions.enum({
-            label: "Anchor",
-            group: "anchor",
+    name: z.literal("plane").describe(uiDescriptions.none),
+    anchor: ZFaceAnchor.describe({
+        ...uiDescriptions.enum,
+        label: "Anchor",
+        group: "anchor",
 
-            options: Object.keys(ZFaceAnchor.Values),
-            optionLabels: ZFaceAnchorLabels,
-            defValue: ZFaceAnchor.Values.forehead,
-        })
-    ),
-    position: ZArray3D.describe(uiDescriptions.array3d({ label: "Position", group: "transform" })),
-    scale: ZArray3D.describe(
-        uiDescriptions.array3d({ defValue: [1, 1, 1], lable: "Scale", group: "transform" })
-    ),
-    rotation: ZArray3D.describe(uiDescriptions.array3d({ label: "Rotation", group: "transform" })),
+        options: Object.keys(ZFaceAnchor.Values),
+        optionLabels: ZFaceAnchorLabels,
+        defValue: ZFaceAnchor.Values.forehead,
+    }),
+    position: ZArray3D.describe({
+        ...uiDescriptions.array3d,
+        label: "Position",
+        group: "transform",
+    }),
+    scale: ZArray3D.describe({
+        ...uiDescriptions.array3d,
+        defValue: [1, 1, 1],
+        lable: "Scale",
+        group: "transform",
+    }),
+    rotation: ZArray3D.describe({
+        ...uiDescriptions.array3d,
+        label: "Rotation",
+        group: "transform",
+    }),
     material: ZMaterial,
-}).describe(
-    uiDescriptions.object({
-        label: "Plane",
+}).describe({
+    ...uiDescriptions.object,
+    label: "Plane",
 
-        groups: {
-            main: {
-                label: null,
-                defExpanded: true,
-            },
-
-            anchor: {
-                label: "Anchor",
-                defExpanded: true,
-            },
-
-            transform: {
-                label: "Transform",
-                defExpanded: true,
-            },
-            materials: {
-                label: "Material",
-                defExpanded: true,
-            },
-            tags: {
-                label: "Tags",
-                defExpanded: false,
-            },
+    groups: {
+        main: {
+            label: null,
+            defExpanded: true,
         },
-    })
-);
+
+        anchor: {
+            label: "Anchor",
+            defExpanded: true,
+        },
+
+        transform: {
+            label: "Transform",
+            defExpanded: true,
+        },
+        materials: {
+            label: "Material",
+            defExpanded: true,
+        },
+        tags: {
+            label: "Tags",
+            defExpanded: false,
+        },
+    },
+});
 
 // const ZBaseTest = ZBaseEffect.extend(
 //     {
@@ -1423,11 +1274,11 @@ const ZPlaneEffect = ZBaseEffect.extend({
 //                 type: z.literal("point"),
 //                 position: ZArray3D.default([0, 0, 0]),
 //                 anchor: ZFaceAnchor.describe(
-//                     uiDescriptions.enum({ options: Object.keys(ZFaceAnchor.Values) })
+//                     {...uiDescriptions.enum,  options: Object.keys(ZFaceAnchor.Values) }
 //                 ).default(ZFaceAnchor.Values.forehead),
 //                 range: z.number().default(500.0),
 //             })
-//             .describe(uiDescriptions.object({})),
+//             .describe(uiDescriptions.object),
 
 //         z
 //             .object({
@@ -1439,7 +1290,7 @@ const ZPlaneEffect = ZBaseEffect.extend({
 //                 direction: ZArray3D.default([0, 0, 1]),
 //                 rotation: ZArray3D.default([0, 0, 0]),
 //             })
-//             .describe(uiDescriptions.object({})),
+//             .describe(uiDescriptions.object),
 
 //         z
 //             .object({
@@ -1449,160 +1300,170 @@ const ZPlaneEffect = ZBaseEffect.extend({
 //                 specular_intensity: ZNumberSlider.default(1.0),
 //                 type: z.literal("ambient"),
 //             })
-//             .describe(uiDescriptions.object({})),
+//             .describe(uiDescriptions.object),
 //     ])
-//     .describe(uiDescriptions.union({}));
+//     .describe(uiDescriptions.union);
 
 const ZLightBase = ZBaseEffect.extend({
-    name: z.literal("light").describe(uiDescriptions.none({})),
-    color: ZColor.describe(
-        uiDescriptions.color({ defValue: [1, 1, 1], showAlways: true, label: "Color" })
-    ),
-    brightness: ZNumberSlider.describe(
-        uiDescriptions.numberSlider({ defValue: 1, showAlways: true, label: "Brightness" })
-    ),
-    specular_intensity: ZNumberSlider.describe(
-        uiDescriptions.numberSlider({ defValue: 1, showAlways: true, label: "Specular factor" })
-    ),
+    name: z.literal("light").describe(uiDescriptions.none),
+    color: ZColor.describe({
+        ...uiDescriptions.color,
+        defValue: [1, 1, 1],
+        showAlways: true,
+        label: "Color",
+    }),
+    brightness: ZNumberSlider.describe({
+        ...uiDescriptions.numberSlider,
+        defValue: 1,
+        showAlways: true,
+        label: "Brightness",
+    }),
+    specular_intensity: ZNumberSlider.describe({
+        ...uiDescriptions.numberSlider,
+        defValue: 1,
+        showAlways: true,
+        label: "Specular factor",
+    }),
 });
 
 const ZLightAmbientEffect = ZLightBase.merge(
     z.object({
-        type: z.literal("ambient").describe(
-            uiDescriptions.enum({
-                label: "Type",
-                options: Object.keys(ZLightType.Values),
-                optionLabels: ZLightTypeLabels,
-                defValue: ZLightType.Values.ambient,
-            })
-        ),
+        type: z.literal("ambient").describe({
+            ...uiDescriptions.enum,
+            label: "Type",
+            options: Object.keys(ZLightType.Values),
+            optionLabels: ZLightTypeLabels,
+            defValue: ZLightType.Values.ambient,
+        }),
     })
-).describe(
-    uiDescriptions.object({
-        label: "Light",
-        groups: {
-            main: {
-                label: null,
-                defExpanded: true,
-            },
-
-            tags: {
-                label: "Tags",
-                defExpanded: false,
-            },
+).describe({
+    ...uiDescriptions.object,
+    label: "Light",
+    groups: {
+        main: {
+            label: null,
+            defExpanded: true,
         },
-    })
-);
+
+        tags: {
+            label: "Tags",
+            defExpanded: false,
+        },
+    },
+});
 
 const ZLightDirectEffect = ZLightBase.merge(
     z.object({
-        type: z.literal("direct").describe(
-            uiDescriptions.enum({
-                label: "Type",
-                options: Object.keys(ZLightType.Values),
-                optionLabels: ZLightTypeLabels,
-                defValue: ZLightType.Values.ambient,
-            })
-        ),
-        direction: ZArray3D.describe(
-            uiDescriptions.array3d({ defValue: [0, 0, 1], label: "Direction", group: "transform" })
-        ),
-        rotation: ZArray3D.describe(
-            uiDescriptions.array3d({ label: "Rotation", group: "transform" })
-        ),
+        type: z.literal("direct").describe({
+            ...uiDescriptions.enum,
+            label: "Type",
+            options: Object.keys(ZLightType.Values),
+            optionLabels: ZLightTypeLabels,
+            defValue: ZLightType.Values.ambient,
+        }),
+        direction: ZArray3D.describe({
+            ...uiDescriptions.array3d,
+            defValue: [0, 0, 1],
+            label: "Direction",
+            group: "transform",
+        }),
+        rotation: ZArray3D.describe({
+            ...uiDescriptions.array3d,
+            label: "Rotation",
+            group: "transform",
+        }),
     })
-).describe(
-    uiDescriptions.object({
-        label: "Light",
-        groups: {
-            main: {
-                label: null,
-                defExpanded: true,
-            },
-
-            anchor: {
-                label: "Anchor",
-                defExpanded: true,
-            },
-
-            transform: {
-                label: "Transform",
-                defExpanded: true,
-            },
-
-            tags: {
-                label: "Tags",
-                defExpanded: false,
-            },
+).describe({
+    ...uiDescriptions.object,
+    label: "Light",
+    groups: {
+        main: {
+            label: null,
+            defExpanded: true,
         },
-    })
-);
+
+        anchor: {
+            label: "Anchor",
+            defExpanded: true,
+        },
+
+        transform: {
+            label: "Transform",
+            defExpanded: true,
+        },
+
+        tags: {
+            label: "Tags",
+            defExpanded: false,
+        },
+    },
+});
 
 const ZLightPointEffect = ZLightBase.merge(
     z.object({
-        type: z.literal("point").describe(
-            uiDescriptions.enum({
-                label: "Type",
-                options: Object.keys(ZLightType.Values),
-                optionLabels: ZLightTypeLabels,
-                defValue: ZLightType.Values.ambient,
-            })
-        ),
-        anchor: ZFaceAnchor.describe(
-            uiDescriptions.enum({
-                label: "Anchor",
-                group: "anchor",
-                options: Object.keys(ZFaceAnchor.Values),
-                optionLabels: ZFaceAnchorLabels,
-                defValue: ZFaceAnchor.Values.forehead,
-            })
-        ),
-        range: ZNumberSlider.describe(
-            uiDescriptions.numberSlider({ min: 0.0, max: 2000.0, defValue: 500.0, label: "Range" })
-        ),
-        position: ZArray3D.describe(
-            uiDescriptions.array3d({
-                // dependencies: [
-                //     {
-                //         source: ["stores", "effects"],
-                //         relPath: ["..", "range"],
-                //         postprocess: (_, range, component) => {
-                //             component.disabled = range > 500;
-                //             return null;
-                //         },
-                //     },
-                // ],
-                label: "Position",
-                group: "transform",
-            })
-        ),
+        type: z.literal("point").describe({
+            ...uiDescriptions.enum,
+            label: "Type",
+            options: Object.keys(ZLightType.Values),
+            optionLabels: ZLightTypeLabels,
+            defValue: ZLightType.Values.ambient,
+        }),
+        anchor: ZFaceAnchor.describe({
+            ...uiDescriptions.enum,
+            label: "Anchor",
+            group: "anchor",
+            options: Object.keys(ZFaceAnchor.Values),
+            optionLabels: ZFaceAnchorLabels,
+            defValue: ZFaceAnchor.Values.forehead,
+        }),
+        range: ZNumberSlider.describe({
+            ...uiDescriptions.numberSlider,
+            min: 0.0,
+            max: 2000.0,
+            defValue: 500.0,
+            label: "Range",
+        }),
+        position: ZArray3D.describe({
+            ...uiDescriptions.array3d,
+            // dependencies: [
+            //     {
+            //         source: ["stores", "effects"],
+            //         relPath: ["..", "range"],
+            //         postprocess: (_, range, component) => {
+            //             component.disabled = range > 500;
+            //             return null;
+            //         },
+            //     },
+            // ],
+            label: "Position",
+            group: "transform",
+        }),
     })
-).describe(
-    uiDescriptions.object({
-        label: "Light",
-        groups: {
-            main: {
-                label: null,
-                defExpanded: true,
-            },
-
-            anchor: {
-                label: "Anchor",
-                defExpanded: true,
-            },
-
-            transform: {
-                label: "Transform",
-                defExpanded: true,
-            },
-
-            tags: {
-                label: "Tags",
-                defExpanded: false,
-            },
+).describe({
+    ...uiDescriptions.object,
+    label: "Light",
+    groups: {
+        main: {
+            label: null,
+            defExpanded: true,
         },
-    })
-);
+
+        anchor: {
+            label: "Anchor",
+            defExpanded: true,
+        },
+
+        transform: {
+            label: "Transform",
+            defExpanded: true,
+        },
+
+        tags: {
+            label: "Tags",
+            defExpanded: false,
+        },
+    },
+});
 
 const ZLight = [ZLightAmbientEffect, ZLightDirectEffect, ZLightPointEffect];
 
@@ -1628,110 +1489,45 @@ const ZLight = [ZLightAmbientEffect, ZLightDirectEffect, ZLightPointEffect];
 // console.log(ZLightEffect.parse(testLight))
 
 const ZLiquifiedWarpEffect = ZBaseEffect.extend({
-    name: z.literal("liquifiedwarp").describe(uiDescriptions.none({})),
-    progress: ZNumberSlider.describe(
-        uiDescriptions.numberSlider({ defValue: 1, label: "Progress" })
-    ),
-}).describe(uiDescriptions.object({ label: "Liquified Warp" }));
+    name: z.literal("liquifiedwarp").describe(uiDescriptions.none),
+    progress: ZNumberSlider.describe({
+        ...uiDescriptions.numberSlider,
+        defValue: 1,
+        label: "Progress",
+    }),
+}).describe({ ...uiDescriptions.object, label: "Liquified Warp" });
 
 const ZPostEffectType = z.enum(["blur", "dispersion", "glow", "noise", "sharpen"]);
 const ZPostEffectTypeLabels = ["Blur", "Dispersion", "Glow", "Noise", "Sharpen"];
 
 const ZPostEffectEffect = ZBaseEffect.extend({
-    name: z.literal("posteffect").describe(uiDescriptions.none({})),
-    type: ZPostEffectType.describe(
-        uiDescriptions.enum({
-            label: "Type",
-            options: Object.keys(ZPostEffectType.Values),
-            defValue: ZPostEffectType.Values.sharpen,
-            optionLabels: ZPostEffectTypeLabels,
-        })
-    ),
-    intensity: ZNumberSlider.describe(
-        uiDescriptions.numberSlider({ defValue: 1, label: "Intensity" })
-    ),
-}).describe(
-    uiDescriptions.object({
-        label: "Post effect",
-        groups: {
-            main: {
-                label: "Main",
-                defExpanded: true,
-            },
-            tags: {
-                label: "Tags",
-                defExpanded: false,
-            },
+    name: z.literal("posteffect").describe(uiDescriptions.none),
+    type: ZPostEffectType.describe({
+        ...uiDescriptions.enum,
+        label: "Type",
+        options: Object.keys(ZPostEffectType.Values),
+        defValue: ZPostEffectType.Values.sharpen,
+        optionLabels: ZPostEffectTypeLabels,
+    }),
+    intensity: ZNumberSlider.describe({
+        ...uiDescriptions.numberSlider,
+        defValue: 1,
+        label: "Intensity",
+    }),
+}).describe({
+    ...uiDescriptions.object,
+    label: "Post effect",
+    groups: {
+        main: {
+            label: "Main",
+            defExpanded: true,
         },
-    })
-);
-
-// "name": "liquifiedwarp",
-// "progress": 0.8,
-
-// const lightOptions = z.enum(["A", "B"]);
-// // ZFaceAnchor.describe(
-// //     uiDescriptions.enum({
-// //       options: Object.keys(ZFaceAnchor.Values),
-// //       defValue: ZFaceAnchor.Values.forehead,
-// //     })
-// //   ),
-
-// const lightBase = z.object({
-//   name: z.literal("light").describe(uiDescriptions.none({})),
-// });
-
-// const lightA = lightBase
-//   .merge(
-//     z.object({
-//       //   name: z.literal("light").describe(uiDescriptions.none({})),
-
-//       type: z.literal("A").describe(
-//         uiDescriptions.enum({
-//           options: Object.keys(lightOptions.Values),
-//           defValue: lightOptions.Values.A,
-//         })
-//       ),
-//       param1: z.number().describe(uiDescriptions.numberSlider({ defValue: 1 })),
-//     })
-//   )
-//   .describe(uiDescriptions.object({}));
-
-// const lightB = lightBase
-//   .merge(
-//     z.object({
-//       //   name: z.literal("light").describe(uiDescriptions.none({})),
-
-//       type: z.literal("B").describe(
-//         uiDescriptions.enum({
-//           options: Object.keys(lightOptions.Values),
-//           defValue: lightOptions.Values.A,
-//         })
-//       ),
-//       param1: z.number().describe(uiDescriptions.numberSlider({ defValue: 1 })),
-//       param2: z.number().describe(uiDescriptions.numberSlider({ defValue: 2 })),
-//     })
-//   )
-//   .describe(uiDescriptions.object({}));
-
-// const light = [lightA, lightB];
-// const light = z
-//   .union([lightBase.merge(lightA), lightBase.merge(lightB)])
-//   .describe(uiDescriptions.union({}));
-
-// // light.options[0]
-
-// console.log(
-//   "parse light res",
-
-//   light.parse({
-//     name: "light",
-
-//     type: "B",
-//     param1: 123,
-//     param2: 111,
-//   })
-// );
+        tags: {
+            label: "Tags",
+            defExpanded: false,
+        },
+    },
+});
 
 export const EffectsList = [
     ZFacemodelEffect,
@@ -1749,11 +1545,11 @@ export const EffectsList = [
 
 // export const ZEffect = z
 //     .discriminatedUnion("name", [...EffectsList])
-//     .describe(uiDescriptions.discriminatedUnion({}));
+//     .describe(uiDescriptions.discriminatedUnion);
 
-export const ZEffect = z.union(EffectsList).describe(uiDescriptions.union({}));
+export const ZEffect = z.union(EffectsList).describe(uiDescriptions.union);
 
-export const ZEffects = ZEffect.array().describe(uiDescriptions.array({}));
+export const ZEffects = ZEffect.array().describe(uiDescriptions.array);
 // console.log(ZEffects.safeParse({ name: "facemodel" }))
 
 export const effectNames = [...new Set(ZEffect.options.map((val) => val.shape.name.value))];
@@ -1781,66 +1577,67 @@ effectNames.forEach((name, i) => {
 
 const ZPerspectivePlugin = z
     .object({
-        name: z.literal("perspective").describe(uiDescriptions.none({})),
-        fov: ZNumberSlider.describe(
-            uiDescriptions.numberSlider({
-                min: 30,
-                max: 90,
-                defValue: 30,
-                steps: 15,
-                showAlways: false,
-                label: "Field of view",
-            })
-        ),
-        near_clip: ZNumberSlider.describe(
-            uiDescriptions.numberSlider({
-                min: 0.1,
-                max: 5000,
-                defValue: 0.1,
-                showAlways: false,
-                label: "Near plane",
-            })
-        ),
-        far_clip: ZNumberSlider.describe(
-            uiDescriptions.numberSlider({
-                min: 1,
-                max: 5000,
-                defValue: 3000,
-                steps: 100,
-                showAlways: false,
-                label: "Far plane",
-            })
-        ),
+        name: z.literal("perspective").describe(uiDescriptions.none),
+        fov: ZNumberSlider.describe({
+            ...uiDescriptions.numberSlider,
+            min: 30,
+            max: 90,
+            defValue: 30,
+            steps: 15,
+            showAlways: false,
+            label: "Field of view",
+        }),
+        near_clip: ZNumberSlider.describe({
+            ...uiDescriptions.numberSlider,
+            min: 0.1,
+            max: 5000,
+            defValue: 0.1,
+            showAlways: false,
+            label: "Near plane",
+        }),
+        far_clip: ZNumberSlider.describe({
+            ...uiDescriptions.numberSlider,
+            min: 1,
+            max: 5000,
+            defValue: 3000,
+            steps: 100,
+            showAlways: false,
+            label: "Far plane",
+        }),
     })
-    .describe(uiDescriptions.object({ label: "Perspective" }));
+    .describe({ ...uiDescriptions.object, label: "Perspective" });
 
 const ZMirrorPlugin = z
     .object({
-        name: z.literal("mirror").describe(uiDescriptions.none({})),
-        enabled: ZBool.describe(uiDescriptions.bool({ defValue: true, label: "Enable" })),
-        debug: ZBool.describe(uiDescriptions.bool({ defValue: false, label: "Debug" })),
+        name: z.literal("mirror").describe(uiDescriptions.none),
+        enabled: ZBool.describe({ ...uiDescriptions.bool, defValue: true, label: "Enable" }),
+        debug: ZBool.describe({ ...uiDescriptions.bool, defValue: false, label: "Debug" }),
     })
-    .describe(uiDescriptions.object({ label: "Mirror" }));
+    .describe({ ...uiDescriptions.object, label: "Mirror" });
 
 const ZFixedDetectionPlugin = z
     .object({
-        name: z.literal("fixeddetection").describe(uiDescriptions.none({})),
+        name: z.literal("fixeddetection").describe(uiDescriptions.none),
 
         // !!! need explanation for parameters
-        rotation: ZArray4D.describe(
-            uiDescriptions.array4d({ defValue: [0.1, 0.21, 0.7, 0.2], label: "Rotation" })
-        ),
-        offset: ZNumberSlider.describe(
-            uiDescriptions.numberSlider({ defValue: 0.7, label: "Offset" })
-        ),
+        rotation: ZArray4D.describe({
+            ...uiDescriptions.array4d,
+            defValue: [0.1, 0.21, 0.7, 0.2],
+            label: "Rotation",
+        }),
+        offset: ZNumberSlider.describe({
+            ...uiDescriptions.numberSlider,
+            defValue: 0.7,
+            label: "Offset",
+        }),
     })
-    .describe(uiDescriptions.object({ label: "Detection fix" }));
+    .describe({ ...uiDescriptions.object, label: "Detection fix" });
 
 export const PluginsList = [ZMirrorPlugin, ZPerspectivePlugin, ZFixedDetectionPlugin];
 
-export const ZPlugin = z.union(PluginsList).describe(uiDescriptions.union({}));
+export const ZPlugin = z.union(PluginsList).describe(uiDescriptions.union);
 
-export const ZPlugins = ZPlugin.array().describe(uiDescriptions.array({}));
+export const ZPlugins = ZPlugin.array().describe(uiDescriptions.array);
 // console.log(ZPlugins.safeParse({ name: "facemodel" }))
 
 export const pluginNames = [...new Set(ZPlugin.options.map((val) => val.shape.name.value))];
@@ -1855,15 +1652,9 @@ const UserHintOptionsLabels = [
 ];
 
 const ZEnum = (defValue, label, options = [], optionLabels = [], group = "main") => {
-    return z.enum(options).describe(
-        uiDescriptions.enum({
-            options,
-            optionLabels,
-            defValue,
-            group,
-            label,
-        })
-    );
+    return z
+        .enum(options)
+        .describe({ ...uiDescriptions.enum, options, optionLabels, defValue, group, label });
 };
 
 const ZNumberEnum = (
@@ -1874,16 +1665,15 @@ const ZNumberEnum = (
     optionLabels = [],
     showAlways = false
 ) => {
-    return z.number().describe(
-        uiDescriptions.enum({
-            options,
-            optionLabels,
-            defValue,
-            showAlways,
-            label,
-            group,
-        })
-    );
+    return z.number().describe({
+        ...uiDescriptions.enum,
+        options,
+        optionLabels,
+        defValue,
+        showAlways,
+        label,
+        group,
+    });
 };
 
 const iconInfo = {
@@ -1897,25 +1687,23 @@ const iconInfo = {
     infoHeader: "Icon should meet these requirements :",
     infoErrorHeader: "Errors :",
 };
-const ZIcon = z
-    .string()
-    .describe(
-        uiDescriptions.icon({ info: iconInfo, label: "locale.projectManager.iconControl.label" })
-    );
+const ZIcon = z.string().describe({
+    ...uiDescriptions.icon,
+    info: iconInfo,
+    label: "locale.projectManager.iconControl.label",
+});
 
 const scriptInfo = {
     clickLink: "https://dev.vk.com/ru/masks/development/script-creation",
 };
-const ZMainScriptAsset = z.string().describe(
-    uiDescriptions.mainScript({
-        info: scriptInfo,
-        group: "advanced",
-        label: "locale.projectManager.mainScript.label",
-    })
-);
+const ZMainScriptAsset = z.string().describe({
+    ...uiDescriptions.mainScript,
+    info: scriptInfo,
+    group: "advanced",
+    label: "locale.projectManager.mainScript.label",
+});
 
 const MaskSettings = {
-    // name: ZText.describe(uiDescriptions.text({ defValue: "defaultName", label: "Name" })),
     icon: ZIcon,
     user_hint: ZEnum(
         UserHintOptions[0],
@@ -1925,38 +1713,35 @@ const MaskSettings = {
     ),
     // num_faces: ZNumberEnum(1, "Number faces", "main", [0, 1, 2], ["0", "1", "2"]),
     // facemodel_version: ZNumberEnum(0, "Facemodel version", "Advanced", [0, 1], ["old", "new"]),
-    mouse_input: z.boolean().describe(
-        uiDescriptions.bool({
-            label: "locale.projectManager.mouseInput.label",
-            defValue: false,
-            showAlways: false,
-            group: "permissions",
-        })
-    ),
-    // icon: ZTextureAsset.describe(uiDescriptions.filepath({ ...AssetTypes.texture, label: "Icon" })),
+    mouse_input: z.boolean().describe({
+        ...uiDescriptions.bool,
+        label: "locale.projectManager.mouseInput.label",
+        defValue: false,
+        showAlways: false,
+        group: "permissions",
+    }),
     script: ZMainScriptAsset,
 };
 
 export const ZMaskSettings = z
     .object(MaskSettings)
-    .describe(
-        uiDescriptions.object({
-            groups: {
-                main: {
-                    label: "locale.projectManager.groups.main.label",
-                    defExpanded: true,
-                },
-                permissions: {
-                    label: "locale.projectManager.groups.permissions.label",
-                    defExpanded: false,
-                },
-                advanced: {
-                    label: "locale.projectManager.groups.advanced.label",
-                    defExpanded: false,
-                },
+    .describe({
+        ...uiDescriptions.object,
+        groups: {
+            main: {
+                label: "locale.projectManager.groups.main.label",
+                defExpanded: true,
             },
-        })
-    )
+            permissions: {
+                label: "locale.projectManager.groups.permissions.label",
+                defExpanded: false,
+            },
+            advanced: {
+                label: "locale.projectManager.groups.advanced.label",
+                defExpanded: false,
+            },
+        },
+    })
     .partial();
 
 export const ZMaskConfig = z.object({
