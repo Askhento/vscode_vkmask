@@ -44,9 +44,12 @@
         </div>
         {#if infoOpened && (infoList.length || errors.length)}
             <div use:clickOutside on:click_outside={handleClickOutside} class="info-box-wrapper">
-                <div>{l10n.t(infoHeader)}</div>
+                <div class="info-header-wrapper">
+                    <span class="codicon codicon-info"></span>
+                    <span class="info-header">{l10n.t(infoHeader)}</span>
+                </div>
                 <ul>
-                    {#each infoList as info}
+                    {#each infoList.split("\n") as info}
                         <li class="info-text">
                             {l10n.t(info)}
                         </li>
@@ -54,7 +57,11 @@
                 </ul>
                 {#if errors.length}
                     <vscode-divider role="separator" />
-                    <div>{l10n.t(infoErrorHeader)}</div>
+
+                    <div class="info-header-wrapper">
+                        <span class="codicon codicon-info error"></span>
+                        <span class="info-header">{l10n.t(infoErrorHeader)}</span>
+                    </div>
                     <ul>
                         {#each errors as error}
                             <li class="error">
@@ -95,6 +102,7 @@
         border-radius: var(--global-border-raduis);
         right: 70%;
         top: 70%;
+        z-index: 100;
     }
 
     .info-hit-box {
@@ -113,9 +121,23 @@
         /* pointer-events: none; */
     }
 
+    .info-header-wrapper {
+        display: flex;
+
+        align-content: center;
+    }
+
+    .info-header {
+        margin-left: var(--global-margin);
+    }
+
     ul {
         margin: var(--global-margin);
         padding-left: calc(2 * var(--global-margin));
+    }
+
+    li {
+        margin: var(--global-margin) var(--global-margin);
     }
 
     .info-btn {
