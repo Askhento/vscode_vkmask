@@ -1,0 +1,227 @@
+{
+    "Your extension got activated with the {0} language!": "Расширение активировано с  {0} языком!",
+
+
+    "--- wbviews --- ": " ---- webviews ----",
+
+    "Name": "Имя",
+
+    "User Hint": "Подсказка",
+
+    "Facemodel version": "Версия модели лица",
+    "new": "новая",
+    "old": "старая",
+
+
+    "Mouse input": "Нажатие экрана",
+
+    "Icon": "Иконка",
+    "Upload icon": "Загрузить иконку",
+    "Remove icon": "Удалить иконку",
+
+    "Advanced": "Продвинутые",
+    "Permissions": "Разрешения",
+
+
+
+    "Script": "Скрипт",
+    "Upload main script": "Загрузить главный скрипт",
+    "Upload or create a scirpt file": "Загрузи или создай файл скрипта",
+    "Create main.as": "Создать main.as",
+    "Remove script": "Удалить скрипт",
+
+    " --- enums --- ": " --- enums --- ",
+
+    "Free": "Свободный",
+    "Fullscreen": "Весь экран",
+    "Face": "Лицо",
+    "Eyes": "Глаза",
+    "Right eye": "Правый глаз",
+    "Left eye": "Левый глаз",
+    "Between eyes": "Между глаз",
+    "Forehead": "Лоб",
+    "Nose": "Нос",
+    "Mouth": "Рот",
+    "Right cheek": "Правая щека",
+    "Left cheek": "Левая щека",
+    "Lower lip": "Нижняя губа",
+    "Upper lip": "Верхняя губа",
+
+    "Always": "Всегда",
+    "Animation": "Анимация",
+    "Mouth open": "Открытие рта",
+
+    "Crop": "Обрезать",
+    "Pad": "Заполнить",
+
+    "Point": "Точечный",
+    "Ambient": "Рассеянный",
+    "Direct": "Направленный",
+
+    "None": "Пусто",
+    "Open mouth": "Открой рот",
+    "Tap on screen": "Нажми на экран",
+    "Try with friends": "Попробуй с друзьями",
+    "Start recording": "Начни запись",
+
+    "Replace": "Непрозрачный",
+    "Alpha": "Прозрачность",
+    "Additive": "Аддитивный",
+    "Add alpha": "Аддитивный прозрачный",
+    "Multiply": "Перемножение",
+    "Lighten": "Осветление",
+    "Darken": "Затемнение",
+    "Linear Light": "Линейный свет",
+    "Screen": "Экран",
+    "Overlay": "Перекрытие",
+    "Soft Light": "Мягкий свет",
+    "Soft Light 2": "Мягкий свет 2",
+    "Color Dodge": "Осветление основы",
+    "Color Burn": "Затемнение основы",
+    "Vivid Light": "Яркий свет",
+    "Pin Light": "Точечный свет",
+    "Hard Mix": "Жесткое смешение",
+    "Difference": "Разность",
+    "Exclusion": "Исключение",
+    "Hue": "Цветовой тон",
+    "Saturation": "Насыщенность",
+    "Color": "Цвет",
+    "Luminosity": "Яркость",
+
+    "Matierial": "Материал",
+    "Texture": "Текстура",
+    "LUT": "Таблица цветов",
+    "Diffuse": "Основная",
+    "Normal": "Нормаль",
+    "Lit": "Освещен",
+
+    "Enable": "Включён",
+
+
+    "Allow rotation": "Допускать вращение",
+    "Render Path": "Схема отрисовки",
+    "Render order": "Порядок отрисовки",
+    "Brightness": "Яркость",
+    "Specular factor": "Зеркальность",
+    "Mix": "Смешивание",
+    "Progress": "Прогресс",
+    "Intensity": "Интенсивность",
+    "Type": "Тип",
+
+    "Blend mode": "Режим смешивания",
+    "Anchor": "Точка привязки",
+    "Visible": "Видимость",
+    "Fit": "Подгонка",
+    "Offset": "Смещение",
+    "Debug": "Отладка",
+
+    "Field of view": "Угол обзора",
+    "Near plane": "Ближняя плоскость",
+    "Far plane": "Дальняя плоскость",
+
+    "Upload": "Загрузить",
+    "Remove": "Удалить",
+    "Select asset": "Выбрать ресурс",
+    "No assets available": "Ресурсов не найдено",
+
+    "Transform": "Трансформация",
+    "Rotation": "Вращение",
+    "Scale": "Увеличение",
+    "Size": "Размер",
+    "U transform": "U Трансформация",
+    "V transform": "V Трансформация",
+    "Position": "Позиция",
+
+    "Blur": "Размытие",
+    "Dispersion": "Рассеяние",
+    "Glow": "Свечение",
+    "Noise": "Шум",
+    "Sharpen": "Резкозть",
+
+    "Mouth Open": "Рот открылся",
+    "Mouth Close": "Рот закрылся",
+    "Face Found": "Лицо найдено",
+    "Face Lost": "Лицо потеряно",
+    "Tap": "Нажатие",
+
+
+    "Once": "Один раз", "Loop": "Циклично",
+
+    "Start trigger": "Триггер начала",
+    "Stop trigger": "Триггер остановки",
+    "Fps": "Кадры в секунду",
+
+
+    "Tags": "Тэги",
+    "Tag": "Тэг",
+    "Add tag": "Добавить тэг",
+    "Add new tag": "Добавить новый тэг",
+    "Add new": "Добавить новый",
+    "Add texture": "Добавить текстуру",
+    "Add materials": "Добавить материалы",
+    "Add material": "Добавить материал",
+    "Add animation": "Добавить анимацию",
+
+    "Materials": "Материалы",
+    "material": "материал",
+
+    "Model 3d": "3D Модель",
+    "Model 3d Asset": "Ресурс 3D Модели",
+    "Patch": "Плашка",
+    "Facemodel": "Модель лица",
+    "Beautify": "Бьюти",
+    "Liquified Warp": "Искажение",
+    "Color filter": "Цветовой фильтр",
+    "Plane": "Плоскость",
+    "Light": "Свет",
+    "Post effect": "Пост обработка",
+    "Detection fix": "Фикс позиции лица",
+    "Mirror": "Фикс отзеркаливания",
+    "Perspective": "Перспектива",
+    "Effect": "Эффект",
+    "EFFECT": "ЭФФЕКТ",
+    "PLUGIN": "ПЛАГИН",
+    "EMPTY": "ПУСТО",
+
+    "Nothing selected": "Ничего не выделено",
+    "unkown effect": "неизвестный эффект",
+    "unkown plugin": "неизвестный плагин",
+
+    "Create your first effect!": "Создайте свой первый эффект!",
+    "Create your first plugin!": "Создайте свой первый плагин!",
+
+
+
+    "Icon should meet these requirements :": "Иконка должна соответсвовать требованиям :",
+    "PNG format": "PNG формат",
+    "Should not contain transparent layer": "Не должная содержать прозрачность",
+    "Should preview what masks look like": "Должна передавать содержимое маски ",
+    "Max size 60Kb": "Максимальный размер 60Кбайт",
+    "Used transparency": "Исользована прозрачность",
+    "Maximum size exceeded": "Превышен максимальный размер",
+
+
+    "January": "Январь",
+    "February": "Февраль",
+    "March": "Март",
+    "April": "Апрель",
+    "May": "Май",
+    "June": "Июнь",
+    "July": "Июль",
+    "August": "Август",
+    "September": "Сентябрь",
+    "October": "Октябрь",
+    "November": "Ноябрь",
+    "December": "Декабрь",
+
+
+    "Create new or open existing project": "Создайте новый или откройте существующий проект",
+    "Recent": "Последние",
+    "Create new project": "Создать новый проект",
+    "Open project": "Открыть проект",
+
+    "Click + to add asset": "Нажми + чтобы добавить ресурс",
+    "Click + to add a plugin": "Нажми + чтобы добавить плагин",
+    "Click + to add an effect": "Нажми + чтобы добавить эффект"
+
+}
