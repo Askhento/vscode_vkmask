@@ -30,19 +30,18 @@ jobs:
                     #   platform: alpine
                     #   arch: x64
                     #   npm_config_arch: x64
-                    - os: windows-latest
-                      platform: win32
-                      arch: x64
-                      npm_config_arch: x64
-                    - os: macos-latest
-                      platform: darwin
-                      arch: x64
-                      npm_config_arch: x64
-                    # mix mac and win to keep load minimal
-                    - os: windows-latest
-                      platform: win32
-                      arch: arm64
-                      npm_config_arch: arm
+                    # - os: windows-latest
+                    #   platform: win32
+                    #   arch: x64
+                    #   npm_config_arch: x64
+                    # - os: macos-latest
+                    #   platform: darwin
+                    #   arch: x64
+                    #   npm_config_arch: x64
+                    # - os: windows-latest
+                    #   platform: win32
+                    #   arch: arm64
+                    #   npm_config_arch: arm
                     - os: macos-latest
                       platform: darwin
                       arch: arm64
@@ -53,6 +52,7 @@ jobs:
             - uses: actions/setup-node@v2
               with:
                   node-version: 18.x
+            - run: npm install --arch=${{matrix.arch}} --platform=${{matrix.platform}}  sharp
             - run: npm install
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
