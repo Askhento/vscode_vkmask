@@ -52,10 +52,12 @@ jobs:
             - uses: actions/setup-node@v2
               with:
                   node-version: 18.x
-            - run: npm --cpu=${{matrix.arch}} --platform=${{matrix.platform}} install
+            - run: npm remove sharp #will install sharp separately
+            - run: npm install
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   npm_config_arch: ${{ matrix.npm_config_arch }}
+            - run: npm install --cpu=${{matrix.arch}} --platform=${{matrix.platform}}  sharp
             - shell: pwsh
               run: echo "target=${{ matrix.platform }}-${{ matrix.arch }}" >> $env:GITHUB_ENV
             - run: npx vsce package --target ${{ env.target }}
