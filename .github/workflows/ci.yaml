@@ -52,8 +52,7 @@ jobs:
             - uses: actions/setup-node@v2
               with:
                   node-version: 18.x
-            - run: npm install --cpu=${{matrix.arch}} --platform=${{matrix.platform}}  sharp
-            - run: npm install
+            - run: npm --cpu=${{matrix.arch}} --platform=${{matrix.platform}} install
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   npm_config_arch: ${{ matrix.npm_config_arch }}
