@@ -30,22 +30,22 @@ jobs:
                     #   platform: alpine
                     #   arch: x64
                     #   npm_config_arch: x64
-                    - os: windows-latest
-                      platform: win32
-                      arch: x64
-                      npm_config_arch: x64
-                    - os: macos-latest
-                      platform: darwin
-                      arch: x64
-                      npm_config_arch: x64
+                    # - os: windows-latest
+                    #   platform: win32
+                    #   arch: x64
+                    #   npm_config_arch: x64
+                    # - os: macos-latest
+                    #   platform: darwin
+                    #   arch: x64
+                    #   npm_config_arch: x64
                     - os: windows-latest
                       platform: win32
                       arch: x86
                       npm_config_arch: arm
-                    - os: macos-latest
-                      platform: darwin
-                      arch: arm64
-                      npm_config_arch: arm64
+                    # - os: macos-latest
+                    #   platform: darwin
+                    #   arch: arm64
+                    #   npm_config_arch: arm64
 
         runs-on: ${{ matrix.os }}
         steps:
