@@ -8,7 +8,7 @@
         errors = [],
         clickLink = "#",
         infoHeader = "",
-        infoList = [],
+        infoList = "",
         infoErrorHeader = "",
     } = info;
 
@@ -27,6 +27,8 @@
             infoOpened = false;
         }, 0);
     }
+
+    console.log("INFO LIST", infoList);
 </script>
 
 {#if visible || errors.length}
@@ -38,6 +40,7 @@
                     infoOpened = !infoOpened;
                 }}
                 class="codicon codicon-info"
+                class:darker={infoOpened}
             />
             <!-- <a href={clickLink}>
             </a> -->
@@ -46,12 +49,16 @@
             <div use:clickOutside on:click_outside={handleClickOutside} class="info-box-wrapper">
                 <div class="info-header-wrapper">
                     <span class="codicon codicon-info"></span>
-                    <span class="info-header">{l10n.t(infoHeader)}</span>
+                    <span>
+                        {#each l10n.t(infoHeader).split("\n") as header, i}
+                            <div class="info-header">{header}</div>
+                        {/each}
+                    </span>
                 </div>
                 <ul>
-                    {#each infoList.split("\n") as info}
+                    {#each l10n.t(infoList).split("\n") as info}
                         <li class="info-text">
-                            {l10n.t(info)}
+                            {info}
                         </li>
                     {/each}
                 </ul>
@@ -95,7 +102,10 @@
         position: absolute;
         /* width: var(--global-grid-value-column-size); */
         /* max-width: var(--global-grid-value-column-size); */
-        min-width: max-content;
+        /* min-width: max-content; */
+        width: 80vw;
+        max-width: 335px;
+
         height: fit-content;
         background-color: var(--dropdown-background);
         border: solid 1px var(--vscode-dropdown-border);
@@ -129,6 +139,7 @@
 
     .info-header {
         margin-left: var(--global-margin);
+        text-wrap: wrap;
     }
 
     ul {
@@ -202,8 +213,13 @@
         width: calc(100% + 2 * var(--global-margin));
         margin-left: calc(0px - var(--global-margin));
     }
+
     .icon-wrapper > span:hover {
         opacity: 0.5;
         /* color: var(--badge-background); */
+    }
+
+    .darker {
+        opacity: 0.5;
     }
 </style>

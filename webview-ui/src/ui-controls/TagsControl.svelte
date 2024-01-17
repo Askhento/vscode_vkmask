@@ -35,7 +35,7 @@
                 () => {
                     addTag();
                 },
-                `+ ${l10n.t("locale.controls.tags.buttonAddNewTag")}`,
+                `+ ${l10n.t("locale.controls.tags.buttonAddNewTag.label")}`,
             ],
             ...tagOptions,
         ];
@@ -93,7 +93,7 @@
             <span class="codicon codicon-add" />
             Add new tag
         </vscode-button> -->
-    <Dropdown options={tagOptions} name={"Add tag"} icon="" />
+    <Dropdown options={tagOptions} name={l10n.t("locale.controls.tags.buttonAdd.label")} icon="" />
     {#each tags as tag, index}
         <vscode-text-field
             value={tags[index]}
