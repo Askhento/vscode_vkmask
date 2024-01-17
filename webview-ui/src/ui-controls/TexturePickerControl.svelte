@@ -110,7 +110,7 @@
 </script>
 
 {#if label !== undefined}
-    <span class="label" title={l10n.t(label)}><span>{label}</span></span>
+    <span class="label" title={l10n.t(label)}><span>{l10n.t(label)}</span></span>
 
     <span class="control-wrapper">
         <!-- <div class="value-text">

@@ -58,6 +58,19 @@
         processAssets(payload);
     }
 
+    async function getLocatization() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getLocalization,
+        });
+
+        if (payload) {
+            l10n.config({
+                contents: payload,
+            });
+        }
+    }
+
     // const assetGroupKeys = [
     //     ["json_material", "xml_material"],
     //     ["model3d"],
@@ -69,6 +82,12 @@
         xml_material: "material",
         model3d: "model3d",
         image: "image",
+    };
+
+    const assetLocaleLabels = {
+        material: "locale.assetManager.assetGroups.material.label",
+        model3d: "locale.assetManager.assetGroups.model3d.label",
+        image: "locale.assetManager.assetGroups.image.label",
     };
 
     function processAssets(newAssets) {
@@ -151,6 +170,7 @@
     }
 
     async function init() {
+        await getLocatization();
         await getSelection();
         await getAssets();
 
@@ -181,7 +201,7 @@
                 >
                     <i class="codicon codicon-chevron-{groupData.expanded ? 'down' : 'right'}" />
 
-                    <span>{l10n.t(groupName)}</span>
+                    <span>{l10n.t(assetLocaleLabels[groupName])}</span>
                     <!-- {#if groupName === "material"}
                         <vscode-button
                             class="add-btn"
@@ -210,7 +230,7 @@
             {/each}
             <!-- group -->
         {:else}
-            <p>{l10n.t("Click + to add asset")}</p>
+            <p>{l10n.t("locale.assetManager.emptyAssetsHint")}</p>
         {/if}
     {/key}
 {/key}

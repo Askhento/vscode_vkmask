@@ -21,7 +21,7 @@ sourceMatches.forEach((sourcePath) => {
     for (const m of match) {
         const capturedKey = m[1];
         if (!(capturedKey in mainBundle)) {
-            console.log(`Will found : ${capturedKey}`);
+            console.log(`New key found : ${capturedKey}`);
             mainBundle[capturedKey] = "!!!TRANSLATION_REQUIRED!!!";
         }
     }
@@ -53,21 +53,21 @@ bundles.forEach((bundleName) => {
         bundle[key] = mainBundle[key];
     });
 
-    const oldBundleName = "old." + bundleName;
-    const oldBundlePath = path.join(__dirname, oldBundleName);
-    if (fs.existsSync(oldBundlePath)) {
-        console.log(`Reading : ${oldBundleName}`);
-        const oldBundle = JSON.parse(fs.readFileSync(oldBundlePath));
+    // const oldBundleName = "old." + bundleName;
+    // const oldBundlePath = path.join(__dirname, oldBundleName);
+    // if (fs.existsSync(oldBundlePath)) {
+    //     console.log(`Reading : ${oldBundleName}`);
+    //     const oldBundle = JSON.parse(fs.readFileSync(oldBundlePath));
 
-        Object.keys(bundle).forEach((key) => {
-            if (!(bundle[key] in oldBundle)) return;
-            bundle[key] = oldBundle[bundle[key]];
-            console.log(
-                `\x1b[32m Found key in ${oldBundleName}. \n\t${key} : ${bundle[key]}\x1b[0m`
-            );
-            needUpdate = true;
-        });
-    }
+    //     Object.keys(bundle).forEach((key) => {
+    //         if (!(bundle[key] in oldBundle)) return;
+    //         console.log(
+    //             `\x1b[32m Found old key in ${oldBundleName}. \n\t${key} : ${bundle[key]}\x1b[0m`
+    //         );
+    //         bundle[key] = oldBundle[bundle[key]];
+    //         needUpdate = true;
+    //     });
+    // }
 
     if (needUpdate) {
         console.log(`Writing ${bundleName}`);

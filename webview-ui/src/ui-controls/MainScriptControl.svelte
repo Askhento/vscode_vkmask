@@ -132,7 +132,9 @@
     >
         <div class="value-text">
             {#if value == null}
-                <span class="text-center">{l10n.t("Upload or create a scirpt file")}</span>
+                <span class="text-center"
+                    >{l10n.t("locale.projectManager.mainScript.ActionMissingScript")}</span
+                >
             {:else if scriptAsset}
                 <vscode-link href={getScriptUri()}>{value}</vscode-link>
             {:else}
@@ -151,7 +153,9 @@
                 uploadScript();
             }}
         >
-            <span class="btn-text">{l10n.t("Upload main script")}</span>
+            <span class="btn-text"
+                >{l10n.t("locale.projectManager.mainScript.buttonUpload.label")}</span
+            >
         </vscode-button>
         <vscode-button
             appearance={value == null ? "primary" : "secondary"}
@@ -161,7 +165,9 @@
                 createScript();
             }}
         >
-            <span class="btn-text">{l10n.t("Create main.as")}</span>
+            <span class="btn-text"
+                >{l10n.t("locale.projectManager.mainScript.buttonCreate.label")}</span
+            >;
         </vscode-button>
         <vscode-button
             disabled={value == null || waiting}
@@ -171,7 +177,9 @@
                 removeScript();
             }}
         >
-            <span class="btn-text">{l10n.t("Remove script")}</span>
+            <span class="btn-text"
+                >{l10n.t("locale.projectManager.mainScript.buttonRemove.label")}</span
+            >
         </vscode-button>
         <InfoBox info={params.info} visible={true} />
     </span>

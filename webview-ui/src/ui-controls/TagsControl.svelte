@@ -35,7 +35,7 @@
                 () => {
                     addTag();
                 },
-                `+ ${l10n.t("Add new tag")}`,
+                `+ ${l10n.t("locale.controls.tags.buttonAddNewTag")}`,
             ],
             ...tagOptions,
         ];

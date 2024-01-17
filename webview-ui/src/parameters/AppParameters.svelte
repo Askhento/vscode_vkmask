@@ -653,7 +653,7 @@
                                 on:changed={onChanged}
                             />
                         {:else}
-                            <div>{l10n.t("unkown effect")}</div>
+                            <div>{l10n.t("locale.parameters.unknownEffect")}</div>
                         {/if}
                     {/key}
                 {/if}
@@ -672,7 +672,7 @@
                                 on:changed={onChanged}
                             />
                         {:else}
-                            <div>{l10n.t("unknown plugin")}</div>
+                            <div>{l10n.t("locale.parameters.unknownPlugin")}</div>
                         {/if}
                     {/key}
                 {/if}
@@ -705,14 +705,14 @@
                                 on:changed={onChanged}
                             />
                         {:else}
-                            <div>{l10n.t("unknown asset")}</div>
+                            <div>{l10n.t("locale.parameters.unknownAsset")}</div>
                         {/if}
                     {:else}
                         <InfoTableControl value={asset} />
                     {/if}
                 {/key}
             {:else}
-                <div>{`${l10n.t("Nothing selected")}..`}.</div>
+                <div>{`${l10n.t("locale.parameters.nothingSelected")}..`}.</div>
                 <!-- <pre>{JSON.stringify(selection, null, "\t")}</pre> -->
             {/if}
         {/key}

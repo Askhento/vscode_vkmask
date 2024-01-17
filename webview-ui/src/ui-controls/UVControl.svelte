@@ -204,7 +204,7 @@
 
 <NumberSliderControl
     bind:value={rotation}
-    label={"Rotation"}
+    label={"locale.controls.uvTransform.rotation"}
     {path}
     params={{
         min: -180,
@@ -219,14 +219,14 @@
 <VectorControl
     bind:value={scale}
     {path}
-    label={"Scale"}
+    label={"locale.controls.uvTransform.scale"}
     params={{ valueLabels: ["X", "Y"] }}
     on:changed={scaleChanged}
 />
 <VectorControl
     bind:value={pivot}
     {path}
-    label={"Pivot"}
+    label={"locale.controls.uvTransform.pivot"}
     params={{ valueLabels: ["X", "Y"] }}
     on:changed={() => {}}
 />

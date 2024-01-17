@@ -179,7 +179,7 @@
                 }}
             />
         {:else}
-            <h4>{l10n.t("Click + to add a plugin")}</h4>
+            <h4>{l10n.t("locale.plugins.emptyPluginsHint")}</h4>
         {/if}
     {/key}
 {/key}

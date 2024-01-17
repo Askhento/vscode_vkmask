@@ -60,7 +60,7 @@
 
                     <div class="info-header-wrapper">
                         <span class="codicon codicon-info error"></span>
-                        <span class="info-header">{l10n.t(infoErrorHeader)}</span>
+                        <span class="info-header">{l10n.t(infoErrorHeader) + " :"}</span>
                     </div>
                     <ul>
                         {#each errors as error}

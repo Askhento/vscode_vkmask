@@ -91,9 +91,13 @@
 
         // print(iconAsset);
         let errors = [];
-        if (!isOpaque) errors.push(l10n.t("Used transparency"));
+        if (!isOpaque) errors.push(l10n.t("locale.projectManager.icon.errors.usedTransparency"));
         if (size >= 60000)
-            errors.push(`${l10n.t("Maximum size exceeded")} : ${Math.round(size / 1000)}KB`);
+            errors.push(
+                `${l10n.t("locale.projectManager.icon.errors.maximumSize")} : ${Math.round(
+                    size / 1000
+                )}${l10n.t("locale.units.kiloByte")}`
+            );
         // can modify if needed!
         params.info.errors = errors;
     }
@@ -185,7 +189,9 @@
                     uploadIcon();
                 }}
             >
-                <span class="btn-text">{l10n.t("Upload icon")}</span>
+                <span class="btn-text"
+                    >{l10n.t("locale.projectManager.icon.buttonUpload.label")}</span
+                >
             </vscode-button>
         {:else}
             <vscode-button
@@ -196,7 +202,9 @@
                     removeIcon();
                 }}
             >
-                <span class="btn-text">{l10n.t("Remove icon")}</span>
+                <span class="btn-text"
+                    >{l10n.t("locale.projectManager.icon.buttonRemove.label")}</span
+                >
             </vscode-button>
         {/if}
         <!-- <vscode-button

@@ -52,7 +52,7 @@
 <span class="control-wrapper">
     <div class="display-value">{params.valueTemplate?.(value) ?? value}</div>
     {#if params.valueLabel}
-        <div class="value-label">{params.valueLabel}</div>
+        <div class="value-label">{l10n.t(params.valueLabel)}</div>
     {/if}
     <input
         class="slider"

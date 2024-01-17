@@ -38,18 +38,18 @@
     }
 
     const monthNames = [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December",
+        "locale.months.january",
+        "locale.months.february",
+        "locale.months.march",
+        "locale.months.april",
+        "locale.months.may",
+        "locale.months.june",
+        "locale.months.july",
+        "locale.months.august",
+        "locale.months.september",
+        "locale.months.october",
+        "locale.months.november",
+        "locale.months.december",
     ];
     function formatDate(date: Date) {
         const day = date.getDate();
@@ -75,9 +75,9 @@
 <!-- <p /> -->
 
 <div class="welcome-wrapper">
-    <p>{l10n.t("Create new or open existing project")}.</p>
+    <p>{l10n.t("locale.welcomeScreen.newProjectHint")}.</p>
     <vscode-button on:click={sendCreateNewProject}>
-        <span class="button-text">{l10n.t("Create new project")}</span>
+        <span class="button-text">{l10n.t("locale.welcomeScreen.buttonCreate.label")}</span>
         <!-- <span slot="start" class="codicon codicon-add" /> -->
     </vscode-button>
     <vscode-button
@@ -85,13 +85,13 @@
             sendOpenProject("");
         }}
     >
-        <span class="button-text">{l10n.t("Open project")}</span>
+        <span class="button-text">{l10n.t("locale.welcomeScreen.buttonOpen.label")}</span>
         <!-- <span slot="start" class="codicon codicon-folder-opened" /> -->
     </vscode-button>
 
     {#key recentProjectInfo}
         {#if recentProjectInfo.length}
-            <p>{l10n.t("Recent")}:</p>
+            <p>{l10n.t("locale.welcomeScreen.recentHeader")}:</p>
             {#each recentProjectInfo as info}
                 <div class="recent-projects-wrapper" title={info.path}>
                     <vscode-link

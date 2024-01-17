@@ -114,8 +114,10 @@
         // this is inner slot which stores value of whole element
         if (!controlElement) return;
 
-        let innerText = newValue ?? `${l10n.t("Select asset")}...`;
-        if (!typedAssets.length) innerText = `${l10n.t("No assets available")}...`;
+        let innerText =
+            newValue ?? `${l10n.t("locale.controls.filepicker.selectFilePlaceholder")}...`;
+        if (!typedAssets.length)
+            innerText = `${l10n.t("locale.controls.filepicker.noAssetsAvailable")}...`;
         controlElement.innerText = innerText;
     }
 
@@ -354,7 +356,9 @@
                     uploadAsset();
                 }}
             >
-                <span class="btn-text">{`${l10n.t("Upload")}`}</span>
+                <span class="btn-text"
+                    >{`${l10n.t("locale.controls.filepicker.buttonUpload.label")}`}</span
+                >
             </vscode-button>
 
             {#if currentAsset && currentAsset.projectFile}
@@ -366,7 +370,9 @@
                         selectAsset();
                     }}
                 >
-                    <span class="btn-text">{`${l10n.t("Select")}`}</span>
+                    <span class="btn-text"
+                        >{`${l10n.t("locale.controls.filepicker.buttonSelect.label")}`}</span
+                    >
                 </vscode-button>
             {/if}
 
@@ -378,7 +384,9 @@
                     removeAsset();
                 }}
             >
-                <span class="btn-text">{`${l10n.t("Remove")}`}</span>
+                <span class="btn-text"
+                    >{`${l10n.t("locale.controls.filepicker.buttonRemove.label")}`}</span
+                >
             </vscode-button>
         </span>
     {/key}
