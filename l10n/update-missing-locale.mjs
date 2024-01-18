@@ -35,7 +35,7 @@ const bundles = fs
     .readdirSync(__dirname)
     .filter((file) => file.startsWith("bundle.l10n") && file !== "bundle.l10n.json");
 
-bundles.forEach((bundleName) => {
+function updateBundle(refBundle, bundleName, dryRun = false) {
     console.log(`\nReading ${bundleName} ...`);
     const bundlePath = path.join(__dirname, bundleName);
     const bundle = JSON.parse(fs.readFileSync(bundlePath));
@@ -43,14 +43,15 @@ bundles.forEach((bundleName) => {
     let needUpdate = false;
 
     Object.keys(bundle).forEach((key) => {
-        if (key in mainBundle) return;
+        if (key in refBundle) return;
         console.log(`\x1b[33m Unknown key in ${bundlePath}. \n\t${key} : ${bundle[key]}\x1b[0m`);
     });
 
-    Object.keys(mainBundle).forEach((key) => {
+    Object.keys(refBundle).forEach((key) => {
         if (key in bundle) return;
         needUpdate = true;
-        bundle[key] = mainBundle[key];
+        bundle[key] = refBundle[key];
+        console.log(`Will add key ${key} to ${bundleName}`);
     });
 
     // const oldBundleName = "old." + bundleName;
@@ -70,9 +71,41 @@ bundles.forEach((bundleName) => {
     // }
 
     if (needUpdate) {
+        if (dryRun) return;
         console.log(`Writing ${bundleName}`);
         fs.writeFileSync(bundlePath, JSON.stringify(bundle, null, "\t"));
     } else {
         console.log(`No update required for ${bundleName}.`);
     }
+}
+
+bundles.forEach((bundleName) => {
+    updateBundle(mainBundle, bundleName);
 });
+
+const mainPackgeJSONBundlePath = path.join(__dirname, "..", "package.nls.json");
+const mainPackgeJSONBundle = JSON.parse(fs.readFileSync(mainPackgeJSONBundlePath).toString());
+
+const packageJSON = fs.readFileSync(path.join(__dirname, "..", "package.json")).toString();
+const regexPackageJSON = /%(.+)%/gm;
+
+const match = [...packageJSON.matchAll(regexPackageJSON)];
+for (const m of match) {
+    const capturedKey = m[1];
+    if (!(capturedKey in mainPackgeJSONBundle)) {
+        console.log(`New key found : ${capturedKey}`);
+        mainPackgeJSONBundle[capturedKey] = "!!!TRANSLATION_REQUIRED!!!";
+    }
+}
+
+// console.log(mainBundle);
+console.log(`Writing : package.nls.json`);
+fs.writeFileSync(mainPackgeJSONBundlePath, JSON.stringify(mainPackgeJSONBundle, null, "\t"));
+
+const packageJSONBundles = fs
+    .readdirSync(path.join(__dirname, ".."))
+    .filter((file) => file.startsWith("package.nls") && file !== "package.nls.json");
+
+packageJSONBundles.forEach((bundleName) =>
+    updateBundle(mainPackgeJSONBundle, path.join("..", bundleName), false)
+);

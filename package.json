@@ -5,7 +5,7 @@
     "repository": {
         "url": "https://github.com/Askhento/vscode_vkmask"
     },
-    "description": "UI for vkontakte AR development ",
+    "description": "%extension.description%",
     "version": "0.7.4",
     "engines": {
         "vscode": "^1.74.0"
@@ -26,22 +26,22 @@
                 "vkmask.use-builtins": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Show builtin resources in file pickers"
+                    "description": "%userSettings.useBuiltins.description%"
                 },
                 "vkmask.keep-logs": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Does it require to keep debug logs"
+                    "description": "%userSettings.keepLogs.description%"
                 },
                 "vkmask.output-channel": {
                     "type": "boolean",
                     "default": true,
-                    "description": "Open console ouput at the bottom"
+                    "description": "%userSettings.outputChannel.description%"
                 },
                 "vkmask.experimentalFeatures": {
                     "type": "boolean",
                     "default": false,
-                    "description": "Enable experimental features"
+                    "description": "%userSettings.experimentalFeatures.description%"
 
                 }
             }
@@ -49,17 +49,17 @@
         "submenus": [
             {
                 "icon": "$(add)",
-                "label": "Add effect",
+                "label": "%command.addSubMenuHint.effect.label%",
                 "id": "vkmask.add_effect_submenu"
             },
             {
                 "icon": "$(add)",
-                "label": "Add plugin",
+                "label": "%command.addSubMenuHint.plugin.label%",
                 "id": "vkmask.add_plugin_submenu"
             },
             {
                 "icon": "$(add)",
-                "label": "Add asset",
+                "label": "%command.addSubMenuHint.asset.label%",
                 "id": "vkmask.add_asset_submenu"
             }
         ],
@@ -146,90 +146,85 @@
         "commands": [
             {
                 "command": "vkmask.add_effect.facemodel",
-                "title": "facemodel",
-                "shortTitle": "Add facemodel effect"
+                "title": "%command.addSubMenuHint.effect.facemodel.title%",
+                "shortTitle": "%command.addSubMenuHint.effect.facemodel.shortTtitle%"
             },
             {
                 "command": "vkmask.add_effect.plane",
-                "title": "plane",
-                "shortTitle": "Add plane effect"
+                "title": "%command.addSubMenuHint.effect.plane.title%",
+                "shortTitle": "%command.addSubMenuHint.effect.plane.shortTtitle%"
             },
             {
                 "command": "vkmask.add_effect.model3d",
-                "title": "model3d",
-                "shortTitle": "Add model3d effect"
+                "title": "%command.addSubMenuHint.effect.model3d.title%",
+                "shortTitle": "%command.addSubMenuHint.effect.model3d.shortTtitle%"
             },
             {
                 "command": "vkmask.add_effect.patch",
-                "title": "patch",
-                "shortTitle": "Add patch effect"
+                "title": "%command.addSubMenuHint.effect.patch.title%",
+                "shortTitle": "%command.addSubMenuHint.effect.patch.shortTtitle%"
             },
             {
                 "command": "vkmask.add_effect.light",
-                "title": "light",
-                "shortTitle": "Add light effect"
+                "title": "%command.addSubMenuHint.effect.light.title%",
+                "shortTitle": "%command.addSubMenuHint.effect.light.shortTtitle%"
             },
             {
                 "command": "vkmask.add_effect.beautify",
-                "title": "beautify",
-                "shortTitle": "Add beautify effect"
+                "title": "%command.addSubMenuHint.effect.beautify.title%",
+                "shortTitle": "%command.addSubMenuHint.effect.beautify.shortTtitle%"
             },
             {
                 "command": "vkmask.add_effect.liquifiedwarp",
-                "title": "liquifiedwarp",
-                "shortTitle": "Add liquifiedwarp effect"
+                "title": "%command.addSubMenuHint.effect.liquifiedwarp.title%",
+                "shortTitle": "%command.addSubMenuHint.effect.liquifiedwarp.shortTtitle%"
             },
             {
                 "command": "vkmask.add_effect.colorfilter",
-                "title": "colorfilter",
-                "shortTitle": "Add colorfilter effect"
+                "title": "%command.addSubMenuHint.effect.colorfilter.title%",
+                "shortTitle": "%command.addSubMenuHint.effect.colorfilter.shortTtitle%"
             },
             {
                 "command": "vkmask.add_effect.posteffect",
-                "title": "posteffect",
-                "shortTitle": "Add posteffect effect"
+                "title": "%command.addSubMenuHint.effect.posteffect.title%",
+                "shortTitle": "%command.addSubMenuHint.effect.posteffect.shortTtitle%"
             },
             {
                 "command": "vkmask.add_plugin.mirror",
-                "title": "mirror",
-                "shortTitle": "Add mirror plugin"
+                "title": "%command.addSubMenuHint.plugin.mirror.title%",
+                "shortTitle": "%command.addSubMenuHint.plugin.mirror.shortTtitle%"
             },
             {
                 "command": "vkmask.add_plugin.perspective",
-                "title": "perspective",
-                "shortTitle": "Add perspective plugin"
+                "title": "%command.addSubMenuHint.plugin.perspective.title%",
+                "shortTitle": "%command.addSubMenuHint.plugin.perspective.shortTtitle%"
             },
             {
                 "command": "vkmask.add_plugin.fixeddetection",
-                "title": "fixeddetection",
-                "shortTitle": "Add fixeddetection plugin"
+                "title": "%command.addSubMenuHint.plugin.fixeddetection.title%",
+                "shortTitle": "%command.addSubMenuHint.plugin.fixeddetection.shortTtitle%"
             },
             {
                 "command": "vkmask.add_asset.material",
-                "title": "material",
-                "shortTitle": "Add material asset"
-            },
-            {
-                "command": "vkmask.execute_command_by_id",
-                "title": "execute command by Id",
-                "shortTitle": "execute by id"
+                "title": "%command.addSubMenuHint.asset.material.title%",
+                "shortTitle": "%command.addSubMenuHint.asset.material.shortTtitle%"
             },
             {
                 "command": "vkmask.dumpLogs",
-                "title": "%command.dumpLogs%",
-                "shortTitle": "Dump vkmask logs",
+                "title": "%command.dumpLogs.title%",
+                "shortTitle": "%command.dumpLogs.shortTitle%",
                 "icon": "$(zap)"
             },
             {
                 "command": "vkmask.resetSidebar",
-                "title": "Reset all views in sidebar",
-                "shortTitle": "Reset sidebar",
+                "title": "%command.resetSidebar.title%",
+                "shortTitle": "%command.resetSidebar.shortTitle%",
                 "icon": "$(refresh)"
             },
             {
                 "command": "vkmask.openSettings",
-                "title": "Open vkmask settings tab",
-                "shortTitle": "vkmask settings",
+                "title": "%command.openSettings.title%",
+                "shortTitle": "%command.openSettings.shortTitle%",
                 "icon": "$(settings-gear)"
             }
         ],

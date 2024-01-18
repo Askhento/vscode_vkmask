@@ -79,7 +79,7 @@
 <!-- </div> -->
 {#if params.alpha}
     <NumberSliderControl
-        label={"Alpha"}
+        label={l10n.t("locale.controls.colorPicker.alpha.label")}
         params={{
             min: 0,
             max: 1,
