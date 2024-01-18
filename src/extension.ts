@@ -3,6 +3,7 @@
 
 import * as fs from "fs";
 import * as vscode from "vscode";
+import * as l10n from "@vscode/l10n";
 import { EffectsViewProvider } from "./panels/EffectsViewProvider";
 import { ProjectManagerViewProvider } from "./panels/ProjectManagerViewProvider";
 import { PluginsViewProvider } from "./panels/PluginsViewProvider";
@@ -50,6 +51,8 @@ export async function activate(context: vscode.ExtensionContext) {
     // vscode.window.showInformationMessage(localizedString);
     // selection = { type: SelectionType.empty };
 
+    let l10nBundle = "";
+    checkLocalizationBundle();
     globalThis.selection = { type: SelectionType.empty };
 
     let appState = AppState.loading,
@@ -72,6 +75,27 @@ export async function activate(context: vscode.ExtensionContext) {
             command: RequestCommand.updateSettings,
             payload: currentConfig,
         });
+    });
+    let experimentalFeatures =
+        context.extensionMode === vscode.ExtensionMode.Development ||
+        userSettings.settings["vkmask.experimentalFeatures"].value;
+
+    userSettings.on("configChanged:vkmask.experimentalFeatures", async (experimental) => {
+        // print("settings changed", section);
+
+        experimentalFeatures = experimental.value;
+        const reloadActionLabel = l10n.t("locale.experimentalFeatures.buttonReload.label");
+        const result = await vscode.window.showInformationMessage(
+            l10n.t("locale.experimentalFeatures.infoMessage.header"),
+            {
+                modal: false,
+            },
+            reloadActionLabel
+        );
+
+        if (result === reloadActionLabel) {
+            vscode.commands.executeCommand("workbench.action.reloadWindow");
+        }
     });
 
     maskConfig.on("error", onError);
@@ -152,6 +176,20 @@ export async function activate(context: vscode.ExtensionContext) {
     //     });
     // });
 
+    function checkLocalizationBundle() {
+        l10nBundle = vscode.l10n.bundle;
+        if (!vscode.l10n.uri) {
+            // bundle = fs.readFileSync(vscode.l10n.uri?.fsPath, { encoding: "utf-8" });
+            // default language
+            l10nBundle = fs.readFileSync(
+                path.join(context.extensionPath, "l10n", "bundle.l10n.json"),
+                { encoding: "utf-8" }
+            );
+        }
+
+        l10n.config({ contents: l10nBundle });
+    }
+
     // ? eventually will make a class
     // ? multiple errors could occur
     // ? multiple time  like removed and added config
@@ -214,9 +252,10 @@ export async function activate(context: vscode.ExtensionContext) {
         switch (type) {
             case SelectionType.effect:
                 globalThis.selection = newSelection;
+
                 const isLiquify =
                     (await maskConfig.getEffects()).at(newSelection.id).name === "liquifiedwarp";
-                if (isLiquify) {
+                if (isLiquify && experimentalFeatures) {
                     liquifiedWarpEditorPanel.createOrShow();
                 } else {
                     maskConfig.showEffect(id);
@@ -456,21 +495,12 @@ export async function activate(context: vscode.ExtensionContext) {
 
             case RequestCommand.getLocalization:
                 // Check if a l10n path is configured, if not, we will use the default language
-                print("locale uri : ", vscode.l10n.uri?.fsPath, vscode.env.language);
-                let bundle;
-                if (vscode.l10n.uri?.fsPath) {
-                    bundle = fs.readFileSync(vscode.l10n.uri?.fsPath, { encoding: "utf-8" });
-                } else {
-                    // default language
-                    bundle = fs.readFileSync(
-                        path.join(context.extensionPath, "l10n", "bundle.l10n.json"),
-                        { encoding: "utf-8" }
-                    );
-                }
+                // print("locale uri : ", vscode.l10n.uri?.fsPath, vscode.env.language);
+
                 messageHandler.send({
                     ...data,
                     target: origin,
-                    payload: bundle,
+                    payload: l10nBundle,
                 });
 
                 break;

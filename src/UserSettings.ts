@@ -65,7 +65,7 @@ class UserSettings extends EventEmitter {
             this.settings[section].value = configuration.get(section) ?? "empty";
             this.emitChangedSectionEvent(section);
         });
-        this.emitChangeEvent(); // @deprecated
+        this.emitChangeEvent();
     }
 
     emitChangedSectionEvent(section: string) {
@@ -73,9 +73,6 @@ class UserSettings extends EventEmitter {
         if (this.listenerCount(eventType)) this.emit(eventType, this.settings[section]);
     }
 
-    /**
-     * @deprecated seems kinda useless
-     */
     emitChangeEvent() {
         this.emit("configChanged", this.settings);
     }

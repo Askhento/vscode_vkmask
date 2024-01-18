@@ -37,6 +37,12 @@
                     "type": "boolean",
                     "default": true,
                     "description": "Open console ouput at the bottom"
+                },
+                "vkmask.experimentalFeatures": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable experimental features"
+
                 }
             }
         },
@@ -110,7 +116,8 @@
                     "command": "vkmask.add_effect.beautify"
                 },
                 {
-                    "command": "vkmask.add_effect.liquifiedwarp"
+                    "command": "vkmask.add_effect.liquifiedwarp",
+                    "when": "config.vkmask.experimentalFeatures"
                 },
                 {
                     "command": "vkmask.add_effect.colorfilter"

@@ -11,6 +11,7 @@
     import { logger, logDump } from "../logger";
     // import AddEffect from "./AddEffect.svelte";
     import * as l10n from "@vscode/l10n";
+
     const print = logger("AppEffects.svelte");
     const origin = RequestTarget.effects;
 
@@ -18,9 +19,12 @@
 
     const selection = writable<Selection>({ type: SelectionType.empty });
     const effects = writable([]);
+    const settings = writable([]);
+    let experimentalFeatures = false;
+    const experimentalEffects = new Set(["liquifiedwarp"]);
     const messageHandler = new MessageHandler(handleMessageApp, origin);
 
-    setContext("stores", { selection, effects, messageHandler });
+    setContext("stores", { selection, effects, messageHandler, settings });
 
     function handleMessageApp(data: MessageHandlerData<any>) {
         print("recived ", data);
@@ -38,9 +42,28 @@
                 processSelection(payload);
                 break;
 
+            case RequestCommand.updateSettings:
+                processSettings(payload);
+                break;
+
             default:
                 break;
         }
+    }
+
+    async function getSettings() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getSettings,
+        });
+        processSettings(payload);
+    }
+
+    function processSettings(newSettings) {
+        print("new settings", newSettings);
+        $settings = newSettings;
+        experimentalFeatures = $settings["vkmask.experimentalFeatures"].value;
+        print("EXP", experimentalFeatures);
     }
 
     function returnLogs(data: MessageHandlerData<any>) {
@@ -53,6 +76,9 @@
 
     function processEffects(newEffects) {
         // print("new effects", newEffects);
+        // newEffects = newEffects.filter(
+        //     (effect) => experimentalFeatures || !experimentalEffects.has(effect.name)
+        // );
         $effects = newEffects.map((e, id) => {
             // print("process effect ", id, selection.id === id);
             return {
@@ -163,6 +189,7 @@
         await getLocatization();
         await getEffects();
         await getSelection();
+        getSettings();
     }
 
     // print("INIT");
@@ -171,41 +198,43 @@
 
 <!-- <AddEffect /> -->
 {#key $selection}
-    {#key $effects}
-        {#if $effects.length}
-            <List
-                elements={$effects}
-                elementComponent={Effect}
-                name="Effects"
-                onDrop={(newElements, dragId) => {
-                    // !!! check type of selection
-                    const newId = newElements.findIndex((e) => e.id === dragId);
-                    // print("newId", newId);
-                    let selectionUpdated = false;
-                    if ($selection.type === SelectionType.effect) {
-                        if (dragId === $selection.id) {
-                            // print("selected drag");
-                            $selection.id = newId;
-                            selectionUpdated = true;
-                        } else if (dragId > $selection.id && newId <= $selection.id) {
-                            $selection.id++;
-                            selectionUpdated = true;
-                        } else if (dragId < $selection.id && newId >= $selection.id) {
-                            $selection.id--;
-                            selectionUpdated = true;
+    {#key experimentalFeatures}
+        {#key $effects}
+            {#if $effects.length}
+                <List
+                    elements={$effects}
+                    elementComponent={Effect}
+                    name="Effects"
+                    onDrop={(newElements, dragId) => {
+                        // !!! check type of selection
+                        const newId = newElements.findIndex((e) => e.id === dragId);
+                        // print("newId", newId);
+                        let selectionUpdated = false;
+                        if ($selection.type === SelectionType.effect) {
+                            if (dragId === $selection.id) {
+                                // print("selected drag");
+                                $selection.id = newId;
+                                selectionUpdated = true;
+                            } else if (dragId > $selection.id && newId <= $selection.id) {
+                                $selection.id++;
+                                selectionUpdated = true;
+                            } else if (dragId < $selection.id && newId >= $selection.id) {
+                                $selection.id--;
+                                selectionUpdated = true;
+                            }
                         }
-                    }
-                    if (selectionUpdated) {
-                        $selection = $selection;
-                        sendSelect();
-                    }
-                    $effects = newElements.map((e, index) => ({ ...e, id: index }));
-                    sendEffects();
-                    // console.log("drop", $effects);
-                }}
-            />
-        {:else}
-            <h4>{l10n.t("locale.effects.emptyEffectsHint")}</h4>
-        {/if}
+                        if (selectionUpdated) {
+                            $selection = $selection;
+                            sendSelect();
+                        }
+                        $effects = newElements.map((e, index) => ({ ...e, id: index }));
+                        sendEffects();
+                        // console.log("drop", $effects);
+                    }}
+                />
+            {:else}
+                <h4>{l10n.t("locale.effects.emptyEffectsHint")}</h4>
+            {/if}
+        {/key}
     {/key}
 {/key}

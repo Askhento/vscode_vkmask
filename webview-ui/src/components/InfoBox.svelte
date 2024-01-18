@@ -27,8 +27,6 @@
             infoOpened = false;
         }, 0);
     }
-
-    console.log("INFO LIST", infoList);
 </script>
 
 {#if visible || errors.length}
