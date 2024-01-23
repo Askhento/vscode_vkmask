@@ -159,7 +159,7 @@
                         <span>{l10n.t(groupData.label)}</span>
                     </div>
                 {/if}
-                {#if uiElementsGroupData[groupName].expanded || true}
+                {#if uiElementsGroupData[groupName].expanded}
                     <div
                         class:main-group-bottom-margin={!groupData.disableMargin}
                         class="group-wrapper"

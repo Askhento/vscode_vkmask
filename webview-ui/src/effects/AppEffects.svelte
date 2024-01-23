@@ -63,7 +63,7 @@
         print("new settings", newSettings);
         $settings = newSettings;
         experimentalFeatures = $settings["vkmask.experimentalFeatures"].value;
-        print("EXP", experimentalFeatures);
+        // print("EXP", experimentalFeatures);
     }
 
     function returnLogs(data: MessageHandlerData<any>) {
@@ -198,43 +198,41 @@
 
 <!-- <AddEffect /> -->
 {#key $selection}
-    {#key experimentalFeatures}
-        {#key $effects}
-            {#if $effects.length}
-                <List
-                    elements={$effects}
-                    elementComponent={Effect}
-                    name="Effects"
-                    onDrop={(newElements, dragId) => {
-                        // !!! check type of selection
-                        const newId = newElements.findIndex((e) => e.id === dragId);
-                        // print("newId", newId);
-                        let selectionUpdated = false;
-                        if ($selection.type === SelectionType.effect) {
-                            if (dragId === $selection.id) {
-                                // print("selected drag");
-                                $selection.id = newId;
-                                selectionUpdated = true;
-                            } else if (dragId > $selection.id && newId <= $selection.id) {
-                                $selection.id++;
-                                selectionUpdated = true;
-                            } else if (dragId < $selection.id && newId >= $selection.id) {
-                                $selection.id--;
-                                selectionUpdated = true;
-                            }
+    {#key $effects}
+        {#if $effects.length}
+            <List
+                elements={$effects}
+                elementComponent={Effect}
+                name="Effects"
+                onDrop={(newElements, dragId) => {
+                    // !!! check type of selection
+                    const newId = newElements.findIndex((e) => e.id === dragId);
+                    // print("newId", newId);
+                    let selectionUpdated = false;
+                    if ($selection.type === SelectionType.effect) {
+                        if (dragId === $selection.id) {
+                            // print("selected drag");
+                            $selection.id = newId;
+                            selectionUpdated = true;
+                        } else if (dragId > $selection.id && newId <= $selection.id) {
+                            $selection.id++;
+                            selectionUpdated = true;
+                        } else if (dragId < $selection.id && newId >= $selection.id) {
+                            $selection.id--;
+                            selectionUpdated = true;
                         }
-                        if (selectionUpdated) {
-                            $selection = $selection;
-                            sendSelect();
-                        }
-                        $effects = newElements.map((e, index) => ({ ...e, id: index }));
-                        sendEffects();
-                        // console.log("drop", $effects);
-                    }}
-                />
-            {:else}
-                <h4>{l10n.t("locale.effects.emptyEffectsHint")}</h4>
-            {/if}
-        {/key}
+                    }
+                    if (selectionUpdated) {
+                        $selection = $selection;
+                        sendSelect();
+                    }
+                    $effects = newElements.map((e, index) => ({ ...e, id: index }));
+                    sendEffects();
+                    // console.log("drop", $effects);
+                }}
+            />
+        {:else}
+            <h4>{l10n.t("locale.effects.emptyEffectsHint")}</h4>
+        {/if}
     {/key}
 {/key}
