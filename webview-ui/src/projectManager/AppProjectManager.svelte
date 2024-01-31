@@ -31,11 +31,13 @@
 
     const assets = writable([]);
     const settings = writable([]);
+    const tabInfo = writable({});
+
     let recentProjectInfo: RecentProjectInfo[] = [];
 
     const messageHandler = new MessageHandler(handleMessageApp, origin);
 
-    setContext("stores", { assets, settings, messageHandler });
+    setContext("stores", { assets, settings, messageHandler, tabInfo });
 
     function handleMessageApp(data: MessageHandlerData<any>) {
         print("recived ", data);
@@ -63,6 +65,10 @@
 
             case RequestCommand.getRecentProjectInfo:
                 recentProjectInfo = payload;
+                break;
+
+            case RequestCommand.updateTabInfo:
+                processTabInfo(payload);
                 break;
 
             default:
@@ -137,6 +143,34 @@
         });
     }
 
+    async function getTabInfo() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getTabInfo,
+            payload: {
+                viewId: origin,
+            },
+        });
+
+        processTabInfo(payload);
+    }
+
+    function processTabInfo(newTabInfo) {
+        print("new tabInfo ", newTabInfo);
+        $tabInfo = newTabInfo;
+    }
+
+    function sendTabInfo() {
+        messageHandler.send({
+            command: RequestCommand.updateTabInfo,
+            target: RequestTarget.extension,
+            payload: {
+                viewId: origin,
+                value: $tabInfo,
+            },
+        });
+    }
+
     function returnLogs(data: MessageHandlerData<any>) {
         messageHandler.send({
             ...data,
@@ -153,13 +187,22 @@
 
         let tempSettings = maskSettings;
         changes.forEach(({ path, value, structural }) => {
+            const root = path.shift();
+
+            if (root === "tabInfo") {
+                console.log("sending tabinfo");
+                sendTabInfo();
+                return;
+            }
+
             tempSettings = applyValueByPath2(tempSettings, path, value);
             needRerender = needRerender || structural;
         });
 
+        if (!needRerender) return;
         maskSettings = tempSettings;
         sendMaskSettings();
-        if (true) parseUI();
+        await parseUI();
     }
 
     // $: console.log("mask setting ", maskSettings);
@@ -171,10 +214,12 @@
         maskSettings = oldSettings;
     }
 
-    function parseUI() {
+    async function parseUI() {
         let parseResult = MaskSettingsParserForUI.safeParse(maskSettings);
 
         if (parseResult.success) {
+            await getTabInfo();
+
             uiElements = parseResult.data;
             print(parseResult);
         } else {

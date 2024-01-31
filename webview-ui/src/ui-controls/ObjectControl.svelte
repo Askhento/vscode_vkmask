@@ -1,10 +1,9 @@
-<script context="module">
-</script>
-
 <script>
     import * as l10n from "@vscode/l10n";
-
     import { createEventDispatcher, onMount } from "svelte";
+    import { getContext } from "svelte";
+    //@ts-expect-error
+    const { tabInfo } = getContext("stores");
 
     export let nesting = true;
     export let value;
@@ -43,8 +42,14 @@
         ]);
     }
 
-    let uiElementsVisible = {};
-    let uiElementsHidden = {};
+    function onTab() {
+        dispatch("changed", [
+            {
+                path: ["tabInfo"],
+            },
+        ]);
+    }
+
     let uiElementsGroupData = {};
 
     onMount(() => {
@@ -70,14 +75,21 @@
 
         Object.entries(params.groups).forEach(([groupKey, groupData]) => {
             const { defExpanded, label, disableMargin } = groupData;
+            const tabKey = [...path, groupKey].join(".");
+            if (!(tabKey in $tabInfo)) $tabInfo[tabKey] = defExpanded;
+
+            // console.log(tabKey, $tabInfo[tabKey]);
+
             uiElementsGroupData[groupKey] = {
-                expanded: defExpanded,
+                expanded: $tabInfo[tabKey],
                 disableMargin,
                 label,
                 elements: {},
                 compositionGroups: {},
             };
         });
+
+        // console.log("tabinfo", $tabInfo, path);
 
         Object.entries(uiElements).forEach(([key, el]) => {
             const group = el.uiDescription.group;
@@ -107,10 +119,6 @@
             } else {
                 uiElementsGroupData[group].elements[key] = el;
             }
-
-            let elExpanded = el.uiDescription.groupExpanded ?? true;
-            // if at least one el not expanded then whole grpuop also
-            uiElementsGroupData[group].expanded = uiElementsGroupData[group].expanded && elExpanded;
         });
         // console.log("group data: ", uiElementsGroupData);
     }
@@ -149,7 +157,11 @@
                         on:click={() => {
                             uiElementsGroupData[groupName].expanded =
                                 !uiElementsGroupData[groupName].expanded;
-                            // console.log(groupName, uiElementsGroupData[groupName].expanded);
+
+                            const tabKey = [...path, groupName].join(".");
+                            $tabInfo[tabKey] = uiElementsGroupData[groupName].expanded;
+                            onTab();
+                            // console.log($tabInfo);
                         }}
                     >
                         <i

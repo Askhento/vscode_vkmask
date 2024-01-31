@@ -58,7 +58,7 @@
         <vscode-button
             class="effect-btn"
             appearance="icon"
-            on:click={() => {
+            on:click|stopPropagation={() => {
                 onClickDelete(id);
             }}
         >

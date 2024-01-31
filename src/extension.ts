@@ -39,6 +39,7 @@ import { BaseWebviewProvider } from "./panels/BaseWebviewProvider";
 import { BaseWebviewPanel } from "./panels/BaseWebviewPanel";
 import { delayPromise } from "./utils/delayPromise";
 import { copyRecursiveSync } from "./utils/copyFilesRecursive";
+import { TabInfo } from "./TabInfo";
 
 // import { selection } from "./global";
 
@@ -60,8 +61,9 @@ export async function activate(context: vscode.ExtensionContext) {
     logger.setMode(context.extensionMode);
 
     assetsWatcher.attach(context.extensionPath);
-
     await assetsWatcher.getBuiltinAssets();
+
+    const tabInfo = new TabInfo();
 
     const recentProjectInfo = new RecentProjects(context);
 
@@ -331,7 +333,6 @@ export async function activate(context: vscode.ExtensionContext) {
         switch (command) {
             // simple requests
             case RequestCommand.getAssets:
-                // reply with assets
                 messageHandler.send({
                     ...data,
                     payload: await assetsWatcher.getAssets(true),
@@ -340,7 +341,6 @@ export async function activate(context: vscode.ExtensionContext) {
                 break;
 
             case RequestCommand.readAsset:
-                // reply with assets
                 messageHandler.send({
                     ...data,
                     payload: await assetsWatcher.readAsset(payload.path, payload.assetType),
@@ -349,7 +349,6 @@ export async function activate(context: vscode.ExtensionContext) {
                 break;
 
             case RequestCommand.getSettings:
-                // reply with settings
                 messageHandler.send({
                     ...data,
                     payload: userSettings.getSettings(),
@@ -358,7 +357,6 @@ export async function activate(context: vscode.ExtensionContext) {
                 break;
 
             case RequestCommand.getMaskSettings:
-                // reply with settings
                 messageHandler.send({
                     ...data,
                     payload: await maskConfig.getMaskSettings(),
@@ -367,7 +365,6 @@ export async function activate(context: vscode.ExtensionContext) {
                 break;
 
             case RequestCommand.getEffects:
-                // reply with effects
                 messageHandler.send({
                     ...data,
                     payload: await maskConfig.getEffects(),
@@ -376,7 +373,6 @@ export async function activate(context: vscode.ExtensionContext) {
                 break;
 
             case RequestCommand.getPlugins:
-                // reply with effects
                 messageHandler.send({
                     ...data,
                     payload: await maskConfig.getPlugins(),
@@ -385,7 +381,6 @@ export async function activate(context: vscode.ExtensionContext) {
                 break;
 
             case RequestCommand.getSelection:
-                // reply with effects
                 messageHandler.send({
                     ...data,
                     payload: globalThis.selection,
@@ -393,8 +388,15 @@ export async function activate(context: vscode.ExtensionContext) {
                 });
                 break;
 
+            case RequestCommand.getTabInfo:
+                messageHandler.send({
+                    ...data,
+                    payload: tabInfo.get(payload.viewId),
+                    target: origin,
+                });
+                break;
+
             case RequestCommand.getAppState:
-                // reply with effects
                 messageHandler.send({
                     ...data,
                     target: origin,
@@ -414,7 +416,6 @@ export async function activate(context: vscode.ExtensionContext) {
                 break;
 
             case RequestCommand.getRecentProjectInfo:
-                // reply with effects
                 messageHandler.send({
                     ...data,
                     target: origin,
@@ -439,11 +440,16 @@ export async function activate(context: vscode.ExtensionContext) {
                 sendSelection();
                 break;
 
+            case RequestCommand.updateTabInfo:
+                tabInfo.set(payload.viewId, payload.value);
+                print("new info ext", tabInfo.info);
+                break;
+
             case RequestCommand.updateEffects:
                 maskConfig.updateEffects(payload);
                 sendEffects(
                     [RequestTarget.parameters, RequestTarget.effects].filter((t) => t !== origin)
-                );
+                ); // !!!!!!!!
                 break;
             case RequestCommand.updatePlugins:
                 maskConfig.updatePlugins(payload);
@@ -648,10 +654,41 @@ export async function activate(context: vscode.ExtensionContext) {
     //     }
     // }
 
+    function onAddTabInfo(viewId: string, selectionType: string) {
+        if (globalThis.selection == null || globalThis.selection.type !== selectionType) {
+            return;
+        }
+        const info = tabInfo.get(viewId);
+        const insertId = globalThis.selection.id + 1;
+        Object.keys(info).forEach((tabKey) => {
+            const [root, id, ...rest] = tabKey.split(".");
+            if (+id < insertId) return;
+
+            const newTabKey = [root, +id + 1, ...rest].join(".");
+            info[newTabKey] = info[tabKey];
+            delete info[tabKey]; // !!!! will require sorted keys
+        });
+
+        tabInfo.set(viewId, info);
+        messageHandler.send({
+            target: viewId,
+            command: RequestCommand.updateTabInfo,
+            payload: info,
+        });
+    }
+
     effectNames.forEach((name) => {
         context.subscriptions.push(
             vscode.commands.registerCommand(`vkmask.add_effect.${name}`, async () => {
+                onAddTabInfo(parameters.viewId, SelectionType.effect);
+                messageHandler.send({
+                    target: effects.viewId,
+                    command: RequestCommand.updateTabInfo,
+                    payload: tabInfo.get(effects.viewId),
+                });
+
                 await maskConfig.addEffect(name);
+
                 maskConfig.onFileSave();
                 sendSelection();
             })
@@ -661,6 +698,13 @@ export async function activate(context: vscode.ExtensionContext) {
     pluginNames.forEach((name) => {
         context.subscriptions.push(
             vscode.commands.registerCommand(`vkmask.add_plugin.${name}`, async () => {
+                // !!! plugins don't have tabs for now
+                onAddTabInfo(parameters.viewId, SelectionType.plugin);
+                messageHandler.send({
+                    target: plugins.viewId,
+                    command: RequestCommand.updateTabInfo,
+                    payload: tabInfo.get(plugins.viewId),
+                });
                 await maskConfig.addPlugin(name);
                 maskConfig.onFileSave();
                 sendSelection();

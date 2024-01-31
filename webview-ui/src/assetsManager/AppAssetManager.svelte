@@ -16,6 +16,7 @@
     const messageHandler = new MessageHandler(handleMessageApp, origin);
     const selection = writable();
     const assets = writable([]);
+    const tabInfo = writable({});
     let assetGroups = {};
 
     const assetsDefaults = {
@@ -42,6 +43,10 @@
 
             case RequestCommand.updateSelection:
                 processSelection(payload);
+                break;
+
+            case RequestCommand.updateTabInfo:
+                processTabInfo(payload);
                 break;
 
             default:
@@ -71,6 +76,34 @@
         }
     }
 
+    async function getTabInfo() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getTabInfo,
+            payload: {
+                viewId: origin,
+            },
+        });
+
+        processTabInfo(payload);
+    }
+
+    function processTabInfo(newTabInfo) {
+        print("new tabInfo ", newTabInfo);
+        $tabInfo = newTabInfo;
+    }
+
+    function sendTabInfo() {
+        messageHandler.send({
+            command: RequestCommand.updateTabInfo,
+            target: RequestTarget.extension,
+            payload: {
+                viewId: origin,
+                value: $tabInfo,
+            },
+        });
+    }
+
     // const assetGroupKeys = [
     //     ["json_material", "xml_material"],
     //     ["model3d"],
@@ -98,7 +131,10 @@
         $assets.forEach((asset) => {
             const type = assetTypeMap[asset.type];
             if (!type) return;
-            if (!(type in assetGroups)) assetGroups[type] = { expanded: true, elements: [] };
+            if (!(type in $tabInfo)) $tabInfo[type] = true;
+
+            if (!(type in assetGroups))
+                assetGroups[type] = { expanded: $tabInfo[type], elements: [] };
             assetGroups[type].elements.push(asset);
         });
 
@@ -171,6 +207,7 @@
 
     async function init() {
         await getLocatization();
+        await getTabInfo();
         await getSelection();
         await getAssets();
 
@@ -197,6 +234,10 @@
                     class="group-label"
                     on:click={() => {
                         groupData.expanded = !groupData.expanded;
+
+                        // const tabKey = [groupName].join(".");
+                        $tabInfo[groupName] = groupData.expanded;
+                        sendTabInfo();
                     }}
                 >
                     <i class="codicon codicon-chevron-{groupData.expanded ? 'down' : 'right'}" />

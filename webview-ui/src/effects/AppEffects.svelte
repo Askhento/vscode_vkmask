@@ -5,7 +5,7 @@
     import { MessageHandler } from "../common/MessageHandler";
     import type { MessageHandlerData } from "../common/MessageHandler";
     import List from "../components/DraggableList.svelte";
-    import { RequestTarget, RequestCommand, SelectionType } from "../../../src/types";
+    import { RequestTarget, RequestCommand, SelectionType, ViewIds } from "../../../src/types";
     import type { Selection } from "../../../src/types";
     import Effect from "./Effect.svelte";
     import { logger, logDump } from "../logger";
@@ -20,6 +20,7 @@
     const selection = writable<Selection>({ type: SelectionType.empty });
     const effects = writable([]);
     const settings = writable([]);
+    const tabInfo = writable({});
     let experimentalFeatures = false;
     const experimentalEffects = new Set(["liquifiedwarp"]);
     const messageHandler = new MessageHandler(handleMessageApp, origin);
@@ -44,6 +45,10 @@
 
             case RequestCommand.updateSettings:
                 processSettings(payload);
+                break;
+
+            case RequestCommand.updateTabInfo:
+                processTabInfo(payload);
                 break;
 
             default:
@@ -90,22 +95,42 @@
                     $effects[id].value.disabled = disabled;
                     sendEffects();
                 },
-                onClickDelete: (id) => {
+                onClickDelete: async (deleteId) => {
+                    print("delte effect", deleteId);
+                    await getTabInfo();
+                    Object.keys($tabInfo).forEach((tabKey) => {
+                        const [root, id, ...rest] = tabKey.split(".");
+                        if (+id < deleteId) return;
+                        if (+id === deleteId) {
+                            delete $tabInfo[tabKey];
+                            return;
+                        }
+
+                        const newTabKey = [root, +id - 1, ...rest].join(".");
+                        $tabInfo[newTabKey] = $tabInfo[tabKey];
+                        delete $tabInfo[tabKey];
+                    });
+                    sendTabInfo();
+
                     // print("ondelte", id);
-                    $effects.splice(id, 1);
+                    $effects.splice(deleteId, 1);
+
                     processEffects($effects.map((e) => e.value));
                     sendEffects();
+
                     if ($selection.type === SelectionType.effect) {
-                        if ($selection.id === id) {
+                        if ($selection.id === deleteId) {
                             $selection = { type: SelectionType.empty };
-                        } else if ($selection.id > id) {
+                        } else if ($selection.id > deleteId) {
                             $selection.id--;
                         }
                         $selection = $selection;
+                        print("delete send", $selection);
                         sendSelect();
                     }
                 },
                 onSelect: () => {
+                    print("send on select", $selection);
                     sendSelect();
                 },
             };
@@ -172,6 +197,34 @@
         // print("new selection", $selection);
     }
 
+    async function getTabInfo() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getTabInfo,
+            payload: {
+                viewId: ViewIds.parameters,
+            },
+        });
+
+        processTabInfo(payload);
+    }
+
+    function processTabInfo(newTabInfo) {
+        print("new tabInfo ", newTabInfo);
+        $tabInfo = newTabInfo;
+    }
+
+    function sendTabInfo() {
+        messageHandler.send({
+            command: RequestCommand.updateTabInfo,
+            target: RequestTarget.extension,
+            payload: {
+                viewId: ViewIds.parameters,
+                value: $tabInfo,
+            },
+        });
+    }
+
     async function getLocatization() {
         const { payload } = await messageHandler.request({
             target: RequestTarget.extension,
@@ -204,9 +257,15 @@
                 elements={$effects}
                 elementComponent={Effect}
                 name="Effects"
-                onDrop={(newElements, dragId) => {
+                onDrop={async (newElements, dragId) => {
                     // !!! check type of selection
                     const newId = newElements.findIndex((e) => e.id === dragId);
+                    const dragDir = Math.sign(newId - dragId);
+                    const minEdge = Math.min(newId, dragId);
+                    const maxEdge = Math.max(newId, dragId);
+
+                    if (newId === dragId) return;
+
                     // print("newId", newId);
                     let selectionUpdated = false;
                     if ($selection.type === SelectionType.effect) {
@@ -222,13 +281,44 @@
                             selectionUpdated = true;
                         }
                     }
+
+                    // due to linear lookup
+                    // it is hard to manipulate data in tabinfo
+
+                    await getTabInfo(); // !!!!! add auto update by extension
+
+                    // print("drag", dragId, newId);
+                    const dragTabInfo = {};
+                    print("tabInfo drag before", $tabInfo);
+
+                    Object.keys($tabInfo).forEach((tabKey) => {
+                        const [root, id, ...rest] = tabKey.split(".");
+
+                        if (+id === dragId) {
+                            const newTabKey = [root, newId, ...rest].join(".");
+                            dragTabInfo[newTabKey] = $tabInfo[tabKey];
+                            delete $tabInfo[tabKey];
+                            return;
+                        }
+
+                        if (+id < minEdge || +id > maxEdge) return;
+
+                        const newTabKey = [root, +id - dragDir, ...rest].join(".");
+                        $tabInfo[newTabKey] = $tabInfo[tabKey];
+                        delete $tabInfo[tabKey];
+                    });
+
+                    $tabInfo = { ...$tabInfo, ...dragTabInfo };
+                    print("tabInfo drag after", $tabInfo);
+
+                    sendTabInfo();
+
                     if (selectionUpdated) {
                         $selection = $selection;
                         sendSelect();
                     }
                     $effects = newElements.map((e, index) => ({ ...e, id: index }));
                     sendEffects();
-                    // console.log("drop", $effects);
                 }}
             />
         {:else}

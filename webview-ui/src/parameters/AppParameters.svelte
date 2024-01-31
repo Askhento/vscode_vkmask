@@ -20,7 +20,13 @@
     import { MessageHandler } from "../common/MessageHandler";
     import type { MessageHandlerData } from "../common/MessageHandler";
 
-    import { RequestTarget, RequestCommand, SelectionType, AppState } from "../../../src/types";
+    import {
+        RequestTarget,
+        RequestCommand,
+        SelectionType,
+        AppState,
+        ViewIds,
+    } from "../../../src/types";
     import type { Selection, AppError } from "../../../src/types";
     import { ErrorType } from "../../../src/types";
 
@@ -32,7 +38,6 @@
     import ObjectControl from "../ui-controls/ObjectControl.svelte";
     import {
         EffectParserForUI,
-        MaskSettingsParserForUI,
         PluginParserForUI,
         AssetParserForUI,
     } from "../ui-controls/Controls.js";
@@ -41,6 +46,7 @@
     import { applyValueByPath2 } from "../utils/applyValueByPath";
     import TextControl from "../ui-controls/TextControl.svelte"; // asset name change
     import InfoTableControl from "../ui-controls/InfoTableControl.svelte";
+    import { effect } from "zod";
 
     provideVSCodeDesignSystem().register(allComponents);
 
@@ -51,9 +57,9 @@
     const origin = RequestTarget.parameters;
     let selection: Selection = { type: SelectionType.empty },
         effects = writable([]),
-        plugins,
+        plugins, // !!!!!
+        tabInfo = writable({}),
         asset,
-        maskSettings,
         uiElements,
         selectionName;
 
@@ -86,7 +92,15 @@
     }
 
     const messageHandler = new MessageHandler(handleMessageApp, origin);
-    setContext("stores", { assets, settings, messageHandler, allTags, effects, selection });
+    setContext("stores", {
+        assets,
+        settings,
+        messageHandler,
+        allTags,
+        effects,
+        selection,
+        tabInfo,
+    });
 
     function handleMessageApp(data: MessageHandlerData<any>) {
         print("recived ", data);
@@ -123,6 +137,10 @@
 
             case RequestCommand.updateAssets:
                 processAssets(payload);
+                break;
+
+            case RequestCommand.updateTabInfo:
+                processTabInfo(payload);
                 break;
 
             default:
@@ -166,6 +184,34 @@
     function processSettings(newSettings) {
         print("new settings", newSettings);
         $settings = newSettings;
+    }
+
+    async function getTabInfo() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getTabInfo,
+            payload: {
+                viewId: origin,
+            },
+        });
+
+        processTabInfo(payload);
+    }
+
+    function processTabInfo(newTabInfo) {
+        print("new tabInfo ", newTabInfo);
+        $tabInfo = newTabInfo;
+    }
+
+    function sendTabInfo() {
+        messageHandler.send({
+            command: RequestCommand.updateTabInfo,
+            target: RequestTarget.extension,
+            payload: {
+                viewId: origin,
+                value: $tabInfo,
+            },
+        });
     }
 
     async function getAssets() {
@@ -253,7 +299,6 @@
             case SelectionType.plugin:
                 return pluginNamesSet.has(plugins?.[selection.id]?.name);
 
-            case SelectionType.maskSettings:
             case SelectionType.asset:
                 return true;
 
@@ -296,7 +341,7 @@
         });
     }
 
-    function parseUI() {
+    async function parseUI() {
         error = null;
         appState = AppState.running;
         if (!selectedIsKnown()) {
@@ -315,10 +360,6 @@
                 print("will parse plugin", plugins[selection.id]);
                 parseResult = PluginParserForUI.safeParse(plugins[selection.id]);
                 selectionName = plugins[selection.id]?.name;
-                break;
-            case SelectionType.maskSettings:
-                print("will parse mask settings", maskSettings);
-                parseResult = MaskSettingsParserForUI.safeParse(maskSettings);
                 break;
 
             case SelectionType.asset:
@@ -340,6 +381,8 @@
         }
 
         if (parseResult.success) {
+            await getTabInfo();
+
             uiElements = parseResult.data;
             print("parse result : ", parseResult);
 
@@ -370,6 +413,7 @@
     async function processSelection(newSelection) {
         selectionName = null;
         selection = newSelection;
+        // await getTabInfo();
 
         // print("new selection", selection);
         uiElements = null; // this prevents new effects be applied to old uiElements
@@ -391,7 +435,7 @@
                 return;
         }
 
-        parseUI();
+        await parseUI();
     }
 
     async function onChanged(event) {
@@ -400,51 +444,51 @@
         // Array.isArray()
         //
         let needRerender = false;
+        let action = null; // !!!!!! will not work with different actions
 
-        switch (selection.type) {
-            case SelectionType.effect:
-                let tempEffects = $effects;
-                changes.forEach(({ path, value, structural }) => {
+        changes.forEach(({ path, value, structural }) => {
+            const root = path.shift();
+            // !!!!!!!!!!! split
+            if (root === "tabInfo") {
+                console.log("sending tabinfo");
+                action = sendTabInfo;
+                return;
+            }
+            switch (root) {
+                case SelectionType.effect:
+                    let tempEffects = $effects;
                     tempEffects = applyValueByPath2(tempEffects, path, value);
                     needRerender = needRerender || structural;
-                });
-                $effects = tempEffects;
-                print("updated effects", $effects[selection.id]);
-                sendEffects();
-                break;
+                    $effects = tempEffects;
+                    print("updated effects", $effects[selection.id]);
+                    action = sendEffects;
+                    break;
 
-            case SelectionType.plugin:
-                let tempPlugins = plugins;
-                changes.forEach(({ path, value, structural }) => {
+                case SelectionType.plugin:
+                    let tempPlugins = plugins;
                     tempPlugins = applyValueByPath2(tempPlugins, path, value);
                     needRerender = needRerender || structural;
-                });
-                plugins = tempPlugins;
-                print("updated plugins", plugins);
-                sendPlugins();
-                break;
+                    plugins = tempPlugins;
+                    print("updated plugins", plugins);
+                    action = sendPlugins;
+                    break;
 
-            case SelectionType.asset:
-                let tempAsset = asset;
-                changes.forEach(({ path, value, structural }) => {
+                case SelectionType.asset:
+                    let tempAsset = asset;
                     tempAsset = applyValueByPath2(tempAsset, path, value);
                     needRerender = needRerender || structural;
-                });
-                asset = tempAsset;
-                print("updated assets", asset);
-                writeAsset();
-                break;
+                    asset = tempAsset;
+                    print("updated assets", asset);
+                    action = writeAsset;
+                    break;
 
-            // case SelectionType.maskSettings:
-            //     maskSettings = applyValueByPath2(maskSettings, path, value);
-            //     print("updated maskSettings", maskSettings);
-            //     // sendMaskSettings();
-            //     break;
+                default:
+                    print("selection type not implemented " + selection.type);
+                    break;
+            }
+        });
 
-            default:
-                print("selection type not implemented " + selection.type);
-                break;
-        }
+        if (action) action();
 
         // // send to the app, store does not trigger for some reason
         // dispatch("changed");
@@ -453,7 +497,7 @@
         // // !!!!!!!!!!!!!!!!!!!!!!!!
         if (!needRerender) return;
         print("SHOULD RERENDER");
-        parseUI();
+        await parseUI();
         rerenderParameters();
     }
 
@@ -503,6 +547,7 @@
 
         // let errorPath = ;
 
+        // !!!!  root now included in path
         let errorRootPath;
         switch (selection.type) {
             case SelectionType.effect:
@@ -553,21 +598,6 @@
         selection = oldSelection;
     }
 
-    // function applyValueByPath(obj, path, value) {
-    //     // parts = path.split(".");
-    //     // console.log(obj, path, value);
-    //     if (path.length === 0) {
-    //         obj = value;
-    //         return;
-    //     }
-
-    //     if (path.length === 1) {
-    //         obj[path[0]] = value;
-    //     } else {
-    //         applyValueByPath(obj[path[0]], path.slice(1), value);
-    //     }
-    // }
-
     async function getLocatization() {
         const { payload } = await messageHandler.request({
             target: RequestTarget.extension,
@@ -595,27 +625,6 @@
     init();
 </script>
 
-<!-- <div class="parameters-wrapper">
-  {#if selectedId !== undefined}
-    <div class="parameters-name">Parameters Panel</div>
-    {#if $selection.type === "effect"}
-
-      <ObjectControl
-        expanded={true}
-        value={$effects[selectedId]}
-        label={$effects[selectedId].name}
-        path={[]}
-        uiElements={uiElements.value}
-        on:changed={onChanged}
-      />
-    {:else if $selection.type === "unknownEffect"}
-      <div>unknownEffect</div>
-    {/if}
-  {:else}
-    <div>some error</div>
-  {/if}
-</div> -->
-
 <div class="parameters-wrapper">
     {#if appState === AppState.running}
         {#if $selectionStack.length !== 0}
@@ -638,25 +647,27 @@
         </div> -->
         {#key selection}
             {#if selection.type === SelectionType.effect}
-                {#if $effects}
-                    {#key $effects}
-                        {#if uiElements}
-                            <ObjectControl
-                                expanded={true}
-                                nesting={false}
-                                value={$effects[selection.id]}
-                                label={uiElements.uiDescription.label ??
-                                    $effects[selection.id].name}
-                                params={uiElements.uiDescription}
-                                path={[selection.id]}
-                                uiElements={uiElements.value}
-                                on:changed={onChanged}
-                            />
-                        {:else}
-                            <div>{l10n.t("locale.parameters.unknownEffect")}</div>
-                        {/if}
-                    {/key}
-                {/if}
+                {#key uiElements}
+                    {#if $effects}
+                        {#key $effects}
+                            {#if uiElements}
+                                <ObjectControl
+                                    expanded={true}
+                                    nesting={false}
+                                    value={$effects[selection.id]}
+                                    label={uiElements.uiDescription.label ??
+                                        $effects[selection.id].name}
+                                    params={uiElements.uiDescription}
+                                    path={[SelectionType.effect, selection.id]}
+                                    uiElements={uiElements.value}
+                                    on:changed={onChanged}
+                                />
+                            {:else}
+                                <div>{l10n.t("locale.parameters.unknownEffect")}</div>
+                            {/if}
+                        {/key}
+                    {/if}
+                {/key}
             {:else if selection.type === SelectionType.plugin}
                 {#if plugins}
                     {#key plugins}
@@ -667,7 +678,7 @@
                                 value={plugins[selection.id]}
                                 label={uiElements.uiDescription.label ?? plugins[selection.id].name}
                                 params={uiElements.uiDescription}
-                                path={[selection.id]}
+                                path={[SelectionType.plugin, selection.id]}
                                 uiElements={uiElements.value}
                                 on:changed={onChanged}
                             />
@@ -700,7 +711,7 @@
                                 value={asset}
                                 label={selection.path}
                                 params={uiElements.uiDescription}
-                                path={[]}
+                                path={[SelectionType.asset]}
                                 uiElements={uiElements.value}
                                 on:changed={onChanged}
                             />

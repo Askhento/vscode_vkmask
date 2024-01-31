@@ -19,6 +19,7 @@
     const selection = writable<Selection>({ type: SelectionType.empty });
     const messageHandler = new MessageHandler(handleMessageApp, origin);
     let plugins = writable([]);
+    // !!!! add tabInfo
 
     setContext("stores", { selection, plugins, messageHandler });
 
@@ -155,6 +156,8 @@
                 name="Plugins"
                 onDrop={(newElements, dragId) => {
                     const newId = newElements.findIndex((e) => e.id === dragId);
+                    if (newId === dragId) return;
+
                     // print("newId", newId);
                     let selectionUpdated = false;
                     if ($selection.type === SelectionType.plugin) {

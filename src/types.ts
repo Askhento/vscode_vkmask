@@ -25,10 +25,6 @@ export const RequestCommand = {
     getAppState: "getAppState",
     getRecentProjectInfo: "getRecentProjectInfo",
 
-    readAsset: "readAsset",
-    writeAsset: "writeAsset",
-    renameAsset: "renameAsset",
-
     updateAssets: "updateAssets",
     updateSettings: "updateSettings",
     updateMaskSettings: "updateMaskSettings",
@@ -38,13 +34,21 @@ export const RequestCommand = {
     updateAppState: "updateAppState",
 
     showError: "showError",
-    showLiquifiedWarpEditor: "showLiquifiedWarpEditor",
+    showLiquifiedWarpEditor: "showLiquifiedWarpEditor", // ? showWebviewPanel instead
 
+    readAsset: "readAsset",
+    writeAsset: "writeAsset",
+    renameAsset: "renameAsset",
     getCreatedAssets: "getCreatedAssets",
     getUploadedAsset: "getUploadedAsset",
     removeAsset: "removeAsset",
 
+    getUploadedAsset: "getUploadedAsset",
+
     getLocalization: "getLocalization",
+
+    getTabInfo: "getTabInfo",
+    updateTabInfo: "updateTabInfo",
 
     openProject: "openProject",
     createProject: "createProject",
@@ -63,7 +67,7 @@ export const SelectionType = {
     effect: "EFFECT",
     plugin: "PLUGIN",
     asset: "ASSET",
-    maskSettings: "MASKSETTINGS",
+    // maskSettings: "MASKSETTINGS",
     empty: "EMPTY",
 } as const;
 

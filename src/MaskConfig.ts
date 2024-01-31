@@ -416,7 +416,7 @@ export class MaskConfig extends EventEmitter {
     }
 
     public async addEffect(name: string) {
-        if (!this.maskJSON) return;
+        if (!this.maskJSON) return null;
 
         const effectObjects = this.maskJSON.effects;
 
@@ -443,6 +443,8 @@ export class MaskConfig extends EventEmitter {
 
         // this.maskJSON.effects =;
         await this.updateEffects(effectObjects);
+
+        return effectObjects;
     }
 
     public async addPlugin(name: string) {
@@ -473,6 +475,8 @@ export class MaskConfig extends EventEmitter {
 
         // this.maskJSON.effects =;
         await this.updatePlugins(pluginObjects);
+
+        return pluginObjects;
     }
 
     public async updatePlugins(pluginsObject: object[]) {

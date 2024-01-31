@@ -12,7 +12,9 @@ export function applyDeps(component, stores, dependencies) {
     };
 
     return dependencies.reduce((previous, { source, relPath, postprocess }) => {
-        const relSourcePath = relPath ? resolveRelative(relPath, component.path) : [];
+        const componentPath = [...component.path];
+        componentPath.shift(); // remove root to be able to override in ztypes
+        const relSourcePath = relPath ? resolveRelative(relPath, componentPath) : [];
 
         let dataSource = getValueByPath(dataSources, source);
         if (source[0] === "stores") dataSource = get(dataSource);
