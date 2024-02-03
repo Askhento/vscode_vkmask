@@ -259,7 +259,9 @@ const AssetTypes = {
 };
 
 const ZText = z.string().describe(uiDescriptions.text);
-const ZTags = z.string().describe({ ...uiDescriptions.tags, label: "locale.effects.tags.label" });
+const ZTags = z
+    .string()
+    .describe({ ...uiDescriptions.tags, label: "locale.parameters.tags.label" });
 
 const ZVisibleType = z.enum(["always", "face", "animation", "mouth_open"]);
 const ZVisibleTypeLabels = [
@@ -386,21 +388,21 @@ const ZTextureAnimation = z
         type: ZAnimationType.describe({
             ...uiDescriptions.enum,
 
-            label: "locale.effects.textureAnimation.type.label",
+            label: "locale.parameters.textureAnimation.type.label",
             options: Object.keys(ZAnimationType.Values),
             optionLabels: ZAnimationTypeLabels,
             defValue: ZAnimationType.Values.mouth_open,
         }),
         trigget_start: ZEventTrigger.describe({
             ...uiDescriptions.enum,
-            label: "locale.effects.textureAnimation.triggerStart.label",
+            label: "locale.parameters.textureAnimation.triggerStart.label",
             options: Object.keys(ZEventTrigger.Values),
             optionLabels: ZEventTriggerLabels,
             defValue: ZEventTrigger.Values.mouth_open,
         }),
         trigget_stop: ZEventTrigger.describe({
             ...uiDescriptions.enum,
-            label: "locale.effects.textureAnimation.triggerStop.label",
+            label: "locale.parameters.textureAnimation.triggerStop.label",
             options: Object.keys(ZEventTrigger.Values),
             optionLabels: ZEventTriggerLabels,
             defValue: ZEventTrigger.Values.mouth_close,
@@ -410,14 +412,14 @@ const ZTextureAnimation = z
             defValue: 30,
             min: 0,
             max: 240,
-            valueLabel: "locale.effects.textureAnimation.fps.valueLabel",
+            valueLabel: "locale.parameters.textureAnimation.fps.valueLabel",
             // valueTemplate: (val) => Math.floor(val * 100),
-            label: "locale.effects.textureAnimation.fps.label",
+            label: "locale.parameters.textureAnimation.fps.label",
         }),
     })
     .describe({
         ...uiDescriptions.object,
-        label: "locale.effects.textureAnimation.label",
+        label: "locale.parameters.textureAnimation.label",
         group: "animation",
     });
 
@@ -439,17 +441,17 @@ export const ZTextureObject = z.preprocess(
     },
     z
         .object({
-            diffuse: ZTextureAsset({ label: "locale.effects.texture.diffuse.label" }),
+            diffuse: ZTextureAsset({ label: "locale.parameters.texture.diffuse.label" }),
             blend_mode: ZBlendModes.describe({
                 ...uiDescriptions.enum,
-                label: "locale.effects.texture.blendMode.label",
+                label: "locale.parameters.texture.blendMode.label",
                 options: Object.keys(ZBlendModes.Values),
                 optionLabels: ZBlendModesLabels,
                 defValue: ZBlendModes.Values.replace,
             }),
             color: ZColorAlpha.describe({
                 ...uiDescriptions.colorAlpha,
-                label: "locale.effects.texture.color.label",
+                label: "locale.parameters.texture.color.label",
             }),
             // lit: ZBool.describe(uiDesc riptions.bool({ label: "Lit" })),
             // !!! probably will miss texture property
@@ -457,12 +459,12 @@ export const ZTextureObject = z.preprocess(
             // normal: ZTextureAsset({ label: "Normal" }),
             u_transform: ZArray3D.describe({
                 ...uiDescriptions.uv_transform,
-                label: "locale.effects.texture.uvTransform.label",
+                label: "locale.parameters.texture.uvTransform.label",
                 defValue: [1, 0, 0],
             }),
             v_transform: ZArray3D.describe({
                 ...uiDescriptions.uv_transform,
-                label: "locale.effects.texture.uvTransform.label",
+                label: "locale.parameters.texture.uvTransform.label",
                 defValue: [0, 1, 0],
             }),
             animation: ZTextureAnimation,
@@ -479,7 +481,7 @@ export const ZTextureObject = z.preprocess(
         .describe({
             ...uiDescriptions.object,
             showAlways: false,
-            label: "locale.effects.texture.label",
+            label: "locale.parameters.texture.label",
             group: "texture",
             groups: {
                 main: {
@@ -487,11 +489,11 @@ export const ZTextureObject = z.preprocess(
                     defExpanded: true,
                 },
                 animation: {
-                    label: "locale.effects.texture.groups.animation.label",
+                    label: "locale.parameters.texture.groups.animation.label",
                     defExpanded: false,
                 },
                 uv_transform: {
-                    label: "locale.effects.texture.groups.uvTransform.label",
+                    label: "locale.parameters.texture.groups.uvTransform.label",
                     defExpanded: false,
                 },
             },
@@ -790,35 +792,35 @@ const ZFacemodelEffect = ZBaseEffect.extend({
     mouth: ZBool.describe({
         ...uiDescriptions.bool,
         defValue: true,
-        label: "locale.effects.facemodel.mouth.label",
+        label: "locale.parameters.facemodel.mouth.label",
         group: "visible",
     }),
     eyes: ZBool.describe({
         ...uiDescriptions.bool,
         defValue: true,
-        label: "locale.effects.facemodel.eyes.label",
+        label: "locale.parameters.facemodel.eyes.label",
         group: "visible",
     }),
     position: ZArray3D.describe({
         ...uiDescriptions.array3d,
-        label: "locale.effects.facemodel.position.label",
+        label: "locale.parameters.facemodel.position.label",
         group: "transform",
     }),
     scale: ZArray3D.describe({
         ...uiDescriptions.array3d,
         defValue: [1, 1, 1],
-        label: "locale.effects.facemodel.scale.label",
+        label: "locale.parameters.facemodel.scale.label",
         group: "transform",
     }),
     rotation: ZArray3D.describe({
         ...uiDescriptions.array3d,
-        label: "locale.effects.facemodel.rotation.label",
+        label: "locale.parameters.facemodel.rotation.label",
         group: "transform",
     }),
     texture: ZTextureObject,
 }).describe({
     ...uiDescriptions.object,
-    label: "locale.effects.facemodel.label",
+    label: "locale.parameters.facemodel.label",
     groups: {
         main: {
             label: null,
@@ -826,23 +828,23 @@ const ZFacemodelEffect = ZBaseEffect.extend({
         },
 
         visible: {
-            label: "locale.effects.facemodel.groups.visible.label",
+            label: "locale.parameters.facemodel.groups.visible.label",
             defExpanded: true,
         },
 
         transform: {
-            label: "locale.effects.facemodel.groups.transform.label",
+            label: "locale.parameters.facemodel.groups.transform.label",
             defExpanded: true,
         },
 
         texture: {
-            label: "locale.effects.facemodel.groups.texture.label",
+            label: "locale.parameters.facemodel.groups.texture.label",
             defExpanded: true,
             disableMargin: true,
         },
 
         tags: {
-            label: "locale.effects.facemodel.groups.tags.label",
+            label: "locale.parameters.facemodel.groups.tags.label",
             defExpanded: false,
         },
     },
@@ -906,7 +908,7 @@ const ZPatchEffect = ZBaseEffect.extend({
     name: z.literal("patch").describe(uiDescriptions.none),
     anchor: ZPatchAnchor.describe({
         ...uiDescriptions.enum,
-        label: "locale.effects.patch.anchor.label",
+        label: "locale.parameters.patch.anchor.label",
         group: "anchor",
         options: Object.keys(ZPatchAnchor.Values),
         optionLabels: ZPatchAnchorLabels,
@@ -914,7 +916,7 @@ const ZPatchEffect = ZBaseEffect.extend({
     }),
     visible: ZVisibleType.describe({
         ...uiDescriptions.enum,
-        label: "locale.effects.patch.visible.label",
+        label: "locale.parameters.patch.visible.label",
         group: "advanced",
         options: Object.keys(ZVisibleType.Values),
         optionLabels: ZVisibleTypeLabels,
@@ -922,7 +924,7 @@ const ZPatchEffect = ZBaseEffect.extend({
     }),
     fit: ZPatchFitMode.describe({
         ...uiDescriptions.enum,
-        label: "locale.effects.patch.fit.label",
+        label: "locale.parameters.patch.fit.label",
         group: "advanced",
         options: Object.keys(ZPatchFitMode.Values),
         optionLabels: ZPatchFitModeLabels,
@@ -931,24 +933,24 @@ const ZPatchEffect = ZBaseEffect.extend({
     size: ZArray2D.describe({
         ...uiDescriptions.array2d,
         defValue: [1, 1],
-        label: "locale.effects.patch.size.label",
+        label: "locale.parameters.patch.size.label",
         group: "transform",
         dependencies: patchAnchorDeps,
     }),
     offset: ZArray3D.describe({
         ...uiDescriptions.array3d,
-        label: "locale.effects.patch.offset.label",
+        label: "locale.parameters.patch.offset.label",
         group: "transform",
         dependencies: patchAnchorDeps,
     }),
     allow_rotation: ZBool.describe({
         ...uiDescriptions.bool,
-        label: "locale.effects.patch.allowRotation.label",
+        label: "locale.parameters.patch.allowRotation.label",
         group: "anchor",
     }),
     rotation: ZArray3D.describe({
         ...uiDescriptions.array3d,
-        label: "locale.effects.patch.rotation.label",
+        label: "locale.parameters.patch.rotation.label",
         group: "transform",
         dependencies: patchAnchorDeps,
     }),
@@ -956,7 +958,7 @@ const ZPatchEffect = ZBaseEffect.extend({
     texture: ZTextureObject,
 }).describe({
     ...uiDescriptions.object,
-    label: "locale.effects.patch.label",
+    label: "locale.parameters.patch.label",
     groups: {
         main: {
             label: null,
@@ -964,28 +966,28 @@ const ZPatchEffect = ZBaseEffect.extend({
         },
 
         anchor: {
-            label: "locale.effects.patch.groups.anchor.label",
+            label: "locale.parameters.patch.groups.anchor.label",
             defExpanded: true,
         },
 
         transform: {
-            label: "locale.effects.patch.groups.transform.label",
+            label: "locale.parameters.patch.groups.transform.label",
             defExpanded: true,
         },
 
         texture: {
-            label: "locale.effects.patch.groups.texture.label",
+            label: "locale.parameters.patch.groups.texture.label",
             defExpanded: true,
             disableMargin: true,
         },
 
         tags: {
-            label: "locale.effects.patch.groups.tags.label",
+            label: "locale.parameters.patch.groups.tags.label",
             defExpanded: false,
         },
 
         advanced: {
-            label: "locale.effects.patch.groups.advanced.label",
+            label: "locale.parameters.patch.groups.advanced.label",
             defExpanded: false,
         },
     },
@@ -998,18 +1000,18 @@ const ZBeautifyEffect = ZBaseEffect.extend({
     mix: ZNumberSlider.describe({
         ...uiDescriptions.numberSlider,
         defValue: 0.65,
-        label: "locale.effects.beautify.mix.label",
+        label: "locale.parameters.beautify.mix.label",
     }),
 }).describe({
     ...uiDescriptions.object,
-    label: "locale.effects.beautify.label",
+    label: "locale.parameters.beautify.label",
     groups: {
         main: {
-            label: "locale.effects.beautify.groups.main.label",
+            label: "locale.parameters.beautify.groups.main.label",
             defExpanded: true,
         },
         tags: {
-            label: "locale.effects.beautify.groups.tags.label",
+            label: "locale.parameters.beautify.groups.tags.label",
             defExpanded: false,
         },
     },
@@ -1022,7 +1024,7 @@ const ZColorfilterEffect = ZBaseEffect.extend({
     name: z.literal("colorfilter").describe(uiDescriptions.none),
     anchor: ZPatchAnchor.describe({
         ...uiDescriptions.enum,
-        label: "locale.effects.colorFilter.anchor.label",
+        label: "locale.parameters.colorFilter.anchor.label",
         group: "anchor",
         options: Object.keys(ZPatchAnchor.Values),
         optionLabels: ZPatchAnchorLabels,
@@ -1030,7 +1032,7 @@ const ZColorfilterEffect = ZBaseEffect.extend({
     }),
     visible: ZVisibleType.describe({
         ...uiDescriptions.enum,
-        label: "locale.effects.colorFilter.visible.label",
+        label: "locale.parameters.colorFilter.visible.label",
         group: "advanced",
         options: Object.keys(ZVisibleType.Values),
         optionLabels: ZVisibleTypeLabels,
@@ -1038,7 +1040,7 @@ const ZColorfilterEffect = ZBaseEffect.extend({
     }),
     fit: ZPatchFitMode.describe({
         ...uiDescriptions.enum,
-        label: "locale.effects.colorFilter.fit.label",
+        label: "locale.parameters.colorFilter.fit.label",
         group: "advanced",
         options: Object.keys(ZPatchFitMode.Values),
         optionLabels: ZPatchFitModeLabels,
@@ -1047,40 +1049,43 @@ const ZColorfilterEffect = ZBaseEffect.extend({
     size: ZArray2D.describe({
         ...uiDescriptions.array2d,
         defValue: [1, 1],
-        label: "locale.effects.colorFilter.size.label",
+        label: "locale.parameters.colorFilter.size.label",
         group: "transform",
         dependencies: patchAnchorDeps,
     }),
     offset: ZArray3D.describe({
         ...uiDescriptions.array3d,
-        label: "locale.effects.colorFilter.offset.label",
+        label: "locale.parameters.colorFilter.offset.label",
         group: "transform",
         dependencies: patchAnchorDeps,
     }),
     allow_rotation: ZBool.describe({
         ...uiDescriptions.bool,
-        label: "locale.effects.colorFilter.allowRotation.label",
+        label: "locale.parameters.colorFilter.allowRotation.label",
         group: "anchor",
     }),
     rotation: ZArray3D.describe({
         ...uiDescriptions.array3d,
-        label: "locale.effects.colorFilter.rotation.label",
+        label: "locale.parameters.colorFilter.rotation.label",
         group: "transform",
         dependencies: patchAnchorDeps,
     }),
 
-    lookup: ZTextureAsset({ label: "locale.effects.colorFilter.lut.label", group: "colorfilter" }),
+    lookup: ZTextureAsset({
+        label: "locale.parameters.colorFilter.lut.label",
+        group: "colorfilter",
+    }),
     intensity: ZNumberSlider.describe({
         ...uiDescriptions.numberSlider,
         defValue: 0.75,
-        valueLabel: "locale.effects.colorFilter.intensity.valueLabel",
+        valueLabel: "locale.parameters.colorFilter.intensity.valueLabel",
         valueTemplate: (val) => Math.floor(val * 100),
-        label: "locale.effects.colorFilter.intensity.label",
+        label: "locale.parameters.colorFilter.intensity.label",
         group: "colorfilter",
     }),
 }).describe({
     ...uiDescriptions.object,
-    label: "locale.effects.colorFilter.label",
+    label: "locale.parameters.colorFilter.label",
     groups: {
         main: {
             label: null,
@@ -1088,27 +1093,27 @@ const ZColorfilterEffect = ZBaseEffect.extend({
         },
 
         anchor: {
-            label: "locale.effects.colorFilter.groups.anchor.label",
+            label: "locale.parameters.colorFilter.groups.anchor.label",
             defExpanded: true,
         },
 
         transform: {
-            label: "locale.effects.colorFilter.groups.transform.label",
+            label: "locale.parameters.colorFilter.groups.transform.label",
             defExpanded: true,
         },
 
         colorfilter: {
-            label: "locale.effects.colorFilter.groups.colorfilter.label",
+            label: "locale.parameters.colorFilter.groups.colorfilter.label",
             defExpanded: true,
         },
 
         tags: {
-            label: "locale.effects.colorFilter.groups.tags.label",
+            label: "locale.parameters.colorFilter.groups.tags.label",
             defExpanded: false,
         },
 
         advanced: {
-            label: "locale.effects.colorFilter.groups.advanced.label",
+            label: "locale.parameters.colorFilter.groups.advanced.label",
             defExpanded: false,
         },
     },
@@ -1118,34 +1123,34 @@ const ZModel3dEffect = ZBaseEffect.extend({
     name: z.literal("model3d").describe(uiDescriptions.none),
     anchor: ZFaceAnchor.describe({
         ...uiDescriptions.enum,
-        label: "locale.effects.model3d.anchor.label",
+        label: "locale.parameters.model3d.anchor.label",
         group: "anchor",
 
         options: Object.keys(ZFaceAnchor.Values),
         optionLabels: ZFaceAnchorLabels,
         defValue: ZFaceAnchor.Values.forehead,
     }),
-    model: ZModel3dAsset({ label: "locale.effects.model3d.model.label", group: "model" }),
+    model: ZModel3dAsset({ label: "locale.parameters.model3d.model.label", group: "model" }),
     position: ZArray3D.describe({
         ...uiDescriptions.array3d,
-        label: "locale.effects.model3d.position.label",
+        label: "locale.parameters.model3d.position.label",
         group: "transform",
     }),
     scale: ZArray3D.describe({
         ...uiDescriptions.array3d,
         defValue: [1, 1, 1],
-        label: "locale.effects.model3d.scale.label",
+        label: "locale.parameters.model3d.scale.label",
         group: "transform",
     }),
     rotation: ZArray3D.describe({
         ...uiDescriptions.array3d,
-        label: "locale.effects.model3d.rotation.label",
+        label: "locale.parameters.model3d.rotation.label",
         group: "transform",
     }),
     material: ZMaterialArray,
 }).describe({
     ...uiDescriptions.object,
-    label: "locale.effects.model3d.label",
+    label: "locale.parameters.model3d.label",
     groups: {
         main: {
             label: null,
@@ -1153,24 +1158,24 @@ const ZModel3dEffect = ZBaseEffect.extend({
         },
 
         anchor: {
-            label: "locale.effects.model3d.groups.anchor.label",
+            label: "locale.parameters.model3d.groups.anchor.label",
             defExpanded: true,
         },
 
         transform: {
-            label: "locale.effects.model3d.groups.transform.label",
+            label: "locale.parameters.model3d.groups.transform.label",
             defExpanded: true,
         },
         model: {
-            label: "locale.effects.model3d.groups.model.label",
+            label: "locale.parameters.model3d.groups.model.label",
             defExpanded: true,
         },
         materials: {
-            label: "locale.effects.model3d.groups.materials.label",
+            label: "locale.parameters.model3d.groups.materials.label",
             defExpanded: true,
         },
         tags: {
-            label: "locale.effects.model3d.groups.tags.label",
+            label: "locale.parameters.model3d.groups.tags.label",
             defExpanded: false,
         },
     },
@@ -1180,7 +1185,7 @@ const ZPlaneEffect = ZBaseEffect.extend({
     name: z.literal("plane").describe(uiDescriptions.none),
     anchor: ZFaceAnchor.describe({
         ...uiDescriptions.enum,
-        label: "locale.effects.plane.anchor.label",
+        label: "locale.parameters.plane.anchor.label",
         group: "anchor",
 
         options: Object.keys(ZFaceAnchor.Values),
@@ -1189,24 +1194,24 @@ const ZPlaneEffect = ZBaseEffect.extend({
     }),
     position: ZArray3D.describe({
         ...uiDescriptions.array3d,
-        label: "locale.effects.plane.position.label",
+        label: "locale.parameters.plane.position.label",
         group: "transform",
     }),
     scale: ZArray3D.describe({
         ...uiDescriptions.array3d,
         defValue: [1, 1, 1],
-        label: "locale.effects.plane.scale.label",
+        label: "locale.parameters.plane.scale.label",
         group: "transform",
     }),
     rotation: ZArray3D.describe({
         ...uiDescriptions.array3d,
-        label: "locale.effects.plane.rotation.label",
+        label: "locale.parameters.plane.rotation.label",
         group: "transform",
     }),
     material: ZMaterial,
 }).describe({
     ...uiDescriptions.object,
-    label: "locale.effects.plane.label",
+    label: "locale.parameters.plane.label",
 
     groups: {
         main: {
@@ -1215,20 +1220,20 @@ const ZPlaneEffect = ZBaseEffect.extend({
         },
 
         anchor: {
-            label: "locale.effects.plane.groups.anchor.label",
+            label: "locale.parameters.plane.groups.anchor.label",
             defExpanded: true,
         },
 
         transform: {
-            label: "locale.effects.plane.groups.transform.label",
+            label: "locale.parameters.plane.groups.transform.label",
             defExpanded: true,
         },
         materials: {
-            label: "locale.effects.plane.groups.material.label",
+            label: "locale.parameters.plane.groups.material.label",
             defExpanded: true,
         },
         tags: {
-            label: "locale.effects.plane.groups.tags.label",
+            label: "locale.parameters.plane.groups.tags.label",
             defExpanded: false,
         },
     },
@@ -1290,19 +1295,19 @@ const ZLightBase = ZBaseEffect.extend({
         ...uiDescriptions.color,
         defValue: [1, 1, 1],
         showAlways: true,
-        label: "locale.effects.light.color.label",
+        label: "locale.parameters.light.color.label",
     }),
     brightness: ZNumberSlider.describe({
         ...uiDescriptions.numberSlider,
         defValue: 1,
         showAlways: true,
-        label: "locale.effects.light.brightness.label",
+        label: "locale.parameters.light.brightness.label",
     }),
     specular_intensity: ZNumberSlider.describe({
         ...uiDescriptions.numberSlider,
         defValue: 1,
         showAlways: true,
-        label: "locale.effects.light.specularFactor.label",
+        label: "locale.parameters.light.specularFactor.label",
     }),
 });
 
@@ -1310,7 +1315,7 @@ const ZLightAmbientEffect = ZLightBase.merge(
     z.object({
         type: z.literal("ambient").describe({
             ...uiDescriptions.enum,
-            label: "locale.effects.light.type.label",
+            label: "locale.parameters.light.type.label",
             options: Object.keys(ZLightType.Values),
             optionLabels: ZLightTypeLabels,
             defValue: ZLightType.Values.ambient,
@@ -1318,7 +1323,7 @@ const ZLightAmbientEffect = ZLightBase.merge(
     })
 ).describe({
     ...uiDescriptions.object,
-    label: "locale.effects.light.label",
+    label: "locale.parameters.light.label",
     groups: {
         main: {
             label: null,
@@ -1326,7 +1331,7 @@ const ZLightAmbientEffect = ZLightBase.merge(
         },
 
         tags: {
-            label: "locale.effects.light.groups.tags.label",
+            label: "locale.parameters.light.groups.tags.label",
             defExpanded: false,
         },
     },
@@ -1336,7 +1341,7 @@ const ZLightDirectEffect = ZLightBase.merge(
     z.object({
         type: z.literal("direct").describe({
             ...uiDescriptions.enum,
-            label: "locale.effects.light.type.label",
+            label: "locale.parameters.light.type.label",
             options: Object.keys(ZLightType.Values),
             optionLabels: ZLightTypeLabels,
             defValue: ZLightType.Values.ambient,
@@ -1344,18 +1349,18 @@ const ZLightDirectEffect = ZLightBase.merge(
         direction: ZArray3D.describe({
             ...uiDescriptions.array3d,
             defValue: [0, 0, 1],
-            label: "locale.effects.light.direction.label",
+            label: "locale.parameters.light.direction.label",
             group: "transform",
         }),
         rotation: ZArray3D.describe({
             ...uiDescriptions.array3d,
-            label: "locale.effects.light.rotation.label",
+            label: "locale.parameters.light.rotation.label",
             group: "transform",
         }),
     })
 ).describe({
     ...uiDescriptions.object,
-    label: "locale.effects.light.label",
+    label: "locale.parameters.light.label",
     groups: {
         main: {
             label: null,
@@ -1363,17 +1368,17 @@ const ZLightDirectEffect = ZLightBase.merge(
         },
 
         anchor: {
-            label: "locale.effects.light.groups.anchor.label",
+            label: "locale.parameters.light.groups.anchor.label",
             defExpanded: true,
         },
 
         transform: {
-            label: "locale.effects.light.groups.transform.label",
+            label: "locale.parameters.light.groups.transform.label",
             defExpanded: true,
         },
 
         tags: {
-            label: "locale.effects.light.groups.tags.label",
+            label: "locale.parameters.light.groups.tags.label",
             defExpanded: false,
         },
     },
@@ -1383,14 +1388,14 @@ const ZLightPointEffect = ZLightBase.merge(
     z.object({
         type: z.literal("point").describe({
             ...uiDescriptions.enum,
-            label: "locale.effects.light.type.label",
+            label: "locale.parameters.light.type.label",
             options: Object.keys(ZLightType.Values),
             optionLabels: ZLightTypeLabels,
             defValue: ZLightType.Values.ambient,
         }),
         anchor: ZFaceAnchor.describe({
             ...uiDescriptions.enum,
-            label: "locale.effects.light.anchor.label",
+            label: "locale.parameters.light.anchor.label",
             group: "anchor",
             options: Object.keys(ZFaceAnchor.Values),
             optionLabels: ZFaceAnchorLabels,
@@ -1401,7 +1406,7 @@ const ZLightPointEffect = ZLightBase.merge(
             min: 0.0,
             max: 2000.0,
             defValue: 500.0,
-            label: "locale.effects.light.range.label",
+            label: "locale.parameters.light.range.label",
         }),
         position: ZArray3D.describe({
             ...uiDescriptions.array3d,
@@ -1415,13 +1420,13 @@ const ZLightPointEffect = ZLightBase.merge(
             //         },
             //     },
             // ],
-            label: "locale.effects.light.position.label",
+            label: "locale.parameters.light.position.label",
             group: "transform",
         }),
     })
 ).describe({
     ...uiDescriptions.object,
-    label: "locale.effects.light.label",
+    label: "locale.parameters.light.label",
     groups: {
         main: {
             label: null,
@@ -1429,17 +1434,17 @@ const ZLightPointEffect = ZLightBase.merge(
         },
 
         anchor: {
-            label: "locale.effects.light.groups.anchor.label",
+            label: "locale.parameters.light.groups.anchor.label",
             defExpanded: true,
         },
 
         transform: {
-            label: "locale.effects.light.groups.transform.label",
+            label: "locale.parameters.light.groups.transform.label",
             defExpanded: true,
         },
 
         tags: {
-            label: "locale.effects.light.groups.tags.label",
+            label: "locale.parameters.light.groups.tags.label",
             defExpanded: false,
         },
     },
@@ -1473,9 +1478,9 @@ const ZLiquifiedWarpEffect = ZBaseEffect.extend({
     progress: ZNumberSlider.describe({
         ...uiDescriptions.numberSlider,
         defValue: 1,
-        label: "locale.effects.liquifiedwarp.progress.label",
+        label: "locale.parameters.liquifiedwarp.progress.label",
     }),
-}).describe({ ...uiDescriptions.object, label: "locale.effects.liquifiedwarp.label" });
+}).describe({ ...uiDescriptions.object, label: "locale.parameters.liquifiedwarp.label" });
 
 const ZPostEffectType = z.enum(["blur", "dispersion", "glow", "noise", "sharpen"]);
 const ZPostEffectTypeLabels = [
@@ -1490,7 +1495,7 @@ const ZPostEffectEffect = ZBaseEffect.extend({
     name: z.literal("posteffect").describe(uiDescriptions.none),
     type: ZPostEffectType.describe({
         ...uiDescriptions.enum,
-        label: "locale.effects.postEffect.type.label",
+        label: "locale.parameters.postEffect.type.label",
         options: Object.keys(ZPostEffectType.Values),
         defValue: ZPostEffectType.Values.sharpen,
         optionLabels: ZPostEffectTypeLabels,
@@ -1498,18 +1503,18 @@ const ZPostEffectEffect = ZBaseEffect.extend({
     intensity: ZNumberSlider.describe({
         ...uiDescriptions.numberSlider,
         defValue: 1,
-        label: "locale.effects.postEffect.intensity.label",
+        label: "locale.parameters.postEffect.intensity.label",
     }),
 }).describe({
     ...uiDescriptions.object,
-    label: "locale.effects.postEffect.label",
+    label: "locale.parameters.postEffect.label",
     groups: {
         main: {
-            label: "locale.effects.postEffect.groups.main.label",
+            label: "locale.parameters.postEffect.groups.main.label",
             defExpanded: true,
         },
         tags: {
-            label: "locale.effects.postEffect.groups.tags.label",
+            label: "locale.parameters.postEffect.groups.tags.label",
             defExpanded: false,
         },
     },
@@ -1570,14 +1575,14 @@ const ZPerspectivePlugin = z
             max: 90,
             defValue: 30,
             steps: 15,
-            label: "locale.plugins.perspective.fieldOfView.label",
+            label: "locale.parameters.perspective.fieldOfView.label",
         }),
         near_clip: ZNumberSlider.describe({
             ...uiDescriptions.numberSlider,
             min: 0.1,
             max: 5000,
             defValue: 0.1,
-            label: "locale.plugins.perspective.nearPlane.label",
+            label: "locale.parameters.perspective.nearPlane.label",
         }),
         far_clip: ZNumberSlider.describe({
             ...uiDescriptions.numberSlider,
@@ -1585,10 +1590,10 @@ const ZPerspectivePlugin = z
             max: 5000,
             defValue: 3000,
             steps: 100,
-            label: "locale.plugins.perspective.farPlane.label",
+            label: "locale.parameters.perspective.farPlane.label",
         }),
     })
-    .describe({ ...uiDescriptions.object, label: "locale.plugins.perspective.label" });
+    .describe({ ...uiDescriptions.object, label: "locale.parameters.perspective.label" });
 
 const ZMirrorPlugin = z
     .object({
@@ -1596,15 +1601,15 @@ const ZMirrorPlugin = z
         enabled: ZBool.describe({
             ...uiDescriptions.bool,
             defValue: true,
-            label: "locale.plugins.mirror.enable.label",
+            label: "locale.parameters.mirror.enable.label",
         }),
         debug: ZBool.describe({
             ...uiDescriptions.bool,
             defValue: false,
-            label: "locale.plugins.mirror.debug.label",
+            label: "locale.parameters.mirror.debug.label",
         }),
     })
-    .describe({ ...uiDescriptions.object, label: "locale.plugins.mirror.label" });
+    .describe({ ...uiDescriptions.object, label: "locale.parameters.mirror.label" });
 
 const ZFixedDetectionPlugin = z
     .object({
@@ -1614,15 +1619,15 @@ const ZFixedDetectionPlugin = z
         rotation: ZArray4D.describe({
             ...uiDescriptions.array4d,
             defValue: [0.1, 0.21, 0.7, 0.2],
-            label: "locale.plugins.fixedDeteciton.rotation.label",
+            label: "locale.parameters.fixedDeteciton.rotation.label",
         }),
         offset: ZNumberSlider.describe({
             ...uiDescriptions.numberSlider,
             defValue: 0.7,
-            label: "locale.plugins.fixedDeteciton.offset.label",
+            label: "locale.parameters.fixedDeteciton.offset.label",
         }),
     })
-    .describe({ ...uiDescriptions.object, label: "locale.plugins.fixedDeteciton.label" });
+    .describe({ ...uiDescriptions.object, label: "locale.parameters.fixedDeteciton.label" });
 
 export const PluginsList = [ZMirrorPlugin, ZPerspectivePlugin, ZFixedDetectionPlugin];
 

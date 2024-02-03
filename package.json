@@ -5,7 +5,7 @@
     "repository": {
         "url": "https://github.com/Askhento/vscode_vkmask"
     },
-    "description": "%extension.description%",
+    "description": "%locale.contribution.extension.description%",
     "version": "0.7.5",
     "engines": {
         "vscode": "^1.74.0"
@@ -26,39 +26,39 @@
                 "vkmask.use-builtins": {
                     "type": "boolean",
                     "default": false,
-                    "description": "%userSettings.useBuiltins.description%"
+                    "description": "%locale.contribution.userSettings.useBuiltins.description%"
                 },
                 "vkmask.keep-logs": {
                     "type": "boolean",
                     "default": true,
-                    "description": "%userSettings.keepLogs.description%"
+                    "description": "%locale.contribution.userSettings.keepLogs.description%"
                 },
                 "vkmask.output-channel": {
                     "type": "boolean",
                     "default": true,
-                    "description": "%userSettings.outputChannel.description%"
+                    "description": "%locale.contribution.userSettings.outputChannel.description%"
                 },
                 "vkmask.experimentalFeatures": {
                     "type": "boolean",
                     "default": false,
-                    "description": "%userSettings.experimentalFeatures.description%"
+                    "description": "%locale.contribution.userSettings.experimentalFeatures.description%"
                 }
             }
         },
         "submenus": [
             {
                 "icon": "$(add)",
-                "label": "%command.addSubMenuHint.effect.label%",
+                "label": "%locale.contribution.command.addSubMenuHint.effect.label%",
                 "id": "vkmask.add_effect_submenu"
             },
             {
                 "icon": "$(add)",
-                "label": "%command.addSubMenuHint.plugin.label%",
+                "label": "%locale.contribution.command.addSubMenuHint.plugin.label%",
                 "id": "vkmask.add_plugin_submenu"
             },
             {
                 "icon": "$(add)",
-                "label": "%command.addSubMenuHint.asset.label%",
+                "label": "%locale.contribution.command.addSubMenuHint.asset.label%",
                 "id": "vkmask.add_asset_submenu"
             }
         ],
@@ -145,85 +145,85 @@
         "commands": [
             {
                 "command": "vkmask.add_effect.facemodel",
-                "title": "%command.addSubMenuHint.effect.facemodel.title%",
-                "shortTitle": "%command.addSubMenuHint.effect.facemodel.shortTtitle%"
+                "title": "%locale.contribution.command.addSubMenuHint.effect.facemodel.title%",
+                "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.facemodel.shortTtitle%"
             },
             {
                 "command": "vkmask.add_effect.plane",
-                "title": "%command.addSubMenuHint.effect.plane.title%",
-                "shortTitle": "%command.addSubMenuHint.effect.plane.shortTtitle%"
+                "title": "%locale.contribution.command.addSubMenuHint.effect.plane.title%",
+                "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.plane.shortTtitle%"
             },
             {
                 "command": "vkmask.add_effect.model3d",
-                "title": "%command.addSubMenuHint.effect.model3d.title%",
-                "shortTitle": "%command.addSubMenuHint.effect.model3d.shortTtitle%"
+                "title": "%locale.contribution.command.addSubMenuHint.effect.model3d.title%",
+                "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.model3d.shortTtitle%"
             },
             {
                 "command": "vkmask.add_effect.patch",
-                "title": "%command.addSubMenuHint.effect.patch.title%",
-                "shortTitle": "%command.addSubMenuHint.effect.patch.shortTtitle%"
+                "title": "%locale.contribution.command.addSubMenuHint.effect.patch.title%",
+                "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.patch.shortTtitle%"
             },
             {
                 "command": "vkmask.add_effect.light",
-                "title": "%command.addSubMenuHint.effect.light.title%",
-                "shortTitle": "%command.addSubMenuHint.effect.light.shortTtitle%"
+                "title": "%locale.contribution.command.addSubMenuHint.effect.light.title%",
+                "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.light.shortTtitle%"
             },
             {
                 "command": "vkmask.add_effect.beautify",
-                "title": "%command.addSubMenuHint.effect.beautify.title%",
-                "shortTitle": "%command.addSubMenuHint.effect.beautify.shortTtitle%"
+                "title": "%locale.contribution.command.addSubMenuHint.effect.beautify.title%",
+                "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.beautify.shortTtitle%"
             },
             {
                 "command": "vkmask.add_effect.liquifiedwarp",
-                "title": "%command.addSubMenuHint.effect.liquifiedwarp.title%",
-                "shortTitle": "%command.addSubMenuHint.effect.liquifiedwarp.shortTtitle%"
+                "title": "%locale.contribution.command.addSubMenuHint.effect.liquifiedwarp.title%",
+                "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.liquifiedwarp.shortTtitle%"
             },
             {
                 "command": "vkmask.add_effect.colorfilter",
-                "title": "%command.addSubMenuHint.effect.colorfilter.title%",
-                "shortTitle": "%command.addSubMenuHint.effect.colorfilter.shortTtitle%"
+                "title": "%locale.contribution.command.addSubMenuHint.effect.colorfilter.title%",
+                "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.colorfilter.shortTtitle%"
             },
             {
                 "command": "vkmask.add_effect.posteffect",
-                "title": "%command.addSubMenuHint.effect.posteffect.title%",
-                "shortTitle": "%command.addSubMenuHint.effect.posteffect.shortTtitle%"
+                "title": "%locale.contribution.command.addSubMenuHint.effect.posteffect.title%",
+                "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.posteffect.shortTtitle%"
             },
             {
                 "command": "vkmask.add_plugin.mirror",
-                "title": "%command.addSubMenuHint.plugin.mirror.title%",
-                "shortTitle": "%command.addSubMenuHint.plugin.mirror.shortTtitle%"
+                "title": "%locale.contribution.command.addSubMenuHint.plugin.mirror.title%",
+                "shortTitle": "%locale.contribution.command.addSubMenuHint.plugin.mirror.shortTtitle%"
             },
             {
                 "command": "vkmask.add_plugin.perspective",
-                "title": "%command.addSubMenuHint.plugin.perspective.title%",
-                "shortTitle": "%command.addSubMenuHint.plugin.perspective.shortTtitle%"
+                "title": "%locale.contribution.command.addSubMenuHint.plugin.perspective.title%",
+                "shortTitle": "%locale.contribution.command.addSubMenuHint.plugin.perspective.shortTtitle%"
             },
             {
                 "command": "vkmask.add_plugin.fixeddetection",
-                "title": "%command.addSubMenuHint.plugin.fixeddetection.title%",
-                "shortTitle": "%command.addSubMenuHint.plugin.fixeddetection.shortTtitle%"
+                "title": "%locale.contribution.command.addSubMenuHint.plugin.fixeddetection.title%",
+                "shortTitle": "%locale.contribution.command.addSubMenuHint.plugin.fixeddetection.shortTtitle%"
             },
             {
                 "command": "vkmask.add_asset.material",
-                "title": "%command.addSubMenuHint.asset.material.title%",
-                "shortTitle": "%command.addSubMenuHint.asset.material.shortTtitle%"
+                "title": "%locale.contribution.command.addSubMenuHint.asset.material.title%",
+                "shortTitle": "%locale.contribution.command.addSubMenuHint.asset.material.shortTtitle%"
             },
             {
                 "command": "vkmask.dumpLogs",
-                "title": "%command.dumpLogs.title%",
-                "shortTitle": "%command.dumpLogs.shortTitle%",
+                "title": "%locale.contribution.command.dumpLogs.title%",
+                "shortTitle": "%locale.contribution.command.dumpLogs.shortTitle%",
                 "icon": "$(zap)"
             },
             {
                 "command": "vkmask.resetSidebar",
-                "title": "%command.resetSidebar.title%",
-                "shortTitle": "%command.resetSidebar.shortTitle%",
+                "title": "%locale.contribution.command.resetSidebar.title%",
+                "shortTitle": "%locale.contribution.command.resetSidebar.shortTitle%",
                 "icon": "$(refresh)"
             },
             {
                 "command": "vkmask.openSettings",
-                "title": "%command.openSettings.title%",
-                "shortTitle": "%command.openSettings.shortTitle%",
+                "title": "%locale.contribution.command.openSettings.title%",
+                "shortTitle": "%locale.contribution.command.openSettings.shortTitle%",
                 "icon": "$(settings-gear)"
             }
         ],
@@ -231,7 +231,7 @@
             "activitybar": [
                 {
                     "id": "vkmask_primary_bar",
-                    "title": "%title.vkmask_primary_bar%",
+                    "title": "%locale.contribution.title.vkmask_primary_bar%",
                     "icon": "./res/smile-svgrepo-com.svg"
                 }
             ],
@@ -247,37 +247,37 @@
             "vkmask_primary_bar": [
                 {
                     "type": "webview",
-                    "contextualTitle": "%contextTitle.projectManager%",
+                    "contextualTitle": "%locale.contribution.contextTitle.projectManager%",
                     "id": "vkmask.projectManager",
-                    "name": "%name.projectManager%",
+                    "name": "%locale.contribution.name.projectManager%",
                     "icon": "./node_modules/@vscode/codicons/src/icons/add.svg"
                 },
                 {
                     "type": "webview",
-                    "contextualTitle": "%contextTitle.effects%",
+                    "contextualTitle": "%locale.contribution.contextTitle.effects%",
                     "id": "vkmask.effects",
-                    "name": "%name.effects%",
+                    "name": "%locale.contribution.name.effects%",
                     "icon": "./node_modules/@vscode/codicons/src/icons/add.svg"
                 },
                 {
                     "type": "webview",
-                    "contextualTitle": "%contextTitle.plugins%",
+                    "contextualTitle": "%locale.contribution.contextTitle.plugins%",
                     "id": "vkmask.plugins",
-                    "name": "%name.plugins%",
+                    "name": "%locale.contribution.name.plugins%",
                     "icon": "./node_modules/@vscode/codicons/src/icons/add.svg"
                 },
                 {
                     "type": "webview",
-                    "contextualTitle": "%contextTitle.parameters%",
+                    "contextualTitle": "%locale.contribution.contextTitle.parameters%",
                     "id": "vkmask.parameters",
-                    "name": "%name.parameters%",
+                    "name": "%locale.contribution.name.parameters%",
                     "icon": "./node_modules/@vscode/codicons/src/icons/arrow-circle-up.svg"
                 },
                 {
                     "type": "webview",
-                    "contextualTitle": "%contextTitle.assetsManager%",
+                    "contextualTitle": "%locale.contribution.contextTitle.assetsManager%",
                     "id": "vkmask.assetsManager",
-                    "name": "%name.assetsManager%",
+                    "name": "%locale.contribution.name.assetsManager%",
                     "icon": "${zap}"
                 }
             ]
