@@ -36,6 +36,7 @@ function updateBundle(refBundle, bundleName, dryRun = false) {
 }
 
 function checkExistingTranslations(bundleName, translations, dryRun = false) {
+    console.log(`Checking existing translations for ${bundleName}\n`);
     const lang = bundleName.split(".").at(-2);
     if (!(lang in translations)) {
         console.log(`Missing translation for bundle : ${bundleName}, lang=${ru}`);

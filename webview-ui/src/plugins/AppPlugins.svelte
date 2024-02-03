@@ -182,7 +182,13 @@
                 }}
             />
         {:else}
-            <h4>{l10n.t("locale.plugins.emptyPluginsHint")}</h4>
+            <div class="empty-plugins">{l10n.t("locale.plugins.emptyPluginsHint")}</div>
         {/if}
     {/key}
 {/key}
+
+<style>
+    div.empty-plugins {
+        padding-left: var(--global-body-padding-left);
+    }
+</style>

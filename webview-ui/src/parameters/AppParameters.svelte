@@ -723,7 +723,9 @@
                     {/if}
                 {/key}
             {:else}
-                <div>{`${l10n.t("locale.parameters.nothingSelected")}..`}.</div>
+                <div class="empty-parameters">
+                    {`${l10n.t("locale.parameters.nothingSelected")}..`}.
+                </div>
                 <!-- <pre>{JSON.stringify(selection, null, "\t")}</pre> -->
             {/if}
         {/key}
@@ -760,9 +762,6 @@
         padding-right: var(--global-body-padding-right);
     }
 
-    h4 {
-        padding-left: var(--global-body-padding-left);
-    }
     /* :global(div) {
         color: aqua;
         background-color: var(--main-bg-color);
@@ -779,5 +778,9 @@
         position: sticky;
         width: 100%;
         margin: var(--global-margin);
+    }
+
+    .empty-parameters {
+        padding-left: var(--global-body-padding-left);
     }
 </style>

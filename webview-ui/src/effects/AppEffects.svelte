@@ -322,7 +322,13 @@
                 }}
             />
         {:else}
-            <h4>{l10n.t("locale.effects.emptyEffectsHint")}</h4>
+            <div class="empty-effects">{l10n.t("locale.effects.emptyEffectsHint")}</div>
         {/if}
     {/key}
 {/key}
+
+<style>
+    div.empty-effects {
+        padding-left: var(--global-body-padding-left);
+    }
+</style>

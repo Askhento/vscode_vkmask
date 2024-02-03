@@ -271,7 +271,7 @@
             {/each}
             <!-- group -->
         {:else}
-            <p>{l10n.t("locale.assetManager.emptyAssetsHint")}</p>
+            <p class="empty-assets">{l10n.t("locale.assetManager.emptyAssetsHint")}</p>
         {/if}
     {/key}
 {/key}
@@ -305,5 +305,9 @@
         margin-left: -50vw;
         margin-top: 0;
         /* calc(0px - var(--global-body-padding-left)); */
+    }
+
+    p.empty-assets {
+        padding-left: var(--global-body-padding-left);
     }
 </style>

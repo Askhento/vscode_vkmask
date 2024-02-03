@@ -1,4 +1,5 @@
-const csvURL = "https://psv4.userapi.com/c237031/u102637718/docs/d52/85233d01b1c6/Klyuchi.csv";
+// const csvURL = "https://psv4.userapi.com/c237031/u102637718/docs/d52/85233d01b1c6/Klyuchi.csv";
+// const csvURL =
 // ? url will change
 // ! add split
 

@@ -29,7 +29,7 @@
 <!-- <h3>{name}</h3> -->
 
 <section
-    use:dndzone={{ items: elements, flipDurationMs, ...dndProps }}
+    use:dndzone={{ items: elements, flipDurationMs, ...dndProps, dropTargetStyle: {} }}
     on:consider={handleConsider}
     on:finalize={handleFinalize}
 >
