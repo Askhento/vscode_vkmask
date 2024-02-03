@@ -1,10 +1,14 @@
-const csvURL = "https://psv4.userapi.com/c237031/u102637718/docs/d52/b73d9f915998/Klyuchi.csv";
+const csvURL = "https://psv4.userapi.com/c237031/u102637718/docs/d52/85233d01b1c6/Klyuchi.csv";
+// ? url will change
 // ! add split
 
 export async function getTranslationCSV() {
     const result = await fetch(csvURL);
 
-    if (!result.ok) return null;
+    if (!result.ok) {
+        console.log(result.status);
+        return null;
+    }
 
     const lines = (await result.text()).split("\r");
     // console.log(lines);
@@ -15,7 +19,7 @@ export async function getTranslationCSV() {
         obj[key] = trans;
     });
 
-    console.log(obj);
+    // console.log(obj);
     return obj;
 }
 
