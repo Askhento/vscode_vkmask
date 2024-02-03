@@ -1,42 +1,50 @@
 import * as fs from "fs";
 import * as path from "path";
-import * as glob from "glob";
 import { fileURLToPath } from "url";
+import { getTranslationCSV } from "./downloadLocaleCSV.mjs";
+import { parseSourceKeys } from "./parseSourceKeys.mjs";
+
+const translations = {
+    ru: await getTranslationCSV(), // ! could be null
+};
+
+// console.log(translations.ru);
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-
-const localeRegex = /"(locale\..*?)"/gm;
 
 // path.readdirSync()
 
 const mainBundlePath = path.join(__dirname, "bundle.l10n.json");
 const mainBundle = JSON.parse(fs.readFileSync(mainBundlePath).toString());
 
-// const localeKeys = {};
-
-const sourceMatches = glob.sync(["./src/**/**.{ts,js}", "./webview-ui/**/**.{ts,js,svelte}"]);
-sourceMatches.forEach((sourcePath) => {
-    const source = fs.readFileSync(path.join(__dirname, "..", sourcePath)).toString();
-    const match = [...source.matchAll(localeRegex)];
-    for (const m of match) {
-        const capturedKey = m[1];
-        if (!(capturedKey in mainBundle)) {
-            console.log(`New key found : ${capturedKey}`);
-            mainBundle[capturedKey] = "!!!TRANSLATION_REQUIRED!!!";
-        }
-    }
+console.log("Parsing sources in ./src and ./webview-ui");
+const sourcesRegex = /"(locale\..*?)"/gm;
+const sourceParsedKeys = parseSourceKeys(
+    ["./src/**/**.{ts,js}", "./webview-ui/**/**.{ts,js,svelte}"],
+    sourcesRegex
+);
+let needWriteMain = false;
+Object.keys(sourceParsedKeys).forEach((key) => {
+    if (key in mainBundle) return;
+    console.log(`New key found : ${key}`);
+    mainBundle[key] = sourceParsedKeys[key];
+    needWriteMain = true;
 });
 
-// console.log(mainBundle);
-console.log(`Writing : bundle.l10n.json`);
-fs.writeFileSync(mainBundlePath, JSON.stringify(mainBundle, null, "\t"));
+if (needWriteMain) {
+    console.log(`Writing : bundle.l10n.json`);
+    fs.writeFileSync(mainBundlePath, JSON.stringify(mainBundle, null, "\t"));
+} else {
+    console.log("No need to write bundle.l10n.json");
+}
 
 const bundles = fs
     .readdirSync(__dirname)
     .filter((file) => file.startsWith("bundle.l10n") && file !== "bundle.l10n.json");
 
 function updateBundle(refBundle, bundleName, dryRun = false) {
-    console.log(`\nReading ${bundleName} ...`);
+    const lang = bundleName.split(".").at(-2);
+    console.log(`\nReading ${bundleName} ... lang=${lang}`);
     const bundlePath = path.join(__dirname, bundleName);
     const bundle = JSON.parse(fs.readFileSync(bundlePath));
     // console.log(bundleName);
@@ -54,22 +62,6 @@ function updateBundle(refBundle, bundleName, dryRun = false) {
         console.log(`Will add key ${key} to ${bundleName}`);
     });
 
-    // const oldBundleName = "old." + bundleName;
-    // const oldBundlePath = path.join(__dirname, oldBundleName);
-    // if (fs.existsSync(oldBundlePath)) {
-    //     console.log(`Reading : ${oldBundleName}`);
-    //     const oldBundle = JSON.parse(fs.readFileSync(oldBundlePath));
-
-    //     Object.keys(bundle).forEach((key) => {
-    //         if (!(bundle[key] in oldBundle)) return;
-    //         console.log(
-    //             `\x1b[32m Found old key in ${oldBundleName}. \n\t${key} : ${bundle[key]}\x1b[0m`
-    //         );
-    //         bundle[key] = oldBundle[bundle[key]];
-    //         needUpdate = true;
-    //     });
-    // }
-
     if (needUpdate) {
         if (dryRun) return;
         console.log(`Writing ${bundleName}`);
@@ -79,32 +71,66 @@ function updateBundle(refBundle, bundleName, dryRun = false) {
     }
 }
 
+function checkExistingTranslations(bundleName, translations, dryRun = false) {
+    const lang = bundleName.split(".").at(-2);
+    if (!(lang in translations)) {
+        console.log(`Missing translation for bundle : ${bundleName}, lang=${ru}`);
+    }
+
+    const bundlePath = path.join(__dirname, bundleName);
+    const bundle = JSON.parse(fs.readFileSync(bundlePath));
+
+    Object.keys(translations[lang]).forEach((key) => {
+        if (!(key in bundle)) {
+            console.log(`\x1b[33m Unknown translation key=${key}\x1b[0m`);
+            return;
+        }
+        console.log(
+            `\x1b[32m Found translation key: \n\t${key} : ${translations[lang][key]}\x1b[0m`
+        );
+        if (!dryRun) {
+            bundle[key] = translations[lang][key];
+            needUpdate = true;
+        }
+    });
+}
+
+console.log("\nUpdating sources bundles");
+
 bundles.forEach((bundleName) => {
     updateBundle(mainBundle, bundleName);
+    checkExistingTranslations(bundleName, translations, true);
 });
+
+console.log("");
+console.log("Parsing package.json keys");
 
 const mainPackgeJSONBundlePath = path.join(__dirname, "..", "package.nls.json");
 const mainPackgeJSONBundle = JSON.parse(fs.readFileSync(mainPackgeJSONBundlePath).toString());
 
-const packageJSON = fs.readFileSync(path.join(__dirname, "..", "package.json")).toString();
 const regexPackageJSON = /%(.+)%/gm;
 
-const match = [...packageJSON.matchAll(regexPackageJSON)];
-for (const m of match) {
-    const capturedKey = m[1];
-    if (!(capturedKey in mainPackgeJSONBundle)) {
-        console.log(`New key found : ${capturedKey}`);
-        mainPackgeJSONBundle[capturedKey] = "!!!TRANSLATION_REQUIRED!!!";
-    }
-}
+const parsedPackageKeys = parseSourceKeys(["./package.json"], regexPackageJSON);
+let needWriteMainPackageJSON = false;
+Object.keys(parsedPackageKeys).forEach((key) => {
+    if (key in mainPackgeJSONBundle) return;
+    console.log(`New key found : ${key}`);
+    mainPackgeJSONBundle[key] = sourceParsedKeys[key];
+    needWriteMainPackageJSON = true;
+});
 
-// console.log(mainBundle);
-console.log(`Writing : package.nls.json`);
-fs.writeFileSync(mainPackgeJSONBundlePath, JSON.stringify(mainPackgeJSONBundle, null, "\t"));
+if (needWriteMainPackageJSON) {
+    console.log(`Writing : package.nls.json`);
+    fs.writeFileSync(mainPackgeJSONBundlePath, JSON.stringify(mainPackgeJSONBundle, null, "\t"));
+} else {
+    console.log("No need to write package.nls.json");
+}
 
 const packageJSONBundles = fs
     .readdirSync(path.join(__dirname, ".."))
     .filter((file) => file.startsWith("package.nls") && file !== "package.nls.json");
+
+console.log("Updating package.json bundles");
 
 packageJSONBundles.forEach((bundleName) =>
     updateBundle(mainPackgeJSONBundle, path.join("..", bundleName), false)
