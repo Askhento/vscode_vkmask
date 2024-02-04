@@ -8,6 +8,7 @@
     const print = logger("FilePickerControl.svelte");
     import { getContext } from "svelte";
     import { RequestCommand, RequestTarget, SelectionType } from "src/types";
+    import InfoBox from "../components/InfoBox.svelte";
     //@ts-expect-error
 
     const { assets, settings, messageHandler, selection } = getContext("stores");
@@ -20,6 +21,8 @@
         value,
         params,
         path;
+
+    let infoVisible = false;
 
     // print("INIT", value, params);
 
@@ -240,11 +243,26 @@
 <!-- {#key typedAssets} -->
 {#if label !== undefined}
     {#key value}
-        <span class="label" title={l10n.t(label)}><span>{l10n.t(label)}</span></span>
+        <span
+            class="label"
+            title={l10n.t(label)}
+            on:mouseleave={() => {
+                infoVisible = false;
+            }}
+            on:mouseover={() => {
+                infoVisible = true;
+            }}><span>{l10n.t(label)}</span></span
+        >
 
-        <!-- <input class="value" type="text" bind:value /> -->
-        <!-- add REd color if file not found in options -->
-        <span class="control-wrapper">
+        <span
+            class="control-wrapper"
+            on:mouseleave={() => {
+                infoVisible = false;
+            }}
+            on:mouseover={() => {
+                infoVisible = true;
+            }}
+        >
             <div class="dropdown-wrapper">
                 <!-- <span class="file-preview">
             </span> -->
@@ -388,6 +406,7 @@
                     >{`${l10n.t("locale.controls.filepicker.buttonRemove.label")}`}</span
                 >
             </vscode-button>
+            <InfoBox visible={infoVisible} info={params.info} />
         </span>
     {/key}
 {/if}
@@ -479,20 +498,26 @@
     }
 
     span.label {
+        padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
+        padding-right: var(--global-label-control-gap);
+        margin: var(--global-margin) 0 var(--global-margin) 0;
+        height: 100%;
 
-        height: var(--global-block-height);
         display: flex;
         justify-content: var(--label-justify);
     }
 
     span.label > span {
+        margin: 0;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
 
     span.control-wrapper {
+        padding-right: var(--global-body-padding-right);
+
         margin: unset;
         /* position: relative; */
         display: flex;

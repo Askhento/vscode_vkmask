@@ -759,7 +759,6 @@
         position: relative;
         /* var(--global-body-padding-left) */
         padding-left: 0;
-        padding-right: var(--global-body-padding-right);
     }
 
     /* :global(div) {

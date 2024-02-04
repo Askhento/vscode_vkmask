@@ -5,6 +5,7 @@
     import { get_current_component } from "svelte/internal";
     const component = get_current_component();
     import { applyDeps } from "../common/controlDependencies";
+    import InfoBox from "../components/InfoBox.svelte";
     const stores = getContext("stores");
     const { assets, settings, messageHandler, effects } = stores;
 
@@ -14,6 +15,8 @@
         params,
         error = null,
         disabled = false;
+
+    let infoVisible = false;
 
     if (value == null || value.length === 0 || error) value = params.defValue;
 
@@ -53,7 +56,15 @@
 
 {#if label && value}
     <!-- <span class="label"><span class="label-text">{l10n.t(label)}</span></span> -->
-    <div class="labels-wrapper">
+    <span
+        class="labels-wrapper"
+        on:mouseleave={() => {
+            infoVisible = false;
+        }}
+        on:mouseover={() => {
+            infoVisible = true;
+        }}
+    >
         {#each params.valueLabels as valueLabel, index}
             <span class="label" title={l10n.t(label)}>
                 {#if index === 0}
@@ -62,8 +73,16 @@
                 <span>{valueLabel}</span>
             </span>
         {/each}
-    </div>
-    <div class="vector-control-wrapper">
+    </span>
+    <span
+        class="control-wrapper"
+        on:mouseleave={() => {
+            infoVisible = false;
+        }}
+        on:mouseover={() => {
+            infoVisible = true;
+        }}
+    >
         {#each value as v, index}
             <!-- <vscode-text-area
         class="value"
@@ -105,12 +124,9 @@
                     onChanged();
                 }}
             />
-            <!-- {/each}
-    {:else}
-      {#each params.default as v, index}
-        <input class="value" type="number" bind:value={params.default[index]} /> -->
+            <InfoBox visible={infoVisible} info={params.info} />
         {/each}
-    </div>
+    </span>
 {/if}
 
 <style>
@@ -129,7 +145,7 @@
         justify-content: space-around;
         /* flex-wrap: wrap; */
         margin: 0;
-        margin-right: var(--global-margin);
+        padding-right: var(--global-margin);
         min-width: var(--global-min-width);
 
         padding-left: var(--global-body-padding-left);
@@ -152,7 +168,9 @@
         text-overflow: ellipsis;
     }
 
-    .vector-control-wrapper {
+    .control-wrapper {
+        padding-right: var(--global-body-padding-right);
+        position: relative;
         display: flex;
         flex-direction: row;
         /* min-height: fit-content; */

@@ -4,13 +4,14 @@
     import { createEventDispatcher, tick } from "svelte";
     import Dropdown from "../components/Dropdown.svelte";
     import { getContext } from "svelte";
+    import InfoBox from "../components/InfoBox.svelte";
     //@ts-expect-error
     const { allTags } = getContext("stores");
 
     // console.log("tags all ", $allTags);
 
-    export let label, value, path;
-
+    export let label, value, path, params;
+    let infoVisible = false;
     let tags = [];
     let tagElems = [];
     let tagOptions = [];
@@ -81,9 +82,26 @@
     }
 </script>
 
-<span class="label" title={l10n.t(label)}><span>{l10n.t(label)}</span></span>
+<span
+    class="label"
+    title={l10n.t(label)}
+    on:mouseleave={() => {
+        infoVisible = false;
+    }}
+    on:mouseover={() => {
+        infoVisible = true;
+    }}><span>{l10n.t(label)}</span></span
+>
 
-<span class="control-wrapper">
+<span
+    class="control-wrapper"
+    on:mouseleave={() => {
+        infoVisible = false;
+    }}
+    on:mouseover={() => {
+        infoVisible = true;
+    }}
+>
     <!-- <vscode-button
             class="add-tag-btn"
             on:click|stopPropagation={() => {
@@ -95,37 +113,39 @@
         </vscode-button> -->
     <Dropdown options={tagOptions} name={l10n.t("locale.controls.tags.buttonAdd.label")} icon="" />
     {#each tags as tag, index}
-        <vscode-text-field
-            value={tags[index]}
-            bind:this={tagElems[index]}
-            on:keydown={(e) => {
-                switch (e.key) {
-                    case "Backspace":
-                        if (e.target) {
-                            const newValue = e.target.value;
-                            if (newValue === "" && index > 0) {
-                                removeTag(index);
+        <div class="tag-value-wrapper">
+            <vscode-text-field
+                value={tags[index]}
+                bind:this={tagElems[index]}
+                on:keydown={(e) => {
+                    switch (e.key) {
+                        case "Backspace":
+                            if (e.target) {
+                                const newValue = e.target.value;
+                                if (newValue === "" && index > 0) {
+                                    removeTag(index);
+                                }
                             }
-                        }
-                        break;
-                    case "Escape":
-                        e.target.value = tag;
-                        e.target.blur();
-                        break;
-                    case "Enter":
-                        e.target.blur();
-                    default:
-                        break;
-                }
-            }}
-            on:change={(e) => {
-                if (e.target) {
-                    tags[index] = e.target.value;
-                    // console.log("changed tag", tags[index]);
-                    joinTags();
-                }
-            }}
-        >
+                            break;
+                        case "Escape":
+                            e.target.value = tag;
+                            e.target.blur();
+                            break;
+                        case "Enter":
+                            e.target.blur();
+                        default:
+                            break;
+                    }
+                }}
+                on:change={(e) => {
+                    if (e.target) {
+                        tags[index] = e.target.value;
+                        // console.log("changed tag", tags[index]);
+                        joinTags();
+                    }
+                }}
+            >
+            </vscode-text-field>
             <vscode-button
                 class="remove-tag-btn"
                 appearance="icon"
@@ -135,8 +155,9 @@
             >
                 <span class="codicon codicon-close" />
             </vscode-button>
-        </vscode-text-field>
+        </div>
     {/each}
+    <InfoBox visible={infoVisible} info={params.info} />
 </span>
 
 <style>
@@ -148,29 +169,48 @@
     }
 
     span.label {
+        padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
+        padding-right: var(--global-label-control-gap);
+        margin: var(--global-margin) 0 var(--global-margin) 0;
+        height: 100%;
 
-        height: var(--global-block-height);
         display: flex;
         justify-content: var(--label-justify);
     }
 
     span.label > span {
+        margin: 0;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
 
     .control-wrapper {
+        padding: var(--global-margin);
+        padding-right: calc(var(--global-body-padding-right) + var(--global-margin));
+
+        margin: unset;
+        position: relative;
         display: flex;
         flex-direction: column;
         row-gap: 0.5rem;
     }
 
+    .tag-value-wrapper {
+        margin: 0;
+
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: stretch;
+        align-items: center;
+    }
+
     vscode-text-field {
         margin: 0;
-        position: relative;
         height: var(--global-block-height);
+        flex-grow: 1;
     }
 
     /* vscode-text-field > section {
@@ -189,13 +229,21 @@
 
     .remove-tag-btn {
         position: absolute;
-        left: calc(100% + 0.25rem);
-        top: calc();
-        height: 100%;
+        left: calc(100%);
+        /* top: 0; */
+        height: calc(0.9 * var(--global-block-height));
+        width: calc(0.9 * var(--global-block-height));
+
         margin: 0;
         padding: 0;
+
         /* overflow: auto; */
         /* display: inline-block; */
         /* flex-grow: 1; */
+    }
+
+    .remove-tag-btn::part(control) {
+        height: calc(0.9 * var(--global-block-height));
+        width: calc(0.9 * var(--global-block-height));
     }
 </style>

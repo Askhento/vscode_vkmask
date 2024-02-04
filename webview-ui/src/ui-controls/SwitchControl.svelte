@@ -2,8 +2,10 @@
     import * as l10n from "@vscode/l10n";
 
     import { createEventDispatcher } from "svelte";
+    import InfoBox from "../components/InfoBox.svelte";
 
     export let label, path, params, value;
+    let infoVisible = false;
 
     function onChange(e) {
         // console.log();
@@ -21,9 +23,29 @@
     }
 </script>
 
-<span class="label" title={l10n.t(label)}><span>{l10n.t(label)}</span></span>
+<span
+    class="label"
+    title={l10n.t(label)}
+    on:mouseleave={() => {
+        infoVisible = false;
+    }}
+    on:mouseover={() => {
+        infoVisible = true;
+    }}><span>{l10n.t(label)}</span></span
+>
 
-<vscode-checkbox checked={value} on:change={onChange} />
+<span
+    class="control-wrapper"
+    on:mouseleave={() => {
+        infoVisible = false;
+    }}
+    on:mouseover={() => {
+        infoVisible = true;
+    }}
+>
+    <vscode-checkbox checked={value} on:change={onChange} />
+    <InfoBox visible={infoVisible} info={params.info} />
+</span>
 
 <!-- <label class="switch">
     <input type="checkbox" bind:checked={value} />
@@ -33,6 +55,7 @@
 <style>
     * {
         margin: unset;
+        padding: 0;
         box-sizing: border-box;
     }
 
@@ -45,93 +68,33 @@
         justify-self: var(--label-justify);
     } */
 
+    span.control-wrapper {
+        padding-right: var(--global-body-padding-right);
+        margin: unset;
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+
     span.label {
+        padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
+        padding-right: var(--global-label-control-gap);
+        margin: var(--global-margin) 0 var(--global-margin) 0;
 
         height: var(--global-block-height);
         display: flex;
         justify-content: var(--label-justify);
         align-content: center;
         align-items: center;
-        margin-right: var(--global-margin);
     }
 
     span.label > span {
+        margin: unset;
         height: fit-content;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-    }
-
-    /* span.label > span {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    } */
-
-    /* The switch - the box around the slider */
-    .switch {
-        flex-grow: 1;
-        max-width: 60px;
-        position: absolute;
-        right: 20px;
-        display: block;
-        width: 60px;
-        height: 34px;
-    }
-
-    /* Hide default HTML checkbox */
-    .switch input {
-        opacity: 0;
-        width: 0;
-        height: 0;
-    }
-
-    /* The slider */
-    .slider {
-        position: absolute;
-        cursor: pointer;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: #ccc;
-        -webkit-transition: 0.4s;
-        transition: 0.4s;
-    }
-
-    .slider:before {
-        position: absolute;
-        content: "";
-        height: 26px;
-        width: 26px;
-        left: 4px;
-        bottom: 4px;
-        background-color: white;
-        -webkit-transition: 0.4s;
-        transition: 0.4s;
-    }
-
-    input:checked + .slider {
-        background-color: #2196f3;
-    }
-
-    input:focus + .slider {
-        box-shadow: 0 0 1px #2196f3;
-    }
-
-    input:checked + .slider:before {
-        -webkit-transform: translateX(26px);
-        -ms-transform: translateX(26px);
-        transform: translateX(26px);
-    }
-
-    /* Rounded sliders */
-    .slider.round {
-        border-radius: 34px;
-    }
-
-    .slider.round:before {
-        border-radius: 50%;
     }
 </style>

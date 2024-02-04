@@ -5,9 +5,10 @@
 
     // import { onMount } from "svelte";
     import NumberSliderControl from "./NumberSliderControl.svelte";
+    import InfoBox from "../components/InfoBox.svelte";
 
     export let label, value, path, params;
-
+    let infoVisible = false;
     if (value == null) value = params.defValue;
     let color, alpha;
 
@@ -60,23 +61,40 @@
     }
 </script>
 
-<span class="label" title={l10n.t(label)}><span>{l10n.t(label)}</span></span>
-
-<!-- <span class="color">{value}</span> -->
-<!-- <div class="color-control-wrapper"> -->
-<input
-    class="color"
-    type="color"
-    bind:value={color}
-    on:change={(e) => {
-        // console.log("color picker on change!!!!");
-        // color = e.target.value;
-        hexToRGB();
-        onChange();
+<span
+    class="label"
+    title={l10n.t(label)}
+    on:mouseleave={() => {
+        infoVisible = false;
     }}
-/>
+    on:mouseover={() => {
+        infoVisible = true;
+    }}><span>{l10n.t(label)}</span></span
+>
 
-<!-- </div> -->
+<span
+    class="control-wrapper"
+    on:mouseleave={() => {
+        infoVisible = false;
+    }}
+    on:mouseover={() => {
+        infoVisible = true;
+    }}
+>
+    <input
+        class="color"
+        type="color"
+        bind:value={color}
+        on:change={(e) => {
+            // console.log("color picker on change!!!!");
+            // color = e.target.value;
+            hexToRGB();
+            onChange();
+        }}
+    />
+    <InfoBox visible={infoVisible} info={params.info} />
+</span>
+
 {#if params.alpha}
     <NumberSliderControl
         label={l10n.t("locale.controls.colorPicker.alpha.label")}
@@ -96,43 +114,36 @@
             onChange();
         }}
     />
-    <!-- <input
-        class="alpha"
-        type="range"
-        bind:value={alpha}
-        min="0"
-        max="1"
-        step="0.02"
-      /> -->
 {/if}
 
 <style>
     * {
         margin: var(--global-margin);
-        /* box-sizing: border-box; */
+        padding: unset;
+        box-sizing: border-box;
     }
 
-    .color-control-wrapper {
+    .control-wrapper {
+        padding-right: var(--global-body-padding-right);
+        margin: unset;
         position: relative;
-        /* display: flex; */
-        /* flex-direction: column; */
-        /* justify-content: start; */
+        display: flex;
+        justify-content: center;
     }
-
-    /* span.color {
-    display: inline-block;
-    flex: 1 0 0px;
-  } */
 
     span.label {
+        padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
+        padding-right: var(--global-label-control-gap);
+        margin: var(--global-margin) 0 var(--global-margin) 0;
+        height: 100%;
 
-        height: var(--global-block-height);
         display: flex;
         justify-content: var(--label-justify);
     }
 
     span.label > span {
+        margin: 0;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;

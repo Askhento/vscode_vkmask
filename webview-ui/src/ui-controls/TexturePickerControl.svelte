@@ -6,6 +6,7 @@
     const print = logger("TexturePickerControl.svelte");
     import { getContext } from "svelte";
     import { RequestCommand, RequestTarget } from "src/types";
+    import InfoBox from "../components/InfoBox.svelte";
     //@ts-expect-error
     const { assets, settings, messageHandler } = getContext("stores");
 
@@ -16,7 +17,7 @@
         value,
         params,
         path;
-
+    let infoVisible = false;
     let waiting = false;
     let textureAsset = null;
 
@@ -110,9 +111,26 @@
 </script>
 
 {#if label !== undefined}
-    <span class="label" title={l10n.t(label)}><span>{l10n.t(label)}</span></span>
+    <span
+        class="label"
+        title={l10n.t(label)}
+        on:mouseleave={() => {
+            infoVisible = false;
+        }}
+        on:mouseover={() => {
+            infoVisible = true;
+        }}><span>{l10n.t(label)}</span></span
+    >
 
-    <span class="control-wrapper">
+    <span
+        class="control-wrapper"
+        on:mouseleave={() => {
+            infoVisible = false;
+        }}
+        on:mouseover={() => {
+            infoVisible = true;
+        }}
+    >
         <!-- <div class="value-text">
             {#if value == null}
                 <span class="text-center">Upload or create a scirpt file</span>
@@ -171,6 +189,7 @@
         {#if waiting}
             <vscode-progress-ring />
         {/if}
+        <InfoBox visible={infoVisible} info={params.info} />
     </span>
 {/if}
 
@@ -186,15 +205,20 @@
     }
 
     span.label {
+        padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
+        padding-right: var(--global-label-control-gap);
+        margin: var(--global-margin) 0 var(--global-margin) 0;
+        height: 100%;
 
         justify-self: var(--label-justify);
-        height: var(--global-block-height);
         display: flex;
         justify-content: center;
     }
 
     span.control-wrapper {
+        padding-right: var(--global-body-padding-right);
+
         margin: unset;
         position: relative;
         display: flex;

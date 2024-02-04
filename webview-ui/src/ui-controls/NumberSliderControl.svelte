@@ -2,8 +2,10 @@
     import * as l10n from "@vscode/l10n";
 
     import { createEventDispatcher } from "svelte";
+    import InfoBox from "../components/InfoBox.svelte";
 
     export let label, value, path, params;
+    let infoVisible = false;
 
     let steps = params.steps ?? 100;
     // console.log("steps", steps, params);
@@ -47,13 +49,36 @@
             }
         }}
     /> -->
-<span class="label" title={l10n.t(label)}><span>{l10n.t(label)}</span></span>
+<span
+    class="label"
+    title={l10n.t(label)}
+    on:mouseleave={() => {
+        infoVisible = false;
+    }}
+    on:mouseover={() => {
+        infoVisible = true;
+    }}><span>{l10n.t(label)}</span></span
+>
 
-<span class="control-wrapper">
-    <div class="display-value">{params.valueTemplate?.(value) ?? value}</div>
+<span
+    class="control-wrapper"
+    on:mouseleave={() => {
+        infoVisible = false;
+    }}
+    on:mouseover={() => {
+        infoVisible = true;
+    }}
+>
+    <!-- <div class="overlay-wrapper"> -->
+    <div class="display-value">
+        <span>{params.valueTemplate?.(value) ?? value}</span>
+    </div>
     {#if params.valueLabel}
-        <div class="value-label">{l10n.t(params.valueLabel)}</div>
+        <div class="value-label">
+            <span class="value-overlay">{l10n.t(params.valueLabel)}</span>
+        </div>
     {/if}
+    <!-- </div> -->
     <input
         class="slider"
         type="range"
@@ -65,6 +90,7 @@
         max={params.max ?? 1}
         {step}
     />
+    <InfoBox visible={infoVisible} info={params.info} />
 </span>
 
 <!-- </span> -->
@@ -93,38 +119,53 @@
     } */
 
     .control-wrapper {
+        padding-right: var(--global-body-padding-right);
+        margin: unset;
         position: relative;
         display: flex;
         justify-content: center;
+        align-content: center;
     }
 
     div.display-value {
         position: absolute;
-        /* left: calc(50%); */
-        /* width: 100%; */
-        /* text-align: center; */
-        /* top: calc(50% - 0.5rem - var(--global-margin)); */
-        /* vertical-align: middle; */
-        /* width: 800px; */
-        pointer-events: none;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        margin: unset;
+        padding-right: var(--global-body-padding-right);
+
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     div.value-label {
-        position: absolute;
-        /* left: calc(50%); */
-        width: 100%;
-        text-align: end;
-        top: calc(50% - 0.5rem - var(--global-margin));
-        right: var(--global-margin);
-        /* vertical-align: middle; */
-        /* width: 800px; */
-        white-space: pre;
-        pointer-events: none;
         color: var(--vscode-descriptionForeground);
+
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        margin: unset;
+        padding-right: var(--global-body-padding-right);
+        display: flex;
+        justify-content: end;
+        align-items: center;
+    }
+    .value-overlay {
+        /* margin: unset; */
+        padding-right: var(--global-margin);
     }
 
     span.label {
+        padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
+        padding-right: var(--global-label-control-gap);
+        margin: var(--global-margin) 0 var(--global-margin) 0;
+        height: 100%;
 
         /* justify-self: var(--label-justify); */
         height: var(--global-block-height);
@@ -133,6 +174,7 @@
     }
 
     span.label > span {
+        margin: 0;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -141,6 +183,8 @@
     input.slider {
         display: block;
         margin: 0;
+        margin: var(--global-margin);
+
         /* flex: 2 0 0px; */
     }
 

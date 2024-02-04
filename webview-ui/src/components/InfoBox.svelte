@@ -29,7 +29,7 @@
     }
 </script>
 
-{#if visible || errors.length}
+{#if visible || infoOpened || errors.length}
     <div class="info-btn">
         <div class:error={errors.length} class="icon-wrapper">
             <span
@@ -151,12 +151,13 @@
 
     .info-btn {
         position: absolute;
-        left: calc(100%);
+        left: calc(100% - var(--global-block-height));
         /* top: var(--global-margin); */
+        top: 0;
         height: var(--global-block-height);
         width: var(--global-block-height);
         margin: var(--global-margin);
-        margin-left: 0;
+        margin-right: 0;
         /* margin: 0; */
         padding: 0;
     }

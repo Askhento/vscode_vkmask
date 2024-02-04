@@ -2,8 +2,10 @@
     import * as l10n from "@vscode/l10n";
 
     import { createEventDispatcher } from "svelte";
+    import InfoBox from "../components/InfoBox.svelte";
 
     export let label, value, path, params;
+    let infoVisible = false;
 
     if (value == null) value = params.defValue;
     let options = params.options;
@@ -27,31 +29,44 @@
     }
 </script>
 
-<span class="label" title={l10n.t(label)}>
-    <span>{l10n.t(label)}</span>
-</span>
-<!-- <select class="options" name="" id="" bind:value>
-    {#each options as option, i}
-      <option>{option}</option>
-    {/each}
-  </select> -->
+<span
+    class="label"
+    title={l10n.t(label)}
+    on:mouseleave={() => {
+        infoVisible = false;
+    }}
+    on:mouseover={() => {
+        infoVisible = true;
+    }}><span>{l10n.t(label)}</span></span
+>
 
-<vscode-dropdown
-    position="above"
-    value={String(options.findIndex((op) => op === value))}
-    on:change={(e) => {
-        console.log("optoins", e);
-        value = options[parseInt(e.target.value)];
+<span
+    class="control-wrapper"
+    on:mouseleave={() => {
+        infoVisible = false;
+    }}
+    on:mouseover={() => {
+        infoVisible = true;
     }}
 >
-    {#each params.optionLabels ?? options as option, i}
-        <vscode-option class="option" value={i}
-            ><span class="option-text">
-                {l10n.t(option)}
-            </span></vscode-option
-        >
-    {/each}
-</vscode-dropdown>
+    <vscode-dropdown
+        position="above"
+        value={String(options.findIndex((op) => op === value))}
+        on:change={(e) => {
+            console.log("optoins", e);
+            value = options[parseInt(e.target.value)];
+        }}
+    >
+        {#each params.optionLabels ?? options as option, i}
+            <vscode-option class="option" value={i}
+                ><span class="option-text">
+                    {l10n.t(option)}
+                </span></vscode-option
+            >
+        {/each}
+    </vscode-dropdown>
+    <InfoBox visible={infoVisible} info={params.info} />
+</span>
 
 <style>
     * {
@@ -60,6 +75,8 @@
         box-sizing: border-box;
     }
     /* .option-control-wrapper {
+		padding-right: var(--global-body-padding-right);
+
     position: relative;
     display: flex;
   } */
@@ -68,8 +85,14 @@
     display: inline;
     flex-grow: 1;
   } */
-
+    .control-wrapper {
+        padding-right: var(--global-body-padding-right);
+        position: relative;
+        display: flex;
+        margin: unset;
+    }
     vscode-dropdown {
+        width: 100%;
         height: var(--global-block-height);
         min-width: 0;
     }
@@ -98,7 +121,10 @@
     }
 
     span.label {
+        padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
+        padding-right: var(--global-label-control-gap);
+        margin: var(--global-margin) 0 var(--global-margin) 0;
 
         height: var(--global-block-height);
         display: flex;
@@ -106,7 +132,8 @@
     }
 
     span.label > span {
-        overflow: hidden;
+        margin: 0;
+        overflow: visible;
         white-space: nowrap;
         text-overflow: ellipsis;
     }

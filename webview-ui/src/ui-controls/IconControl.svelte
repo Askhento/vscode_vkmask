@@ -247,8 +247,8 @@
         padding-left: var(--global-body-padding-left);
         padding-right: var(--global-label-control-gap);
         margin: var(--global-margin) 0 var(--global-margin) 0;
+        height: 100%;
 
-        height: var(--global-block-height);
         display: flex;
         justify-content: var(--label-justify);
     }

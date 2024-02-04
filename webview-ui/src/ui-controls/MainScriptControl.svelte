@@ -181,7 +181,7 @@
                 >{l10n.t("locale.projectManager.mainScript.buttonRemove.label")}</span
             >
         </vscode-button>
-        <InfoBox info={params.info} visible={true} />
+        <InfoBox info={params.info} visible={infoVisible} />
     </span>
 {/if}
 
@@ -193,20 +193,26 @@
     }
 
     span.label {
+        padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
+        padding-right: var(--global-label-control-gap);
+        margin: var(--global-margin) 0 var(--global-margin) 0;
 
-        height: var(--global-block-height);
+        /* height: var(--global-block-height); */
+        height: 100%;
         display: flex;
         justify-content: var(--label-justify);
     }
 
     span.label > span {
+        margin: 0;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
 
     span.control-wrapper {
+        padding-right: var(--global-body-padding-right);
         margin: unset;
         position: relative;
         display: flex;
