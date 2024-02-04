@@ -181,14 +181,13 @@
 
     async function onChanged(event) {
         console.log("onChange: ", event);
-        // const { path, value, structural } = event.detail;
         const changes = event.detail;
         let needRerender = false;
 
         let tempSettings = maskSettings;
+        let action = null; // !!!! only one action
         changes.forEach(({ path, value, structural }) => {
             const root = path.shift();
-
             if (root === "tabInfo") {
                 console.log("sending tabinfo");
                 sendTabInfo();
@@ -197,12 +196,16 @@
 
             tempSettings = applyValueByPath2(tempSettings, path, value);
             needRerender = needRerender || structural;
+            maskSettings = tempSettings;
+            action = sendMaskSettings;
         });
 
+        if (action) action();
+
         if (!needRerender) return;
-        maskSettings = tempSettings;
-        sendMaskSettings();
+        print("new settings", tempSettings, changes);
         await parseUI();
+        rerenderSettings();
     }
 
     // $: console.log("mask setting ", maskSettings);
@@ -274,7 +277,7 @@
                                 value={maskSettings}
                                 params={uiElements.uiDescription}
                                 label={"MaskSettings"}
-                                path={[]}
+                                path={["maskSettings"]}
                                 uiElements={uiElements.value}
                                 on:changed={onChanged}
                             />
@@ -302,7 +305,7 @@
     .project-manager-wrapper {
         /* var(--global-body-padding-left) */
         padding-left: 0;
-        padding-right: var(--global-body-padding-right);
+        /* padding-right: var(--global-body-padding-right); */
     }
     /* 
     vscode-progress-ring {

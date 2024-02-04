@@ -227,7 +227,7 @@
         >
         </vscode-button> -->
         {#key iconAsset}
-            <InfoBox visible={false} info={params.info} />
+            <InfoBox visible={infoVisible} info={params.info} />
         {/key}
         {#if waiting}
             <vscode-progress-ring />
@@ -243,7 +243,10 @@
     }
 
     span.label {
+        padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
+        padding-right: var(--global-label-control-gap);
+        margin: var(--global-margin) 0 var(--global-margin) 0;
 
         height: var(--global-block-height);
         display: flex;
@@ -251,12 +254,14 @@
     }
 
     span.label > span {
+        margin: 0;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
 
     span.control-wrapper {
+        padding-right: var(--global-body-padding-right);
         margin: unset;
         position: relative;
         display: flex;

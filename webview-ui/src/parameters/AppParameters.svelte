@@ -444,7 +444,7 @@
         // Array.isArray()
         //
         let needRerender = false;
-        let action = null; // !!!!!! will not work with different actions
+        let action = null; //!!!! only one action
 
         changes.forEach(({ path, value, structural }) => {
             const root = path.shift();
