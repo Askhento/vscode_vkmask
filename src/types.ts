@@ -43,8 +43,6 @@ export const RequestCommand = {
     getUploadedAsset: "getUploadedAsset",
     removeAsset: "removeAsset",
 
-    getUploadedAsset: "getUploadedAsset",
-
     getLocalization: "getLocalization",
 
     getTabInfo: "getTabInfo",

@@ -269,10 +269,6 @@ export async function activate(context: vscode.ExtensionContext) {
                 maskConfig.showPlugin(id);
                 break;
 
-            case SelectionType.maskSettings:
-                globalThis.selection = newSelection;
-                break;
-
             case SelectionType.asset:
                 globalThis.selection = newSelection;
                 break;
