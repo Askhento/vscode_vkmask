@@ -49,5 +49,12 @@
     "locale.contribution.command.addSubMenuHint.plugin.fixeddetection.title": "Add fixeddetection plugin",
     "locale.contribution.command.addSubMenuHint.plugin.fixeddetection.shortTtitle": "Add fixeddetection plugin",
     "locale.contribution.command.addSubMenuHint.asset.material.title": "Add material asset",
-    "locale.contribution.command.addSubMenuHint.asset.material.shortTtitle": "Add material asset"
+    "locale.contribution.command.addSubMenuHint.asset.material.shortTtitle": "Add material asset",
+    "locale.contribution.effectsSubmenu.light.label": "Add light effect",
+    "locale.contribution.command.addSubMenuHint.effect.ambientLight.title": "ambient",
+    "locale.contribution.command.addSubMenuHint.effect.pointLight.title": "point",
+    "locale.contribution.command.addSubMenuHint.effect.directLight.title": "direct",
+    "locale.contribution.command.addSubMenuHint.effect.ambientLight.shortTtitle": "ambient",
+    "locale.contribution.command.addSubMenuHint.effect.pointLight.shortTtitle": "point",
+    "locale.contribution.command.addSubMenuHint.effect.directLight.shortTtitle": "direct"
 }

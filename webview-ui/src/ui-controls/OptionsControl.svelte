@@ -133,7 +133,7 @@
 
     span.label > span {
         margin: 0;
-        overflow: visible;
+        overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
     }

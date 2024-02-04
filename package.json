@@ -60,6 +60,10 @@
                 "icon": "$(add)",
                 "label": "%locale.contribution.command.addSubMenuHint.asset.label%",
                 "id": "vkmask.add_asset_submenu"
+            },
+            {
+                "label": "%locale.contribution.effectsSubmenu.light.label%",
+                "id": "vkmask.add_effect_submenu.light_submenu"
             }
         ],
         "menus": {
@@ -97,34 +101,56 @@
             ],
             "vkmask.add_effect_submenu": [
                 {
-                    "command": "vkmask.add_effect.facemodel"
+                    "command": "vkmask.add_effect.facemodel",
+                    "group": "3d"
                 },
                 {
-                    "command": "vkmask.add_effect.plane"
+                    "command": "vkmask.add_effect.plane",
+                    "group": "3d"
                 },
                 {
-                    "command": "vkmask.add_effect.model3d"
+                    "command": "vkmask.add_effect.model3d",
+                    "group": "3d"
                 },
                 {
-                    "command": "vkmask.add_effect.patch"
-                },
-                {
-                    "command": "vkmask.add_effect.light"
-                },
-                {
-                    "command": "vkmask.add_effect.beautify"
+                    "command": "vkmask.add_effect.patch",
+                    "group": "3d"
                 },
                 {
                     "command": "vkmask.add_effect.liquifiedwarp",
                     "when": "config.vkmask.experimentalFeatures"
                 },
                 {
-                    "command": "vkmask.add_effect.colorfilter"
+                    "command": "vkmask.add_effect.beautify",
+                    "group": "fullscreen"
                 },
                 {
-                    "command": "vkmask.add_effect.posteffect"
+                    "command": "vkmask.add_effect.colorfilter",
+                    "group": "fullscreen"
+                },
+                {
+                    "command": "vkmask.add_effect.posteffect",
+                    "group": "fullscreen"
+                },
+                {
+                    "submenu": "vkmask.add_effect_submenu.light_submenu",
+                    "group": "light"
+                }
+
+            ],
+
+            "vkmask.add_effect_submenu.light_submenu": [
+                {
+                    "command": "vkmask.add_effect.ambientLight"
+                },
+                {
+                    "command": "vkmask.add_effect.pointLight"
+                },
+                {
+                    "command": "vkmask.add_effect.directLight"
                 }
             ],
+
             "vkmask.add_plugin_submenu": [
                 {
                     "command": "vkmask.add_plugin.mirror"
@@ -164,9 +190,19 @@
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.patch.shortTtitle%"
             },
             {
-                "command": "vkmask.add_effect.light",
-                "title": "%locale.contribution.command.addSubMenuHint.effect.light.title%",
-                "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.light.shortTtitle%"
+                "command": "vkmask.add_effect.ambientLight",
+                "title": "%locale.contribution.command.addSubMenuHint.effect.ambientLight.title%",
+                "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.ambientLight.shortTtitle%"
+            },
+            {
+                "command": "vkmask.add_effect.pointLight",
+                "title": "%locale.contribution.command.addSubMenuHint.effect.pointLight.title%",
+                "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.pointLight.shortTtitle%"
+            },
+            {
+                "command": "vkmask.add_effect.directLight",
+                "title": "%locale.contribution.command.addSubMenuHint.effect.directLight.title%",
+                "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.directLight.shortTtitle%"
             },
             {
                 "command": "vkmask.add_effect.beautify",

@@ -49,5 +49,12 @@
     "locale.contribution.command.addSubMenuHint.plugin.fixeddetection.title": "Добавить fixeddetection плагин",
     "locale.contribution.command.addSubMenuHint.plugin.fixeddetection.shortTtitle": "Добавить fixeddetection плагин",
     "locale.contribution.command.addSubMenuHint.asset.material.title": "Добавить material ресурс",
-    "locale.contribution.command.addSubMenuHint.asset.material.shortTtitle": "Добавить material ресурс"
+    "locale.contribution.command.addSubMenuHint.asset.material.shortTtitle": "Добавить material ресурс",
+    "locale.contribution.effectsSubmenu.light.label": "Добавить light эффект",
+    "locale.contribution.command.addSubMenuHint.effect.ambientLight.title": "ambient",
+    "locale.contribution.command.addSubMenuHint.effect.pointLight.title": "point",
+    "locale.contribution.command.addSubMenuHint.effect.directLight.title": "direct",
+    "locale.contribution.command.addSubMenuHint.effect.ambientLight.shortTtitle": "ambient",
+    "locale.contribution.command.addSubMenuHint.effect.pointLight.shortTtitle": "point",
+    "locale.contribution.command.addSubMenuHint.effect.directLight.shortTtitle": "direct"
 }

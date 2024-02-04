@@ -1289,8 +1289,7 @@ const ZPlaneEffect = ZBaseEffect.extend({
 //     ])
 //     .describe(uiDescriptions.union);
 
-const ZLightBase = ZBaseEffect.extend({
-    name: z.literal("light").describe(uiDescriptions.none),
+const ZLightBase = {
     color: ZColor.describe({
         ...uiDescriptions.color,
         defValue: [1, 1, 1],
@@ -1309,43 +1308,48 @@ const ZLightBase = ZBaseEffect.extend({
         showAlways: true,
         label: "locale.parameters.light.specularFactor.label",
     }),
-});
+    tag: ZTags,
+};
 
-const ZLightAmbientEffect = ZLightBase.merge(
-    z.object({
-        type: z.literal("ambient").describe({
-            ...uiDescriptions.enum,
-            label: "locale.parameters.light.type.label",
-            options: Object.keys(ZLightType.Values),
-            optionLabels: ZLightTypeLabels,
-            defValue: ZLightType.Values.ambient,
-        }),
+const ZLightAmbientEffect = z
+    .object({
+        name: z.literal("ambientLight").describe(uiDescriptions.none),
+
+        // type: z.literal("ambient").describe({
+        //     ...uiDescriptions.enum,
+        //     label: "locale.parameters.light.type.label",
+        //     options: Object.keys(ZLightType.Values),
+        //     optionLabels: ZLightTypeLabels,
+        //     defValue: ZLightType.Values.ambient,
+        // }),
+        ...ZLightBase,
     })
-).describe({
-    ...uiDescriptions.object,
-    label: "locale.parameters.light.label",
-    groups: {
-        main: {
-            label: null,
-            defExpanded: true,
-        },
+    .describe({
+        ...uiDescriptions.object,
+        label: "locale.parameters.light.label",
+        groups: {
+            main: {
+                label: null,
+                defExpanded: true,
+            },
 
-        tags: {
-            label: "locale.parameters.light.groups.tags.label",
-            defExpanded: false,
+            tags: {
+                label: "locale.parameters.light.groups.tags.label",
+                defExpanded: false,
+            },
         },
-    },
-});
+    });
 
-const ZLightDirectEffect = ZLightBase.merge(
-    z.object({
-        type: z.literal("direct").describe({
-            ...uiDescriptions.enum,
-            label: "locale.parameters.light.type.label",
-            options: Object.keys(ZLightType.Values),
-            optionLabels: ZLightTypeLabels,
-            defValue: ZLightType.Values.ambient,
-        }),
+const ZLightDirectEffect = z
+    .object({
+        name: z.literal("directLight").describe(uiDescriptions.none),
+        // type: z.literal("direct").describe({
+        //     ...uiDescriptions.enum,
+        //     label: "locale.parameters.light.type.label",
+        //     options: Object.keys(ZLightType.Values),
+        //     optionLabels: ZLightTypeLabels,
+        //     defValue: ZLightType.Values.ambient,
+        // }),
         direction: ZArray3D.describe({
             ...uiDescriptions.array3d,
             defValue: [0, 0, 1],
@@ -1357,42 +1361,45 @@ const ZLightDirectEffect = ZLightBase.merge(
             label: "locale.parameters.light.rotation.label",
             group: "transform",
         }),
+        ...ZLightBase,
     })
-).describe({
-    ...uiDescriptions.object,
-    label: "locale.parameters.light.label",
-    groups: {
-        main: {
-            label: null,
-            defExpanded: true,
-        },
+    .describe({
+        ...uiDescriptions.object,
+        label: "locale.parameters.light.label",
+        groups: {
+            main: {
+                label: null,
+                defExpanded: true,
+            },
 
-        anchor: {
-            label: "locale.parameters.light.groups.anchor.label",
-            defExpanded: true,
-        },
+            anchor: {
+                label: "locale.parameters.light.groups.anchor.label",
+                defExpanded: true,
+            },
 
-        transform: {
-            label: "locale.parameters.light.groups.transform.label",
-            defExpanded: true,
-        },
+            transform: {
+                label: "locale.parameters.light.groups.transform.label",
+                defExpanded: true,
+            },
 
-        tags: {
-            label: "locale.parameters.light.groups.tags.label",
-            defExpanded: false,
+            tags: {
+                label: "locale.parameters.light.groups.tags.label",
+                defExpanded: false,
+            },
         },
-    },
-});
+    });
 
-const ZLightPointEffect = ZLightBase.merge(
-    z.object({
-        type: z.literal("point").describe({
-            ...uiDescriptions.enum,
-            label: "locale.parameters.light.type.label",
-            options: Object.keys(ZLightType.Values),
-            optionLabels: ZLightTypeLabels,
-            defValue: ZLightType.Values.ambient,
-        }),
+const ZLightPointEffect = z
+    .object({
+        name: z.literal("pointLight").describe(uiDescriptions.none),
+
+        // type: z.literal("point").describe({
+        //     ...uiDescriptions.enum,
+        //     label: "locale.parameters.light.type.label",
+        //     options: Object.keys(ZLightType.Values),
+        //     optionLabels: ZLightTypeLabels,
+        //     defValue: ZLightType.Values.ambient,
+        // }),
         anchor: ZFaceAnchor.describe({
             ...uiDescriptions.enum,
             label: "locale.parameters.light.anchor.label",
@@ -1423,55 +1430,35 @@ const ZLightPointEffect = ZLightBase.merge(
             label: "locale.parameters.light.position.label",
             group: "transform",
         }),
+        ...ZLightBase,
     })
-).describe({
-    ...uiDescriptions.object,
-    label: "locale.parameters.light.label",
-    groups: {
-        main: {
-            label: null,
-            defExpanded: true,
+    .describe({
+        ...uiDescriptions.object,
+        label: "locale.parameters.light.label",
+        groups: {
+            main: {
+                label: null,
+                defExpanded: true,
+            },
+
+            anchor: {
+                label: "locale.parameters.light.groups.anchor.label",
+                defExpanded: true,
+            },
+
+            transform: {
+                label: "locale.parameters.light.groups.transform.label",
+                defExpanded: true,
+            },
+
+            tags: {
+                label: "locale.parameters.light.groups.tags.label",
+                defExpanded: false,
+            },
         },
+    });
 
-        anchor: {
-            label: "locale.parameters.light.groups.anchor.label",
-            defExpanded: true,
-        },
-
-        transform: {
-            label: "locale.parameters.light.groups.transform.label",
-            defExpanded: true,
-        },
-
-        tags: {
-            label: "locale.parameters.light.groups.tags.label",
-            defExpanded: false,
-        },
-    },
-});
-
-const ZLight = [ZLightAmbientEffect, ZLightDirectEffect, ZLightPointEffect];
-
-// console.log(ZLightEffect.parse({ name: "light", type: "point" }))
-
-// console.log(ZLightEffect.description)
-
-// const testLight = {
-//     name: "light",
-//     tag: "1233",
-//     disabled: true,
-//     anchor: "right_eye",
-//     type: "ambient",
-//     color: [0.88, 0.14, 0.14],
-//     brightness: 0.45,
-//     specular_intensity: 0.25,
-//     range: 1500,
-//     position: [0.0, 0.0, 13.0],
-//     direction: [0.0, 0.0, 1.0],
-//     rotation: [0.0, 0.0, 0.0],
-// };
-
-// console.log(ZLightEffect.parse(testLight))
+const ZLights = [ZLightAmbientEffect, ZLightDirectEffect, ZLightPointEffect];
 
 const ZLiquifiedWarpEffect = ZBaseEffect.extend({
     name: z.literal("liquifiedwarp").describe(uiDescriptions.none),
@@ -1525,8 +1512,7 @@ export const EffectsList = [
     ZPlaneEffect,
     ZModel3dEffect,
     ZPatchEffect,
-    ...ZLight,
-    // ZLightAmbientEffect,
+    ...ZLights,
 
     ZBeautifyEffect,
     ZLiquifiedWarpEffect,
@@ -1803,7 +1789,9 @@ export const ZMaskConfigPreprocess = z.preprocess(
                         z
                             .object({
                                 name: z.union([
-                                    z.literal("light"),
+                                    z.literal("ambientLight"),
+                                    z.literal("pointLight"),
+                                    z.literal("directLight"),
                                     z.literal("posteffect"),
                                     z.literal("beautify"),
                                     z.literal("colorfilter"),
