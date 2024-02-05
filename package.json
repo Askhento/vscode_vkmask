@@ -6,7 +6,7 @@
         "url": "https://github.com/Askhento/vscode_vkmask"
     },
     "description": "%locale.contribution.extension.description%",
-    "version": "0.7.5",
+    "version": "0.7.6",
     "engines": {
         "vscode": "^1.74.0"
     },
@@ -136,9 +136,7 @@
                     "submenu": "vkmask.add_effect_submenu.light_submenu",
                     "group": "light"
                 }
-
             ],
-
             "vkmask.add_effect_submenu.light_submenu": [
                 {
                     "command": "vkmask.add_effect.ambientLight"
@@ -150,7 +148,6 @@
                     "command": "vkmask.add_effect.directLight"
                 }
             ],
-
             "vkmask.add_plugin_submenu": [
                 {
                     "command": "vkmask.add_plugin.mirror"
