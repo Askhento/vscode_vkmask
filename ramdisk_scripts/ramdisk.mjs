@@ -6,6 +6,9 @@ import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
 
+// todo : check if other ramdisk created ???;
+// todo : found a way to unmount, timing
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 export function ramdisk(volumeName, mountPoint) {
@@ -72,7 +75,6 @@ const disk = ramdisk("vkmask_build_ramdisk", ramdiskPath);
 const createDisk = util.promisify(disk.create);
 const deleteDisk = util.promisify(disk.delete);
 
-// createDisk(100);
 export async function startRamDisk(size = 100) {
     if (supportedPlatforms.findIndex((os) => os === process.platform) < 0) {
         console.log(`Radmisk not supported for ${process.platform}`);
@@ -81,13 +83,17 @@ export async function startRamDisk(size = 100) {
     if (!fs.existsSync(ramdiskPath)) await createDisk(size);
 }
 
-// async function unmount() {
-//     if (!fs.existsSync(ramdiskPath)) {
-//         console.log("ramdisk does not exist to unmount");
-//         return;
-//     }
+export async function unmount() {
+    if (!fs.existsSync(ramdiskPath)) {
+        console.log("ramdisk does not exist to unmount");
+        return;
+    }
 
-//     await deleteDisk(ramdiskPath);
+    await deleteDisk(ramdiskPath);
 
-//     console.log("unmounted");
-// }
+    console.log("unmounted");
+}
+
+// createDisk(100);
+
+unmount();
