@@ -326,9 +326,9 @@
         "publish-patch": "npm version patch ; npm run package",
         "publish-minor": "npm version minor ; npm run package",
         "package": "npm run prepublish && npm run package-win32-x64 && npm run package-darwin-x64 && npm run package-darwin-arm64",
-        "package-win32-x64": "vsce package --target win32-x64 --ignoreFile .vscodeignore_win32_x64 --out ./vsix-packages",
-        "package-darwin-x64": "vsce package --target darwin-x64 --ignoreFile .vscodeignore_darwin_x64 --out ./vsix-packages",
-        "package-darwin-arm64": "vsce package --target darwin-arm64 --ignoreFile .vscodeignore_darwin_arm64 --out ./vsix-packages",
+        "package-win32-x64": "vsce package --target win32-x64 --ignoreFile .win32_x64.vscodeignore --out ./vsix-packages",
+        "package-darwin-x64": "vsce package --target darwin-x64 --ignoreFile .darwin_x64.vscodeignore --out ./vsix-packages",
+        "package-darwin-arm64": "vsce package --target darwin-arm64 --ignoreFile .darwin_arm64.vscodeignore --out ./vsix-packages",
 
         "publish": "vsce publish patch",
         "generateBuiltins": "npx ts-node-esm ./src/generateBuiltins.ts",
