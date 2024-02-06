@@ -261,6 +261,7 @@
             }
         ],
         "viewsContainers": {
+
             "activitybar": [
                 {
                     "id": "vkmask_primary_bar",
@@ -283,35 +284,35 @@
                     "contextualTitle": "%locale.contribution.contextTitle.projectManager%",
                     "id": "vkmask.projectManager",
                     "name": "%locale.contribution.name.projectManager%",
-                    "icon": "./node_modules/@vscode/codicons/src/icons/add.svg"
+                    "icon": "./res/icons/Project_manager_icon.svg"
                 },
                 {
                     "type": "webview",
                     "contextualTitle": "%locale.contribution.contextTitle.effects%",
                     "id": "vkmask.effects",
                     "name": "%locale.contribution.name.effects%",
-                    "icon": "./node_modules/@vscode/codicons/src/icons/add.svg"
+                    "icon": "./res/icons/Effects_icon.svg"
                 },
                 {
                     "type": "webview",
                     "contextualTitle": "%locale.contribution.contextTitle.plugins%",
                     "id": "vkmask.plugins",
                     "name": "%locale.contribution.name.plugins%",
-                    "icon": "./node_modules/@vscode/codicons/src/icons/add.svg"
+                    "icon": "./res/icons/Plugins_icon.svg"
                 },
                 {
                     "type": "webview",
                     "contextualTitle": "%locale.contribution.contextTitle.parameters%",
                     "id": "vkmask.parameters",
                     "name": "%locale.contribution.name.parameters%",
-                    "icon": "./node_modules/@vscode/codicons/src/icons/arrow-circle-up.svg"
+                    "icon": "./res/icons/Settings_icon.svg"
                 },
                 {
                     "type": "webview",
                     "contextualTitle": "%locale.contribution.contextTitle.assetsManager%",
                     "id": "vkmask.assetsManager",
                     "name": "%locale.contribution.name.assetsManager%",
-                    "icon": "${zap}"
+                    "icon": "${files}"
                 }
             ]
         }
