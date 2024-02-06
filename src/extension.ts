@@ -831,7 +831,8 @@ export async function activate(context: vscode.ExtensionContext) {
                 watchTimeout = setTimeout(() => {
                     // watchLock = false;
                     vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction");
-                }, 200);
+                    print("Reload due to file changed");
+                }, 2000);
                 // watchLock = true;
             })
         );
