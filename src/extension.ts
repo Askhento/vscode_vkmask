@@ -52,7 +52,7 @@ export async function activate(context: vscode.ExtensionContext) {
     // vscode.window.showInformationMessage(localizedString);
     // selection = { type: SelectionType.empty };
 
-    let l10nBundle = "";
+    let l10nBundle: string | l10n.l10nJsonFormat;
     checkLocalizationBundle();
     globalThis.selection = { type: SelectionType.empty };
 

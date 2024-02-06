@@ -19,9 +19,9 @@ mk_ram_disk() {
 
   printf %s ${mount_point//[[:blank:]]/}
 }
-
+#-force
 rm_ram_disk() {
-  diskutil eject $1 -force > /dev/null
+  diskutil eject $1  > /dev/null
   rm -rf $1 > /dev/null
 }
 

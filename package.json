@@ -312,7 +312,7 @@
     },
     "scripts": {
         "prepublish": "npm run clear && npm run build",
-        "clear": "rimraf ./out",
+        "clear": "rimraf -g ./out/**",
         "dev": "npm run clear  && npm run watch",
         "build": "set NODE_ENV=production && rollup -c",
         "build-dev": "NODE_ENV=dev rollup -c",

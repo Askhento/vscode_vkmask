@@ -13,25 +13,44 @@ import typescript from "@rollup/plugin-typescript"; // esbuild have issues with 
 // import { transformSync } from "esbuild";
 
 // import { typescript as svelteTypescript } from "svelte-preprocess-esbuild";
-
 import { extensionConfig } from "./rollup.extension.mjs";
+import { startRamDisk } from "./ramdisk_scripts/ramdisk.mjs";
 
 // ? production env var?
 const production = !process.env.ROLLUP_WATCH;
 
+if (!production) await startRamDisk();
+
 // "dev": "npm run clear && npm run generateBuiltins && conc  \"npm:dev:webview\" \"npm:watch\"",
 // fs.mkdirSync("./out/panels/webview-build", { recursive: true }); // for watcher attach folder
 
-// /** @type {import("rollup").RollupOptions} */
-// const builtinsConfig = {
-//     input : "src/generateBuiltins.ts",
-
-// }
+/** @type {import("rollup").PluginImpl} */
+function demoWatcherPlugin(globs) {
+    let doTheAction = false;
+    return {
+        closeWatcher() {
+            console.log("close watcher");
+        },
+        closeBundle() {
+            console.log("close bundle");
+        },
+        watchChange(id, change) {
+            console.log("change", id, change.event);
+        },
+        async buildEnd() {
+            console.log("build end");
+            // if (doTheAction) {
+            //     // Do the action you want to perform when certain files change
+            // }
+        },
+    };
+}
 
 // for config autocomplete
 /** @type {import("rollup").RollupOptions} */
 const svelteCommon = {
     plugins: [
+        // demoWatcherPlugin(),
         // !!! this will copy to the same dir for every webivew
         copy({
             // watch: "./src/global.css",

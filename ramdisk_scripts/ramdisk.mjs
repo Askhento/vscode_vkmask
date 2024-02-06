@@ -8,7 +8,6 @@ import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-console.log(__dirname);
 export function ramdisk(volumeName, mountPoint) {
     if (mountPoint == null) mountPoint = path.join("/", "tmp", volumeName);
     var os = process.platform;
@@ -66,24 +65,21 @@ function exec(command) {
     return childProc.spawn("/bin/sh", ["-c", command]);
 }
 
+const supportedPlatforms = ["darwin"];
+
 const ramdiskPath = path.join(__dirname, "..", "out");
 const disk = ramdisk("vkmask_build_ramdisk", ramdiskPath);
 const createDisk = util.promisify(disk.create);
 const deleteDisk = util.promisify(disk.delete);
 
-console.log(await createDisk(100));
-
-// // size in MB
-// async function startRamDisk(size = 100) {
-//     // while()
-//     try {
-//         if (!fs.existsSync(ramdiskPath)) return await createDisk(size);
-//     } catch (error) {
-//         console.log(error);
-//         return null;
-//     }
-//     return ramdiskPath;
-// }
+// createDisk(100);
+export async function startRamDisk(size = 100) {
+    if (supportedPlatforms.findIndex((os) => os === process.platform) < 0) {
+        console.log(`Radmisk not supported for ${process.platform}`);
+        return;
+    }
+    if (!fs.existsSync(ramdiskPath)) await createDisk(size);
+}
 
 // async function unmount() {
 //     if (!fs.existsSync(ramdiskPath)) {
@@ -95,11 +91,3 @@ console.log(await createDisk(100));
 
 //     console.log("unmounted");
 // }
-
-// // unmount();
-
-// const testPath = path.join(ramdiskPath, "vkmask_ramdisk.txt");
-
-// // if(await startRamDisk() !==)
-// console.log(somePaht);
-// // fs.writeFileSync(testPath, "helloworld vkmask");
