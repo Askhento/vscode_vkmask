@@ -2,6 +2,7 @@
     "name": "vkmask",
     "displayName": "vkmask",
     "publisher": "askhento",
+    "icon": "./res/icons/vkmask_main_icon_128.png",
     "repository": {
         "url": "https://github.com/Askhento/vscode_vkmask"
     },
@@ -266,14 +267,7 @@
                 {
                     "id": "vkmask_primary_bar",
                     "title": "%locale.contribution.title.vkmask_primary_bar%",
-                    "icon": "./res/smile-svgrepo-com.svg"
-                }
-            ],
-            "auxiliaryBar": [
-                {
-                    "id": "vkmask_secondary_bar",
-                    "title": "VK mask",
-                    "icon": "./res/smile-svgrepo-com.svg"
+                    "icon": "./res/icons/vkmask_main_icon.svg"
                 }
             ]
         },
