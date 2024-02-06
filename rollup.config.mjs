@@ -139,8 +139,6 @@ function getSvelteEntry(name) {
     };
 }
 
-// export default extensionConfig;
-
 export default [
     getSvelteEntry("effects"),
     getSvelteEntry("plugins"),
