@@ -7,7 +7,7 @@
         "url": "https://github.com/Askhento/vscode_vkmask"
     },
     "description": "%locale.contribution.extension.description%",
-    "version": "0.7.6",
+    "version": "0.7.7",
     "engines": {
         "vscode": "^1.74.0"
     },
@@ -262,7 +262,6 @@
             }
         ],
         "viewsContainers": {
-
             "activitybar": [
                 {
                     "id": "vkmask_primary_bar",
@@ -324,7 +323,6 @@
         "package-win32-x64": "vsce package --target win32-x64 --ignoreFile .win32_x64.vscodeignore --out ./vsix-packages",
         "package-darwin-x64": "vsce package --target darwin-x64 --ignoreFile .darwin_x64.vscodeignore --out ./vsix-packages",
         "package-darwin-arm64": "vsce package --target darwin-arm64 --ignoreFile .darwin_arm64.vscodeignore --out ./vsix-packages",
-
         "publish": "vsce publish patch",
         "generateBuiltins": "npx ts-node-esm ./src/generateBuiltins.ts",
         "deploy": "echo todo"
