@@ -4,7 +4,7 @@ locale.projectManager.mouseInput.label;Нажатие экрана
 locale.projectManager.groups.main.label;Основное
 locale.projectManager.groups.permissions.label;Разрешения
 locale.projectManager.groups.advanced.label;Продвинутые
-locale.materialArray.elementName;материал
+locale.parameters.materialArray.elementName;материал
 locale.arrayControl.addButtonHint;Добавить
 locale.faceAnchors.free.label;Свободный
 locale.faceAnchors.face.label;Лицо
@@ -102,7 +102,7 @@ locale.material.culling.label; Отображать полигоны
 locale.material.fill.label;Заполнение полигонов
 locale.material.label;Материал
 locale.materialAsset.label;Файл материала
-locale.materialArray.label;Список материалов
+locale.parameters.materialArray.label;Список материалов
 locale.effects.facemodel.mouth.label;Рот
 locale.effects.facemodel.eyes.label;Глаза
 locale.effects.facemodel.position.label;Позиция
@@ -206,7 +206,7 @@ locale.plugins.fixedDeteciton.offset.label;Смещение
 locale.plugins.fixedDeteciton.label;Фикс детектора лица
 locale.projectManager.userHint.none.label;Пусто
 locale.projectManager.userHint.openMouth.label;Открой рот
-locale.projectManager.userHint.tapOnScreen.label;Нажми на экран
+locale.projectManager.userHint.tapChange.label;Нажми на экран
 locale.projectManager.userHint.tryWithFriends.label;Попробуй с друзьями
 locale.projectManager.userHint.startRecording.label;Начни запись
 locale.projectManager.icon.infoList;"Формат: PNG.

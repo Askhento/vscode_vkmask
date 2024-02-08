@@ -104,6 +104,9 @@
             defValue: 1.0,
             valueTemplate: (val) => Math.floor(val * 100),
             valueLabel: "%",
+            info: {
+                infoList: "locale.controls.colorPicker.alpha.infoList",
+            },
         }}
         bind:value={alpha}
         on:changed={(e) => {

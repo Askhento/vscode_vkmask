@@ -44,6 +44,7 @@ function checkExistingTranslations(bundleName, translations, dryRun = false) {
 
     const bundlePath = path.join(__dirname, bundleName);
     const bundle = JSON.parse(fs.readFileSync(bundlePath));
+    let needUpdate = false;
 
     Object.keys(translations[lang]).forEach((key) => {
         if (!(key in bundle)) {
@@ -52,6 +53,9 @@ function checkExistingTranslations(bundleName, translations, dryRun = false) {
             );
             return;
         }
+
+        if (bundle[key] === translations[lang][key]) return; // skip same
+
         console.log(
             `\x1b[32m Found translation key: \n\t${key} : ${translations[lang][key]}\x1b[0m`
         );
@@ -60,6 +64,14 @@ function checkExistingTranslations(bundleName, translations, dryRun = false) {
             needUpdate = true;
         }
     });
+
+    if (needUpdate) {
+        if (dryRun) return;
+        console.log(`Writing ${bundleName}`);
+        fs.writeFileSync(bundlePath, JSON.stringify(bundle, null, "\t"));
+    } else {
+        console.log(`No update required for ${bundleName}.`);
+    }
 }
 
 function processSourceBundles(translations, dryRun = false) {
@@ -148,7 +160,7 @@ const translations = {
     ru: await getTranslations(csvURL), // ! could be null
 };
 
-processSourceBundles(translations, true);
+processSourceBundles(translations, false);
 // console.log(translations);
 
 // path.readdirSync()

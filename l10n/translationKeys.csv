@@ -9,11 +9,11 @@
 159;locale.effect.plane;plane
 202;locale.effect.pointLight;point light
 99;locale.effect.posteffect;posteffect
-201;locale.parameters.ambientLight.color.infoList;RGB-компоненты цвета источника света. Числа с плавающей точкой, означающие силу цветового канала.
-200;locale.parameters.ambientLight.color.label;Цвет
-199;locale.parameters.ambientLight.group.main.label;Основное
-98;locale.parameters.beautify.group.main.infoList;Интенсивность сглаживания кожи лица.
-97;locale.parameters.beautify.group.main.label;Основное
+201;locale.parameters.light.color.infoList;RGB-компоненты цвета источника света. Числа с плавающей точкой, означающие силу цветового канала.
+200;locale.parameters.light.color.label;Цвет
+199;locale.parameters.group.main.label;Основное
+98;locale.parameters.group.main.infoList;Интенсивность сглаживания кожи лица.
+97;locale.parameters.group.main.label;Основное
 110;locale.parameters.colorfilter.allowRotation.infoList;Включает вращение эффекта вместе с головой, если указаны точки привязки лица, — щёки, нос, глаза, уши, рот и губы.
 109;locale.parameters.colorfilter.allowRotation.label;Вращение с головой
 108;locale.parameters.colorfilter.anchor.infoList;Точка привязки, к которой будет применён эффект в пространстве.
@@ -21,7 +21,7 @@
 126;locale.parameters.colorfilter.group.additional.label;Дополнительно
 106;locale.parameters.colorfilter.group.anchor.label;Привязка
 118;locale.parameters.colorfilter.group.texture.label;Текстура
-111;locale.parameters.colorfilter.group.transformation.label;Трансформация
+111;locale.parameters.colorfilter.group.transform.label;Трансформация
 125;locale.parameters.colorfilter.intensity.infoList;Интенсивность накладываемого фильтра.
 124;locale.parameters.colorfilter.intensity.label;Интенсивность
 120;locale.parameters.colorfilter.lookup.infoList;"Файл цветовой таблицы.
@@ -47,56 +47,23 @@
 112;locale.parameters.colorfilter.size.label;Размер
 128;locale.parameters.colorfilter.visible.infoList;Условия видимости эффекта.
 127;locale.parameters.colorfilter.visible.label;Видимость
-195;locale.parameters.directLight.brightness.infoList;Яркость источника освещения.
-194;locale.parameters.directLight.brightness.label;Яркость
-193;locale.parameters.directLight.color.infoList;Цвет источника освещения.
-192;locale.parameters.directLight.color.label;Цвет
-191;locale.parameters.directLight.direction.infoList;"Направление светового потока по оси X
+195;locale.parameters.light.brightness.infoList;Яркость источника освещения.
+194;locale.parameters.light.brightness.label;Яркость
+193;locale.parameters.light.color.infoList;Цвет источника освещения.
+192;locale.parameters.light.color.label;Цвет
+191;locale.parameters.light.direction.infoList;"Направление светового потока по оси X
 Направление светового потока по оси Y
 Направление светового потока по оси Z"
-190;locale.parameters.directLight.direction.label;Направление
-189;locale.parameters.directLight.group.main.label;Основное
-197;locale.parameters.directLight.specularBrightness.infoList;Яркость отражаемых бликов.
-196;locale.parameters.directLight.specularBrightness.label;Яркость бликов
-74;locale.parameters.facemodel.blendMode.infoList;Способ наложения текстуры на фоновое изображение.
-73;locale.parameters.facemodel.blendMode.label;Наложение
-72;locale.parameters.facemodel.color.infoList;"Задаёт цвет заливки для плоскости.
-
-Если есть текстура, цвет выступает в качестве коэффициентов RGB, применяемых к текстуре."
-71;locale.parameters.facemodel.color.label;Цвет
+190;locale.parameters.light.direction.label;Направление
+189;locale.parameters.group.main.label;Основное
+197;locale.parameters.light.specularBrightness.infoList;Яркость отражаемых бликов.
+196;locale.parameters.light.specularBrightness.label;Яркость бликов
 65;locale.parameters.facemodel.eyes.infoList;Показывает, включает ли маска полигоны глаз.
 64;locale.parameters.facemodel.eyes.label;Глаза
 68;locale.parameters.facemodel.group.texture.label;Текстура
 63;locale.parameters.facemodel.group.visible.label;Видимость
 67;locale.parameters.facemodel.mouth.infoList;Показывает, включает ли маска полигоны рта.
 66;locale.parameters.facemodel.mouth.label;Рот
-70;locale.parameters.facemodel.texture.infoList;Изображение текстуры. Если текстура не выбрана, плоскость будет покрыта выбранным цветом.
-69;locale.parameters.facemodel.texture.label;Текстура
-79;locale.parameters.facemodel.textureAnimation.activation.infoList;"Включает анимацию и считывает последовательность кадров.
-[Как указывать кадры](сделать короткую ссылку)."
-80;locale.parameters.facemodel.textureAnimation.activation.error.animationnotFound;Кадры анимации не найдены.
-78;locale.parameters.facemodel.textureAnimation.activation.label;Активация
-88;locale.parameters.facemodel.textureAnimation.fps.infoList;Число проигрываемых кадров в секунду.
-87;locale.parameters.facemodel.textureAnimation.fps.label;fps
-77;locale.parameters.facemodel.textureAnimation.label;Анимация
-84;locale.parameters.facemodel.textureAnimation.triggerStart.infoList;Событие запуска анимации.
-83;locale.parameters.facemodel.textureAnimation.triggerStart.label;Триггер начала
-86;locale.parameters.facemodel.textureAnimation.triggerStop.infoList;Событие остановки анимации.
-85;locale.parameters.facemodel.textureAnimation.triggerStop.label;Триггер остановки
-82;locale.parameters.facemodel.textureAnimation.type.infoList;Тип воспроизведения анимации.
-81;locale.parameters.facemodel.textureAnimation.type.label;Тип
-89;locale.parameters.facemodel.textureTransformation.label;Трансформация
-95;locale.parameters.facemodel.textureTransformation.rotation.infoList;"Углы вращения плоскости в трёхмерном пространстве XYZ.
-3 числа с плавающей точкой."
-94;locale.parameters.facemodel.textureTransformation.rotation.label;Поворот
-91;locale.parameters.facemodel.textureTransformation.scale.infoList;Размер плоскости, на которую накладывается текстура, по осям X и Y.
-90;locale.parameters.facemodel.textureTransformation.scale.label;Масштаб
-93;locale.parameters.facemodel.textureTransformation.shift.infoList;"Смещение плоскости относительно точки привязки в трёхмерном пространстве XYZ.
-3 числа с плавающей точкой.
-Указывается в единицах измерения сцены как число с плавающей точкой."
-92;locale.parameters.facemodel.textureTransformation.shift.label;Сдвиг
-76;locale.parameters.facemodel.transparency.infoList;Степень прозрачности текстуры.
-75;locale.parameters.facemodel.transparency.label;Прозрачность
 57;locale.parameters.group.additional.label;Дополнительно
 13;locale.parameters.group.advancedSettings.label;Продвинутые настройки
 2;locale.parameters.group.main.label;Основное
@@ -118,7 +85,7 @@
 130;locale.parameters.model3d.group.anchor.label;Привязка
 156;locale.parameters.model3d.group.material.label;Материал
 140;locale.parameters.model3d.group.model.label;Модель
-133;locale.parameters.model3d.group.transformation.label;Трансформация
+133;locale.parameters.model3d.group.transform.label;Трансформация
 158;locale.parameters.model3d.material.infoList;Материал 3D модели.
 157;locale.parameters.model3d.material.label;Материал
 142;locale.parameters.model3d.model.infoList;Файл 3D-модели в формате MDL.
@@ -137,7 +104,7 @@
 175;locale.parameters.occluder.anchor.label;Точка привязки
 174;locale.parameters.occluder.group.anchor.label;Привязка
 184;locale.parameters.occluder.group.model.label;Модель
-177;locale.parameters.occluder.group.transformation.label;Трансформация
+177;locale.parameters.occluder.group.transform.label;Трансформация
 186;locale.parameters.occluder.model.infoList;Файл 3D-модели в формате MDL.
 187;locale.parameters.occluder.model.error.needMdl;Загрузите файл в формате MDL.
 185;locale.parameters.occluder.model.label;Модель
@@ -154,18 +121,20 @@
 20;locale.parameters.patch.allowRotation.label;Вращение с головой
 19;locale.parameters.patch.anchor.infoList;Точка привязки, относительно которой текстура будет располагаться в пространстве.
 18;locale.parameters.patch.anchor.label;Точка привязки
-35;locale.parameters.patch.blendMode.infoList;Способ наложения текстуры на фоновое изображение.
-34;locale.parameters.patch.blendMode.label;Наложение
-33;locale.parameters.patch.color.infoList;"Задаёт цвет заливки для плоскости.
+35;locale.parameters.texture.blendMode.infoList;Способ наложения текстуры на фоновое изображение.
+34;locale.parameters.texture.blendMode.label;Наложение
+33;locale.parameters.texture.color.infoList;"Задаёт цвет заливки для плоскости.
 
 Если есть текстура, цвет выступает в качестве коэффициентов RGB, применяемых к текстуре."
-32;locale.parameters.patch.color.label;Цвет
+32;locale.parameters.texture.color.label;Цвет
+37;locale.controls.colorPicker.alpha.infoList;Степень прозрачности текстуры.
+36;locale.controls.colorPicker.alpha.label;Прозрачность
 61;locale.parameters.patch.fit.infoList;"Способ растяжения.
 Можно указать, если anchor: ""fullscreen""."
 60;locale.parameters.patch.fit.label;Растяжение
 17;locale.parameters.patch.group.anchor.label;Привязка
 29;locale.parameters.patch.group.texture.label;Текстура
-22;locale.parameters.patch.group.transformation.label;Трансформация
+22;locale.parameters.patch.group.transform.label;Трансформация
 26;locale.parameters.patch.offset.infoList;"Смещение текстуры на плоскости по осям X, Y.
 Указывается в единицах измерения сцены как число с плавающей точкой."
 25;locale.parameters.patch.offset.label;Смещение
@@ -174,42 +143,40 @@
 24;locale.parameters.patch.size.infoList;"Размер текстуры по осям X, Y.
 Указывается в единицах измерения сцены как число с плавающей точкой."
 23;locale.parameters.patch.size.label;Размер
-31;locale.parameters.patch.texture.infoList;Изображение текстуры. Если текстура не выбрана, плоскость будет покрыта выбранным цветом.
-30;locale.parameters.patch.texture.label;Текстура
-40;locale.parameters.patch.textureAnimation.activation.infoList;"Включает анимацию и считывает последовательность кадров.
+31;locale.parameters.texture.infoList;Изображение текстуры. Если текстура не выбрана, плоскость будет покрыта выбранным цветом.
+30;locale.parameters.texture.label;Текстура
+40;locale.parameters.textureAnimation.activation.infoList;"Включает анимацию и считывает последовательность кадров.
 [Как указывать кадры](сделать короткую ссылку)."
-41;locale.parameters.patch.textureAnimation.activation.error.animationnotFound;Кадры анимации не найдены.
-39;locale.parameters.patch.textureAnimation.activation.label;Активация
-49;locale.parameters.patch.textureAnimation.fps.infoList;Число проигрываемых кадров в секунду.
-48;locale.parameters.patch.textureAnimation.fps.label;fps
-38;locale.parameters.patch.textureAnimation.label;Анимация
-45;locale.parameters.patch.textureAnimation.triggerStart.infoList;Событие запуска анимации.
-44;locale.parameters.patch.textureAnimation.triggerStart.label;Триггер начала
-47;locale.parameters.patch.textureAnimation.triggerStop.infoList;Событие остановки анимации.
-46;locale.parameters.patch.textureAnimation.triggerStop.label;Триггер остановки
-43;locale.parameters.patch.textureAnimation.type.infoList;Тип воспроизведения анимации.
-42;locale.parameters.patch.textureAnimation.type.label;Тип
-50;locale.parameters.patch.textureTransformation.label;Трансформация
-56;locale.parameters.patch.textureTransformation.rotation.infoList;"Углы поворота плоскости в трёхмерном пространстве XYZ.
+41;locale.parameters.textureAnimation.activation.error.animationnotFound;Кадры анимации не найдены.
+39;locale.parameters.textureAnimation.activation.label;Активация
+49;locale.parameters.textureAnimation.fps.infoList;Число проигрываемых кадров в секунду.
+48;locale.parameters.textureAnimation.fps.label;fps
+38;locale.parameters.textureAnimation.label;Анимация
+45;locale.parameters.textureAnimation.triggerStart.infoList;Событие запуска анимации.
+44;locale.parameters.textureAnimation.triggerStart.label;Триггер начала
+47;locale.parameters.textureAnimation.triggerStop.infoList;Событие остановки анимации.
+46;locale.parameters.textureAnimation.triggerStop.label;Триггер остановки
+43;locale.parameters.textureAnimation.type.infoList;Тип воспроизведения анимации.
+42;locale.parameters.textureAnimation.type.label;Тип
+50;locale.parameters.uvTransform.label;Трансформация
+56;locale.parameters.uvTransform.rotation.infoList;"Углы поворота плоскости в трёхмерном пространстве XYZ.
 3 числа с плавающей точкой."
-55;locale.parameters.patch.textureTransformation.rotation.label;Поворот
-52;locale.parameters.patch.textureTransformation.scale.infoList;Размер плоскости, на которую накладывается текстура, по осям X и Y.
-51;locale.parameters.patch.textureTransformation.scale.label;Масштаб
-54;locale.parameters.patch.textureTransformation.shift.infoList;"Смещение плоскости относительно точки привязки в трёхмерном пространстве XYZ.
+55;locale.parameters.uvTransform.rotation.label;Поворот
+52;locale.parameters.uvTransform.scale.infoList;Размер плоскости, на которую накладывается текстура, по осям X и Y.
+51;locale.parameters.uvTransform.scale.label;Масштаб
+54;locale.parameters.uvTransform.offset.infoList;"Смещение плоскости относительно точки привязки в трёхмерном пространстве XYZ.
 3 числа с плавающей точкой.
 Указывается в единицах измерения сцены как число с плавающей точкой."
-53;locale.parameters.patch.textureTransformation.shift.label;Сдвиг
-37;locale.parameters.patch.transparency.infoList;Степень прозрачности текстуры.
-36;locale.parameters.patch.transparency.label;Прозрачность
+53;locale.parameters.uvTransform.offset.label;Сдвиг
 59;locale.parameters.patch.visible.infoList;Условие видимости эффекта.
 58;locale.parameters.patch.visible.label;Видимость
 162;locale.parameters.plane.anchor.infoList;Точка привязки, относительно которой текстура будет располагаться в пространстве.
 161;locale.parameters.plane.anchor.label;Точка привязки
 160;locale.parameters.plane.group.anchor.label;Привязка
 170;locale.parameters.plane.group.material.label;Материал
-163;locale.parameters.plane.group.transformation.label;Трансформация
-172;locale.parameters.plane.material.infoList;Материал 3D модели.
-171;locale.parameters.plane.material.label;Материал
+163;locale.parameters.plane.group.transform.label;Трансформация
+172;locale.parameters.material.infoList;Материал 3D модели.
+171;locale.parameters.material.label;Материал
 167;locale.parameters.plane.offset.infoList;"Смещение по осям X, Y, Z.
 Указывается в единицах измерения сцены как число с плавающей точкой."
 166;locale.parameters.plane.offset.label;Смещение
@@ -219,21 +186,18 @@
 165;locale.parameters.plane.size.infoList;"Размер плоскости по осям X, Y.
 Указывается в единицах измерения сцены как число с плавающей точкой."
 164;locale.parameters.plane.size.label;Размер
-205;locale.parameters.pointLight.anchor.infoList;Точка привязки положения источника света.
-204;locale.parameters.pointLight.anchor.label;Точка привязки
-211;locale.parameters.pointLight.color.infoList;RGB-компоненты цвета источника света. Числа с плавающей точкой, означающие силу цветового канала.
-210;locale.parameters.pointLight.color.label;Цвет
-209;locale.parameters.pointLight.distance.infoList;Максимальная дальность распространения света от источника.
-208;locale.parameters.pointLight.distance.label;Дальность
-203;locale.parameters.pointLight.group.main.label;Основное
-213;locale.parameters.pointLight.lightingBrightness.infoList;"Яркость освещения.
-Отрицательные значения используются для затенения."
-212;locale.parameters.pointLight.lightingBrightness.label;Яркость освещения
-207;locale.parameters.pointLight.position.infoList;Положение источника света в трёхмерном пространстве XYZ относительно точки привязки anchor.
-206;locale.parameters.pointLight.position.label;Позиция
-215;locale.parameters.pointLight.specularBrightness.infoList;Яркость бликов. Значения больше 1.0 увеличивают яркость, меньше 1.0 — уменьшают.
-214;locale.parameters.pointLight.specularBrightness.label;Яркость бликов
-100;locale.parameters.posteffect.group.main.label;Основное
+205;locale.parameters.light.anchor.infoList;Точка привязки положения источника света.
+204;locale.parameters.light.anchor.label;Точка привязки
+211;locale.parameters.light.color.infoList;RGB-компоненты цвета источника света. Числа с плавающей точкой, означающие силу цветового канала.
+210;locale.parameters.light.color.label;Цвет
+209;locale.parameters.light.range.infoList;Максимальная дальность распространения света от источника.
+208;locale.parameters.light.range.label;Дальность
+203;locale.parameters.group.main.label;Основное
+207;locale.parameters.light.position.infoList;Положение источника света в трёхмерном пространстве XYZ относительно точки привязки anchor.
+206;locale.parameters.light.position.label;Позиция
+215;locale.parameters.light.specularBrightness.infoList;Яркость бликов. Значения больше 1.0 увеличивают яркость, меньше 1.0 — уменьшают.
+214;locale.parameters.light.specularBrightness.label;Яркость бликов
+100;locale.parameters.group.main.label;Основное
 104;locale.parameters.posteffect.intensity.infoList;Интенсивность применяемого эффекта.
 103;locale.parameters.posteffect.intensity.label;Интенсивность
 102;locale.parameters.posteffect.type.infoList;Тип применяемого эффекта.
@@ -245,16 +209,15 @@
 - Формат: PNG.
 - Не содержит прозрачных или полупрозрачных областей.
 - Размер файла: 60 Кбайт максимум."
-6;locale.projectManager.icon.error.fileSize;Размер файла не должен превышать 60 Кбайт.
-5;locale.projectManager.icon.error.needPng;Загрузите изображение формата PNG.
-15;locale.projectManager.script.infoList;"Файл скрипта, код которого будет выполняться при запуске маски.
+6;locale.projectManager.icon.error.maximumSize;Размер файла не должен превышать 60 Кбайт.
+15;locale.projectManager.mainScript.infoList;"Файл скрипта, код которого будет выполняться при запуске маски.
 
 Формат: AngelScript (.as).
 
 Код скрипта должен содержать вызов глобальной функции Init()."
-14;locale.projectManager.script.label;Скрипт
-12;locale.projectManager.tapChange.infoList;Указывает движку отслеживать касания экрана пользователем. Касания могут вызывать события в эффектах, плагинах и скриптах.
-11;locale.projectManager.tapChange.label;Нажатие экрана
+14;locale.projectManager.mainScript.label;Скрипт
+12;locale.projectManager.userHint.tapChange.infoList;Указывает движку отслеживать касания экрана пользователем. Касания могут вызывать события в эффектах, плагинах и скриптах.
+11;locale.projectManager.userHint.tapChange.label;Нажатие экрана
 8;locale.projectManager.userHint.infoList;Всплывающая подсказка о действии с маской при её запуске.
 7;locale.projectManager.userHint.label;Подсказка
 9;locale.projectManager.userHint.tapChange.error.requiredTap;Для подсказки «Коснитесь экрана» необходимо разрешить нажатие на экран.
