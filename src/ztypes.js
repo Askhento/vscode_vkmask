@@ -489,11 +489,11 @@ export const ZTextureObject = z.preprocess(
                     defExpanded: true,
                 },
                 animation: {
-                    label: "locale.parameters.texture.groups.animation.label",
+                    label: "locale.parameters.texture.group.animation.label",
                     defExpanded: false,
                 },
                 uv_transform: {
-                    label: "locale.parameters.texture.groups.uvTransform.label",
+                    label: "locale.parameters.texture.group.uvTransform.label",
                     defExpanded: false,
                 },
             },
@@ -512,92 +512,6 @@ const FillModeLabels = [
     "locale.fillModes.wireframe.label",
     "locale.fillModes.point.label",
 ];
-
-// const ZMaterialObject = z
-//     .object({
-//         technique: ZTechniqueAsset({ label: "Technique" }),
-//         textures: z
-//             .object({
-//                 diffuse: ZTextureAsset({ label: "Diffuse" }),
-//                 normal: ZTextureAsset({ label: "Normal" }),
-//                 specular: ZTextureAsset({ label: "Specular" }),
-//                 emissive: ZTextureAsset({ label: "Emissive" }),
-//                 environment: ZTextureAsset({ label: "Environment" }),
-//             })
-//             .describe(uiDescriptions.object),
-//         parameters: z
-//             .object({
-//                 MatDiffColor: ZArray4D.describe(
-//                     {...uiDescriptions.array4d,
-//                         defValue: [1.0, 1.0, 1.0, 1.0],
-//                         label: "Diffuse color",
-//                     }
-//                 ),
-//                 MatSpecColor: ZArray4D.describe(
-//                     {...uiDescriptions.array4d,
-//                         defValue: [0.0, 0.0, 0.0, 1.0],
-//                         showAlways: false,
-//                         label: "Specular color",
-//                     }
-//                 ),
-//                 MatEmissiveColor: ZArray3D.describe(
-//                     {...uiDescriptions.array3d,  showAlways: false, label: "Emissive color" }
-//                 ),
-//                 MatEnvMapColor: ZArray3D.describe(
-//                     {...uiDescriptions.array3d,
-//                         defValue: [1.0, 1.0, 1.0],
-//                         showAlways: false,
-//                         label: "Environment color",
-//                     }
-//                 ),
-//                 Roughness: ZNumberSlider.describe(
-//                     {...uiDescriptions.numberSlider,
-//                         defValue: 0.5,
-//                         showAlways: false,
-//                         label: "Roughness",
-//                     }
-//                 ),
-//                 Metallic: ZNumberSlider.describe(
-//                     {...uiDescriptions.numberSlider,
-//                         defValue: 0.5,
-//                         showAlways: false,
-//                         label: "Metallness",
-//                     }
-//                 ),
-//                 UOffset: ZArray4D.describe(
-//                     {...uiDescriptions.array4d,
-//                         defValue: [1.0, 0.0, 0.0, 0.0],
-//                         showAlways: false,
-//                         label: "U transform",
-//                     }
-//                 ),
-//                 VOffset: ZArray4D.describe(
-//                     {...uiDescriptions.array4d,
-//                         defValue: [0.0, 1.0, 0.0, 0.0],
-//                         showAlways: false,
-//                         label: "V transform",
-//                     }
-//                 ),
-//             })
-//             .describe(uiDescriptions.object)
-//             .passthrough(),
-//         cull: ZCullMode.describe(
-//             {...uiDescriptions.enum,
-//                 label: "Culling",
-//                 options: Object.keys(ZCullMode.Values),
-//                 defValue: ZCullMode.Values.ccw,
-//             }
-//         ),
-//         fill: ZFillMode.describe(
-//             {...uiDescriptions.enum,
-//                 label: "Fill",
-//                 options: Object.keys(ZFillMode.Values),
-//                 defValue: ZFillMode.Values.solid,
-//                 showAlways: false,
-//             }
-//         ),
-//     })
-//     .describe(uiDescriptions.object);
 
 export const ZMaterialObject = z.preprocess(
     (val) => {
@@ -683,27 +597,27 @@ export const ZMaterialObject = z.preprocess(
                 },
 
                 diffuse: {
-                    label: "locale.material.groups.diffuse.label",
+                    label: "locale.material.group.diffuse.label",
                     defExpanded: true,
                 },
 
                 normal: {
-                    label: "locale.material.groups.normal.label",
+                    label: "locale.material.group.normal.label",
                     defExpanded: true,
                 },
 
                 specular: {
-                    label: "locale.material.groups.specular.label",
+                    label: "locale.material.group.specular.label",
                     defExpanded: true,
                 },
 
                 environment: {
-                    label: "locale.material.groups.environment.label",
+                    label: "locale.material.group.environment.label",
                     defExpanded: true,
                 },
 
                 emissive: {
-                    label: "locale.material.groups.emissive.label",
+                    label: "locale.material.group.emissive.label",
                     defExpanded: true,
                 },
             },
@@ -828,23 +742,23 @@ const ZFacemodelEffect = ZBaseEffect.extend({
         },
 
         visible: {
-            label: "locale.parameters.facemodel.groups.visible.label",
+            label: "locale.parameters.facemodel.group.visible.label",
             defExpanded: true,
         },
 
         transform: {
-            label: "locale.parameters.facemodel.groups.transform.label",
+            label: "locale.parameters.facemodel.group.transform.label",
             defExpanded: true,
         },
 
         texture: {
-            label: "locale.parameters.facemodel.groups.texture.label",
+            label: "locale.parameters.facemodel.group.texture.label",
             defExpanded: true,
             disableMargin: true,
         },
 
         tags: {
-            label: "locale.parameters.facemodel.groups.tags.label",
+            label: "locale.parameters.facemodel.group.tags.label",
             defExpanded: false,
         },
     },
@@ -966,28 +880,28 @@ const ZPatchEffect = ZBaseEffect.extend({
         },
 
         anchor: {
-            label: "locale.parameters.patch.groups.anchor.label",
+            label: "locale.parameters.patch.group.anchor.label",
             defExpanded: true,
         },
 
         transform: {
-            label: "locale.parameters.patch.groups.transform.label",
+            label: "locale.parameters.patch.group.transform.label",
             defExpanded: true,
         },
 
         texture: {
-            label: "locale.parameters.patch.groups.texture.label",
+            label: "locale.parameters.patch.group.texture.label",
             defExpanded: true,
             disableMargin: true,
         },
 
         tags: {
-            label: "locale.parameters.patch.groups.tags.label",
+            label: "locale.parameters.patch.group.tags.label",
             defExpanded: false,
         },
 
         advanced: {
-            label: "locale.parameters.patch.groups.advanced.label",
+            label: "locale.parameters.patch.group.advanced.label",
             defExpanded: false,
         },
     },
@@ -1007,11 +921,11 @@ const ZBeautifyEffect = ZBaseEffect.extend({
     label: "locale.parameters.beautify.label",
     groups: {
         main: {
-            label: "locale.parameters.beautify.groups.main.label",
+            label: "locale.parameters.beautify.group.main.label",
             defExpanded: true,
         },
         tags: {
-            label: "locale.parameters.beautify.groups.tags.label",
+            label: "locale.parameters.beautify.group.tags.label",
             defExpanded: false,
         },
     },
@@ -1093,27 +1007,27 @@ const ZColorfilterEffect = ZBaseEffect.extend({
         },
 
         anchor: {
-            label: "locale.parameters.colorFilter.groups.anchor.label",
+            label: "locale.parameters.colorFilter.group.anchor.label",
             defExpanded: true,
         },
 
         transform: {
-            label: "locale.parameters.colorFilter.groups.transform.label",
+            label: "locale.parameters.colorFilter.group.transform.label",
             defExpanded: true,
         },
 
         colorfilter: {
-            label: "locale.parameters.colorFilter.groups.colorfilter.label",
+            label: "locale.parameters.colorFilter.group.colorfilter.label",
             defExpanded: true,
         },
 
         tags: {
-            label: "locale.parameters.colorFilter.groups.tags.label",
+            label: "locale.parameters.colorFilter.group.tags.label",
             defExpanded: false,
         },
 
         advanced: {
-            label: "locale.parameters.colorFilter.groups.advanced.label",
+            label: "locale.parameters.colorFilter.group.advanced.label",
             defExpanded: false,
         },
     },
@@ -1158,24 +1072,24 @@ const ZModel3dEffect = ZBaseEffect.extend({
         },
 
         anchor: {
-            label: "locale.parameters.model3d.groups.anchor.label",
+            label: "locale.parameters.model3d.group.anchor.label",
             defExpanded: true,
         },
 
         transform: {
-            label: "locale.parameters.model3d.groups.transform.label",
+            label: "locale.parameters.model3d.group.transform.label",
             defExpanded: true,
         },
         model: {
-            label: "locale.parameters.model3d.groups.model.label",
+            label: "locale.parameters.model3d.group.model.label",
             defExpanded: true,
         },
         materials: {
-            label: "locale.parameters.model3d.groups.materials.label",
+            label: "locale.parameters.model3d.group.materials.label",
             defExpanded: true,
         },
         tags: {
-            label: "locale.parameters.model3d.groups.tags.label",
+            label: "locale.parameters.model3d.group.tags.label",
             defExpanded: false,
         },
     },
@@ -1220,20 +1134,20 @@ const ZPlaneEffect = ZBaseEffect.extend({
         },
 
         anchor: {
-            label: "locale.parameters.plane.groups.anchor.label",
+            label: "locale.parameters.plane.group.anchor.label",
             defExpanded: true,
         },
 
         transform: {
-            label: "locale.parameters.plane.groups.transform.label",
+            label: "locale.parameters.plane.group.transform.label",
             defExpanded: true,
         },
         materials: {
-            label: "locale.parameters.plane.groups.material.label",
+            label: "locale.parameters.plane.group.material.label",
             defExpanded: true,
         },
         tags: {
-            label: "locale.parameters.plane.groups.tags.label",
+            label: "locale.parameters.plane.group.tags.label",
             defExpanded: false,
         },
     },
@@ -1334,7 +1248,7 @@ const ZLightAmbientEffect = z
             },
 
             tags: {
-                label: "locale.parameters.light.groups.tags.label",
+                label: "locale.parameters.light.group.tags.label",
                 defExpanded: false,
             },
         },
@@ -1373,17 +1287,17 @@ const ZLightDirectEffect = z
             },
 
             anchor: {
-                label: "locale.parameters.light.groups.anchor.label",
+                label: "locale.parameters.light.group.anchor.label",
                 defExpanded: true,
             },
 
             transform: {
-                label: "locale.parameters.light.groups.transform.label",
+                label: "locale.parameters.light.group.transform.label",
                 defExpanded: true,
             },
 
             tags: {
-                label: "locale.parameters.light.groups.tags.label",
+                label: "locale.parameters.light.group.tags.label",
                 defExpanded: false,
             },
         },
@@ -1442,17 +1356,17 @@ const ZLightPointEffect = z
             },
 
             anchor: {
-                label: "locale.parameters.light.groups.anchor.label",
+                label: "locale.parameters.light.group.anchor.label",
                 defExpanded: true,
             },
 
             transform: {
-                label: "locale.parameters.light.groups.transform.label",
+                label: "locale.parameters.light.group.transform.label",
                 defExpanded: true,
             },
 
             tags: {
-                label: "locale.parameters.light.groups.tags.label",
+                label: "locale.parameters.light.group.tags.label",
                 defExpanded: false,
             },
         },
@@ -1497,11 +1411,11 @@ const ZPostEffectEffect = ZBaseEffect.extend({
     label: "locale.parameters.postEffect.label",
     groups: {
         main: {
-            label: "locale.parameters.postEffect.groups.main.label",
+            label: "locale.parameters.postEffect.group.main.label",
             defExpanded: true,
         },
         tags: {
-            label: "locale.parameters.postEffect.groups.tags.label",
+            label: "locale.parameters.postEffect.group.tags.label",
             defExpanded: false,
         },
     },
@@ -1708,15 +1622,15 @@ export const ZMaskSettings = z
         ...uiDescriptions.object,
         groups: {
             main: {
-                label: "locale.projectManager.groups.main.label",
+                label: "locale.projectManager.group.main.label",
                 defExpanded: true,
             },
             permissions: {
-                label: "locale.projectManager.groups.permissions.label",
+                label: "locale.projectManager.group.permissions.label",
                 defExpanded: false,
             },
             advanced: {
-                label: "locale.projectManager.groups.advanced.label",
+                label: "locale.projectManager.group.advanced.label",
                 defExpanded: false,
             },
         },

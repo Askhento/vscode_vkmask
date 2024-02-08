@@ -1,7 +1,7 @@
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
-import { getTranslationCSV } from "./downloadLocaleCSV.mjs";
+import { csvToObject, getTranslations } from "./downloadLocaleCSV.mjs";
 import { parseSourceKeys } from "./parseSourceKeys.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -47,7 +47,9 @@ function checkExistingTranslations(bundleName, translations, dryRun = false) {
 
     Object.keys(translations[lang]).forEach((key) => {
         if (!(key in bundle)) {
-            console.log(`\x1b[33m Unknown translation key=${key}\x1b[0m`);
+            console.log(
+                `\x1b[33mUnknown translation key: \n${key} : ${translations[lang][key]}\x1b[0m`
+            );
             return;
         }
         console.log(
@@ -138,8 +140,12 @@ function processContributionBundles(dryRun = false) {
     );
 }
 
+const csvURL =
+    // "https://psv4.userapi.com/c237031/u102637718/docs/d52/b36c541f409c/Klyuchi.csv?extra=Nh_KsAQh7F56wfS3nuVmsADxmPVqbZu06Wb1JWULyY1Sp2BEUgwNzHVokfLOUWbuCma5Lck05CiESRiGMJBOEOlA8J1_dTEYKZBP0RL55IN1x9FI0Xi1GOr8veFT1tTH1CEtewgygxhryXYn7gqb606Fkg&dl=1";
+    path.join(__dirname, "./translationKeys.csv");
+
 const translations = {
-    ru: await getTranslationCSV(), // ! could be null
+    ru: await getTranslations(csvURL), // ! could be null
 };
 
 processSourceBundles(translations, true);

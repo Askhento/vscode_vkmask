@@ -323,9 +323,8 @@
         "package-win32-x64": "vsce package --target win32-x64 --ignoreFile .win32_x64.vscodeignore --out ./vsix-packages",
         "package-darwin-x64": "vsce package --target darwin-x64 --ignoreFile .darwin_x64.vscodeignore --out ./vsix-packages",
         "package-darwin-arm64": "vsce package --target darwin-arm64 --ignoreFile .darwin_arm64.vscodeignore --out ./vsix-packages",
-        "publish": " publish patch --packagePath $(find ./vsix-packages -iname *.vsix)",
-        "generateBuiltins": "npx ts-node-esm ./src/generateBuiltins.ts",
-        "deploy": "echo todo"
+        "publish-extension": "rimraf ./vsix-packages &&  publish --packagePath $(find ./vsix-packages -iname *.vsix)",
+        "generateBuiltins": "npx ts-node-esm ./src/generateBuiltins.ts"
     },
     "devDependencies": {
         "@rollup/plugin-commonjs": "^25.0.7",
