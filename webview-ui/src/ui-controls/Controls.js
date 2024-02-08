@@ -71,7 +71,7 @@ function addTypeToSchema(schema) {
     switch (description.name) {
         case "object":
             // if (k === "disabled") return [];
-            // console.log("in object")
+            console.log("in object", res);
 
             res = z.object(
                 Object.fromEntries(
@@ -105,10 +105,10 @@ function addTypeToSchema(schema) {
 
         case "discriminatedUnion":
             // seems like unions are different and should not be included in ui
-            console.log(
-                "in desc union",
-                schema.options.map((elem) => addTypeToSchema(elem))
-            );
+            // console.log(
+            //     "in desc union",
+            //     schema.options.map((elem) => addTypeToSchema(elem))
+            // );
             res = z.discriminatedUnion(
                 schema.discriminator,
                 schema.options.map((elem) => addTypeToSchema(elem))

@@ -29,12 +29,12 @@
     }
 </script>
 
-{#if visible || infoOpened || errors.length}
+{#if infoList && (visible || infoOpened || errors.length)}
     <div class="info-btn">
         <div class:error={errors.length} class="icon-wrapper">
             <span
                 on:click|stopPropagation={() => {
-                    // console.log("span lol");
+                    console.log("info list", infoList);
                     infoOpened = !infoOpened;
                 }}
                 class="codicon codicon-info"
