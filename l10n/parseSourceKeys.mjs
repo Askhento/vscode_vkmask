@@ -12,7 +12,7 @@ export function parseSourceKeys(searchPaths, pattern) {
         for (const m of match) {
             const capturedKey = m[1];
             if (!(capturedKey in localeKeys)) {
-                localeKeys[capturedKey] = "!!!TRANSLATION_REQUIRED!!!";
+                localeKeys[capturedKey] = `${capturedKey} NEED TRANSLATION`;
             }
             // else {
             //     console.log(

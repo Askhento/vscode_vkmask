@@ -71,7 +71,7 @@ function addTypeToSchema(schema) {
     switch (description.name) {
         case "object":
             // if (k === "disabled") return [];
-            console.log("in object", res);
+            // console.log("in object", res);
 
             res = z.object(
                 Object.fromEntries(

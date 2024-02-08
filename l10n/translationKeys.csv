@@ -240,13 +240,13 @@
 101;locale.parameters.posteffect.type.label;Тип
 1;locale.projectManager;Менеджер проекта
 3;locale.projectManager.icon.label;Иконка
-4;locale.projectManager.icon.label.infoList;"Иконка маски в каталоге. Представляет содержимое маски или накладываемый эффект.
+4;locale.projectManager.icon.infoList;"Иконка маски в каталоге. Представляет содержимое маски или накладываемый эффект.
 
 - Формат: PNG.
 - Не содержит прозрачных или полупрозрачных областей.
 - Размер файла: 60 Кбайт максимум."
-6;locale.projectManager.icon.label.error.fileSize;Размер файла не должен превышать 60 Кбайт.
-5;locale.projectManager.icon.label.error.needPng;Загрузите изображение формата PNG.
+6;locale.projectManager.icon.error.fileSize;Размер файла не должен превышать 60 Кбайт.
+5;locale.projectManager.icon.error.needPng;Загрузите изображение формата PNG.
 15;locale.projectManager.script.infoList;"Файл скрипта, код которого будет выполняться при запуске маски.
 
 Формат: AngelScript (.as).

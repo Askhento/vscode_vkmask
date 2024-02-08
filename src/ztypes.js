@@ -259,13 +259,11 @@ const AssetTypes = {
 };
 
 const ZText = z.string().describe(uiDescriptions.text);
-const ZTags = z
-    .string()
-    .describe({
-        ...uiDescriptions.tags,
-        label: "locale.parameters.tags.label",
-        info: { infoList: "locale.parameters.tags.infoList" },
-    });
+const ZTags = z.string().describe({
+    ...uiDescriptions.tags,
+    label: "locale.parameters.tags.label",
+    info: { infoList: "locale.parameters.tags.infoList" },
+});
 
 const ZVisibleType = z.enum(["always", "face", "animation", "mouth_open"]);
 const ZVisibleTypeLabels = [
@@ -974,8 +972,11 @@ const ZBeautifyEffect = ZBaseEffect.extend({
     },
 });
 
-// "lookup": "ColorFilter/lookup.png",
-// "intensity":
+const lookupInfo = {
+    infoList: "locale.parameters.colorfilter.lookup.infoList",
+    infoHeader: "locale.parameters.colorfilter.lookup.infoHeader",
+    infoErrorHeader: "locale.parameters.colorfilter.lookup.infoErrorHeader",
+};
 
 const ZColorfilterEffect = ZBaseEffect.extend({
     name: z.literal("colorfilter").describe(uiDescriptions.none),
@@ -1036,8 +1037,8 @@ const ZColorfilterEffect = ZBaseEffect.extend({
     }),
 
     lookup: ZTextureAsset({
-        label: "locale.parameters.colorFilter.lut.label",
-        info: { infoList: "locale.parameters.colorFilter.lut.infoList" },
+        label: "locale.parameters.colorFilter.lookup.label",
+        info: lookupInfo,
         group: "colorfilter",
     }),
     intensity: ZNumberSlider.describe({
@@ -1309,7 +1310,7 @@ const ZLightAmbientEffect = z
 
         groups: {
             main: {
-                label: null,
+                label: "locale.parameters.light.group.main.label",
                 defExpanded: true,
             },
 
@@ -1351,7 +1352,7 @@ const ZLightDirectEffect = z
 
         groups: {
             main: {
-                label: null,
+                label: "locale.parameters.light.group.main.label",
                 defExpanded: true,
             },
 
@@ -1424,7 +1425,7 @@ const ZLightPointEffect = z
 
         groups: {
             main: {
-                label: null,
+                label: "locale.parameters.light.group.main.label",
                 defExpanded: true,
             },
 
