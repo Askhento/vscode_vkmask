@@ -16,10 +16,6 @@ experiments
 node_modules/**
 rollup.config.mjs
 rollup.extension.mjs
-
 !node_modules/@vscode/codicons/dist/codicon.css
-!node_modules/@vscode/codicons/dist/codicon.ttf
-
-
-!node_modules/@img/sharp-libvips-darwin-x64
-!node_modules/@img/sharp-darwin-x64
+!node_modules/@vscode/codicons/dist/codicon.ttf\n
+!./node_modules/@img/sharp-win32-x64

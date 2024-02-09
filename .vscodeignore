@@ -18,5 +18,3 @@ rollup.config.mjs
 rollup.extension.mjs
 !node_modules/@vscode/codicons/dist/codicon.css
 !node_modules/@vscode/codicons/dist/codicon.ttf
-
-!node_modules/@img/**
