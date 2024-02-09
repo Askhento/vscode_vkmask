@@ -22,10 +22,16 @@ localeBundles.forEach((bundleName) => {
     });
 });
 
+const sortedTranslations = Object.entries(localeObject).sort(([keya, vala], [keyb, valb]) => {
+    return keya.localeCompare(keyb);
+});
+
+// console.log(sortedTranslations);
+
 let result = "";
 
-Object.keys(localeObject).forEach((key) => {
-    result += `${key};${localeObject[key]}\n`;
+sortedTranslations.forEach(([key, value]) => {
+    result += `${key};"${value}"\n`;
 });
 
 fs.writeFileSync("./l10n/generated.csv", result, { encoding: "utf8" });

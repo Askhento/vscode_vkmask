@@ -113,7 +113,7 @@ function processSourceBundles(translations, dryRun = false) {
     });
 }
 
-function processContributionBundles(dryRun = false) {
+function processContributionBundles(translations, dryRun = false) {
     console.log("");
     console.log("Parsing package.json keys");
 
@@ -147,9 +147,10 @@ function processContributionBundles(dryRun = false) {
 
     console.log("Updating package.json bundles");
 
-    packageJSONBundles.forEach((bundleName) =>
-        updateBundle(mainPackgeJSONBundle, path.join("..", bundleName), false)
-    );
+    packageJSONBundles.forEach((bundleName) => {
+        updateBundle(mainPackgeJSONBundle, path.join("..", bundleName), false);
+        // checkExistingTranslations(bundleName, translations, dryRun);
+    });
 }
 
 const csvURL =
@@ -161,6 +162,8 @@ const translations = {
 };
 
 processSourceBundles(translations, false);
+
+// processContributionBundles(translations, true);
 // console.log(translations);
 
 // path.readdirSync()
