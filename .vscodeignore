@@ -12,6 +12,7 @@ rollup.config.mjs
 rollup.extension.mjs
 generateIgnoreFiles.sh
 ramdisk_scripts
+vsix-packages
 experiments
 !node_modules/@vscode/codicons/dist/codicon.css
 !node_modules/@vscode/codicons/dist/codicon.ttf
