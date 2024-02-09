@@ -10,3 +10,5 @@ experiments
 package-lock.json
 res/mask-assets
 ./l10n/translationKeys.csv
+.*.vscodeignore
+vsix-packages
