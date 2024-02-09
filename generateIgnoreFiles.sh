@@ -7,7 +7,7 @@ function genIgnore {
     newFile=".$1.vscodeignore"
     cat .vscodeignore  > $newFile
 
-    echo "\n" >> $newFile
+    echo -e "\n" >> $newFile
 
     for i in $(find node_modules/@img -type d -maxdepth 1 -regex "$regexp"); 
     do
