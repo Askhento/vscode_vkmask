@@ -27,4 +27,9 @@
         /* padding: 0; */
         box-sizing: border-box;
     }
+
+    vscode-data-grid {
+        padding-left: var(--global-body-padding-left);
+        padding-right: var(--global-body-padding-right);
+    }
 </style>

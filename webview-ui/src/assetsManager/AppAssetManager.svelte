@@ -4,7 +4,7 @@
     import { provideVSCodeDesignSystem, allComponents } from "@vscode/webview-ui-toolkit";
     import * as l10n from "@vscode/l10n";
 
-    import { RequestTarget, RequestCommand, SelectionType } from "../../../src/types";
+    import { RequestTarget, RequestCommand, AppState, SelectionType } from "../../../src/types";
     import Asset from "./Asset.svelte";
     import { logger, logDump } from "../logger";
     import { writable } from "svelte/store";
@@ -18,6 +18,7 @@
     const assets = writable([]);
     const tabInfo = writable({});
     let assetGroups = {};
+    let appState = AppState.loading;
 
     const assetsDefaults = {
         material: {
@@ -49,9 +50,25 @@
                 processTabInfo(payload);
                 break;
 
+            case RequestCommand.updateAppState:
+                processAppState(payload);
+                break;
+
             default:
                 break;
         }
+    }
+
+    async function getAppState() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getAppState,
+        });
+        processAppState(payload);
+    }
+
+    function processAppState(payload) {
+        appState = payload.state;
     }
 
     async function getAssets() {
@@ -206,13 +223,15 @@
     }
 
     async function init() {
-        await getLocatization();
-        await getTabInfo();
-        await getSelection();
-        await getAssets();
+        // await getLocatization();
 
-        // await tick();
-        // skippedInit = true;
+        // await getTabInfo();
+        // await getSelection();
+        // await getAssets();
+
+        await Promise.all([getLocatization(), getSelection(), getTabInfo(), getAssets()]);
+
+        await getAppState();
     }
 
     init();
@@ -224,26 +243,29 @@
     // }
 </script>
 
-{#key $selection}
-    {#key $assets}
-        {#if Object.keys(assetGroups).length}
-            {#each Object.entries(assetGroups) as [groupName, groupData]}
-                <!-- content here -->
-                <vscode-divider class="divider" role="separator" />
-                <div
-                    class="group-label"
-                    on:click={() => {
-                        groupData.expanded = !groupData.expanded;
+{#if appState === AppState.running}
+    {#key $selection}
+        {#key $assets}
+            {#if Object.keys(assetGroups).length}
+                {#each Object.entries(assetGroups) as [groupName, groupData]}
+                    <!-- content here -->
+                    <vscode-divider class="divider" role="separator" />
+                    <div
+                        class="group-label"
+                        on:click={() => {
+                            groupData.expanded = !groupData.expanded;
 
-                        // const tabKey = [groupName].join(".");
-                        $tabInfo[groupName] = groupData.expanded;
-                        sendTabInfo();
-                    }}
-                >
-                    <i class="codicon codicon-chevron-{groupData.expanded ? 'down' : 'right'}" />
+                            // const tabKey = [groupName].join(".");
+                            $tabInfo[groupName] = groupData.expanded;
+                            sendTabInfo();
+                        }}
+                    >
+                        <i
+                            class="codicon codicon-chevron-{groupData.expanded ? 'down' : 'right'}"
+                        />
 
-                    <span>{l10n.t(assetLocaleLabels[groupName])}</span>
-                    <!-- {#if groupName === "material"}
+                        <span>{l10n.t(assetLocaleLabels[groupName])}</span>
+                        <!-- {#if groupName === "material"}
                         <vscode-button
                             class="add-btn"
                             appearance="icon"
@@ -256,25 +278,28 @@
                             <span class="codicon codicon-add" />
                         </vscode-button>
                     {/if} -->
-                </div>
-                {#if groupData.expanded}
-                    {#each groupData.elements as asset}
-                        <Asset
-                            value={asset}
-                            onSelect={sendSelect}
-                            onDelete={() => {
-                                removeAsset(asset.path);
-                            }}
-                        />
-                    {/each}
-                {/if}
-            {/each}
-            <!-- group -->
-        {:else}
-            <p class="empty-assets">{l10n.t("locale.assetManager.emptyAssetsHint")}</p>
-        {/if}
+                    </div>
+                    {#if groupData.expanded}
+                        {#each groupData.elements as asset}
+                            <Asset
+                                value={asset}
+                                onSelect={sendSelect}
+                                onDelete={() => {
+                                    removeAsset(asset.path);
+                                }}
+                            />
+                        {/each}
+                    {/if}
+                {/each}
+                <!-- group -->
+            {:else}
+                <p class="empty-assets">{l10n.t("locale.assetManager.emptyAssetsHint")}</p>
+            {/if}
+        {/key}
     {/key}
-{/key}
+{:else}
+    <vscode-progress-ring />
+{/if}
 
 <style>
     * {
@@ -293,11 +318,6 @@
         margin: var(--global-margin);
         display: flex;
         /* justify-items: end; */
-    }
-
-    .add-btn {
-        /* align-self: flex-end; */
-        margin-left: auto;
     }
 
     vscode-divider {

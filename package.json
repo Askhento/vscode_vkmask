@@ -305,7 +305,7 @@
                     "contextualTitle": "%locale.contribution.contextTitle.assetsManager%",
                     "id": "vkmask.assetsManager",
                     "name": "%locale.contribution.name.assetsManager%",
-                    "icon": "${files}"
+                    "icon": "$(files)"
                 }
             ]
         }

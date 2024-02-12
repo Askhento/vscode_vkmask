@@ -76,6 +76,7 @@
         height: var(--global-block-height);
         text-align: center;
         /* min-width: 0; */
+        padding-right: var(--global-body-padding-right);
     }
 
     vscode-text-field::part(root) {

@@ -63,7 +63,7 @@
         uiElements,
         selectionName;
 
-    let appState = AppState.running,
+    let appState = AppState.loading,
         error: AppError | null;
 
     const assets = writable([]);
@@ -342,8 +342,9 @@
     }
 
     async function parseUI() {
+        // !!!!!!!!
         error = null;
-        appState = AppState.running;
+
         if (!selectedIsKnown()) {
             uiElements = null;
             return;
@@ -370,6 +371,7 @@
                     print("will parse asset", asset);
                     parseResult = AssetParserForUI.safeParse(asset);
                 } else {
+                    appState = AppState.running;
                     return;
                 }
 
@@ -386,6 +388,7 @@
             uiElements = parseResult.data;
             print("parse result : ", parseResult);
 
+            appState = AppState.running;
             if (selection.type === SelectionType.effect) updateTags();
         } else {
             // print(parseResult.error);
@@ -413,6 +416,7 @@
     async function processSelection(newSelection) {
         selectionName = null;
         selection = newSelection;
+        appState = AppState.loading;
         // await getTabInfo();
 
         // print("new selection", selection);
@@ -626,19 +630,18 @@
 </script>
 
 <div class="parameters-wrapper">
+    {#if $selectionStack.length !== 0}
+        <vscode-button
+            on:click|stopPropagation={() => {
+                removeUndo();
+            }}
+        >
+            <span slot="start" class="codicon codicon-arrow-circle-left"></span>
+
+            <span class="btn-text">Back</span>
+        </vscode-button>
+    {/if}
     {#if appState === AppState.running}
-        {#if $selectionStack.length !== 0}
-            <vscode-button
-                on:click|stopPropagation={() => {
-                    removeUndo();
-                }}
-            >
-                <span slot="start" class="codicon codicon-arrow-circle-left"></span>
-
-                <span class="btn-text">Back</span>
-            </vscode-button>
-        {/if}
-
         <!-- <div class="header-wrapper">
             <h3>{l10n.t(selection.type).toUpperCase()}</h3>
             {#if selectionName}
@@ -729,6 +732,8 @@
                 <!-- <pre>{JSON.stringify(selection, null, "\t")}</pre> -->
             {/if}
         {/key}
+    {:else if appState === AppState.loading}
+        <vscode-progress-ring />
     {:else if appState === AppState.error}
         {#key error}
             <!-- <div>should be error</div> -->
@@ -777,8 +782,11 @@
         position: sticky;
         width: 100%;
         margin: var(--global-margin);
+        margin-right: var(--global-body-padding-right);
+        margin-left: var(--global-body-padding-left);
     }
-
+    vscode-button::part(control) {
+    }
     .empty-parameters {
         padding-left: var(--global-body-padding-left);
     }
