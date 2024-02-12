@@ -519,7 +519,7 @@
         padding-right: var(--global-body-padding-right);
 
         margin: unset;
-        /* position: relative; */
+        position: relative;
         display: flex;
         flex-direction: column;
     }
