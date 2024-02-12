@@ -128,6 +128,7 @@
     }
 
     div.display-value {
+        pointer-events: none;
         position: absolute;
         width: 100%;
         height: 100%;
@@ -142,6 +143,7 @@
     }
 
     div.value-label {
+        pointer-events: none;
         color: var(--vscode-descriptionForeground);
 
         position: absolute;
