@@ -5,7 +5,13 @@
     import { MessageHandler } from "../common/MessageHandler";
     import type { MessageHandlerData } from "../common/MessageHandler";
     import List from "../components/DraggableList.svelte";
-    import { RequestTarget, RequestCommand, SelectionType, ViewIds } from "../../../src/types";
+    import {
+        RequestTarget,
+        RequestCommand,
+        SelectionType,
+        ViewIds,
+        AppState,
+    } from "../../../src/types";
     import type { Selection } from "../../../src/types";
     import Effect from "./Effect.svelte";
     import { logger, logDump } from "../logger";
@@ -21,6 +27,8 @@
     const effects = writable([]);
     const settings = writable([]);
     const tabInfo = writable({});
+    let appState = AppState.loading;
+
     let experimentalFeatures = false;
     const experimentalEffects = new Set(["liquifiedwarp"]);
     const messageHandler = new MessageHandler(handleMessageApp, origin);
@@ -51,9 +59,25 @@
                 processTabInfo(payload);
                 break;
 
+            case RequestCommand.updateAppState:
+                processAppState(payload);
+                break;
+
             default:
                 break;
         }
+    }
+
+    async function getAppState() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getAppState,
+        });
+        processAppState(payload);
+    }
+
+    function processAppState(payload) {
+        appState = payload.state;
     }
 
     async function getSettings() {
@@ -239,10 +263,8 @@
     }
 
     async function init() {
-        await getLocatization();
-        await getEffects();
-        await getSelection();
-        getSettings();
+        await Promise.all([getLocatization(), getEffects(), getSelection(), getSettings()]);
+        await getAppState();
     }
 
     // print("INIT");
@@ -250,82 +272,86 @@
 </script>
 
 <!-- <AddEffect /> -->
-{#key $selection}
-    {#key $effects}
-        {#if $effects.length}
-            <List
-                elements={$effects}
-                elementComponent={Effect}
-                name="Effects"
-                onDrop={async (newElements, dragId) => {
-                    // !!! check type of selection
-                    const newId = newElements.findIndex((e) => e.id === dragId);
-                    const dragDir = Math.sign(newId - dragId);
-                    const minEdge = Math.min(newId, dragId);
-                    const maxEdge = Math.max(newId, dragId);
+{#if appState === AppState.running}
+    {#key $selection}
+        {#key $effects}
+            {#if $effects.length}
+                <List
+                    elements={$effects}
+                    elementComponent={Effect}
+                    name="Effects"
+                    onDrop={async (newElements, dragId) => {
+                        // !!! check type of selection
+                        const newId = newElements.findIndex((e) => e.id === dragId);
+                        const dragDir = Math.sign(newId - dragId);
+                        const minEdge = Math.min(newId, dragId);
+                        const maxEdge = Math.max(newId, dragId);
 
-                    if (newId === dragId) return;
+                        if (newId === dragId) return;
 
-                    // print("newId", newId);
-                    let selectionUpdated = false;
-                    if ($selection.type === SelectionType.effect) {
-                        if (dragId === $selection.id) {
-                            // print("selected drag");
-                            $selection.id = newId;
-                            selectionUpdated = true;
-                        } else if (dragId > $selection.id && newId <= $selection.id) {
-                            $selection.id++;
-                            selectionUpdated = true;
-                        } else if (dragId < $selection.id && newId >= $selection.id) {
-                            $selection.id--;
-                            selectionUpdated = true;
+                        // print("newId", newId);
+                        let selectionUpdated = false;
+                        if ($selection.type === SelectionType.effect) {
+                            if (dragId === $selection.id) {
+                                // print("selected drag");
+                                $selection.id = newId;
+                                selectionUpdated = true;
+                            } else if (dragId > $selection.id && newId <= $selection.id) {
+                                $selection.id++;
+                                selectionUpdated = true;
+                            } else if (dragId < $selection.id && newId >= $selection.id) {
+                                $selection.id--;
+                                selectionUpdated = true;
+                            }
                         }
-                    }
 
-                    // due to linear lookup
-                    // it is hard to manipulate data in tabinfo
+                        // due to linear lookup
+                        // it is hard to manipulate data in tabinfo
 
-                    await getTabInfo(); // !!!!! add auto update by extension
+                        await getTabInfo(); // !!!!! add auto update by extension
 
-                    // print("drag", dragId, newId);
-                    const dragTabInfo = {};
-                    print("tabInfo drag before", $tabInfo);
+                        // print("drag", dragId, newId);
+                        const dragTabInfo = {};
+                        print("tabInfo drag before", $tabInfo);
 
-                    Object.keys($tabInfo).forEach((tabKey) => {
-                        const [root, id, ...rest] = tabKey.split(".");
+                        Object.keys($tabInfo).forEach((tabKey) => {
+                            const [root, id, ...rest] = tabKey.split(".");
 
-                        if (+id === dragId) {
-                            const newTabKey = [root, newId, ...rest].join(".");
-                            dragTabInfo[newTabKey] = $tabInfo[tabKey];
+                            if (+id === dragId) {
+                                const newTabKey = [root, newId, ...rest].join(".");
+                                dragTabInfo[newTabKey] = $tabInfo[tabKey];
+                                delete $tabInfo[tabKey];
+                                return;
+                            }
+
+                            if (+id < minEdge || +id > maxEdge) return;
+
+                            const newTabKey = [root, +id - dragDir, ...rest].join(".");
+                            $tabInfo[newTabKey] = $tabInfo[tabKey];
                             delete $tabInfo[tabKey];
-                            return;
+                        });
+
+                        $tabInfo = { ...$tabInfo, ...dragTabInfo };
+                        print("tabInfo drag after", $tabInfo);
+
+                        sendTabInfo();
+
+                        if (selectionUpdated) {
+                            $selection = $selection;
+                            sendSelect();
                         }
-
-                        if (+id < minEdge || +id > maxEdge) return;
-
-                        const newTabKey = [root, +id - dragDir, ...rest].join(".");
-                        $tabInfo[newTabKey] = $tabInfo[tabKey];
-                        delete $tabInfo[tabKey];
-                    });
-
-                    $tabInfo = { ...$tabInfo, ...dragTabInfo };
-                    print("tabInfo drag after", $tabInfo);
-
-                    sendTabInfo();
-
-                    if (selectionUpdated) {
-                        $selection = $selection;
-                        sendSelect();
-                    }
-                    $effects = newElements.map((e, index) => ({ ...e, id: index }));
-                    sendEffects();
-                }}
-            />
-        {:else}
-            <div class="empty-effects">{l10n.t("locale.effects.emptyEffectsHint")}</div>
-        {/if}
+                        $effects = newElements.map((e, index) => ({ ...e, id: index }));
+                        sendEffects();
+                    }}
+                />
+            {:else}
+                <div class="empty-effects">{l10n.t("locale.effects.emptyEffectsHint")}</div>
+            {/if}
+        {/key}
     {/key}
-{/key}
+{:else}
+    <vscode-progress-ring />
+{/if}
 
 <style>
     div.empty-effects {

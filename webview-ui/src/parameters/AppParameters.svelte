@@ -378,6 +378,7 @@
                 break;
 
             default:
+                appState = AppState.running;
                 print("parser unkonwn need to implement!");
                 return;
         }
@@ -435,6 +436,7 @@
                 break;
 
             default:
+                appState = AppState.running;
                 print("selection type not implemented " + selection.type);
                 return;
         }

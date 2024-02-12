@@ -248,14 +248,9 @@
     }
 
     async function init() {
-        await getLocatization();
+        await Promise.all([getLocatization(), getSettings(), getAssets(), getMaskSettings()]);
 
         await getAppState();
-
-        await getSettings();
-        await getAssets(); // ???? add filter to the query
-
-        await getMaskSettings();
     }
 
     init();

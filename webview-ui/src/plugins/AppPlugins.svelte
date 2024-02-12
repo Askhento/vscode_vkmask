@@ -6,7 +6,7 @@
     import { MessageHandler } from "../common/MessageHandler";
     import type { MessageHandlerData } from "../common/MessageHandler";
     import List from "../components/DraggableList.svelte";
-    import { RequestTarget, RequestCommand, SelectionType } from "../../../src/types";
+    import { RequestTarget, RequestCommand, SelectionType, AppState } from "../../../src/types";
     import type { Selection } from "../../../src/types";
     import Plugin from "./Plugin.svelte";
     import AddPlugin from "./AddPlugin.svelte";
@@ -19,6 +19,8 @@
     const selection = writable<Selection>({ type: SelectionType.empty });
     const messageHandler = new MessageHandler(handleMessageApp, origin);
     let plugins = writable([]);
+    let appState = AppState.loading;
+
     // !!!! add tabInfo
 
     setContext("stores", { selection, plugins, messageHandler });
@@ -39,9 +41,25 @@
                 processSelection(payload);
                 break;
 
+            case RequestCommand.updateAppState:
+                processAppState(payload);
+                break;
+
             default:
                 break;
         }
+    }
+
+    async function getAppState() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getAppState,
+        });
+        processAppState(payload);
+    }
+
+    function processAppState(payload) {
+        appState = payload.state;
     }
 
     function returnLogs(data: MessageHandlerData<any>) {
@@ -138,54 +156,57 @@
     }
 
     async function init() {
-        await getLocatization();
-        await getPlugins();
-        await getSelection();
+        await Promise.all([getLocatization(), getPlugins(), getSelection()]); //getSettings()
+        await getAppState();
     }
 
     init();
 </script>
 
 <!-- <AddPlugin /> -->
-{#key $selection}
-    {#key $plugins}
-        {#if $plugins.length}
-            <List
-                elements={$plugins}
-                elementComponent={Plugin}
-                name="Plugins"
-                onDrop={(newElements, dragId) => {
-                    const newId = newElements.findIndex((e) => e.id === dragId);
-                    if (newId === dragId) return;
+{#if appState === AppState.running}
+    {#key $selection}
+        {#key $plugins}
+            {#if $plugins.length}
+                <List
+                    elements={$plugins}
+                    elementComponent={Plugin}
+                    name="Plugins"
+                    onDrop={(newElements, dragId) => {
+                        const newId = newElements.findIndex((e) => e.id === dragId);
+                        if (newId === dragId) return;
 
-                    // print("newId", newId);
-                    let selectionUpdated = false;
-                    if ($selection.type === SelectionType.plugin) {
-                        if (dragId === $selection.id) {
-                            // print("selected drag");
-                            $selection.id = newId;
-                            selectionUpdated = true;
-                        } else if (dragId > $selection.id && newId <= $selection.id) {
-                            $selection.id++;
-                            selectionUpdated = true;
-                        } else if (dragId < $selection.id && newId >= $selection.id) {
-                            $selection.id--;
-                            selectionUpdated = true;
+                        // print("newId", newId);
+                        let selectionUpdated = false;
+                        if ($selection.type === SelectionType.plugin) {
+                            if (dragId === $selection.id) {
+                                // print("selected drag");
+                                $selection.id = newId;
+                                selectionUpdated = true;
+                            } else if (dragId > $selection.id && newId <= $selection.id) {
+                                $selection.id++;
+                                selectionUpdated = true;
+                            } else if (dragId < $selection.id && newId >= $selection.id) {
+                                $selection.id--;
+                                selectionUpdated = true;
+                            }
                         }
-                    }
-                    if (selectionUpdated) {
-                        $selection = $selection;
-                        sendSelect();
-                    }
-                    $plugins = newElements.map((e, index) => ({ ...e, id: index }));
-                    sendPlugins();
-                }}
-            />
-        {:else}
-            <div class="empty-plugins">{l10n.t("locale.plugins.emptyPluginsHint")}</div>
-        {/if}
+                        if (selectionUpdated) {
+                            $selection = $selection;
+                            sendSelect();
+                        }
+                        $plugins = newElements.map((e, index) => ({ ...e, id: index }));
+                        sendPlugins();
+                    }}
+                />
+            {:else}
+                <div class="empty-plugins">{l10n.t("locale.plugins.emptyPluginsHint")}</div>
+            {/if}
+        {/key}
     {/key}
-{/key}
+{:else}
+    <vscode-progress-ring />
+{/if}
 
 <style>
     div.empty-plugins {
