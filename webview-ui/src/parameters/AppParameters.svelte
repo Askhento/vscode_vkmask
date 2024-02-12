@@ -780,12 +780,14 @@
         top: 0;
         z-index: 100;
         position: sticky;
-        width: 100%;
+        width: calc(100% - var(--global-body-padding-right));
+
         margin: var(--global-margin);
-        margin-right: var(--global-body-padding-right);
-        margin-left: var(--global-body-padding-left);
+        /* margin-right: var(--global-body-padding-right); */
+        left: var(--global-body-padding-left);
     }
     vscode-button::part(control) {
+        width: calc(100% - var(--global-body-padding-right));
     }
     .empty-parameters {
         padding-left: var(--global-body-padding-left);
