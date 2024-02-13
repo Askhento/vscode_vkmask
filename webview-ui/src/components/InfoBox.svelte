@@ -6,7 +6,7 @@
         info = {};
     let {
         errors = [],
-        clickLink = "#",
+        clickLink = "",
         infoHeader = "",
         infoList = "",
         infoErrorHeader = "",
@@ -74,6 +74,15 @@
                             </li>
                         {/each}
                     </ul>
+                {/if}
+                {#if clickLink}
+                    <vscode-divider role="separator" />
+                    <div class="info-header-wrapper">
+                        <span class="codicon codicon-globe"></span>
+                        <vscode-link href={clickLink}
+                            >{l10n.t("locale.infobox.readmore")}
+                        </vscode-link>
+                    </div>
                 {/if}
             </div>
         {/if}
@@ -220,5 +229,12 @@
 
     .darker {
         opacity: 0.5;
+    }
+
+    vscode-link {
+        align-items: center;
+        justify-content: center;
+        margin: unset;
+        margin-left: var(--global-margin);
     }
 </style>

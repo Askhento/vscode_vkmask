@@ -354,5 +354,6 @@
     "locale.projectManager.mouseInput.infoList": "locale.projectManager.mouseInput.infoList NEED TRANSLATION",
     "locale.controls.colorPicker.alpha.infoList": "Степень прозрачности текстуры.",
     "locale.parameters.model3d.model.infoList": "Файл 3D-модели в формате MDL.",
-    "locale.parameters.group.main": "Основное"
+    "locale.parameters.group.main": "Основное",
+    "locale.infobox.readmore": "Перейти к документации"
 }

@@ -354,5 +354,6 @@
     "locale.projectManager.mouseInput.infoList": "locale.projectManager.mouseInput.infoList NEED TRANSLATION",
     "locale.controls.colorPicker.alpha.infoList": "locale.controls.colorPicker.alpha.infoList NEED TRANSLATION",
     "locale.parameters.model3d.model.infoList": "locale.parameters.model3d.model.infoList NEED TRANSLATION",
-    "locale.parameters.group.main": "Main"
+    "locale.parameters.group.main": "Main",
+    "locale.infobox.readmore": "See the docs"
 }
