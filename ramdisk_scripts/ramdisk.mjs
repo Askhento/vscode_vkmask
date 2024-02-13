@@ -80,11 +80,11 @@ export async function startRamDisk(size = 100) {
         console.log(`Radmisk not supported for ${process.platform}`);
         return;
     }
-    if (!fs.existsSync(ramdiskPath)) await createDisk(size);
+    if (!checkMounted()) await createDisk(size);
 }
 
 export async function unmount() {
-    if (!fs.existsSync(ramdiskPath)) {
+    if (!checkMounted()) {
         console.log("ramdisk does not exist to unmount");
         return;
     }
@@ -92,6 +92,16 @@ export async function unmount() {
     await deleteDisk(ramdiskPath);
 
     console.log("unmounted");
+}
+
+function checkMounted() {
+    const command = `mount | grep "on ${ramdiskPath}"`;
+    const child = childProc.spawnSync("/bin/sh", ["-c", command], {
+        encoding: "utf8",
+    });
+    // console.log("stdout: ", child.stdout);
+
+    return !!child.stdout;
 }
 
 // createDisk(100);
