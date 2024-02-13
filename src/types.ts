@@ -51,6 +51,8 @@ export const RequestCommand = {
     openProject: "openProject",
     createProject: "createProject",
     createConfig: "createConfig",
+
+    getExtensionURI: "getExtensionURI",
 } as const;
 
 export const AppState = {

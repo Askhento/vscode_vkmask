@@ -403,7 +403,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 });
                 break;
 
-            case "GetExtensionURI": // !!!!!!!! alyarm !!!!!!
+            case RequestCommand.getExtensionURI: // !!!!!!!! alyarm !!!!!!
                 messageHandler.send({
                     ...data,
                     target: origin,

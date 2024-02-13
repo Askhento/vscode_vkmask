@@ -1,7 +1,7 @@
 <script>
     import Handle from "./Handle.svelte";
 
-    export let cx, cy, rx, ry;
+    export let cx, cy, rx, ry, parentElem;
 
     let posMoving = false;
 </script>
@@ -18,9 +18,9 @@
     </text>
 
     <ellipse class="point" cx="0px" cy="0px" rx={rx + "px"} ry={ry + "px"}> </ellipse>
-    <Handle cx={0} cy={0} bind:vx={cx} bind:vy={cy} bind:moving={posMoving} />
-    <Handle cx={rx} cy={0} bind:vx={rx} />
-    <Handle cx={0} cy={ry} bind:vy={ry} />
+    <Handle cx={0} cy={0} bind:vx={cx} bind:vy={cy} absPos={true} {parentElem} />
+    <Handle cx={rx} cy={0} bind:vx={rx} {parentElem} />
+    <Handle cx={0} cy={ry} bind:vy={ry} {parentElem} />
 
     <!-- <Handle bind:vx={} bind:vy={}  /> -->
 </g>

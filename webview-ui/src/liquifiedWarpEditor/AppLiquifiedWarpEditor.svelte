@@ -81,7 +81,7 @@
     async function init() {
         const { payload } = await messageHandler.request({
             target: RequestTarget.extension,
-            command: "GetExtensionURI",
+            command: RequestCommand.getExtensionURI,
         });
         bgImageUri = `https://file%2B.vscode-resource.vscode-cdn.net${payload}/res/liquifiedWarpFaceBackground_v1.png`;
 
@@ -124,33 +124,46 @@
 
     init();
 
-    let imgElem, width, height;
+    let editorElement, width, height;
 
     // function onLoad() {
-    //     width = imgElem.width;
-    //     height = imgElem.height;
+    //     width = editorElement.width;
+    //     height = editorElement.height;
     // }
 
-    $: console.log(width, height);
+    // $: console.log(width, height);
+    // $: console.log(editorElement);
 
-    $: console.log(imgElem);
+    console.log("parent", editorElement);
 
     // zoom : https://github.com/Becavalier/Zoomage.js/
 </script>
 
-<div class="main-container" bind:clientHeight={height} bind:clientWidth={width}>
-    <img src={bgImageUri} />
+<div class="main-container">
+    <div
+        class="editor-container"
+        bind:clientHeight={height}
+        bind:clientWidth={width}
+        bind:this={editorElement}
+    >
+        <img src={bgImageUri} />
 
-    {#if height && width}
-        <svg {height} {width}>
-            {#each points as { offset, radius, anchor }}
-                {@const cx = anchors[anchor][0] * width + offset[0]}
-                {@const cy = anchors[anchor][1] * height + offset[1]}
+        {#if height && width}
+            <svg {height} {width}>
+                {#await tick()}
+                    <!-- promise is pending -->
+                {:then value}
+                    <!-- promise was fulfilled -->
+                    {#each points as { offset, radius, anchor }}
+                        {@const cx = anchors[anchor][0] * width + offset[0]}
+                        {@const cy = anchors[anchor][1] * height + offset[1]}
 
-                <Point {cx} {cy} rx={radius[0]} ry={radius[1]} />
-            {/each}
-        </svg>
-    {/if}
+                        <Point {cx} {cy} rx={radius[0]} ry={radius[1]} parentElem={editorElement} />
+                    {/each}
+                {/await}
+            </svg>
+        {/if}
+    </div>
 </div>
 
 <!-- <pre>
@@ -163,6 +176,14 @@
         width: 100vw;
         display: flex;
         justify-content: center;
+        pointer-events: none;
+    }
+
+    .editor-container {
+        position: relative;
+        height: 100%;
+        width: fit-content;
+        /* pointer-events: none; */
     }
 
     img {
@@ -170,10 +191,17 @@
         /* position: fixed; */
         top: 0;
         z-index: -1;
+        pointer-events: all;
+
+        user-select: none;
     }
 
     svg {
-        position: fixed;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        position: absolute;
         cursor: "move";
     }
 </style>
