@@ -33,6 +33,7 @@
 
     const dispatch = createEventDispatcher();
     function onChanged() {
+        print("changed", path, value);
         dispatch("changed", [
             {
                 value,
@@ -59,12 +60,11 @@
     }
 
     onMount(async () => {
+        print("ui", uiElements);
         const { needUpdate } = await applyDeps(component, stores, params.dependencies);
         if (needUpdate) onChanged();
     });
 </script>
-
-<!-- <vscode-divider role="separator" /> -->
 
 {#if nesting}
     <span class="label" title={l10n.t(label)} class:expanded on:click={toggle}>
@@ -87,6 +87,24 @@
                     uiElements={data.value}
                   /> -->
 
+                {#if params.userResizable}
+                    <span class="right-button-wrapper">
+                        <!-- style="grid-row : {index + 1} / {index + 2}" -->
+
+                        <vscode-button
+                            class="remove-btn"
+                            on:click={() => {
+                                removeElement(index);
+                            }}
+                        >
+                            <span class="btn-text"
+                                >{l10n.t("locale.arrayControl.removeButtonHint") +
+                                    l10n.t(params.elementName)}</span
+                            >
+                            <span slot="start" class="codicon codicon-close" />
+                        </vscode-button>
+                    </span>
+                {/if}
                 <svelte:component
                     this={data.uiElement}
                     expanded={true}
@@ -97,35 +115,24 @@
                     uiElements={data.value}
                     on:changed
                 />
-                {#if params.userResizable}
-                    <vscode-button
-                        class="remove-btn"
-                        style="grid-row : {index + 1} / {index + 2}"
-                        appearance="icon"
-                        on:click={() => {
-                            removeElement(index);
-                        }}
-                    >
-                        <span class="codicon codicon-close" />
-                    </vscode-button>
+
+                {#if index < uiElements.length - 1}
+                    <vscode-divider role="separator" />
                 {/if}
             {/each}
         {/if}
 
         {#if params.userResizable}
-            <vscode-button class="add-btn" on:click={addElement}>
-                <span slot="start" class="codicon codicon-add" />
-                <span class="btn-text"
-                    >{l10n.t("locale.arrayControl.addButtonHint") +
-                        l10n.t(params.elementName)}</span
-                >
-            </vscode-button>
+            <span class="right-button-wrapper">
+                <vscode-button class="add-btn" on:click={addElement}>
+                    <span slot="start" class="codicon codicon-add" />
+                    <span class="btn-text"
+                        >{l10n.t("locale.arrayControl.addButtonHint") +
+                            l10n.t(params.elementName)}</span
+                    >
+                </vscode-button>
+            </span>
         {/if}
-        <!-- {#if value.length}
-        <vscode-button on:click={removeElement}>
-          <span slot="start" class="codicon codicon-remove" />
-        </vscode-button>
-      {/if} -->
     {/if}
 </div>
 
@@ -149,30 +156,31 @@
         /* row-gap: var(--global-grid-row-gap); */
     }
 
-    .add-btn {
+    .add-btn,
+    .remove-btn {
+        width: 100%;
+        margin: unset;
+    }
+
+    .right-button-wrapper {
+        position: relative;
         grid-column: 2/3;
         margin: var(--global-margin);
+        padding-right: var(--global-body-padding-right);
         height: var(--global-block-height);
     }
 
-    .remove-btn {
-        /* flex-grow: 1; */
-        /* display: inline-block; */
-        position: absolute;
+    /* .remove-btn {
 
-        /* left: calc(100% + 0.25rem); */
-        /* top: calc(); */
-        /* height: 100%; */
+        position: absolute;
         height: var(--global-block-height);
         width: var(--global-block-height);
-        /* text-justify: ; */
         text-align: center;
         grid-column: 3/4;
-        /* grid-row: 1/2; */
         margin: 0;
         padding: 0;
         margin-top: var(--global-margin);
-    }
+    }  */
 
     .label {
         justify-self: var(--label-justify);
@@ -223,18 +231,4 @@
         white-space: nowrap;
         text-overflow: ellipsis;
     }
-
-    /* span {
-    padding: 0 0 0 1.5em;
-    background: url(tutorial/icons/folder.svg) 0 0.1em no-repeat;
-    background-size: 1em 1em;
-    font-weight: bold;
-    cursor: pointer;
-    min-height: 1em;
-    display: inline-block;
-  }
-    
-  .expanded {
-    background-image: url(tutorial/icons/folder-open.svg);
-  } */
 </style>

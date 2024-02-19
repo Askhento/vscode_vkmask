@@ -345,8 +345,8 @@
         // !!!!!!!!
         error = null;
 
+        uiElements = null; // will make a blink, but solves null null value for unnull uiElement
         if (!selectedIsKnown()) {
-            uiElements = null;
             return;
         }
         let parseResult;
@@ -451,6 +451,9 @@
         //
         let needRerender = false;
         let action = null; //!!!! only one action
+        let tempEffects = $effects;
+        let tempPlugins = plugins;
+        let tempAsset = asset;
 
         changes.forEach(({ path, value, structural }) => {
             const root = path.shift();
@@ -462,28 +465,23 @@
             }
             switch (root) {
                 case SelectionType.effect:
-                    let tempEffects = $effects;
                     tempEffects = applyValueByPath2(tempEffects, path, value);
                     needRerender = needRerender || structural;
-                    $effects = tempEffects;
-                    print("updated effects", $effects[selection.id]);
+
+                    print("updated effects", tempEffects);
                     action = sendEffects;
                     break;
 
                 case SelectionType.plugin:
-                    let tempPlugins = plugins;
                     tempPlugins = applyValueByPath2(tempPlugins, path, value);
                     needRerender = needRerender || structural;
-                    plugins = tempPlugins;
                     print("updated plugins", plugins);
                     action = sendPlugins;
                     break;
 
                 case SelectionType.asset:
-                    let tempAsset = asset;
                     tempAsset = applyValueByPath2(tempAsset, path, value);
                     needRerender = needRerender || structural;
-                    asset = tempAsset;
                     print("updated assets", asset);
                     action = writeAsset;
                     break;
@@ -501,8 +499,12 @@
         // //??? rerender parameters ???
         // // will need to rerender only if changed parameters structure
         // // !!!!!!!!!!!!!!!!!!!!!!!!
+        $effects = tempEffects;
+        plugins = tempPlugins;
+        asset = tempAsset;
+
         if (!needRerender) return;
-        print("SHOULD RERENDER");
+
         await parseUI();
         rerenderParameters();
     }
@@ -654,43 +656,39 @@
             {#if selection.type === SelectionType.effect}
                 {#key uiElements}
                     {#if $effects}
-                        {#key $effects}
-                            {#if uiElements}
-                                <ObjectControl
-                                    expanded={true}
-                                    nesting={false}
-                                    value={$effects[selection.id]}
-                                    label={uiElements.uiDescription.label ??
-                                        $effects[selection.id].name}
-                                    params={uiElements.uiDescription}
-                                    path={[SelectionType.effect, selection.id]}
-                                    uiElements={uiElements.value}
-                                    on:changed={onChanged}
-                                />
-                            {:else}
-                                <div>{l10n.t("locale.parameters.unknownEffect")}</div>
-                            {/if}
-                        {/key}
-                    {/if}
-                {/key}
-            {:else if selection.type === SelectionType.plugin}
-                {#if plugins}
-                    {#key plugins}
                         {#if uiElements}
                             <ObjectControl
                                 expanded={true}
                                 nesting={false}
-                                value={plugins[selection.id]}
-                                label={uiElements.uiDescription.label ?? plugins[selection.id].name}
+                                value={$effects[selection.id]}
+                                label={uiElements.uiDescription.label ??
+                                    $effects[selection.id].name}
                                 params={uiElements.uiDescription}
-                                path={[SelectionType.plugin, selection.id]}
+                                path={[SelectionType.effect, selection.id]}
                                 uiElements={uiElements.value}
                                 on:changed={onChanged}
                             />
                         {:else}
-                            <div>{l10n.t("locale.parameters.unknownPlugin")}</div>
+                            <div>{l10n.t("locale.parameters.unknownEffect")}</div>
                         {/if}
-                    {/key}
+                    {/if}
+                {/key}
+            {:else if selection.type === SelectionType.plugin}
+                {#if plugins}
+                    {#if uiElements}
+                        <ObjectControl
+                            expanded={true}
+                            nesting={false}
+                            value={plugins[selection.id]}
+                            label={uiElements.uiDescription.label ?? plugins[selection.id].name}
+                            params={uiElements.uiDescription}
+                            path={[SelectionType.plugin, selection.id]}
+                            uiElements={uiElements.value}
+                            on:changed={onChanged}
+                        />
+                    {:else}
+                        <div>{l10n.t("locale.parameters.unknownPlugin")}</div>
+                    {/if}
                 {/if}
             {:else if selection.type === SelectionType.asset}
                 {#key asset}

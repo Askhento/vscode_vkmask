@@ -167,7 +167,6 @@ const ZColorAlpha = z
     .describe(uiDescriptions.colorAlpha);
 
 const ZFaceAnchor = z.enum([
-    "free",
     "face",
     "right_eye",
     "left_eye",
@@ -182,7 +181,6 @@ const ZFaceAnchor = z.enum([
 ]);
 
 const ZFaceAnchorLabels = [
-    "locale.faceAnchors.free.label", //"Free",
     "locale.faceAnchors.face.label", //"Face",
     "locale.faceAnchors.rightEye.label", //"Right eye",
     "locale.faceAnchors.leftEye.label", //"Left eye",
@@ -789,7 +787,7 @@ const ZFacemodelEffect = ZBaseEffect.extend({
         },
 
         tags: {
-            label: "locale.parameters.facemodel.group.tags.label",
+            label: "locale.parameters.tags.label",
             defExpanded: false,
         },
     },
@@ -935,7 +933,7 @@ const ZPatchEffect = ZBaseEffect.extend({
         },
 
         tags: {
-            label: "locale.parameters.patch.group.tags.label",
+            label: "locale.parameters.tags.label",
             defExpanded: false,
         },
 
@@ -966,7 +964,7 @@ const ZBeautifyEffect = ZBaseEffect.extend({
             defExpanded: true,
         },
         tags: {
-            label: "locale.parameters.beautify.group.tags.label",
+            label: "locale.parameters.tags.label",
             defExpanded: false,
         },
     },
@@ -1076,7 +1074,7 @@ const ZColorfilterEffect = ZBaseEffect.extend({
         },
 
         tags: {
-            label: "locale.parameters.colorfilter.group.tags.label",
+            label: "locale.parameters.tags.label",
             defExpanded: false,
         },
 
@@ -1152,7 +1150,7 @@ const ZModel3dEffect = ZBaseEffect.extend({
             defExpanded: true,
         },
         tags: {
-            label: "locale.parameters.model3d.group.tags.label",
+            label: "locale.parameters.tags.label",
             defExpanded: false,
         },
     },
@@ -1214,7 +1212,7 @@ const ZPlaneEffect = ZBaseEffect.extend({
             defExpanded: true,
         },
         tags: {
-            label: "locale.parameters.plane.group.tags.label",
+            label: "locale.parameters.tags.label",
             defExpanded: false,
         },
     },
@@ -1319,7 +1317,7 @@ const ZLightAmbientEffect = z
             },
 
             tags: {
-                label: "locale.parameters.light.group.tags.label",
+                label: "locale.parameters.tags.label",
                 defExpanded: false,
             },
         },
@@ -1371,7 +1369,7 @@ const ZLightDirectEffect = z
             },
 
             tags: {
-                label: "locale.parameters.light.group.tags.label",
+                label: "locale.parameters.tags.label",
                 defExpanded: false,
             },
         },
@@ -1444,13 +1442,66 @@ const ZLightPointEffect = z
             },
 
             tags: {
-                label: "locale.parameters.light.group.tags.label",
+                label: "locale.parameters.tags.label",
                 defExpanded: false,
             },
         },
     });
 
 const ZLights = [ZLightAmbientEffect, ZLightDirectEffect, ZLightPointEffect];
+
+const ZLiquifiedTypes = z.enum(["zoom", "shift"]);
+
+const ZLiquifiedTypeLabels = [
+    "locale.parameters.liquifiedwarp.point.type.zoom.label",
+    "locale.parameters.liquifiedwarp.point.type.shift.label",
+];
+
+const ZLiquifiedPoint = z
+    .object({
+        type: ZLiquifiedTypes.describe({
+            ...uiDescriptions.enum,
+            label: "locale.parameters.liquifiedwarp.point.type.label",
+            info: { infoList: "locale.parameters.liquifiedwarp.point.type.infoList" },
+
+            options: Object.keys(ZLiquifiedTypes.Values),
+            optionLabels: ZLiquifiedTypeLabels,
+            defValue: ZLiquifiedTypes.Values.zoom,
+        }),
+        anchor: ZFaceAnchor.describe({
+            ...uiDescriptions.enum,
+            label: "locale.parameters.liquifiedwarp.point.anchor.label",
+            info: { infoList: "locale.parameters.liquifiedwarp.point.anchor.infoList" },
+
+            options: Object.keys(ZFaceAnchor.Values),
+            optionLabels: ZFaceAnchorLabels,
+            defValue: ZFaceAnchor.Values.forehead,
+        }),
+        // "offset": [-4.5, 0.0],
+        // "radius": [50.0, 50.0],
+        // "angle": 0.0,
+        scale: ZNumberSlider.describe({
+            ...uiDescriptions.numberSlider,
+            defValue: 1.0,
+            min: -100,
+            max: 100,
+            label: "locale.parameters.liquifiedwarp.point.scale.label",
+            info: { infoList: "locale.parameters.liquifiedwarp.point.scale.infoList" },
+        }),
+    })
+    .describe({
+        ...uiDescriptions.object,
+        label: "locale.parameters.liquifiedwarp.label",
+        group: "points",
+    });
+
+const liquifiedDefaultPoint = {
+    type: ZLiquifiedTypes.Values.zoom,
+    anchor: ZFaceAnchor.Values.forehead,
+    offset: [0.0, 0.0],
+    radius: [150.0, 150.0],
+    scale: 10.0,
+};
 
 const ZLiquifiedWarpEffect = ZBaseEffect.extend({
     name: z.literal("liquifiedwarp").describe(uiDescriptions.none),
@@ -1460,7 +1511,34 @@ const ZLiquifiedWarpEffect = ZBaseEffect.extend({
         label: "locale.parameters.liquifiedwarp.progress.label",
         info: { infoList: "locale.parameters.liquifiedwarp.progress.infoList" },
     }),
-}).describe({ ...uiDescriptions.object, label: "locale.parameters.liquifiedwarp.label" });
+    points: z.array(ZLiquifiedPoint).describe({
+        ...uiDescriptions.array,
+        elementName: "locale.parameters.liquifiedwarp.points.elementName",
+        label: "locale.parameters.liquifiedwarp.points.label",
+        info: { infoList: "locale.parameters.liquifiedwarp.points.infoList" },
+        group: "points",
+        defaultElement: liquifiedDefaultPoint,
+        defValue: [liquifiedDefaultPoint],
+        userResizable: true,
+    }),
+}).describe({
+    ...uiDescriptions.object,
+    label: "locale.parameters.liquifiedwarp.label",
+    groups: {
+        main: {
+            label: "locale.parameters.group.main",
+            defExpanded: true,
+        },
+        points: {
+            label: "locale.parameters.liquifiedwarp.points.label",
+            defExpanded: true,
+        },
+        tags: {
+            label: "locale.parameters.tags.label",
+            defExpanded: false,
+        },
+    },
+});
 
 const ZPostEffectType = z.enum(["blur", "dispersion", "glow", "noise", "sharpen"]);
 const ZPostEffectTypeLabels = [
@@ -1497,7 +1575,7 @@ const ZPostEffectEffect = ZBaseEffect.extend({
             defExpanded: true,
         },
         tags: {
-            label: "locale.parameters.posteffect.group.tags.label",
+            label: "locale.parameters.tags.label",
             defExpanded: false,
         },
     },

@@ -3,7 +3,7 @@ import { getValueByPath, resolveRelative } from "../utils/applyValueByPath";
 // import { RequestTarget, RequestCommand, SelectionType, AppState } from "../../../src/types";
 
 export function applyDeps(component, stores, dependencies) {
-    if (!dependencies) return;
+    if (!dependencies) return { needUpdate: false };
     // console.log("aplydeps!", dependencies);
 
     const dataSources = {

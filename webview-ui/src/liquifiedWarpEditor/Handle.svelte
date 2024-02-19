@@ -4,12 +4,24 @@
 
 <script>
     import { onMount } from "svelte";
+    import { createEventDispatcher } from "svelte";
+
+    const dispatch = createEventDispatcher();
+    function onChanged() {
+        // dispatch("changed", [
+        //     {
+        //         value,
+        //         path,
+        //     },
+        // ]);
+    }
 
     export let cx,
         cy,
         vx,
         vy,
         parentElem,
+        path,
         absPos = false;
     let node;
 
@@ -44,11 +56,14 @@
         // console.log("up");
         movingElem = null;
 
+        onChanged();
         node.setAttribute("r", "5");
     }
 
     onMount(() => {
         // console.log("parent", parentElem);
+        console.log("handle inti");
+
         node.addEventListener("mousedown", handleMouseDown);
 
         parentElem.addEventListener("mousemove", handleMove);
@@ -56,7 +71,7 @@
     });
 </script>
 
-<circle {cx} {cy} bind:this={node} r="5"> </circle>
+<circle {vx} {vy} bind:this={node} r="5"> </circle>
 
 <style>
     circle {

@@ -116,11 +116,12 @@
         },
     ];
 
-    const anchors = {
-        right_eye: [0.67946824, 0.42857143],
-        left_eye: [0.32939439, 0.42857143],
-        mouth: [1 / 2, 0.74264706],
-    };
+    $: console.log(points);
+
+    async function onChanged(event) {
+        console.log("onChange: ", event);
+        const changes = event.detail;
+    }
 
     init();
 
@@ -130,11 +131,6 @@
     //     width = editorElement.width;
     //     height = editorElement.height;
     // }
-
-    // $: console.log(width, height);
-    // $: console.log(editorElement);
-
-    console.log("parent", editorElement);
 
     // zoom : https://github.com/Becavalier/Zoomage.js/
 </script>
@@ -149,16 +145,23 @@
         <img src={bgImageUri} />
 
         {#if height && width}
-            <svg {height} {width}>
+            <svg>
                 {#await tick()}
                     <!-- promise is pending -->
                 {:then value}
                     <!-- promise was fulfilled -->
-                    {#each points as { offset, radius, anchor }}
-                        {@const cx = anchors[anchor][0] * width + offset[0]}
-                        {@const cy = anchors[anchor][1] * height + offset[1]}
+                    {#each points as value, i}
+                        <!-- {@const cx = anchors[anchor][0] * width + offset[0]}
+                        {@const cy = anchors[anchor][1] * height + offset[1]} -->
 
-                        <Point {cx} {cy} rx={radius[0]} ry={radius[1]} parentElem={editorElement} />
+                        <Point
+                            bind:value
+                            {editorElement}
+                            {width}
+                            {height}
+                            on:changed={onChanged}
+                            path={[i]}
+                        />
                     {/each}
                 {/await}
             </svg>
