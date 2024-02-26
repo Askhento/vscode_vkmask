@@ -19,7 +19,7 @@
     const dispatch = createEventDispatcher();
 
     function sendValue() {
-        // console.log("should send value");
+        // console.log("numberSlider change : ", value, path);
         dispatch("changed", [
             {
                 value,

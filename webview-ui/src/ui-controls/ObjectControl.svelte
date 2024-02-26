@@ -12,7 +12,6 @@
     export let params;
     export let expanded = params.defExpanded;
     export let uiElements;
-    export let initialLevel = false;
 
     if (params.group != null) nesting = false;
 

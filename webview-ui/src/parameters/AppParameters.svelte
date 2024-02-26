@@ -345,8 +345,8 @@
         // !!!!!!!!
         error = null;
 
-        uiElements = null; // will make a blink, but solves null null value for unnull uiElement
         if (!selectedIsKnown()) {
+            uiElements = null; // will make a blink, but solves null null value for unnull uiElement
             return;
         }
         let parseResult;
@@ -445,8 +445,8 @@
     }
 
     async function onChanged(event) {
-        // console.log("onChange: ", event);
         const changes = event.detail;
+        // console.log("onChange: ", changes);
         // Array.isArray()
         //
         let needRerender = false;
@@ -456,7 +456,8 @@
         let tempAsset = asset;
 
         changes.forEach(({ path, value, structural }) => {
-            const root = path.shift();
+            const [root, ...pathClone] = [...path];
+            // console.log("onchange root", root, pathClone, path);
             // !!!!!!!!!!! split
             if (root === "tabInfo") {
                 console.log("sending tabinfo");
@@ -465,7 +466,7 @@
             }
             switch (root) {
                 case SelectionType.effect:
-                    tempEffects = applyValueByPath2(tempEffects, path, value);
+                    tempEffects = applyValueByPath2(tempEffects, pathClone, value);
                     needRerender = needRerender || structural;
 
                     print("updated effects", tempEffects);
@@ -473,14 +474,14 @@
                     break;
 
                 case SelectionType.plugin:
-                    tempPlugins = applyValueByPath2(tempPlugins, path, value);
+                    tempPlugins = applyValueByPath2(tempPlugins, pathClone, value);
                     needRerender = needRerender || structural;
                     print("updated plugins", plugins);
                     action = sendPlugins;
                     break;
 
                 case SelectionType.asset:
-                    tempAsset = applyValueByPath2(tempAsset, path, value);
+                    tempAsset = applyValueByPath2(tempAsset, pathClone, value);
                     needRerender = needRerender || structural;
                     print("updated assets", asset);
                     action = writeAsset;

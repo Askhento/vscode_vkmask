@@ -46,7 +46,22 @@
     function addElement() {
         // print(params);
         const { defaultElement } = params;
-        value.push(defaultElement);
+
+        if (defaultElement == null) {
+            print("Null default element", params, path);
+            return;
+        }
+
+        // need to clone, otherwise will have same instance of arr, obj
+        value.push(JSON.parse(JSON.stringify(defaultElement)));
+        // if (typeof yourVariable === 'object') {
+        //     value.push({...defaultElement})
+        // } else if(Array.isArray(yourVariable)) {
+
+        // } else {
+        //     value.push([...defaultElement]);
+        // }
+
         value = value;
         onChanged();
     }
@@ -55,6 +70,8 @@
         if (index === undefined) return;
         // value.pop();
         value.splice(index, 1);
+        uiElements.splice(index, 1);
+
         value = value;
         onChanged();
     }
