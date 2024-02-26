@@ -495,8 +495,8 @@
 
         if (action) action();
 
-        // // send to the app, store does not trigger for some reason
-        // dispatch("changed");
+        if (!needRerender) return;
+
         // //??? rerender parameters ???
         // // will need to rerender only if changed parameters structure
         // // !!!!!!!!!!!!!!!!!!!!!!!!
@@ -504,10 +504,8 @@
         plugins = tempPlugins;
         asset = tempAsset;
 
-        if (!needRerender) return;
-
         await parseUI();
-        rerenderParameters();
+        // rerenderParameters();
     }
 
     //   export let mountLock = true;

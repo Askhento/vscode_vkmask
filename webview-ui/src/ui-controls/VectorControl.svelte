@@ -113,9 +113,9 @@
                     }
                 }}
                 on:change={(e) => {
-                    console.log("vector", e);
+                    // console.log("vector", e);
                     const parsed = parseFloat(e.target.value);
-                    console.log("vector parsed ", parsed);
+                    // console.log("vector parsed ", parsed);
                     if (isNaN(parsed) || isNaN(e.target.value)) {
                         e.target.value = value[index];
                         return;
