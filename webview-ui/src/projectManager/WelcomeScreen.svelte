@@ -121,6 +121,7 @@
         align-items: center;
         flex-direction: column;
         padding-left: var(--global-body-padding-left);
+        padding-right: var(--global-body-padding-right);
     }
     .recent-projects-wrapper {
         display: flex;
@@ -169,9 +170,9 @@
 
     p {
         width: 100%;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        overflow: visible;
+        /* text-overflow: ; */
+        /* white-space: ; */
     }
 
     vscode-button {
