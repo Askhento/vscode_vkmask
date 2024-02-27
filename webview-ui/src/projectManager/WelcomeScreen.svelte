@@ -97,8 +97,9 @@
                     <vscode-link
                         on:click={() => {
                             sendOpenProject(info.path);
-                        }}><div class="recent-link">{info.name}</div></vscode-link
+                        }}>{info.name}</vscode-link
                     >
+                    <!-- <div class="recent-link">{info.name}</div> -->
 
                     <!-- <span class="recent-path">{info.path}</span> -->
                     <span class="recent-date">{formatDate(new Date(info.dateModified))}</span>
@@ -125,29 +126,35 @@
     }
     .recent-projects-wrapper {
         display: flex;
-        justify-content: start;
+        /* justify-content: start; */
+        flex-wrap: nowrap;
         width: 100%;
+        height: var(--global-block-height);
     }
 
     vscode-link {
-        width: fit-content;
-
         margin-right: 0.5rem;
+        max-width: fit-content;
+        min-width: 0;
     }
 
-    vscode-link::part(content) {
-        width: 100%;
-        display: inline-block;
+    vscode-link::part(control) {
+        max-width: fit-content;
+        min-width: 0;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
     }
 
     .recent-link {
+        max-width: fit-content;
+        min-width: 0;
         /* width: 5rem; */
-        overflow: visible;
+
+        overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        margin-right: 1rem;
     }
 
     .recent-path {
