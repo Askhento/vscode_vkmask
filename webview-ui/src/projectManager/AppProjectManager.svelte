@@ -22,6 +22,7 @@
     import ObjectControl from "../ui-controls/ObjectControl.svelte";
     import { MaskSettingsParserForUI } from "../ui-controls/Controls.js";
     import type { RecentProjectInfo } from "src/RecentProjectInfo";
+    import Loading from "../components/Loading.svelte";
 
     provideVSCodeDesignSystem().register(allComponents);
 
@@ -260,7 +261,7 @@
 <div class="project-manager-wrapper">
     {#key appState}
         {#if appState === AppState.loading}
-            <vscode-progress-ring />Loading...
+            <Loading />
         {:else if appState === AppState.running}
             {#if maskSettings}
                 {#key maskSettings}
