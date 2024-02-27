@@ -1834,7 +1834,6 @@ export const ZMaskConfigPreprocess = z.preprocess(
     },
     z
         .object({
-            name: z.unknown().optional(), // !!! this will ensure order of parsed keys
             icon: z.unknown().optional(),
             effects: z
                 .array(
