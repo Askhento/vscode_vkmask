@@ -100,7 +100,7 @@
                         }}><div class="recent-link">{info.name}</div></vscode-link
                     >
 
-                    <span class="recent-path">{info.path}</span>
+                    <!-- <span class="recent-path">{info.path}</span> -->
                     <span class="recent-date">{formatDate(new Date(info.dateModified))}</span>
                 </div>
             {/each}
