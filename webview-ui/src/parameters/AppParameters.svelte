@@ -47,6 +47,7 @@
     import TextControl from "../ui-controls/TextControl.svelte"; // asset name change
     import InfoTableControl from "../ui-controls/InfoTableControl.svelte";
     import { effect } from "zod";
+    import Loading from "../components/Loading.svelte";
 
     provideVSCodeDesignSystem().register(allComponents);
 
@@ -732,7 +733,7 @@
             {/if}
         {/key}
     {:else if appState === AppState.loading}
-        <vscode-progress-ring />
+        <Loading />
     {:else if appState === AppState.error}
         {#key error}
             <!-- <div>should be error</div> -->

@@ -11,6 +11,7 @@
     import Plugin from "./Plugin.svelte";
     import AddPlugin from "./AddPlugin.svelte";
     import { logger, logDump } from "../logger";
+    import Loading from "../components/Loading.svelte";
     const print = logger("AppPlugins.svelte");
     const origin = RequestTarget.plugins;
 
@@ -205,7 +206,7 @@
         {/key}
     {/key}
 {:else}
-    <vscode-progress-ring />
+    <Loading />
 {/if}
 
 <style>

@@ -4,9 +4,9 @@
 
 <div class="loading-wrapper">
     <vscode-progress-ring />
-    <div class="loading-hint">
-        {l10n.t("locale.screens.loading.hint")}
-    </div>
+    <!-- <div class="loading-hint">
+        {l10n.t("locale.screens.loading.hint")}...
+    </div> -->
 </div>
 
 <style>

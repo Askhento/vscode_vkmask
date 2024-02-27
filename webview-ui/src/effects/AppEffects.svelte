@@ -17,6 +17,7 @@
     import { logger, logDump } from "../logger";
     // import AddEffect from "./AddEffect.svelte";
     import * as l10n from "@vscode/l10n";
+    import Loading from "../components/Loading.svelte";
 
     const print = logger("AppEffects.svelte");
     const origin = RequestTarget.effects;
@@ -350,7 +351,7 @@
         {/key}
     {/key}
 {:else}
-    <vscode-progress-ring />
+    <Loading />
 {/if}
 
 <style>

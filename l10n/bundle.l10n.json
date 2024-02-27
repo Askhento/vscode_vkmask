@@ -347,5 +347,18 @@
     "locale.controls.colorPicker.alpha.infoList": "locale.controls.colorPicker.alpha.infoList NEED TRANSLATION",
     "locale.parameters.model3d.model.infoList": "locale.parameters.model3d.model.infoList NEED TRANSLATION",
     "locale.parameters.group.main": "Main",
-    "locale.infobox.readmore": "See the docs"
+    "locale.infobox.readmore": "See the docs",
+    "locale.parameters.liquifiedwarp.point.type.zoom.label": "locale.parameters.liquifiedwarp.point.type.zoom.label NEED TRANSLATION",
+    "locale.parameters.liquifiedwarp.point.type.shift.label": "locale.parameters.liquifiedwarp.point.type.shift.label NEED TRANSLATION",
+    "locale.parameters.liquifiedwarp.point.type.label": "locale.parameters.liquifiedwarp.point.type.label NEED TRANSLATION",
+    "locale.parameters.liquifiedwarp.point.type.infoList": "locale.parameters.liquifiedwarp.point.type.infoList NEED TRANSLATION",
+    "locale.parameters.liquifiedwarp.point.anchor.label": "locale.parameters.liquifiedwarp.point.anchor.label NEED TRANSLATION",
+    "locale.parameters.liquifiedwarp.point.anchor.infoList": "locale.parameters.liquifiedwarp.point.anchor.infoList NEED TRANSLATION",
+    "locale.parameters.liquifiedwarp.point.scale.label": "locale.parameters.liquifiedwarp.point.scale.label NEED TRANSLATION",
+    "locale.parameters.liquifiedwarp.point.scale.infoList": "locale.parameters.liquifiedwarp.point.scale.infoList NEED TRANSLATION",
+    "locale.parameters.liquifiedwarp.points.elementName": "locale.parameters.liquifiedwarp.points.elementName NEED TRANSLATION",
+    "locale.parameters.liquifiedwarp.points.label": "locale.parameters.liquifiedwarp.points.label NEED TRANSLATION",
+    "locale.parameters.liquifiedwarp.points.infoList": "locale.parameters.liquifiedwarp.points.infoList NEED TRANSLATION",
+    "locale.arrayControl.removeButtonHint": "locale.arrayControl.removeButtonHint NEED TRANSLATION",
+    "locale.screens.loading.hint": "Loading"
 }

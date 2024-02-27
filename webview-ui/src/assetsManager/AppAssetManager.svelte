@@ -8,6 +8,7 @@
     import Asset from "./Asset.svelte";
     import { logger, logDump } from "../logger";
     import { writable } from "svelte/store";
+    import Loading from "../components/Loading.svelte";
     const print = logger("AssetManager.svelte");
     provideVSCodeDesignSystem().register(allComponents);
 
@@ -298,7 +299,7 @@
         {/key}
     {/key}
 {:else}
-    <vscode-progress-ring />
+    <Loading />
 {/if}
 
 <style>
