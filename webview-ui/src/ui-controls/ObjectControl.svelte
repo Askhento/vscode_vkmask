@@ -180,22 +180,24 @@
                                 <span class="missing-key-label"
                                     ><span>{l10n.t(data.uiDescription.label ?? key)}</span></span
                                 >
-                                <vscode-button
-                                    class="add-key-btn"
-                                    on:click={() => {
-                                        // console.log(data.uiDescription);
-                                        addKey(key, data);
-                                    }}
-                                >
-                                    <span slot="start" class="codicon codicon-add" />
-                                    <span class="btn-text"
-                                        >{l10n.t(
-                                            `Add ${l10n
-                                                .t(data.uiDescription.label ?? key)
-                                                .toLowerCase()}`
-                                        )}</span
+                                <span class="right-button-wrapper">
+                                    <vscode-button
+                                        class="add-key-btn"
+                                        on:click={() => {
+                                            // console.log(data.uiDescription);
+                                            addKey(key, data);
+                                        }}
                                     >
-                                </vscode-button>
+                                        <span slot="start" class="codicon codicon-add" />
+                                        <span class="btn-text"
+                                            >{l10n.t(
+                                                `Add ${l10n
+                                                    .t(data.uiDescription.label ?? key)
+                                                    .toLowerCase()}`
+                                            )}</span
+                                        >
+                                    </vscode-button>
+                                </span>
                             {:else}
                                 <svelte:component
                                     this={data.uiElement}
@@ -341,6 +343,19 @@
 
     span.missing-key-label > span {
         margin: var(--global-margin);
+    }
+
+    .right-button-wrapper {
+        position: relative;
+        grid-column: 2/3;
+        margin: var(--global-margin);
+        padding-right: var(--global-body-padding-right);
+        height: var(--global-block-height);
+    }
+
+    .add-key-btn {
+        width: 100%;
+        margin: unset;
     }
 
     vscode-button::part(content) {
