@@ -22,8 +22,8 @@
     }
 
     function addKey(key, data) {
-        value[key] = data.uiDescription.defValue;
-        uiElements[key].value = data.uiDescription.defValue;
+        value[key] = JSON.parse(JSON.stringify(data.uiDescription.defValue));
+        // uiElements[key].value = {...data.uiDescription.defValue};
         // splitElements();
         // console.log("ui data add key ", data);
         // console.log("add key", value);
@@ -190,7 +190,9 @@
                                     <span slot="start" class="codicon codicon-add" />
                                     <span class="btn-text"
                                         >{l10n.t(
-                                            `Add ${(data.uiDescription.label ?? key).toLowerCase()}`
+                                            `Add ${l10n
+                                                .t(data.uiDescription.label ?? key)
+                                                .toLowerCase()}`
                                         )}</span
                                     >
                                 </vscode-button>
@@ -198,7 +200,7 @@
                                 <svelte:component
                                     this={data.uiElement}
                                     error={data.error}
-                                    value={value[key] ?? data.value}
+                                    value={value[key] ?? data.uiDescription.defValue}
                                     label={data.label ?? data.uiDescription.label ?? key}
                                     path={[...path, key]}
                                     params={data.uiDescription}

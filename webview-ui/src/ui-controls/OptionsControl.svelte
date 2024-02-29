@@ -18,12 +18,12 @@
     // );
 
     const dispatch = createEventDispatcher();
-    $: {
+    function onChange() {
         dispatch("changed", [
             {
                 value,
                 path,
-                structural: true,
+                structural: false,
             },
         ]);
     }
@@ -53,8 +53,9 @@
         position="above"
         value={String(options.findIndex((op) => op === value))}
         on:change={(e) => {
-            console.log("optoins", e);
+            // console.log("optoins", e);
             value = options[parseInt(e.target.value)];
+            onChange();
         }}
     >
         {#each params.optionLabels ?? options as option, i}

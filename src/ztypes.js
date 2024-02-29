@@ -412,22 +412,25 @@ const ZTextureAnimation = z
         group: "animation",
     });
 
-export const ZTextureObject = z.preprocess(
-    (val) => {
-        if (isObject(val)) {
-            // keep only diffuse not texture in object
-            if (val.hasOwnProperty("texture")) {
-                val["diffuse"] = val["texture"];
-                delete val["texture"];
-                return val;
-            } else {
-                return val;
-            }
-        }
-        return {
-            diffuse: val,
-        };
-    },
+export const ZTextureObject =
+    // z.preprocess(
+    //     (val) => {
+    //         if (isObject(val)) {
+    //             // !!! already done on preporocess
+    //             // todo : get rid of this
+    //             // keep only diffuse not texture in object
+    //             if (val.hasOwnProperty("texture")) {
+    //                 val["diffuse"] = val["texture"];
+    //                 delete val["texture"];
+    //                 return val;
+    //             } else {
+    //                 return val;
+    //             }
+    //         }
+    //         return {
+    //             diffuse: val,
+    //         };
+    //     },
     z
         .object({
             diffuse: ZTextureAsset({
@@ -449,18 +452,18 @@ export const ZTextureObject = z.preprocess(
             }),
             // lit: ZBool.describe(uiDesc riptions.bool({ label: "Lit" })),
             // !!! probably will miss texture property
-            u_transform: ZArray3D.describe({
-                ...uiDescriptions.uv_transform,
-                label: "locale.parameters.texture.uvTransform.label",
-                info: { infoList: "locale.parameters.texture.uvTransform.infoList" },
-                defValue: [1, 0, 0],
-            }),
-            v_transform: ZArray3D.describe({
-                ...uiDescriptions.uv_transform,
-                label: "locale.parameters.texture.uvTransform.label",
-                info: { infoList: "locale.parameters.texture.uvTransform.infoList" },
-                defValue: [0, 1, 0],
-            }),
+            // u_transform: ZArray3D.describe({
+            //     ...uiDescriptions.uv_transform,
+            //     label: "locale.parameters.texture.uvTransform.label",
+            //     info: { infoList: "locale.parameters.texture.uvTransform.infoList" },
+            //     defValue: [1, 0, 0],
+            // }),
+            // v_transform: ZArray3D.describe({
+            //     ...uiDescriptions.uv_transform,
+            //     label: "locale.parameters.texture.uvTransform.label",
+            //     info: { infoList: "locale.parameters.texture.uvTransform.infoList" },
+            //     defValue: [0, 1, 0],
+            // }),
             animation: ZTextureAnimation,
             // render_order: ZNumberSlider.describe(
             //     {...uiDescriptions.numberSlider,
@@ -492,8 +495,8 @@ export const ZTextureObject = z.preprocess(
                     defExpanded: false,
                 },
             },
-        })
-);
+        });
+// );
 
 const ZCullMode = z.enum(["none", "ccw", "cw"]);
 const CullModeLabels = [
@@ -1828,6 +1831,8 @@ function replaceObjectSynonim(obj, nameFrom, nameTo) {
     return obj;
 }
 
+//test
+
 export const ZMaskConfigPreprocess = z.preprocess(
     (val) => {
         return replaceObjectSynonim(val, "preview", "icon");
@@ -1841,22 +1846,22 @@ export const ZMaskConfigPreprocess = z.preprocess(
                         z
                             .object({
                                 name: z.union([z.literal("patch"), z.literal("facemodel")]),
-                                texture: z
-                                    .preprocess((val) => {
-                                        if (isObject(val)) {
-                                            // keep only diffuse, not texture in object
-                                            val = replaceObjectSynonim(val, "texture", "diffuse");
-                                            if (!isObject(val.animation)) {
-                                                val.animation = {};
-                                            }
-                                            return val;
-                                        }
-                                        return {
-                                            diffuse: val,
-                                            animation: {},
-                                        };
-                                    }, z.object({}).passthrough())
-                                    .default({ animation: {} }),
+                                // texture: z.preprocess((val) => {
+                                //     if (val == null) return;
+                                //     if (isObject(val)) {
+                                //         // keep only diffuse, not texture in object
+                                //         val = replaceObjectSynonim(val, "texture", "diffuse");
+                                //         // if (!isObject(val.animation)) {
+                                //         //     val.animation = {};
+                                //         // }
+                                //         return val;
+                                //     }
+                                //     return {
+                                //         diffuse: val,
+                                //         // animation: {},
+                                //     };
+                                // }, z.object({}).passthrough()),
+                                // // .default({}),
                             })
                             .passthrough(),
 

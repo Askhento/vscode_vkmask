@@ -73,11 +73,17 @@ function addTypeToSchema(schema) {
             // if (k === "disabled") return [];
             // console.log("in object", res);
 
-            res = z.object(
-                Object.fromEntries(
-                    Object.entries(schema.shape).flatMap(([k, v]) => {
-                        return [[k, addTypeToSchema(v)]];
-                    })
+            res = z.preprocess(
+                (val) => {
+                    if (val == null) val = description.defValue;
+                    return val;
+                },
+                z.object(
+                    Object.fromEntries(
+                        Object.entries(schema.shape).flatMap(([k, v]) => {
+                            return [[k, addTypeToSchema(v)]];
+                        })
+                    )
                 )
             ); //.partial();
 
@@ -127,7 +133,8 @@ function addTypeToSchema(schema) {
     }
 
     // !!! z.nullable()
-    // res = z.nullable(res);
+    // res = z.nullable(res).default(description.defValue);
+
     res = z.union([res, z.null()]).default(null); // a hack to know if prop is missing
     // z.number().transform().catch()
     res = res.transform((value) => ({

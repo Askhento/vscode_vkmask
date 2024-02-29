@@ -8,6 +8,8 @@ export function applyValueByPath2(obj, path, value) {
 
     const lastPath = path[0];
 
+    // !!! could be terrible
+    if (obj[lastPath] == null) obj[lastPath] = {};
     const elem = obj[lastPath];
 
     // if (elem == null) {

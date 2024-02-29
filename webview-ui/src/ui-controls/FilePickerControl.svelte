@@ -24,10 +24,10 @@
 
     let infoVisible = false;
 
-    // print("INIT", value, params);
+    print("INIT", value, params);
 
     const dispatch = createEventDispatcher();
-    $: {
+    function onChange() {
         checkAssetExists();
         dispatch("changed", [
             {
@@ -167,6 +167,7 @@
 
         if (payload) {
             value = payload;
+            onChange();
             // print("asset", value);
         }
 
@@ -203,6 +204,7 @@
 
         value = null;
         waiting = false;
+        onChange();
     }
 
     onMount(async () => {
@@ -305,9 +307,10 @@
                     }}
                     on:change={(e) => {
                         //   value = e.target.value;
-                        //   print("drop change", e.target.value);
-                        // print("change dropdonw");
+                        print("drop change", e.target.value);
+                        print("change dropdonw");
                         value = dropdown.value;
+                        onChange();
                         searchValue = "";
                         inputElement.value = "";
                     }}

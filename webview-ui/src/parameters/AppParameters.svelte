@@ -342,6 +342,15 @@
         });
     }
 
+    function checkPatchTextureAnimationHack() {
+        // !!! what a mess ...
+        if (selection.type !== SelectionType.effect) return;
+        const effect = $effects[selection.id];
+        if (effect.name !== "patch") return;
+        if (effect.texture == null) effect.texture = {};
+        if (effect.texture.animation == null) effect.texture.animation = {};
+    }
+
     async function parseUI() {
         // !!!!!!!!
         error = null;
@@ -355,6 +364,8 @@
         switch (selection.type) {
             case SelectionType.effect:
                 print("will parse effect", $effects[selection.id]);
+                // !!! remove ASAP
+                // checkPatchTextureAnimationHack();
                 parseResult = EffectParserForUI.safeParse($effects[selection.id]);
                 selectionName = $effects[selection.id]?.name;
                 break;
@@ -447,7 +458,7 @@
 
     async function onChanged(event) {
         const changes = event.detail;
-        // console.log("onChange: ", changes);
+        // console.log("params onChange: ", changes);
         // Array.isArray()
         //
         let needRerender = false;
@@ -496,11 +507,11 @@
 
         if (action) action();
 
-        if (!needRerender) return;
-
         // //??? rerender parameters ???
         // // will need to rerender only if changed parameters structure
         // // !!!!!!!!!!!!!!!!!!!!!!!!
+        if (!needRerender) return;
+
         $effects = tempEffects;
         plugins = tempPlugins;
         asset = tempAsset;
@@ -737,7 +748,7 @@
     {:else if appState === AppState.error}
         {#key error}
             <!-- <div>should be error</div> -->
-            <ErrorMessage {error} />
+            <ErrorMessage error={error ?? {}} />
         {/key}
     {/if}
 </div>
