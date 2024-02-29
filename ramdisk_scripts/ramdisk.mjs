@@ -80,7 +80,11 @@ export async function startRamDisk(size = 100) {
         console.log(`Radmisk not supported for ${process.platform}`);
         return;
     }
-    if (!checkMounted()) await createDisk(size);
+    if (!checkMounted()) {
+        await createDisk(size);
+        return;
+    }
+    console.log("ramdisk is running at", ramdiskPath);
 }
 
 export async function unmount() {

@@ -8,10 +8,6 @@ export function applyValueByPath2(obj, path, value) {
 
     const lastPath = path[0];
 
-    // !!! could be terrible
-    if (obj[lastPath] == null) obj[lastPath] = {};
-    const elem = obj[lastPath];
-
     // if (elem == null) {
     //     console.log(`APPLYBALUEBYPATH : error wrong path ${path}`, obj, value);
     //     return obj;
@@ -35,6 +31,10 @@ export function applyValueByPath2(obj, path, value) {
         obj[lastPath] = value;
         return obj;
     } else {
+        // !!! could be terrible
+        if (obj[lastPath] == null) obj[lastPath] = {};
+        const elem = obj[lastPath];
+
         // remove first path element
         const res = applyValueByPath2(elem, path.slice(1), value);
         obj[lastPath] = res;
