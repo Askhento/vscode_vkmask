@@ -6,7 +6,6 @@ const print = (...args: any) => logger.log(__filename, ...args);
 
 import { EventEmitter } from "events";
 import { AssetsProcessor } from "./AssetsProcessor";
-import { applyMixins } from "./utils/applyMixins";
 import { Asset, AssetTypes } from "./types";
 
 class AssetsWatcher extends EventEmitter {
