@@ -1,4 +1,4 @@
-import * as path from "path";
+import { posix as path } from "path";
 import * as fs from "fs";
 import * as vscode from "vscode";
 import { logger } from "./Logger";
@@ -7,6 +7,7 @@ const print = (...args: any) => logger.log(__filename, ...args);
 import { EventEmitter } from "events";
 import { AssetsProcessor } from "./AssetsProcessor";
 import { Asset, AssetTypes } from "./types";
+import slash from "slash";
 
 class AssetsWatcher extends EventEmitter {
     public assets: Array<Asset> = [];
@@ -36,7 +37,7 @@ class AssetsWatcher extends EventEmitter {
             return "";
         }
 
-        const file = fileUri[0].fsPath;
+        const file = slash(fileUri[0].fsPath);
         let base = path.basename(file);
 
         let relative = to.at(-1).includes(".") ? path.join(...to) : path.join(...to, base); // file renaming
@@ -129,6 +130,10 @@ class AssetsWatcher extends EventEmitter {
         }
     }
 
+    /**
+     * @param file abspath for asset
+     * @returns Will return relative path for current project
+     */
     getRelative(file: string) {
         return path.relative(this.directory, file);
     }
@@ -158,10 +163,11 @@ class AssetsWatcher extends EventEmitter {
 
         const files = await vscode.workspace.findFiles("**");
 
-        const newAssets = files.map(async (file) => {
+        const newAssets = files.map(async (uri) => {
+            const slashedPath = slash(uri.fsPath);
             return await this.processor.fileToAsset(
-                file.fsPath,
-                this.getRelative(file.fsPath),
+                slashedPath,
+                this.getRelative(slashedPath),
                 true
             );
         });
@@ -174,10 +180,10 @@ class AssetsWatcher extends EventEmitter {
     }
 
     attach(extensionPath: string) {
-        this.extensionPath = extensionPath;
+        this.extensionPath = slash(extensionPath);
 
         if (vscode.workspace.workspaceFolders?.length) {
-            this.directory = vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath;
+            this.directory = slash(vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath);
         }
 
         if (!this.directory) {
@@ -193,35 +199,38 @@ class AssetsWatcher extends EventEmitter {
         );
 
         watcher.onDidCreate(async (e) => {
-            const relativePath = this.getRelative(e.fsPath);
+            const slashedPath = slash(e.fsPath);
+            const relativePath = this.getRelative(slashedPath);
             print("created file ", relativePath);
             const index = this.assets.findIndex((asset) => asset.path === relativePath);
             if (index < 0) {
                 this.assets.splice(
                     index,
                     0,
-                    await this.processor.fileToAsset(e.fsPath, relativePath, true)
+                    await this.processor.fileToAsset(slashedPath, relativePath, true)
                 );
                 this.fireChangedEvent();
             }
         });
 
         watcher.onDidChange(async (e) => {
-            const relativePath = this.getRelative(e.fsPath);
+            const slashedPath = slash(e.fsPath);
+            const relativePath = this.getRelative(slashedPath);
             if (path.basename(relativePath) === "mask.json") return;
             const index = this.assets.findIndex((asset) => asset.path === relativePath);
             if (index >= 0) {
                 this.assets.splice(
                     index,
                     1,
-                    await this.processor.fileToAsset(e.fsPath, relativePath, true)
+                    await this.processor.fileToAsset(slashedPath, relativePath, true)
                 );
                 this.fireChangedEvent();
             }
         });
 
         watcher.onDidDelete((e) => {
-            const relativePath = this.getRelative(e.fsPath);
+            const slashedPath = slash(e.fsPath);
+            const relativePath = this.getRelative(slashedPath);
             print("deleted file ", relativePath);
             const index = this.assets.findIndex((asset) => asset.path === relativePath);
             if (index >= 0) {
