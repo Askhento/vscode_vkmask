@@ -2,7 +2,7 @@
     import * as l10n from "@vscode/l10n";
 
     import { createEventDispatcher } from "svelte";
-    import { onMount, tick } from "svelte";
+    import { onMount, tick, afterUpdate } from "svelte";
     import { logger } from "../logger";
     import { getFileUri } from "../utils/getFileUri";
     const print = logger("FilePickerControl.svelte");
@@ -28,30 +28,31 @@
 
     const dispatch = createEventDispatcher();
     function onChange() {
-        checkAssetExists();
         dispatch("changed", [
             {
                 value,
                 path,
-                structural: true,
+                structural: false,
             },
         ]);
     }
     let extensions;
     let fileTypes;
-    let filteredAssets; // subset of typed assets with search query applied
-    let typedAssets; // subset of assets to specific type/extension
+    let filteredAssets = []; // subset of typed assets with search query applied
+    let typedAssets = []; // subset of assets to specific type/extension
     let searchValue = "";
     let dropdownOpened = false;
     let dropdown;
     let controlElement;
     let inputElement;
     let useBuiltins;
+    let dropDownIndex;
 
     let waiting = false;
     let currentAsset;
 
-    $: {
+    function updateLists() {
+        // print("upd lists");
         extensions = new Set(params.extensions);
         // print("new extensions", extensions);
         fileTypes = params.types ? new Set(params.types) : undefined;
@@ -72,39 +73,16 @@
         filteredAssets = typedAssets
             .filter(filterAssetByQuery)
             .sort((e) => (e.projectFile ? -1 : 1)); // show builtin assets last
-
-        setControlElementValue(value);
-        setDropDownValue(value);
-    }
-    $: {
-        searchValue = searchValue;
-
-        filteredAssets = typedAssets
-            .filter(filterAssetByQuery)
-            .sort((e) => (e.projectFile ? -1 : 1)); // show builtin assets last
     }
 
-    $: {
-        if (dropdown) {
-            controlElement = dropdown.shadowRoot.querySelector("div.control div");
-        }
-    }
+    // $: {
+    //     searchValue = searchValue;
 
-    //   function selectElementContents(el) {
-    //     var range = document.createRange();
-    //     print(el.firstChild);
-    //     range.selectNodeContents(el.firstChild);
-    //     var sel = window.getSelection();
-    //     sel.removeAllRanges();
-    //     sel.addRange(range);
-    //   }
+    //     filteredAssets = typedAssets
+    //         .filter(filterAssetByQuery)
+    //         .sort((e) => (e.projectFile ? -1 : 1)); // show builtin assets last
+    // }
 
-    //   function getControlElementValue() {
-    //     if (controlElement) {
-    //       return controlElement.innerText;
-    //     }
-    //     return "";
-    //   }
     function filterAssetByQuery(asset) {
         if (searchValue.length === 0) return true;
         return asset.path.toLowerCase().includes(searchValue.toLowerCase());
@@ -121,16 +99,20 @@
             newValue ?? `${l10n.t("locale.controls.filepicker.selectFilePlaceholder")}...`;
         if (!typedAssets.length)
             innerText = `${l10n.t("locale.controls.filepicker.noAssetsAvailable")}...`;
+
+        // print("set control", innerText, newValue);
         controlElement.innerText = innerText;
     }
 
     function setDropDownValue(newValue) {
         // when dropdown opened which value currently highlighted
         if (!dropdown) return;
-        dropdown.setAttribute(
-            "current-value",
-            isValueInAssets(newValue) ? newValue : typedAssets[0]
-        );
+
+        dropdown.setAttribute("current-value", newValue);
+        // dropdown.setAttribute(
+        //     "current-value",
+        //     isValueInAssets(newValue) ? newValue : typedAssets[0]
+        // );
     }
 
     function checkAssetExists() {
@@ -160,7 +142,7 @@
             command: RequestCommand.getUploadedAsset,
             target: RequestTarget.extension,
             payload: {
-                extensions: params.extensions, //[params.extensions.map((ext) => `.${ext}`)],
+                extensions: [params.extensions.map((ext) => `.${ext}`)],
                 to: params.directory,
             },
         });
@@ -204,20 +186,38 @@
 
         value = null;
         waiting = false;
+        currentAsset = null;
+        setControlElementValue(currentAsset?.baseName);
+
         onChange();
     }
 
     onMount(async () => {
-        checkAssetExists();
         await tick();
 
-        setControlElementValue(value);
-        setDropDownValue(value);
+        // print("mount", currentAsset);
+        setControlElementValue(currentAsset?.baseName);
+        // setDropDownValue(String(filteredAssets.findIndex((op) => op.path === value)));
+
+        // print("find", String(filteredAssets.findIndex((op) => op.path === value)));
     });
 
     $: {
-        checkAssetExists();
+        controlElement = dropdown?.shadowRoot.querySelector("div.control div");
+    }
+
+    $: {
+        value;
+        dropDownIndex = String(filteredAssets.findIndex((op) => op.path === value));
+        // print("vew dvalue", dropDownIndex);
+    }
+
+    $: {
         $assets;
+        updateLists();
+        checkAssetExists();
+        setControlElementValue(currentAsset?.baseName);
+        dropDownIndex = String(filteredAssets.findIndex((op) => op.path === value));
     }
 
     // from dropdown
@@ -244,32 +244,32 @@
 
 <!-- {#key typedAssets} -->
 {#if label !== undefined}
-    {#key value}
-        <span
-            class="label"
-            title={l10n.t(label)}
-            on:mouseleave={() => {
-                infoVisible = false;
-            }}
-            on:mouseover={() => {
-                infoVisible = true;
-            }}><span>{l10n.t(label)}</span></span
-        >
+    <span
+        class="label"
+        title={l10n.t(label)}
+        on:mouseleave={() => {
+            infoVisible = false;
+        }}
+        on:mouseover={() => {
+            infoVisible = true;
+        }}><span>{l10n.t(label)}</span></span
+    >
 
-        <span
-            class="control-wrapper"
-            on:mouseleave={() => {
-                infoVisible = false;
-            }}
-            on:mouseover={() => {
-                infoVisible = true;
-            }}
-        >
-            <div class="dropdown-wrapper">
-                <!-- <span class="file-preview">
+    <span
+        class="control-wrapper"
+        on:mouseleave={() => {
+            infoVisible = false;
+        }}
+        on:mouseover={() => {
+            infoVisible = true;
+        }}
+    >
+        <div class="dropdown-wrapper">
+            <!-- <span class="file-preview">
             </span> -->
-                {#if params.typeName === "texture"}
-                    {#if currentAsset && currentAsset.preview}
+            {#if params.typeName === "texture"}
+                {#if currentAsset && currentAsset.preview}
+                    {#if currentAsset.projectFile}
                         <a href={getFileUri(currentAsset.absPath)}>
                             <img
                                 src={"data:image/png;base64," + currentAsset.preview}
@@ -277,67 +277,84 @@
                             />
                         </a>
                     {:else}
-                        <img class="file-preview" src={missingTextureData} />
+                        <img
+                            src={"data:image/png;base64," + currentAsset.preview}
+                            class="file-preview"
+                        />
                     {/if}
+                {:else}
+                    <img class="file-preview" src={missingTextureData} />
                 {/if}
+            {/if}
 
-                <vscode-dropdown
-                    class:error={filteredAssets.length === 0}
-                    position="above"
-                    disabled={typedAssets.length === 0 || waiting}
-                    class:missing-asset={value && currentAsset == null}
-                    bind:this={dropdown}
-                    on:focusout|capture={(e) => {
-                        // print("focus out");
-                        //   e.preventDefault();
-                        e.stopPropagation(); // this is to be able to print while dropdown opened
-                        inputTimer = setTimeout(() => {
-                            if (!dropdown) return;
-                            const event = new KeyboardEvent("keydown", {
-                                key: "Escape",
-                            });
-                            dropdown.dispatchEvent(event);
-                        }, 150);
-                    }}
-                    on:click|preventDefault={(e) => {
-                        // print("dropdown click");
-                        //   setTimeout(function () {
-                        //     inputElement.focus();
-                        //   }, 1000);
-                    }}
-                    on:change={(e) => {
-                        //   value = e.target.value;
-                        print("drop change", e.target.value);
-                        print("change dropdonw");
-                        value = dropdown.value;
-                        onChange();
-                        searchValue = "";
-                        inputElement.value = "";
-                    }}
-                    on:keydown={(e) => {
-                        if (e.key === "Escape") {
-                            // print("escape!");
-                            e.preventDefault();
-                            dropdown.value = value;
-                            return;
-                        }
-                        if (e.key.length === 1) {
-                            inputElement.focus(); // on time !
-                            setTimeout(() => {
-                                if (inputTimer) clearTimeout(inputTimer);
-                            }, 0);
-                        }
-                        //   if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
-                        //   setTimeout(function () {
-                        //     const option = dropdown.querySelector("vscode-option.selected");
-                        //     option.scrollIntoView({
-                        //       behavior: "smooth",
-                        //       block: "nearest",
-                        //     });
-                        //   }, 10);
-                    }}
-                >
-                    <vscode-text-field
+            <vscode-dropdown
+                class:error={filteredAssets.length === 0}
+                position="above"
+                disabled={typedAssets.length === 0 || waiting}
+                class:missing-asset={value && currentAsset == null}
+                value={dropDownIndex}
+                bind:this={dropdown}
+                on:focusout|capture={(e) => {
+                    // print("focus out");
+                    // e.preventDefault();
+                    // e.stopPropagation(); // this is to be able to print while dropdown opened
+                    // inputTimer = setTimeout(() => {
+                    //     if (!dropdown) return;
+                    //     const event = new KeyboardEvent("keydown", {
+                    //         key: "Escape",
+                    //     });
+                    //     dropdown.dispatchEvent(event);
+                    // }, 150);
+                }}
+                on:click|preventDefault={(e) => {
+                    // print("dropdown click");
+                    //   setTimeout(function () {
+                    //     inputElement.focus();
+                    //   }, 1000);
+                }}
+                on:change={(e) => {
+                    //   value = e.target.value;
+                    // print("drop change", e.target.value, filteredAssets[parseInt(e.target.value)]);
+                    // print("change dropdonw");
+                    currentAsset = filteredAssets[parseInt(e.target.value)];
+                    value = currentAsset?.path;
+                    // checkAssetExists();
+                    setControlElementValue(currentAsset?.baseName);
+
+                    onChange();
+                    // searchValue = "";
+                    // inputElement.value = "";
+                }}
+                on:keydown|capture={(e) => {
+                    // print('key"', e.key);
+                    if (e.key === "Escape" || e.key === "Meta") {
+                        // print("escape!");
+                        // e.preventDefault();
+                        e.stopPropagation();
+
+                        value = value;
+                        setDropDownValue(dropDownIndex);
+
+                        dropdown?.blur();
+                        return;
+                    }
+                    // if (e.key.length === 1) {
+                    //     inputElement.focus(); // on time !
+                    //     setTimeout(() => {
+                    //         if (inputTimer) clearTimeout(inputTimer);
+                    //     }, 0);
+                    // }
+                    //   if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return;
+                    //   setTimeout(function () {
+                    //     const option = dropdown.querySelector("vscode-option.selected");
+                    //     option.scrollIntoView({
+                    //       behavior: "smooth",
+                    //       block: "nearest",
+                    //     });
+                    //   }, 10);
+                }}
+            >
+                <!-- <vscode-text-field
                         class:error={filteredAssets.length === 0}
                         bind:this={inputElement}
                         on:click|stopPropagation|capture={(e) => {
@@ -350,148 +367,68 @@
                             searchValue = e.target.value;
                             // print(searchValue);
                         }}
-                    />
-                    {#each filteredAssets as asset, i}
-                        <vscode-option class:builtin={!asset.projectFile}>
-                            {#if asset.absPath && asset.type === "image"}
-                                <img
-                                    src={"data:image/png;base64," + (asset.preview ?? whiteData)}
-                                    class="option-file-preview"
-                                />
-                            {/if}
-                            <span class="option-text">{asset.path}</span>
-                        </vscode-option>
-                    {/each}
-                </vscode-dropdown>
+                    /> -->
+                {#each filteredAssets as asset, i}
+                    <vscode-option class:builtin={!asset.projectFile} value={i}>
+                        {#if asset.absPath && asset.type === "image"}
+                            <img
+                                src={"data:image/png;base64," + (asset.preview ?? whiteData)}
+                                class="option-file-preview"
+                            />
+                        {/if}
+                        <span class="option-text">{`${asset.baseName}`}</span>
+                    </vscode-option>
+                {/each}
+            </vscode-dropdown>
 
-                {#if waiting}
-                    <vscode-progress-ring />
-                {/if}
-            </div>
-
-            <vscode-button
-                appearance={value == null ? "primary" : "secondary"}
-                disabled={waiting}
-                class="upload-button"
-                on:click|stopPropagation={() => {
-                    uploadAsset();
-                }}
-            >
-                <span class="btn-text"
-                    >{`${l10n.t("locale.controls.filepicker.buttonUpload.label")}`}</span
-                >
-            </vscode-button>
-
-            {#if currentAsset && currentAsset.projectFile}
-                <vscode-button
-                    appearance={value != null ? "primary" : "secondary"}
-                    disabled={waiting}
-                    class="select-button"
-                    on:click|stopPropagation={() => {
-                        selectAsset();
-                    }}
-                >
-                    <span class="btn-text"
-                        >{`${l10n.t("locale.controls.filepicker.buttonSelect.label")}`}</span
-                    >
-                </vscode-button>
+            {#if waiting}
+                <vscode-progress-ring />
             {/if}
+        </div>
 
+        <vscode-button
+            appearance={value == null ? "primary" : "secondary"}
+            disabled={waiting}
+            class="upload-button"
+            on:click|stopPropagation={() => {
+                uploadAsset();
+            }}
+        >
+            <span class="btn-text"
+                >{`${l10n.t("locale.controls.filepicker.buttonUpload.label")}`}</span
+            >
+        </vscode-button>
+
+        {#if currentAsset && currentAsset.projectFile}
             <vscode-button
-                disabled={value == null || waiting}
-                appearance="secondary"
-                class="remove-button"
+                appearance={value != null ? "primary" : "secondary"}
+                disabled={waiting}
+                class="select-button"
                 on:click|stopPropagation={() => {
-                    removeAsset();
+                    selectAsset();
                 }}
             >
                 <span class="btn-text"
-                    >{`${l10n.t("locale.controls.filepicker.buttonRemove.label")}`}</span
+                    >{`${l10n.t("locale.controls.filepicker.buttonSelect.label")}`}</span
                 >
             </vscode-button>
-            <InfoBox visible={infoVisible} info={params.info} />
-        </span>
-    {/key}
+        {/if}
+
+        <vscode-button
+            disabled={value == null || waiting || typedAssets.length === 0}
+            appearance="secondary"
+            class="remove-button"
+            on:click|stopPropagation={() => {
+                removeAsset();
+            }}
+        >
+            <span class="btn-text"
+                >{`${l10n.t("locale.controls.filepicker.buttonRemove.label")}`}</span
+            >
+        </vscode-button>
+        <InfoBox visible={infoVisible} info={params.info} />
+    </span>
 {/if}
-
-<!-- svelte-ignore missing-declaration -->
-<!-- <vscode-text-field
-        class:error={filteredAssets.length === 0}
-        bind:this={inputElement}
-        {value}
-        on:click={async (e) => {
-          if (dropdownOpened) return;
-
-          e.target.select();
-          dropdwonFocusLock = true;
-          dropdown.value = value;
-          dropdownOpened = false;
-          dropdown.click();
-          await tick();
-          dropdownOpened = true;
-          setTimeout(function () {
-            e.target.focus(); // wtf why this is working
-            dropdwonFocusLock = false;
-          }, 0);
-        }}
-        on:blur={(e) => {
-          //   searchValue = "";
-          print("blur");
-
-          //   setControlElementValue(value);
-          if (!dropdwonFocusLock) {
-            dropdownOpened = false;
-            dropdown.removeAttribute("open");
-            // dropdown.removeClassName("open")
-          }
-          inputElement.value = value;
-          searchValue = "";
-          //   dropdownOpened = false;
-        }}
-        on:input={(e) => {
-          //   print("oninput", e);
-          searchValue = inputElement.value;
-          print(searchValue);
-        }}
-        on:keydown={async (e) => {
-          if (e.key.length === 1) return;
-          print(e.key);
-          const controlKeys = e.ctrlKey || e.metaKey;
-          switch (e.key) {
-            case "ArrowUp":
-            case "ArrowDown":
-              // passing arrow to dropdown
-
-              const event = new KeyboardEvent("keydown", { key: e.key });
-              dropdown.dispatchEvent(event);
-              e.preventDefault();
-              break;
-            case "Enter":
-              if (filteredAssets.length === 0) {
-                // dropdownOpened = false;
-                // await tick();
-                // dropdownOpened = true;
-              } else {
-                value = dropdown.getAttribute("current-value");
-                // controlElement.innerText = value;
-
-                e.target.blur();
-              }
-              break;
-            case "Escape":
-              e.target.blur();
-              break;
-            case "Backspace":
-              if (searchValue.length > 0) {
-                searchValue = searchValue.slice(0, -1);
-                //   controlElement.innerText = searchValue;
-              }
-              break;
-          }
-        }}
-      /> -->
-
-<!-- {/key} -->
 
 <style>
     * {

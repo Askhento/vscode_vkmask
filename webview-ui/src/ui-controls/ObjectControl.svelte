@@ -202,7 +202,9 @@
                                 <svelte:component
                                     this={data.uiElement}
                                     error={data.error}
-                                    value={value[key] ?? data.uiDescription.defValue}
+                                    value={value[key] ??
+                                        (data.uiDescription.name === "object" ||
+                                            data.uiDescription.defValue)}
                                     label={data.label ?? data.uiDescription.label ?? key}
                                     path={[...path, key]}
                                     params={data.uiDescription}
