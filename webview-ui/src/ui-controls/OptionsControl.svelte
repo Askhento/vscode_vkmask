@@ -57,6 +57,19 @@
             value = options[parseInt(e.target.value)];
             onChange();
         }}
+        on:keydown|capture={(e) => {
+            if (e.key === "Escape" || e.key === "Meta") {
+                e.stopPropagation();
+                e.target.setAttribute(
+                    "current-value",
+                    String(options.findIndex((op) => op === value))
+                );
+
+                e.target.blur();
+
+                return;
+            }
+        }}
     >
         {#each params.optionLabels ?? options as option, i}
             <vscode-option class="option" value={i}
