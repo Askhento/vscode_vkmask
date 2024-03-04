@@ -20,7 +20,7 @@ class AssetsWatcher extends EventEmitter {
     async uploadAssets(extensions: string[], to: string[]) {
         // todo : decide what to do when name conflict
 
-        const filters: any = Object.fromEntries(extensions.map((ext) => [ext, ext]));
+        const filters: any = Object.fromEntries(extensions.map((ext) => [ext, [ext]]));
 
         const options: vscode.OpenDialogOptions = {
             canSelectMany: false,

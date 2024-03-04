@@ -142,7 +142,7 @@
             command: RequestCommand.getUploadedAsset,
             target: RequestTarget.extension,
             payload: {
-                extensions: [params.extensions.map((ext) => `.${ext}`)],
+                extensions: params.extensions, //[params.extensions.map((ext) => `${ext}`)],
                 to: params.directory,
             },
         });
