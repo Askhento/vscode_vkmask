@@ -285,6 +285,7 @@
     }
 
     function sendEffects() {
+        print("sending effects");
         messageHandler.send({
             command: RequestCommand.updateEffects,
             target: RequestTarget.extension,
@@ -396,7 +397,7 @@
         }
 
         if (parseResult.success) {
-            await getTabInfo();
+            // await getTabInfo(); // seems useless here
 
             uiElements = parseResult.data;
             print("parse result : ", parseResult);
@@ -458,7 +459,7 @@
 
     async function onChanged(event) {
         const changes = event.detail;
-        // console.log("params onChange: ", changes);
+        console.log("params onChange: ", changes);
         // Array.isArray()
         //
         let needRerender = false;
@@ -469,7 +470,7 @@
 
         changes.forEach(({ path, value, structural }) => {
             const [root, ...pathClone] = [...path];
-            // console.log("onchange root", root, pathClone, path);
+            // console.log("params onchange root", root, pathClone, path);
             // !!!!!!!!!!! split
             if (root === "tabInfo") {
                 console.log("sending tabinfo");
@@ -505,18 +506,17 @@
             }
         });
 
-        if (action) action();
-
-        // //??? rerender parameters ???
-        // // will need to rerender only if changed parameters structure
-        // // !!!!!!!!!!!!!!!!!!!!!!!!
-        if (!needRerender) return;
-
         $effects = tempEffects;
         plugins = tempPlugins;
         asset = tempAsset;
 
-        await parseUI();
+        // //??? rerender parameters ???
+        // // will need to rerender only if changed parameters structure
+        // // !!!!!!!!!!!!!!!!!!!!!!!!
+        if (needRerender) await parseUI();
+
+        if (action) action();
+
         // rerenderParameters();
     }
 
@@ -663,27 +663,26 @@
                 <h4>{selectionName}</h4>
             {/if}
         </div> -->
-        {#key selection}
+        <!-- {#key selection} -->
+        {#key uiElements}
             {#if selection.type === SelectionType.effect}
-                {#key uiElements}
-                    {#if $effects}
-                        {#if uiElements}
-                            <ObjectControl
-                                expanded={true}
-                                nesting={false}
-                                value={$effects[selection.id]}
-                                label={uiElements.uiDescription.label ??
-                                    $effects[selection.id].name}
-                                params={uiElements.uiDescription}
-                                path={[SelectionType.effect, selection.id]}
-                                uiElements={uiElements.value}
-                                on:changed={onChanged}
-                            />
-                        {:else}
-                            <div>{l10n.t("locale.parameters.unknownEffect")}</div>
-                        {/if}
+                {#if $effects}
+                    {#if uiElements}
+                        <ObjectControl
+                            expanded={true}
+                            nesting={false}
+                            value={$effects[selection.id]}
+                            label={uiElements.uiDescription.label ?? $effects[selection.id].name}
+                            params={uiElements.uiDescription}
+                            path={[SelectionType.effect, selection.id]}
+                            uiElements={uiElements.value}
+                            on:changed={onChanged}
+                        />
+                    {:else}
+                        <div>{l10n.t("locale.parameters.unknownEffect")}</div>
                     {/if}
-                {/key}
+                {/if}
+                <!-- {/key} -->
             {:else if selection.type === SelectionType.plugin}
                 {#if plugins}
                     {#if uiElements}
@@ -702,40 +701,40 @@
                     {/if}
                 {/if}
             {:else if selection.type === SelectionType.asset}
-                {#key asset}
-                    {#if selection.assetType === "xml_material" || selection.assetType === "json_material"}
-                        <div class="grid-container">
-                            <TextControl
-                                label="Name"
-                                value={selection.baseName}
-                                path={null}
-                                on:changed={(e) => {
-                                    print("assetname", e.detail);
-                                    const newName = e.detail[0].value;
-                                    renameAsset(newName);
-                                }}
-                            />
-                        </div>
-                        <vscode-divider role="separator" />
+                <!-- {#key asset} -->
+                {#if selection.assetType === "xml_material" || selection.assetType === "json_material"}
+                    <div class="grid-container">
+                        <TextControl
+                            label="Name"
+                            value={selection.baseName}
+                            path={null}
+                            on:changed={(e) => {
+                                print("assetname", e.detail);
+                                const newName = e.detail[0].value;
+                                renameAsset(newName);
+                            }}
+                        />
+                    </div>
+                    <vscode-divider role="separator" />
 
-                        {#if uiElements}
-                            <ObjectControl
-                                expanded={true}
-                                nesting={false}
-                                value={asset}
-                                label={selection.path}
-                                params={uiElements.uiDescription}
-                                path={[SelectionType.asset]}
-                                uiElements={uiElements.value}
-                                on:changed={onChanged}
-                            />
-                        {:else}
-                            <div>{l10n.t("locale.parameters.unknownAsset")}</div>
-                        {/if}
+                    {#if uiElements}
+                        <ObjectControl
+                            expanded={true}
+                            nesting={false}
+                            value={asset}
+                            label={selection.path}
+                            params={uiElements.uiDescription}
+                            path={[SelectionType.asset]}
+                            uiElements={uiElements.value}
+                            on:changed={onChanged}
+                        />
                     {:else}
-                        <InfoTableControl value={asset} />
+                        <div>{l10n.t("locale.parameters.unknownAsset")}</div>
                     {/if}
-                {/key}
+                {:else}
+                    <InfoTableControl value={asset} />
+                {/if}
+                <!-- {/key} -->
             {:else}
                 <div class="empty-parameters">
                     {`${l10n.t("locale.parameters.nothingSelected")}..`}.
@@ -743,13 +742,13 @@
                 <!-- <pre>{JSON.stringify(selection, null, "\t")}</pre> -->
             {/if}
         {/key}
+        <!-- {/key} -->
     {:else if appState === AppState.loading}
         <Loading />
     {:else if appState === AppState.error}
-        {#key error}
-            <!-- <div>should be error</div> -->
-            <ErrorMessage error={error ?? {}} />
-        {/key}
+        <!-- {#key error} -->
+        <!-- <div>should be error</div> -->
+        <ErrorMessage error={error ?? {}} />
     {/if}
 </div>
 

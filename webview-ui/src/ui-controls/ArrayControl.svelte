@@ -33,7 +33,7 @@
 
     const dispatch = createEventDispatcher();
     function onChanged() {
-        print("changed", path, value);
+        // print("changed", path, value);
         dispatch("changed", [
             {
                 value,
@@ -77,7 +77,7 @@
     }
 
     onMount(async () => {
-        print("ui", uiElements);
+        // print("ui", uiElements);
         const { needUpdate } = await applyDeps(component, stores, params.dependencies);
         if (needUpdate) onChanged();
     });

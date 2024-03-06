@@ -24,7 +24,7 @@
 
     let infoVisible = false;
 
-    print("INIT", value, params);
+    // print("INIT", value, params);
 
     const dispatch = createEventDispatcher();
     function onChange() {

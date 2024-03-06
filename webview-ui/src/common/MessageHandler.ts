@@ -61,13 +61,12 @@ export class MessageHandler {
 
     send(data: MessageHandlerData<any>) {
         if (data.target === undefined) {
-            console.log("MessageHandler : need a target to send ");
+            console.log("MessageHandler : need a target to send ", data);
             return;
         }
 
         // will wait for all calls to settle
         if (data.command in this.debounceTimers) {
-            console.log("cancelling send", data);
             clearTimeout(this.debounceTimers[data.command]);
         }
 
