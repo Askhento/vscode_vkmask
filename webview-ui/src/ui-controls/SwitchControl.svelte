@@ -10,10 +10,11 @@
     function onChange(e) {
         // console.log();
         value = e.target.checked;
+        onChanged();
     }
 
     const dispatch = createEventDispatcher();
-    $: {
+    function onChanged() {
         dispatch("changed", [
             {
                 value,
