@@ -884,11 +884,11 @@ export async function activate(context: vscode.ExtensionContext) {
 
         // this will ensure all the componenets will show up no matter if they closed before.
         webviewProviders.forEach((provider) => {
-            // // !!! Hide unfinished views for now !
-            // if (provider.viewId === ViewIds.assetsManager || provider.viewId === ViewIds.plugins) {
-            //     vscode.commands.executeCommand(provider.viewId + ".removeView");
-            //     return;
-            // }
+            // keep theese collapsed
+            if (provider.viewId === ViewIds.assetsManager || provider.viewId === ViewIds.plugins) {
+                // vscode.commands.executeCommand(provider.viewId + ".removeView");
+                return;
+            }
 
             vscode.commands.executeCommand(provider.viewId + ".focus");
         });

@@ -274,6 +274,7 @@
             "vkmask_primary_bar": [
                 {
                     "type": "webview",
+                    "visibility": "visible",
                     "contextualTitle": "%locale.contribution.contextTitle.projectManager%",
                     "id": "vkmask.projectManager",
                     "name": "%locale.contribution.name.projectManager%",
@@ -281,6 +282,7 @@
                 },
                 {
                     "type": "webview",
+                    "visibility": "visible",
                     "contextualTitle": "%locale.contribution.contextTitle.effects%",
                     "id": "vkmask.effects",
                     "name": "%locale.contribution.name.effects%",
@@ -288,6 +290,7 @@
                 },
                 {
                     "type": "webview",
+                    "visibility": "collapsed",
                     "contextualTitle": "%locale.contribution.contextTitle.plugins%",
                     "id": "vkmask.plugins",
                     "name": "%locale.contribution.name.plugins%",
@@ -295,6 +298,7 @@
                 },
                 {
                     "type": "webview",
+                    "visibility": "visible",
                     "contextualTitle": "%locale.contribution.contextTitle.parameters%",
                     "id": "vkmask.parameters",
                     "name": "%locale.contribution.name.parameters%",
@@ -302,6 +306,7 @@
                 },
                 {
                     "type": "webview",
+                    "visibility": "collapsed",
                     "contextualTitle": "%locale.contribution.contextTitle.assetsManager%",
                     "id": "vkmask.assetsManager",
                     "name": "%locale.contribution.name.assetsManager%",
