@@ -15,9 +15,13 @@ export class MessageHandler {
 
     private listeners: { [requestId: string]: (data: MessageHandlerData<any>) => void } = {};
 
+    // trying to remove double send the same command
+    private debounceTimers: { [command: string]: ReturnType<typeof setTimeout> } = {};
+
     constructor(
         public onWebviewMessage: (data: MessageHandlerData<any>) => void,
-        private origin: string
+        private origin: string,
+        private debounceMS: number = 100
     ) {
         window.addEventListener("message", (e) => {
             const data: MessageHandlerData<any> = e.data;
@@ -60,9 +64,20 @@ export class MessageHandler {
             console.log("MessageHandler : need a target to send ");
             return;
         }
-        const newOrigin = data.origin || this.origin; // for redirects
 
-        const clonedData = JSON.parse(JSON.stringify({ ...data, origin: newOrigin }));
-        vscode.postMessage(clonedData); // ??? await
+        // will wait for all calls to settle
+        if (data.command in this.debounceTimers) {
+            console.log("cancelling send", data);
+            clearTimeout(this.debounceTimers[data.command]);
+        }
+
+        this.debounceTimers[data.command] = setTimeout(() => {
+            const newOrigin = data.origin || this.origin; // for redirects
+
+            const clonedData = JSON.parse(JSON.stringify({ ...data, origin: newOrigin }));
+            vscode.postMessage(clonedData); // ??? await
+
+            delete this.debounceTimers[data.command];
+        }, this.debounceMS);
     }
 }

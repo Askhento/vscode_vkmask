@@ -86,7 +86,7 @@ export const uiDescriptions = {
         name: "script",
         label: "Script",
         group: "Advanced",
-        defValue: "main.as",
+        defValue: null,
         showAlways: true,
         info: null,
     },
@@ -203,7 +203,7 @@ const ZLightTypeLabels = [
 
 const AssetTypes = {
     texture: {
-        defValue: "Textures/Spot.png",
+        defValue: null, //"Textures/Spot.png",
         extensions: ["png", "jpg"],
         directory: ["Textures"],
         typeName: "texture",
@@ -218,7 +218,7 @@ const AssetTypes = {
         label: "locale.assetTypes.material.label",
     },
     technique: {
-        defValue: "Techniques/DiffUnlit.xml",
+        defValue: null, //"Techniques/DiffUnlit.xml",
         extensions: ["xml"],
         types: ["xml_technique"],
         directory: ["Techniques"],
@@ -226,7 +226,7 @@ const AssetTypes = {
         label: "locale.assetTypes.technique.label",
     },
     renderPath: {
-        defValue: "",
+        defValue: null, //"",
         extensions: ["xml"],
         types: ["xml_renderpath"],
         directory: ["RenderPaths"],
@@ -234,21 +234,21 @@ const AssetTypes = {
         label: "locale.assetTypes.renderPath.label",
     },
     animationClip: {
-        defValue: "",
+        defValue: null, // "",
         extensions: ["ani"],
         directory: ["Animations"],
         typeName: "animationClip",
         label: "locale.assetTypes.animationClip.label",
     },
     model3d: {
-        defValue: "Models/DefaultPlane.mdl",
+        defValue: null, //"Models/DefaultPlane.mdl",
         extensions: ["mdl"],
         directory: ["Models"],
         typeName: "model3d",
         label: "locale.assetTypes.model3d.label",
     },
     script: {
-        defValue: "",
+        defValue: null, //"",
         extensions: ["as"],
         directory: ["Scripts"],
         typeName: "script",
@@ -1104,6 +1104,7 @@ const ZModel3dEffect = ZBaseEffect.extend({
         label: "locale.parameters.model3d.model.label",
         group: "model",
         info: { infoList: "locale.parameters.model3d.model.infoList" },
+        structural: true,
     }),
     position: ZArray3D.describe({
         ...uiDescriptions.array3d,

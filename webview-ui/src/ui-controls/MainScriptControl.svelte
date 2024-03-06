@@ -167,7 +167,7 @@
         >
             <span class="btn-text"
                 >{l10n.t("locale.projectManager.mainScript.buttonCreate.label")}</span
-            >;
+            >
         </vscode-button>
         <vscode-button
             disabled={value == null || waiting}

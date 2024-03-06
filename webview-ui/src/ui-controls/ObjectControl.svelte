@@ -146,79 +146,77 @@
             <span>{l10n.t(label)}</span>
         </span>
     {/if}
-    {#key uiElementsGroupData}
-        {#if expanded}
-            {#each Object.entries(uiElementsGroupData) as [groupName, groupData]}
-                {#if groupData.label != null && Object.keys(groupData.elements).length !== 0}
-                    <vscode-divider class="divider" role="separator" />
-                    <div
-                        class="group-label"
-                        on:click={() => {
-                            uiElementsGroupData[groupName].expanded =
-                                !uiElementsGroupData[groupName].expanded;
+    <!-- {#key uiElementsGroupData} -->
+    {#if expanded}
+        {#each Object.entries(uiElementsGroupData) as [groupName, groupData]}
+            {#if groupData.label != null && Object.keys(groupData.elements).length !== 0}
+                <vscode-divider class="divider" role="separator" />
+                <div
+                    class="group-label"
+                    on:click={() => {
+                        uiElementsGroupData[groupName].expanded =
+                            !uiElementsGroupData[groupName].expanded;
 
-                            const tabKey = [...path, groupName].join(".");
-                            $tabInfo[tabKey] = uiElementsGroupData[groupName].expanded;
-                            onTab();
-                            // console.log($tabInfo);
-                        }}
-                    >
-                        <i
-                            class="codicon codicon-chevron-{groupData.expanded ? 'down' : 'right'}"
-                        />
+                        const tabKey = [...path, groupName].join(".");
+                        $tabInfo[tabKey] = uiElementsGroupData[groupName].expanded;
+                        onTab();
+                        // console.log($tabInfo);
+                    }}
+                >
+                    <i class="codicon codicon-chevron-{groupData.expanded ? 'down' : 'right'}" />
 
-                        <span>{l10n.t(groupData.label)}</span>
-                    </div>
-                {/if}
-                {#if uiElementsGroupData[groupName].expanded}
-                    <div
-                        class:main-group-bottom-margin={!groupData.disableMargin}
-                        class="group-wrapper"
-                    >
-                        {#each Object.entries(groupData.elements) as [key, data]}
-                            {#if data.value === null && (data.uiDescription.name === "object" || data.uiDescription.name === "array")}
-                                <span class="missing-key-label"
-                                    ><span>{l10n.t(data.uiDescription.label ?? key)}</span></span
+                    <span>{l10n.t(groupData.label)}</span>
+                </div>
+            {/if}
+            {#if uiElementsGroupData[groupName].expanded}
+                <div
+                    class:main-group-bottom-margin={!groupData.disableMargin}
+                    class="group-wrapper"
+                >
+                    {#each Object.entries(groupData.elements) as [key, data]}
+                        {#if data.value === null && (data.uiDescription.name === "object" || data.uiDescription.name === "array")}
+                            <span class="missing-key-label"
+                                ><span>{l10n.t(data.uiDescription.label ?? key)}</span></span
+                            >
+                            <span class="right-button-wrapper">
+                                <vscode-button
+                                    class="add-key-btn"
+                                    on:click={() => {
+                                        // console.log(data.uiDescription);
+                                        addKey(key, data);
+                                    }}
                                 >
-                                <span class="right-button-wrapper">
-                                    <vscode-button
-                                        class="add-key-btn"
-                                        on:click={() => {
-                                            // console.log(data.uiDescription);
-                                            addKey(key, data);
-                                        }}
+                                    <span slot="start" class="codicon codicon-add" />
+                                    <span class="btn-text"
+                                        >{l10n.t(
+                                            `Add ${l10n
+                                                .t(data.uiDescription.label ?? key)
+                                                .toLowerCase()}`
+                                        )}</span
                                     >
-                                        <span slot="start" class="codicon codicon-add" />
-                                        <span class="btn-text"
-                                            >{l10n.t(
-                                                `Add ${l10n
-                                                    .t(data.uiDescription.label ?? key)
-                                                    .toLowerCase()}`
-                                            )}</span
-                                        >
-                                    </vscode-button>
-                                </span>
-                            {:else}
-                                <svelte:component
-                                    this={data.uiElement}
-                                    error={data.error}
-                                    value={value[key] ??
-                                        (data.uiDescription.name === "object" ||
-                                            data.uiDescription.defValue)}
-                                    label={data.label ?? data.uiDescription.label ?? key}
-                                    path={[...path, key]}
-                                    params={data.uiDescription}
-                                    uiElements={data.value}
-                                    on:changed
-                                />
-                            {/if}
-                        {/each}
-                    </div>
-                    <!-- group-wrapper -->
-                {/if}
-            {/each}
-        {/if}
-    {/key}
+                                </vscode-button>
+                            </span>
+                        {:else}
+                            <svelte:component
+                                this={data.uiElement}
+                                error={data.error}
+                                value={value[key] ??
+                                    (data.uiDescription.name === "object" ||
+                                        data.uiDescription.defValue)}
+                                label={data.label ?? data.uiDescription.label ?? key}
+                                path={[...path, key]}
+                                params={data.uiDescription}
+                                uiElements={data.value}
+                                on:changed
+                            />
+                        {/if}
+                    {/each}
+                </div>
+                <!-- group-wrapper -->
+            {/if}
+        {/each}
+    {/if}
+    <!-- {/key} -->
 
     <!-- <div class="elements-wrapper" style="padding-left: {nesting ? '0.2em' : '0'};">
             {#each Object.entries(uiElementsVisible) as [key, data]}

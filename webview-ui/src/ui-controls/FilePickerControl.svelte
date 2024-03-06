@@ -32,7 +32,7 @@
             {
                 value,
                 path,
-                structural: false,
+                structural: params.structural ?? false,
             },
         ]);
     }
@@ -197,7 +197,7 @@
 
         // print("mount", currentAsset);
         setControlElementValue(currentAsset?.baseName);
-        // setDropDownValue(String(filteredAssets.findIndex((op) => op.path === value)));
+        setDropDownValue(String(filteredAssets.findIndex((op) => op.path === value)));
 
         // print("find", String(filteredAssets.findIndex((op) => op.path === value)));
     });

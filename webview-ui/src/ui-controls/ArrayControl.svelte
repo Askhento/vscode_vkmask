@@ -81,15 +81,20 @@
         const { needUpdate } = await applyDeps(component, stores, params.dependencies);
         if (needUpdate) onChanged();
     });
+
+    // ur 0 0 1 1
+    // >  0 1 0 1
+    // re 0 1 1 1
 </script>
 
-{#if nesting}
-    <span class="label" title={l10n.t(label)} class:expanded on:click={toggle}>
-        <i class="codicon codicon-chevron-{expanded ? 'down' : 'right'}" />
-        {l10n.t(label)}
-    </span>
-{/if}
-
+<!-- {#if params.userResizable || uiElements.length > 0}
+    {#if nesting}
+        <span class="label" title={l10n.t(label)} class:expanded on:click={toggle}>
+            <i class="codicon codicon-chevron-{expanded ? 'down' : 'right'}" />
+            {l10n.t(label)}
+        </span>
+    {/if}
+{/if} -->
 <div class="elements-wrapper">
     {#if expanded}
         {#if uiElements}
