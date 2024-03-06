@@ -285,7 +285,7 @@
     }
 
     function sendEffects() {
-        print("sending effects");
+        // print("sending effects");
         messageHandler.send({
             command: RequestCommand.updateEffects,
             target: RequestTarget.extension,
@@ -343,15 +343,6 @@
         });
     }
 
-    function checkPatchTextureAnimationHack() {
-        // !!! what a mess ...
-        if (selection.type !== SelectionType.effect) return;
-        const effect = $effects[selection.id];
-        if (effect.name !== "patch") return;
-        if (effect.texture == null) effect.texture = {};
-        if (effect.texture.animation == null) effect.texture.animation = {};
-    }
-
     async function parseUI() {
         // !!!!!!!!
         error = null;
@@ -365,8 +356,7 @@
         switch (selection.type) {
             case SelectionType.effect:
                 print("will parse effect", $effects[selection.id]);
-                // !!! remove ASAP
-                // checkPatchTextureAnimationHack();
+
                 parseResult = EffectParserForUI.safeParse($effects[selection.id]);
                 selectionName = $effects[selection.id]?.name;
                 break;
@@ -459,7 +449,7 @@
 
     async function onChanged(event) {
         const changes = event.detail;
-        console.log("params onChange: ", changes);
+        // console.log("params onChange: ", changes);
         // Array.isArray()
         //
         let needRerender = false;
@@ -473,7 +463,7 @@
             // console.log("params onchange root", root, pathClone, path);
             // !!!!!!!!!!! split
             if (root === "tabInfo") {
-                console.log("sending tabinfo");
+                // console.log("sending tabinfo");
                 action = sendTabInfo;
                 return;
             }
