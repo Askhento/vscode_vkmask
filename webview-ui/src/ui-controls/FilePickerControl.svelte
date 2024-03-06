@@ -327,7 +327,11 @@
                 }}
                 on:keydown|capture={(e) => {
                     // print('key"', e.key);
-                    if (e.key === "Escape" || e.key === "Meta") {
+                    if (e.key === "Meta") {
+                        e.stopPropagation();
+                        return;
+                    }
+                    if (e.key === "Escape") {
                         // print("escape!");
                         // e.preventDefault();
                         e.stopPropagation();

@@ -58,7 +58,11 @@
             onChange();
         }}
         on:keydown|capture={(e) => {
-            if (e.key === "Escape" || e.key === "Meta") {
+            if (e.key === "Meta") {
+                e.stopPropagation();
+                return;
+            }
+            if (e.key === "Escape") {
                 e.stopPropagation();
                 e.target.setAttribute(
                     "current-value",
