@@ -34,7 +34,7 @@
             command: RequestCommand.getUploadedAsset,
             target: RequestTarget.extension,
             payload: {
-                extensions: [["*.png", "*.png"]],
+                extensions: ["png"],
                 to: ["icon.png"],
             },
         });
@@ -148,17 +148,16 @@
             infoVisible = true;
         }}><span>{l10n.t(label)}</span></span
     >
-    {#key value}
-        <span
-            class="control-wrapper"
-            on:mouseleave={() => {
-                infoVisible = false;
-            }}
-            on:mouseover={() => {
-                infoVisible = true;
-            }}
-        >
-            <!-- <div class="value-text">
+    <span
+        class="control-wrapper"
+        on:mouseleave={() => {
+            infoVisible = false;
+        }}
+        on:mouseover={() => {
+            infoVisible = true;
+        }}
+    >
+        <!-- <div class="value-text">
             {#if value == null}
                 <span class="text-center">Upload or create a scirpt file</span>
             {:else if iconAsset}
@@ -170,47 +169,44 @@
         
         </div> -->
 
-            <span class="file-preview-wrapper">
-                {#if iconAsset && iconAsset.preview}
-                    <a href={getIconUri()}>
-                        <img
-                            src={"data:image/png;base64," + iconAsset.preview}
-                            class="file-preview"
-                        />
-                    </a>
-                {:else}
-                    <img src={missingIconData} class="file-preview" />
-                {/if}
-            </span>
-
-            {#if value == null}
-                <vscode-button
-                    appearance={"primary"}
-                    disabled={waiting}
-                    class="upload-button"
-                    on:click|stopPropagation={() => {
-                        uploadIcon();
-                    }}
-                >
-                    <span class="btn-text"
-                        >{l10n.t("locale.projectManager.icon.buttonUpload.label")}</span
-                    >
-                </vscode-button>
+        <span class="file-preview-wrapper">
+            {#if iconAsset && iconAsset.preview}
+                <a href={getIconUri()}>
+                    <img src={"data:image/png;base64," + iconAsset.preview} class="file-preview" />
+                </a>
             {:else}
-                <vscode-button
-                    disabled={value == null || waiting}
-                    appearance="secondary"
-                    class="remove-button"
-                    on:click|stopPropagation={() => {
-                        removeIcon();
-                    }}
-                >
-                    <span class="btn-text"
-                        >{l10n.t("locale.projectManager.icon.buttonRemove.label")}</span
-                    >
-                </vscode-button>
+                <img src={missingIconData} class="file-preview" />
             {/if}
-            <!-- <vscode-button
+        </span>
+
+        {#if value == null}
+            <vscode-button
+                appearance={"primary"}
+                disabled={waiting}
+                class="upload-button"
+                on:click|stopPropagation={() => {
+                    uploadIcon();
+                }}
+            >
+                <span class="btn-text"
+                    >{l10n.t("locale.projectManager.icon.buttonUpload.label")}</span
+                >
+            </vscode-button>
+        {:else}
+            <vscode-button
+                disabled={value == null || waiting}
+                appearance="secondary"
+                class="remove-button"
+                on:click|stopPropagation={() => {
+                    removeIcon();
+                }}
+            >
+                <span class="btn-text"
+                    >{l10n.t("locale.projectManager.icon.buttonRemove.label")}</span
+                >
+            </vscode-button>
+        {/if}
+        <!-- <vscode-button
             appearance={value == null ? "primary" : "secondary"}
             disabled={waiting}
             class="create-button"
@@ -221,7 +217,7 @@
             Create icon
         </vscode-button> -->
 
-            <!-- <vscode-button
+        <!-- <vscode-button
             class="info-btn"
             appearance="icon"
             on:click|stopPropagation={() => {
@@ -229,14 +225,13 @@
             }}
         >
         </vscode-button> -->
-            {#key iconAsset}
-                <InfoBox visible={infoVisible} info={params.info} />
-            {/key}
-            {#if waiting}
-                <vscode-progress-ring />
-            {/if}
-        </span>
-    {/key}
+        {#key iconAsset}
+            <InfoBox visible={infoVisible} info={params.info} />
+        {/key}
+        {#if waiting}
+            <vscode-progress-ring />
+        {/if}
+    </span>
 {/if}
 
 <style>

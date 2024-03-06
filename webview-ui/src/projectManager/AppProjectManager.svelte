@@ -181,7 +181,7 @@
     }
 
     async function onChanged(event) {
-        console.log("onChange: ", event);
+        // console.log("onChange: ", event);
         const changes = event.detail;
         let needRerender = false;
 

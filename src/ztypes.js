@@ -90,7 +90,7 @@ export const uiDescriptions = {
         showAlways: true,
         info: null,
     },
-    icon: { name: "icon", label: "Icon", group: "main", defValue: "", info: null },
+    icon: { name: "icon", label: "Icon", group: "main", defValue: null, info: null },
     texture: { name: "texture", label: "Texture", group: "main", defValue: "" },
     // !!!! color alpha redundant here
     color: { name: "color", label: "Color", group: "main", defValue: [1, 1, 1] },
