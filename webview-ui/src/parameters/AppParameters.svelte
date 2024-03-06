@@ -449,8 +449,7 @@
 
     async function onChanged(event) {
         const changes = event.detail;
-        console.log("params onChange: ", changes);
-        // Array.isArray()
+        // console.log("params onChange: ", changes);
         //
         let needRerender = false;
         let action = null; //!!!! only one action
