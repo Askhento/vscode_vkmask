@@ -3,8 +3,8 @@
   "compilerOptions": {
       "strict": false,
       "target": "ESNext",
-      "rootDir": "../",
-      "baseUrl": "../",
+      "rootDir": "../../",
+      "baseUrl": "../../",
       "types": [
           "node",
           "svelte"
@@ -17,6 +17,6 @@
     "moduleResolution": "Bundler"
   },
 
-  "include": ["./src/**/*", "../src/types.ts"], 
+  "include": ["../webview-ui", "../types.ts"], 
   "exclude": ["node_modules", "__sapper__/*"]
 }

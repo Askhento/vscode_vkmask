@@ -15,7 +15,7 @@
         AppState,
         ErrorType,
     } from "../../../src/types";
-    import type { Selection, AppError } from "../../../src/types";
+    import type { Selection, AppError } from "src/types";
 
     import { logger, logDump } from "../logger";
     import { draggable } from "../actions/draggable";

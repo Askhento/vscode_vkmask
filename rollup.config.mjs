@@ -45,8 +45,9 @@ function demoWatcherPlugin(globs) {
         },
     };
 }
-
+//, "global.d.ts", "logger.ts", "actions", "common", "ui-controls", "assetsManager", "effects", "liquifiedWarpEditor", "parameters", "plugins", "projectManager", "utils"
 // for config autocomplete
+
 /** @type {import("rollup").RollupOptions} */
 const svelteCommon = {
     plugins: [
@@ -55,20 +56,20 @@ const svelteCommon = {
         copy({
             // watch: "./src/global.css",
             // copyOnce: false,
-            targets: [{ src: "./webview-ui/src/global.css", dest: "./out/panels/webview-build" }],
+            targets: [{ src: "./src/webview-ui/global.css", dest: "./out/panels/webview-build" }],
         }),
 
         typescript({
-            tsconfig: "./webview-ui/tsconfig.json",
+            tsconfig: "./src/webview-ui/tsconfig.json",
             // rootDirs: ["./src", "../src"],
             sourceMap: true,
             inlineSources: !production,
         }),
         // esbuild({
-        //     tsconfig: "./webview-ui/tsconfig.json",
+        //     tsconfig: "./src/webview-ui/tsconfig.json",
         // }),
         svelte({
-            include: "./webview-ui/src/**/*.svelte",
+            include: "./src/webview-ui/**/*.svelte",
             preprocess: [
                 sveltePreprocess({
                     sourceMap: true,
@@ -82,7 +83,7 @@ const svelteCommon = {
                     // },
                 }),
                 // svelteTypescript({
-                //     tsconfig: "./webview-ui/tsconfig.json",
+                //     tsconfig: "./src/webview-ui/tsconfig.json",
                 //     // define: {
                 //     //     "process.browser": "true",
                 //     // },
@@ -146,13 +147,13 @@ const svelteCommon = {
 
 function getSvelteEntry(name) {
     return {
-        input: `./webview-ui/src/${name}/main.ts`,
+        input: `./src/webview-ui/${name}/main.ts`,
 
         output: {
             sourcemap: true,
             format: "iife",
             name: "app",
-            file: `./out/panels/webview-build/${name}/bundle.js`, //!!!! add path resolve, for cross platform
+            file: `./out/panels/webview-build/${name}/bundle.js`,
         },
         ...svelteCommon,
     };

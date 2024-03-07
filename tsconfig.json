@@ -39,7 +39,7 @@
     "exclude": [
         "**/node_modules",
         "**/.*/",
-        "webview-ui"
+        "src/webview-ui"
     ],
 
      "ts-node": {

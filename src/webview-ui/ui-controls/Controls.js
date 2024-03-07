@@ -7,7 +7,7 @@ import {
     ZPlugin,
     ZMaskSettings,
     ZMaterialObject,
-} from "../../../src/ztypes.js";
+} from "../../ztypes.js";
 import { z } from "zod";
 
 import TextControl from "./TextControl.svelte";
