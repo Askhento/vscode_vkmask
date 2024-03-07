@@ -1,4 +1,4 @@
-<script lang="ts">
+<script>
     import * as l10n from "@vscode/l10n";
 
     import { createEventDispatcher } from "svelte";
@@ -9,12 +9,12 @@
 
     function onChange(e) {
         // console.log();
-        value = e.target.checked;
+        value = !value; //e.target.checked;
         onChanged();
     }
 
     const dispatch = createEventDispatcher();
-    function onChanged() {
+    export function onChanged() {
         dispatch("changed", [
             {
                 value,
@@ -44,7 +44,7 @@
         infoVisible = true;
     }}
 >
-    <vscode-checkbox checked={value} on:change={onChange} />
+    <vscode-checkbox role="checkbox" checked={value} on:click={onChange} />
     <InfoBox visible={infoVisible} info={params.info} />
 </span>
 
