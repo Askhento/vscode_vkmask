@@ -1,9 +1,7 @@
-// import { render, screen, fireEvent } from "@testing-library/svelte";
 import SwitchControl from "../../../src/webview-ui/ui-controls/SwitchControl.svelte";
 import userEvent from "@testing-library/user-event";
 import { render, screen, fireEvent } from "@testing-library/svelte";
 import { expect, test, vi } from "vitest";
-import { tick } from "svelte";
 
 test("click", async () => {
     const user = userEvent.setup();
@@ -17,7 +15,6 @@ test("click", async () => {
         value: false,
     });
 
-    // const button = screen.getByRole('button', {name: 'Greet'})
     const label = screen.queryByText(/labelTest/iu);
     expect(label).toBeInTheDocument();
 
@@ -43,23 +40,3 @@ test("click", async () => {
     expect(mock).toHaveBeenCalled();
     expect(data).toEqual([{ value: false, path: ["EFFECT", 1, "somebool"] }]);
 });
-
-// it('it works', async () => {
-//   const { getByText, getByTestId } = render(SwitchControl, {
-//     props : {}
-//   })
-
-//   const increment = getByText('increment')
-//   const decrement = getByText('decrement')
-//   const counter = getByTestId('counter-value')
-
-//   await fireEvent.click(increment)
-//   await fireEvent.click(increment)
-//   await fireEvent.click(increment)
-//   await fireEvent.click(decrement)
-
-//   expect(counter.textContent).toBe('2')
-
-//   // with jest-dom
-//   expect(counter).toHaveTextContent('2')
-// })
