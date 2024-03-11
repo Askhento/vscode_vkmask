@@ -120,8 +120,7 @@
                             }}
                         >
                             <span class="btn-text"
-                                >{l10n.t("locale.arrayControl.removeButtonHint") +
-                                    l10n.t(params.elementName)}</span
+                                >{`${l10n.t("locale.arrayControl.removeButtonHint")} ${l10n.t(params.elementName)}`}</span
                             >
                             <span slot="start" class="codicon codicon-close" />
                         </vscode-button>
@@ -149,8 +148,7 @@
                 <vscode-button class="add-btn" on:click={addElement}>
                     <span slot="start" class="codicon codicon-add" />
                     <span class="btn-text"
-                        >{l10n.t("locale.arrayControl.addButtonHint") +
-                            l10n.t(params.elementName)}</span
+                        >{`${l10n.t("locale.arrayControl.addButtonHint")} ${l10n.t(params.elementName)}`}</span
                     >
                 </vscode-button>
             </span>

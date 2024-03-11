@@ -1518,7 +1518,7 @@ const ZLiquifiedWarpEffect = ZBaseEffect.extend({
     points: z.array(ZLiquifiedPoint).describe({
         ...uiDescriptions.array,
         elementName: "locale.parameters.liquifiedwarp.points.elementName",
-        label: "locale.parameters.liquifiedwarp.points.label",
+        // label: "locale.parameters.liquifiedwarp.points.label",
         info: { infoList: "locale.parameters.liquifiedwarp.points.infoList" },
         group: "points",
         defaultElement: liquifiedDefaultPoint,
@@ -1534,7 +1534,7 @@ const ZLiquifiedWarpEffect = ZBaseEffect.extend({
             defExpanded: true,
         },
         points: {
-            label: "locale.parameters.liquifiedwarp.points.label",
+            label: "locale.parameters.liquifiedwarp.group.points.label",
             defExpanded: true,
         },
         tags: {
