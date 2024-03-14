@@ -138,12 +138,6 @@ export async function activate(context: vscode.ExtensionContext) {
     const parametersBuildPath = path.join(webviewsBuildPath, "parameters");
     const parameters = new ParametersViewProvider(context.extensionUri, parametersBuildPath);
 
-    // setTimeout(() => {
-    //     print(parameters._view);
-    //     parameters._view.title = "test title";
-    //     parameters._view.description = "wzp desdctiption";
-    // }, 3000);
-
     webviewProviders.push(parameters);
     context.subscriptions.push(
         vscode.window.registerWebviewViewProvider(parameters.viewId, parameters)
@@ -200,11 +194,16 @@ export async function activate(context: vscode.ExtensionContext) {
 
         await vscode.commands.executeCommand("setContext", "vkmask.appState", appState);
 
-        error = newError;
+        error = newError.value;
 
         switch (newError.type) {
             case ErrorType.configMissing:
                 onConfigMissing();
+                break;
+
+            case ErrorType.configZod:
+                // now it is preprocess
+                // onSendAppState();
                 break;
 
             default:
@@ -281,13 +280,14 @@ export async function activate(context: vscode.ExtensionContext) {
                 break;
         }
 
+        // ? liquify
         if (type !== SelectionType.empty) {
             vscode.commands.executeCommand(parameters.viewId + ".focus");
         }
     }
 
     function onSendAppState(target = RequestTarget.all) {
-        messageHandler.send({
+        return messageHandler.send({
             target,
             command: RequestCommand.updateAppState,
             payload: {
@@ -880,7 +880,7 @@ export async function activate(context: vscode.ExtensionContext) {
         const tabsToClose = vscode.window.tabGroups.all.map((tg) => tg.tabs).flat();
         // ? maybe close only files that are in old project, could be usefull for opened api reference
         await vscode.window.tabGroups.close(tabsToClose);
-        // maskConfig.showConfig(); // !!!!!
+        maskConfig.showConfig(true);
 
         // this will ensure all the componenets will show up no matter if they closed before.
         webviewProviders.forEach((provider) => {

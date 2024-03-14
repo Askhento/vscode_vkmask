@@ -37,6 +37,7 @@ export class BaseWebviewPanel {
             enableScripts: true,
             enableCommandUris: true,
             localResourceRoots: [this._extensionUri],
+            retainContextWhenHidden: true,
         });
 
         this.webview = this.currentPanel.webview;
