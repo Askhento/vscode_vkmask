@@ -444,7 +444,11 @@ export async function activate(context: vscode.ExtensionContext) {
             case RequestCommand.updateEffects:
                 maskConfig.updateEffects(payload);
                 sendEffects(
-                    [RequestTarget.parameters, RequestTarget.effects].filter((t) => t !== origin)
+                    [
+                        RequestTarget.parameters,
+                        RequestTarget.effects,
+                        RequestTarget.liquifiedWarpEditor,
+                    ].filter((t) => t !== origin)
                 ); // !!!!!!!!
                 break;
             case RequestCommand.updatePlugins:

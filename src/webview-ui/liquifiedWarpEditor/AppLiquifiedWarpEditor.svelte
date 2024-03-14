@@ -19,6 +19,7 @@
 
     import { logger, logDump } from "../logger";
     import { draggable } from "../actions/draggable";
+    import Loading from "../components/Loading.svelte";
     const print = logger("AppLiquifiedWarpEditor.svelte");
 
     const origin = RequestTarget.liquifiedWarpEditor;
@@ -26,9 +27,11 @@
     let selection: Selection = { type: SelectionType.empty },
         effects = writable([]),
         someDataDeleteMe = {},
-        bgImageUri = "";
+        bgImageUri = "",
+        points = [],
+        appState = AppState.loading;
 
-    function handleMessageApp(data: MessageHandlerData<any>) {
+    async function handleMessageApp(data: MessageHandlerData<any>) {
         print("recived ", data);
         const { payload, command } = data;
 
@@ -36,11 +39,13 @@
 
         switch (command) {
             case RequestCommand.updateSelection:
-                processSelection(payload);
+                await processSelection(payload);
+                updatePoints();
                 break;
 
             case RequestCommand.updateEffects:
-                processEffects(payload);
+                await processEffects(payload);
+                updatePoints();
                 break;
 
             // case RequestCommand.showLiquifiedWarpEditor:
@@ -62,7 +67,20 @@
 
     function processEffects(payload) {
         $effects = payload;
-        someDataDeleteMe = payload;
+        // points = $effects
+    }
+
+    function updatePoints() {
+        if (
+            selection &&
+            selection.type === SelectionType.effect &&
+            $effects[selection.id].name === "liquifiedwarp"
+        ) {
+            points = $effects[selection.id].points;
+        } else {
+            points = [];
+        }
+        console.log("liq point", points);
     }
 
     async function getSelection() {
@@ -79,6 +97,7 @@
     }
 
     async function init() {
+        appState = AppState.loading;
         const { payload } = await messageHandler.request({
             target: RequestTarget.extension,
             command: RequestCommand.getExtensionURI,
@@ -87,36 +106,37 @@
 
         await getSelection();
         await getEffects();
+        updatePoints();
+
+        appState = AppState.running;
     }
 
-    const points = [
-        {
-            type: "zoom",
-            anchor: "right_eye",
-            offset: [-4.5, 0.0],
-            radius: [50.0, 50.0],
-            angle: 0.0,
-            scale: -100.0,
-        },
-        {
-            type: "zoom",
-            anchor: "left_eye",
-            offset: [4.5, 0.0],
-            radius: [50.0, 50.0],
-            angle: 0.0,
-            scale: -100.0,
-        },
-        {
-            type: "shift",
-            anchor: "mouth",
-            offset: [0.0, 0.0],
-            radius: [150.0, 150.0],
-            angle: 90.0,
-            scale: 10.0,
-        },
-    ];
-
-    $: console.log(points);
+    // const points = [
+    //     {
+    //         type: "zoom",
+    //         anchor: "right_eye",
+    //         offset: [-4.5, 0.0],
+    //         radius: [50.0, 50.0],
+    //         angle: 0.0,
+    //         scale: -100.0,
+    //     },
+    //     {
+    //         type: "zoom",
+    //         anchor: "left_eye",
+    //         offset: [4.5, 0.0],
+    //         radius: [50.0, 50.0],
+    //         angle: 0.0,
+    //         scale: -100.0,
+    //     },
+    //     {
+    //         type: "shift",
+    //         anchor: "mouth",
+    //         offset: [0.0, 0.0],
+    //         radius: [150.0, 150.0],
+    //         angle: 90.0,
+    //         scale: 10.0,
+    //     },
+    // ];
 
     async function onChanged(event) {
         console.log("onChange: ", event);
@@ -136,37 +156,45 @@
 </script>
 
 <div class="main-container">
-    <div
-        class="editor-container"
-        bind:clientHeight={height}
-        bind:clientWidth={width}
-        bind:this={editorElement}
-    >
-        <img src={bgImageUri} />
+    {#if appState === AppState.loading}
+        <Loading />
+    {:else if points.length}
+        <div
+            class="editor-container"
+            bind:clientHeight={height}
+            bind:clientWidth={width}
+            bind:this={editorElement}
+        >
+            <img src={bgImageUri} />
 
-        {#if height && width}
-            <svg>
-                {#await tick()}
-                    <!-- promise is pending -->
-                {:then value}
-                    <!-- promise was fulfilled -->
-                    {#each points as value, i}
-                        <!-- {@const cx = anchors[anchor][0] * width + offset[0]}
+            {#if height && width}
+                <svg>
+                    {#await tick()}
+                        <!-- promise is pending -->
+                    {:then value}
+                        <!-- promise was fulfilled -->
+                        {#each points as value, i}
+                            <!-- {@const cx = anchors[anchor][0] * width + offset[0]}
                         {@const cy = anchors[anchor][1] * height + offset[1]} -->
 
-                        <Point
-                            bind:value
-                            {editorElement}
-                            {width}
-                            {height}
-                            on:changed={onChanged}
-                            path={[i]}
-                        />
-                    {/each}
-                {/await}
-            </svg>
-        {/if}
-    </div>
+                            <Point
+                                bind:value
+                                {editorElement}
+                                {width}
+                                {height}
+                                on:changed={onChanged}
+                                path={[i]}
+                            />
+                        {/each}
+                    {/await}
+                </svg>
+            {/if}
+        </div>
+    {:else}
+        <div class="select-liquify-hint-wrapper">
+            <h1>Please select liquifiedwarp effect.</h1>
+        </div>
+    {/if}
 </div>
 
 <!-- <pre>
@@ -197,6 +225,12 @@
         pointer-events: all;
 
         user-select: none;
+    }
+
+    div.select-liquify-hint-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     svg {

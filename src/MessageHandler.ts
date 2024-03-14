@@ -5,10 +5,6 @@ import { logger } from "./Logger";
 import { RequestTarget, ViewIds } from "./types";
 const print = (...args: any) => logger.log(__filename, ...args);
 
-// export interface Event<T> {
-
-// }
-
 export interface MessageHandlerData<T> {
     requestId?: string;
     error?: any;
@@ -35,6 +31,8 @@ export class MessageHandler {
     async onMessage(data: MessageHandlerData<any>) {
         const { target, origin } = data;
         // todo : add a list of targets
+        // ? maybe send all except?
+
         switch (target) {
             case RequestTarget.all:
                 // redirect to all webviews
