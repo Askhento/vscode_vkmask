@@ -206,6 +206,8 @@
         if (!needRerender) return;
         print("new settings", tempSettings, changes);
         await parseUI();
+
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1
         rerenderSettings();
     }
 

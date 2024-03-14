@@ -3,6 +3,14 @@
         right_eye: [0.67946824, 0.42857143],
         left_eye: [0.32939439, 0.42857143],
         mouth: [1 / 2, 0.74264706],
+        middle_eyes: [0.5, 0.5],
+        forehead: [0.5, 0.5],
+        nose: [0.5, 0.5],
+        right_cheek: [0.5, 0.5],
+        left_cheek: [0.5, 0.5],
+        lower_lip: [0.5, 0.5],
+        upper_lip: [0.5, 0.5],
+        face: [0.5, 0.5],
     };
 
     const anchorKeys = Object.keys(anchors);
@@ -12,11 +20,13 @@
     import { flip } from "svelte/animate";
 
     import Handle from "./Handle.svelte";
+    import { createEventDispatcher } from "svelte";
 
     export let value, editorElement, width, height, path;
 
     let { offset, anchor, radius } = value;
 
+    console.log("point", value, anchors);
     // let anchorPos = anchors[anchor];
 
     $: anchorPos = anchors[anchor];
@@ -26,20 +36,32 @@
     $: [rx, ry] = radius;
 
     let posMoving = false;
+
+    const dispatch = createEventDispatcher();
+    export function onChanged() {
+        dispatch("changed", [
+            {
+                value,
+                path,
+            },
+        ]);
+    }
 </script>
 
 <!-- {@const cx = anchors[anchor][0] * width + offset[0]}
 {@const cy = anchors[anchor][1] * height + offset[1]} -->
 
-<foreignObject x={ax + 50} y={ay} width="100px" height="100px">
+<foreignObject x={ax + 50} y={ay} width="100px" height="500px">
     <div class="controls-wrapper">
         <vscode-dropdown
             position="above"
             value={String(anchorKeys.findIndex((op) => op === anchor))}
             on:change={(e) => {
-                console.log("optoins", e);
+                // console.log("optoins", e);
                 anchor = anchorKeys[parseInt(e.target.value)];
                 value.anchor = anchor;
+
+                onChanged();
             }}
         >
             {#each anchorKeys as option, i}

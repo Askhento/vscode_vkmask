@@ -20,6 +20,7 @@
     import { logger, logDump } from "../logger";
     import { draggable } from "../actions/draggable";
     import Loading from "../components/Loading.svelte";
+    import { applyValueByPath2 } from "../utils/applyValueByPath";
     const print = logger("AppLiquifiedWarpEditor.svelte");
 
     const origin = RequestTarget.liquifiedWarpEditor;
@@ -65,6 +66,14 @@
         processEffects(payload);
     }
 
+    function sendEffects() {
+        messageHandler.send({
+            command: RequestCommand.updateEffects,
+            target: RequestTarget.extension,
+            payload: $effects,
+        });
+    }
+
     function processEffects(payload) {
         $effects = payload;
         // points = $effects
@@ -76,7 +85,7 @@
             selection.type === SelectionType.effect &&
             $effects[selection.id].name === "liquifiedwarp"
         ) {
-            points = $effects[selection.id].points;
+            points = $effects[selection.id].points ?? [];
         } else {
             points = [];
         }
@@ -97,6 +106,7 @@
     }
 
     async function init() {
+        // await tick();
         appState = AppState.loading;
         const { payload } = await messageHandler.request({
             target: RequestTarget.extension,
@@ -141,12 +151,27 @@
     async function onChanged(event) {
         console.log("onChange: ", event);
         const changes = event.detail;
+
+        let needRerender = false;
+
+        let tempEffects = $effects;
+
+        changes.forEach(({ path, value, structural }) => {
+            const [root, ...pathClone] = [...path];
+
+            print("changes liq", path, value);
+            tempEffects = applyValueByPath2(tempEffects, pathClone, value);
+            needRerender = needRerender || structural;
+        });
+
+        sendEffects();
     }
 
     init();
 
     let editorElement, width, height;
 
+    $: console.log("liq poin upd", points);
     // function onLoad() {
     //     width = editorElement.width;
     //     height = editorElement.height;
@@ -159,37 +184,35 @@
     {#if appState === AppState.loading}
         <Loading />
     {:else if points.length}
-        <div
-            class="editor-container"
-            bind:clientHeight={height}
-            bind:clientWidth={width}
-            bind:this={editorElement}
-        >
-            <img src={bgImageUri} />
+        {#key points}
+            <div
+                class="editor-container"
+                bind:clientHeight={height}
+                bind:clientWidth={width}
+                bind:this={editorElement}
+            >
+                <img src={bgImageUri} />
 
-            {#if height && width}
-                <svg>
-                    {#await tick()}
-                        <!-- promise is pending -->
-                    {:then value}
+                {#if height && width}
+                    <svg>
                         <!-- promise was fulfilled -->
                         {#each points as value, i}
                             <!-- {@const cx = anchors[anchor][0] * width + offset[0]}
                         {@const cy = anchors[anchor][1] * height + offset[1]} -->
 
                             <Point
-                                bind:value
+                                {value}
                                 {editorElement}
                                 {width}
                                 {height}
                                 on:changed={onChanged}
-                                path={[i]}
+                                path={[SelectionType.effect, selection.id, i]}
                             />
                         {/each}
-                    {/await}
-                </svg>
-            {/if}
-        </div>
+                    </svg>
+                {/if}
+            </div>
+        {/key}
     {:else}
         <div class="select-liquify-hint-wrapper">
             <h1>Please select liquifiedwarp effect.</h1>
