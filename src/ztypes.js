@@ -1843,56 +1843,68 @@ export const ZMaskConfigPreprocess = z.preprocess(
             icon: z.unknown().optional(),
             effects: z
                 .array(
-                    z.union([
-                        z
-                            .object({
-                                name: z.union([z.literal("patch"), z.literal("facemodel")]),
-                                // texture: z.preprocess((val) => {
-                                //     if (val == null) return;
-                                //     if (isObject(val)) {
-                                //         // keep only diffuse, not texture in object
-                                //         val = replaceObjectSynonim(val, "texture", "diffuse");
-                                //         // if (!isObject(val.animation)) {
-                                //         //     val.animation = {};
-                                //         // }
-                                //         return val;
-                                //     }
-                                //     return {
-                                //         diffuse: val,
-                                //         // animation: {},
-                                //     };
-                                // }, z.object({}).passthrough()),
-                                // // .default({}),
-                            })
-                            .passthrough(),
+                    z
+                        .union([
+                            z
+                                .object({
+                                    name: z
+                                        .union([z.literal("patch"), z.literal("facemodel")])
+                                        .optional(),
+                                    texture: z
+                                        .preprocess((val) => {
+                                            if (val == null) return;
+                                            if (isObject(val)) {
+                                                // keep only diffuse, not texture in object
+                                                val = replaceObjectSynonim(
+                                                    val,
+                                                    "texture",
+                                                    "diffuse"
+                                                );
+                                                // if (!isObject(val.animation)) {
+                                                //     val.animation = {};
+                                                // }
+                                                return val;
+                                            }
+                                            return {
+                                                diffuse: val,
+                                                // animation: {},
+                                            };
+                                        }, z.object({}).passthrough())
+                                        .optional(),
+                                    // // .default({}),
+                                })
+                                .passthrough(),
 
-                        z
-                            .object({
-                                name: z.literal("model3d"),
-                                material: z
-                                    .preprocess((val) => {
-                                        if (!Array.isArray(val)) return [val];
-                                        return val;
-                                    }, z.array(z.unknown())) // was union string and object
-                                    .optional()
-                                    .default([]),
-                            })
-                            .passthrough(),
-                        z
-                            .object({
-                                name: z.union([
-                                    z.literal("ambientLight"),
-                                    z.literal("pointLight"),
-                                    z.literal("directLight"),
-                                    z.literal("posteffect"),
-                                    z.literal("beautify"),
-                                    z.literal("colorfilter"),
-                                    z.literal("liquifiedwarp"),
-                                    z.literal("plane"),
-                                ]),
-                            })
-                            .passthrough(),
-                    ])
+                            z
+                                .object({
+                                    name: z.literal("model3d").optional(),
+                                    material: z
+                                        .preprocess((val) => {
+                                            if (!Array.isArray(val)) return [val];
+                                            return val;
+                                        }, z.array(z.unknown())) // was union string and object
+                                        .optional()
+                                        .default([]),
+                                })
+                                .passthrough(),
+                            z
+                                .object({
+                                    name: z
+                                        .union([
+                                            z.literal("ambientLight"),
+                                            z.literal("pointLight"),
+                                            z.literal("directLight"),
+                                            z.literal("posteffect"),
+                                            z.literal("beautify"),
+                                            z.literal("colorfilter"),
+                                            z.literal("liquifiedwarp"),
+                                            z.literal("plane"),
+                                        ])
+                                        .optional(),
+                                })
+                                .passthrough(),
+                        ])
+                        .optional()
                 )
                 .default([]),
             plugins: z
@@ -1912,35 +1924,3 @@ export const ZMaskConfigPreprocess = z.preprocess(
         })
         .passthrough()
 );
-
-// const maskTest = {
-//     name: "test",
-//     effects: [
-//         {
-//             name: "some",
-//             material: "textueeeee",
-//         },
-//         {
-//             name: "facemodel",
-//             texture: "textureeee",
-//         },
-//         {
-//             name: "test_deep",
-//             texture: {
-//                 diffuse: "somth_tex",
-//                 animation: {
-//                     num_frames: 100500,
-//                     fps: 25,
-//                 },
-//             },
-//         },
-//     ],
-//     plugins: [
-//         {
-//             name: "mirror",
-//             enabled: true,
-//         },
-//     ],
-// };
-
-// console.log(ZMaskConfigPreprocess.parse(maskTest))
