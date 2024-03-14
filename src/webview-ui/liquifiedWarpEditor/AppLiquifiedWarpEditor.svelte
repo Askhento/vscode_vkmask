@@ -166,40 +166,39 @@
 
         sendEffects();
     }
-
+    // style = "background-image: url('{bgImageUri}')";
+    //
     init();
 
-    let editorElement, width, height;
+    let editorElement, imgWidth, imgHeight;
 
-    $: console.log("liq poin upd", points);
-    // function onLoad() {
-    //     width = editorElement.width;
-    //     height = editorElement.height;
-    // }
+    let containerWidth, containerHeight;
+    $: ratio = imgWidth / imgHeight;
+    $: width = Math.min(containerWidth, containerHeight * ratio);
+    $: height = Math.min(containerHeight, containerWidth / ratio);
 
     // zoom : https://github.com/Becavalier/Zoomage.js/
 </script>
 
 <div class="main-container">
+    <img src={bgImageUri} bind:naturalWidth={imgWidth} bind:naturalHeight={imgHeight} />
+
     {#if appState === AppState.loading}
         <Loading />
     {:else if points.length}
         {#key points}
             <div
                 class="editor-container"
-                bind:clientHeight={height}
-                bind:clientWidth={width}
+                bind:clientHeight={containerHeight}
+                bind:clientWidth={containerWidth}
                 bind:this={editorElement}
             >
-                <img src={bgImageUri} />
-
-                {#if height && width}
-                    <svg>
+                {#if imgHeight && imgWidth}
+                    <svg style="width: {width}; height: {height}">
                         <!-- promise was fulfilled -->
                         {#each points as value, i}
                             <!-- {@const cx = anchors[anchor][0] * width + offset[0]}
-                        {@const cy = anchors[anchor][1] * height + offset[1]} -->
-
+                            {@const cy = anchors[anchor][1] * height + offset[1]} -->
                             <Point
                                 {value}
                                 {editorElement}
@@ -220,31 +219,62 @@
     {/if}
 </div>
 
-<!-- <pre>
-    {JSON.stringify(selection, null, "\t")}
-</pre> -->
-
 <style>
     .main-container {
         height: 100vh;
         width: 100vw;
+        position: relative;
         display: flex;
         justify-content: center;
+        align-items: center;
         pointer-events: none;
     }
 
-    .editor-container {
+    /* .editor-height-sizer {
         position: relative;
+        width: 100%;
+        background-color: rgba(47, 0, 255, 0.548);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    } */
+
+    .editor-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* position: absolute; */
+        width: 100%;
         height: 100%;
-        width: fit-content;
+        /* aspect-ratio: 2; */
+
+        /* object-fit: contain; */
+        /* background-color: rgba(255, 0, 0, 0.467); */
+        /* background-size: contain;
+        background-position: center;
+        background-repeat: no-repeat; */
+        /* width: fit-content; */
+        /* height: fit-content; */
         /* pointer-events: none; */
     }
 
     img {
-        height: 100%;
+        /* height: 100%; */
+        object-fit: contain;
+        position: absolute;
+        /* max-width: 100%; */
+        /* max-height: 100%; */
+        /* width: auto; */
+        /* height: auto; */
+
+        /* max-width: 100%; */
+        /* max-height: 100%; */
+        /* width: auto; */
+        /* height: auto; */
         /* position: fixed; */
-        top: 0;
-        z-index: -1;
+        /* top: 0; */
+
+        /* z-index: -1; */
         pointer-events: all;
 
         user-select: none;
@@ -257,11 +287,11 @@
     }
 
     svg {
+        /* top: 0; */
+        /* left: 0; */
+        /* position: absolute; */
         width: 100%;
         height: 100%;
-        top: 0;
-        left: 0;
-        position: absolute;
         cursor: "move";
     }
 </style>
