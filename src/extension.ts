@@ -516,6 +516,7 @@ export async function activate(context: vscode.ExtensionContext) {
         // maskConfig.selection = {type : SelectionType.empty};
         // await maskConfig.clearSelection();
         print("on file save");
+        await sendSelection();
         sendEffects([RequestTarget.effects, RequestTarget.parameters]);
         sendPlugins([RequestTarget.plugins, RequestTarget.parameters]);
         sendMaskSettings(RequestTarget.projectManager);
@@ -546,7 +547,7 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 
     function sendSelection(target = RequestTarget.all) {
-        messageHandler.send({
+        return messageHandler.send({
             command: RequestCommand.updateSelection,
             origin: RequestTarget.extension,
             payload: globalThis.selection,
@@ -727,7 +728,7 @@ export async function activate(context: vscode.ExtensionContext) {
                     baseName: path.basename(relativePath), // !!! could be error
                 };
 
-                print("asset selection", globalThis.selection);
+                // print("asset selection", globalThis.selection);
                 sendSelection();
             })
         );
