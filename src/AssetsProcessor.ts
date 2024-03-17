@@ -1,4 +1,4 @@
-import * as path from "path";
+import { posix as path } from "path";
 import * as fs from "fs";
 import { logger } from "./Logger";
 const print = (...args: any) => console.log(...args); //logger.log(__filename, ...args);

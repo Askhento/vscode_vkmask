@@ -14,12 +14,13 @@ import typescript from "@rollup/plugin-typescript"; // esbuild have issues with 
 
 // import { typescript as svelteTypescript } from "svelte-preprocess-esbuild";
 import { extensionConfig } from "./rollup.extension.mjs";
-import { startRamDisk } from "./ramdisk_scripts/ramdisk.mjs";
+// import { startRamDisk } from "./ramdisk_scripts/ramdisk.mjs";
 
 // ? production env var?
 const production = !process.env.ROLLUP_WATCH;
 
-if (!production) await startRamDisk();
+// !!!!!!!
+// if (!production) await startRamDisk();
 
 // "dev": "npm run clear && npm run generateBuiltins && conc  \"npm:dev:webview\" \"npm:watch\"",
 // fs.mkdirSync("./out/panels/webview-build", { recursive: true }); // for watcher attach folder

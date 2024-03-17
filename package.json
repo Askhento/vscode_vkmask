@@ -326,7 +326,7 @@
         "publish-patch": "npm version patch ; npm run package",
         "publish-minor": "npm version minor ; npm run package",
         "unmount": "./ramdisk_scripts/darwin.sh 2 ./out",
-        "package-full": "npm run unmount ; rimraf -g ./vsix-packages/** && npm run generateIgnoreFiles && npm run prepublish && npm run package-all",
+        "package-full": "rimraf -g ./vsix-packages/** && npm run generateIgnoreFiles && npm run prepublish && npm run package-all",
         "package-all": " npm run package-win32-x64 && npm run package-darwin-x64 && npm run package-darwin-arm64",
         "package-win32-x64": "vsce package --target win32-x64 --ignoreFile .win32-x64.vscodeignore --out ./vsix-packages",
         "package-darwin-x64": "vsce package --target darwin-x64 --ignoreFile .darwin-x64.vscodeignore --out ./vsix-packages",
@@ -346,7 +346,7 @@
         "@testing-library/svelte": "^4.1.0",
         "@testing-library/user-event": "^14.5.2",
         "@tsconfig/svelte": "^5.0.2",
-        "@types/node": "16.x",
+        "@types/node": "^18.x",
         "@types/vscode": "^1.74.0",
         "@types/vscode-webview": "^1.57.4",
         "@vscode/l10n-dev": "^0.0.29",
@@ -354,7 +354,6 @@
         "@vscode/webview-ui-toolkit": "^1.4.0",
         "glob": "^10.3.10",
         "jsdom": "^24.0.0",
-        "node-ramdisk": "^1.2.2",
         "rimraf": "^5.0.1",
         "rollup": "^4.9.1",
         "rollup-plugin-copy-watch": "^0.0.1",
@@ -378,13 +377,14 @@
         "slash": "^5.1.0",
         "smart-buffer": "^4.2.0",
         "zod": "^3.20.2",
-        "zod-validation-error": "^0.3.0"
-    },
-    "optionalDependencies": {
+        "zod-validation-error": "^0.3.0",
         "@img/sharp-darwin-arm64": "0.33.2",
         "@img/sharp-darwin-x64": "0.33.2",
         "@img/sharp-libvips-darwin-arm64": "1.0.1",
         "@img/sharp-libvips-darwin-x64": "1.0.1",
         "@img/sharp-win32-x64": "0.33.2"
+    },
+    "optionalDependencies": {
+
     }
 }

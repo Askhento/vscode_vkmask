@@ -9,7 +9,7 @@ function genIgnore {
 
     echo -e "\n" >> $newFile
 
-    for i in $(find node_modules/@img -type d -maxdepth 1 -regex "$regexp"); 
+    for i in $(find node_modules/@img -maxdepth 1  -type d -regex "$regexp"); 
     do
         echo "!$i" >> $newFile
     done

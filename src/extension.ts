@@ -15,7 +15,9 @@ import { messageHandler, MessageHandlerData } from "./MessageHandler";
 
 import { HotReload } from "./HotReload";
 // const { exec } = require('node:child_process');
-import * as path from "path";
+
+import { posix as path } from "path";
+
 import { logger } from "./Logger";
 import type { LogEntry } from "./Logger";
 const print = (...args: any) => logger.log(__filename, ...args);
@@ -40,6 +42,7 @@ import { BaseWebviewPanel } from "./panels/BaseWebviewPanel";
 import { delayPromise } from "./utils/delayPromise";
 import { copyRecursiveSync } from "./utils/copyFilesRecursive";
 import { TabInfo } from "./TabInfo";
+import slash from "slash";
 
 // import { selection } from "./global";
 
@@ -564,6 +567,8 @@ export async function activate(context: vscode.ExtensionContext) {
             // notes : https://www.eliostruyf.com/opening-folders-visual-studio-code-extension/
             print("new folder", folder);
             const maskJsonFile = path.join(folder, "mask.json");
+
+            //!!! need a slash
             if (!fs.existsSync(maskJsonFile)) {
                 vscode.window.showErrorMessage(`Project does not seems to exist: \n${folder}`);
                 messageHandler.send({
@@ -595,11 +600,14 @@ export async function activate(context: vscode.ExtensionContext) {
 
         vscode.window.showOpenDialog(options).then(async (fileUri) => {
             if (fileUri && fileUri[0]) {
-                print("Selected open folder: " + fileUri[0].fsPath);
-                const maskJsonFile = fileUri[0].fsPath;
+                const maskJsonFile = slash(fileUri[0].fsPath);
                 const folder = path.dirname(maskJsonFile);
                 recentProjectInfo.addInfo(folder); // !!! maybe useless!!!!
-                const folderUri = vscode.Uri.parse(folder);
+                const folderUri = vscode.Uri.file(folder);
+                print("Selected open folder: ", maskJsonFile, folder);
+                appState = oldState;
+                onSendAppState();
+                // return;
                 await vscode.commands.executeCommand(`vscode.openFolder`, folderUri);
             } else {
                 appState = oldState;
