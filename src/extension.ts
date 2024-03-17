@@ -895,9 +895,11 @@ export async function activate(context: vscode.ExtensionContext) {
         await vscode.window.tabGroups.close(tabsToClose);
         maskConfig.showConfig(true);
 
+        //!!!
         // this will ensure all the componenets will show up no matter if they closed before.
         webviewProviders.forEach((provider) => {
             // keep theese collapsed
+            // ?maybe only  for first  run?
             if (provider.viewId === ViewIds.assetsManager || provider.viewId === ViewIds.plugins) {
                 // vscode.commands.executeCommand(provider.viewId + ".removeView");
                 return;
@@ -905,6 +907,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
             vscode.commands.executeCommand(provider.viewId + ".focus");
         });
+
         // await vscode.commands.executeCommand(`vkmask.parameters.focus`);
         // await vscode.commands.executeCommand(`vkmask.assets_manager.focus`);
         // await vscode.commands.executeCommand(`vkmask.assets_manager.removeView`);  // hides a view

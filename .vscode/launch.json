@@ -23,7 +23,22 @@
 			// "preLaunchTask" : "npm: watch"
 
 		},
-		
+		{
+			"name": "Run without prelaunch",
+			"type": "extensionHost",
+			"request": "launch",
+			"args": [
+				"--extensionDevelopmentPath=${workspaceFolder}",
+				"--disable-extensions"
+			],
+			"outFiles": [
+				"${workspaceFolder}/out/**/*.js"
+			],
+			"env": {
+				"NODE_ENV" : "dev"
+			}
+
+		},
 		{
 			"name": "Extension Tests",
 			"type": "extensionHost",
