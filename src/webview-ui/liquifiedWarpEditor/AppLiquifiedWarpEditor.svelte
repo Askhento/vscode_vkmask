@@ -89,6 +89,8 @@
         } else {
             points = [];
         }
+        // !!!!
+        points = [...points];
         console.log("liq point", points);
     }
 
@@ -112,7 +114,7 @@
             target: RequestTarget.extension,
             command: RequestCommand.getExtensionURI,
         });
-        bgImageUri = `https://file%2B.vscode-resource.vscode-cdn.net${payload}/res/liquifiedWarpFaceBackground_v1.png`;
+        bgImageUri = `https://file%2B.vscode-resource.vscode-cdn.net/${payload}/res/liquifiedWarpFaceBackground_v1.png`;
 
         await getSelection();
         await getEffects();
@@ -120,33 +122,6 @@
 
         appState = AppState.running;
     }
-
-    // const points = [
-    //     {
-    //         type: "zoom",
-    //         anchor: "right_eye",
-    //         offset: [-4.5, 0.0],
-    //         radius: [50.0, 50.0],
-    //         angle: 0.0,
-    //         scale: -100.0,
-    //     },
-    //     {
-    //         type: "zoom",
-    //         anchor: "left_eye",
-    //         offset: [4.5, 0.0],
-    //         radius: [50.0, 50.0],
-    //         angle: 0.0,
-    //         scale: -100.0,
-    //     },
-    //     {
-    //         type: "shift",
-    //         anchor: "mouth",
-    //         offset: [0.0, 0.0],
-    //         radius: [150.0, 150.0],
-    //         angle: 90.0,
-    //         scale: 10.0,
-    //     },
-    // ];
 
     async function onChanged(event) {
         console.log("onChange: ", event);
@@ -164,59 +139,74 @@
             needRerender = needRerender || structural;
         });
 
+        // console.log(tempEffects);
+
         sendEffects();
     }
     // style = "background-image: url('{bgImageUri}')";
     //
-    init();
 
     let editorElement, imgWidth, imgHeight;
+
+    // just some magic numbers!
+    const targetWidth = 170,
+        targetHeight = 220;
+    const offsetHeight = -20;
 
     let containerWidth, containerHeight;
     $: ratio = imgWidth / imgHeight;
     $: width = Math.min(containerWidth, containerHeight * ratio);
     $: height = Math.min(containerHeight, containerWidth / ratio);
+    $: rateX = targetWidth / width;
+    $: rateY = targetHeight / height;
+
+    init();
 
     // zoom : https://github.com/Becavalier/Zoomage.js/
 </script>
 
 <div class="main-container">
-    <img src={bgImageUri} bind:naturalWidth={imgWidth} bind:naturalHeight={imgHeight} />
-
+    <!-- {#key points} -->
     {#if appState === AppState.loading}
         <Loading />
-    {:else if points.length}
-        {#key points}
-            <div
-                class="editor-container"
-                bind:clientHeight={containerHeight}
-                bind:clientWidth={containerWidth}
-                bind:this={editorElement}
-            >
-                {#if imgHeight && imgWidth}
-                    <svg style="width: {width}; height: {height}">
-                        <!-- promise was fulfilled -->
-                        {#each points as value, i}
-                            <!-- {@const cx = anchors[anchor][0] * width + offset[0]}
-                            {@const cy = anchors[anchor][1] * height + offset[1]} -->
-                            <Point
-                                {value}
-                                {editorElement}
-                                {width}
-                                {height}
-                                on:changed={onChanged}
-                                path={[SelectionType.effect, selection.id, i]}
-                            />
-                        {/each}
-                    </svg>
-                {/if}
-            </div>
-        {/key}
+    {:else if points.length > 0}
+        <img src={bgImageUri} bind:naturalWidth={imgWidth} bind:naturalHeight={imgHeight} />
+        <div
+            class="editor-container"
+            bind:clientHeight={containerHeight}
+            bind:clientWidth={containerWidth}
+        >
+            {#if width && height && rateX && rateY}
+                <svg
+                    bind:this={editorElement}
+                    style="width:{width}; height:{height};"
+                    {width}
+                    {height}
+                    viewBox="{-0.5 * targetWidth} {-0.5 * targetHeight +
+                        offsetHeight} {targetWidth} {targetHeight}"
+                >
+                    <g transform="scale (1, -1)">
+                        {#if editorElement}
+                            {#each points as value, i (value)}
+                                <Point
+                                    {value}
+                                    {editorElement}
+                                    rates={[rateX, rateY]}
+                                    on:changed={onChanged}
+                                    path={[SelectionType.effect, selection.id, "points", i]}
+                                />
+                            {/each}
+                        {/if}
+                    </g>
+                </svg>
+            {/if}
+        </div>
     {:else}
         <div class="select-liquify-hint-wrapper">
             <h1>Please select liquifiedwarp effect.</h1>
         </div>
     {/if}
+    <!-- {/key} -->
 </div>
 
 <style>
@@ -255,7 +245,7 @@
         background-repeat: no-repeat; */
         /* width: fit-content; */
         /* height: fit-content; */
-        /* pointer-events: none; */
+        pointer-events: none;
     }
 
     img {
@@ -275,7 +265,7 @@
         /* top: 0; */
 
         /* z-index: -1; */
-        pointer-events: all;
+        pointer-events: none;
 
         user-select: none;
     }
@@ -293,5 +283,6 @@
         width: 100%;
         height: 100%;
         cursor: "move";
+        pointer-events: all;
     }
 </style>

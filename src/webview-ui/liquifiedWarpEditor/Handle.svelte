@@ -8,28 +8,44 @@
 
     const dispatch = createEventDispatcher();
     function onChanged() {
-        // dispatch("changed", [
-        //     {
-        //         value,
-        //         path,
-        //     },
-        // ]);
+        let value;
+        if (vx == null) {
+            value = vy - cy;
+        } else if (vy == null) {
+            value = vx - cx;
+        } else {
+            value = [vx - cx, vy - cy];
+        }
+
+        dispatch("changed", [
+            {
+                value,
+                path,
+            },
+        ]);
     }
 
-    export let cx,
-        cy,
+    export let cx = 0,
+        cy = 0,
         vx,
         vy,
+        speed,
         parentElem,
         path,
-        absPos = false;
+        handleSizes = [2, 4],
+        postprocess = (v) => v,
+        rates;
     let node;
+    const [handleSmall, handleBig] = handleSizes.map((v) => v.toString());
+    // console.log(handleBig, cx, cy);
+
+    $: [rateX, rateY] = rates;
 
     function handleMouseDown(e) {
         console.log(e);
         movingElem = node;
 
-        node.setAttribute("r", "10");
+        node.setAttribute("r", handleBig);
         // movingElem = true;
     }
 
@@ -42,22 +58,23 @@
 
         // console.log("lol");
 
-        if (absPos) {
-            vx = e.offsetX;
-            vy = e.offsetY;
-        } else {
-            vx += e.movementX;
-            vy += e.movementY;
-            // console.log(cx, cy);
-        }
+        // if (absPos) {
+        //     vx = e.offsetX;
+        //     vy = e.offsetY;
+        // } else
+
+        if (vx != null) vx = postprocess(vx + e.movementX * rateX);
+        if (vy != null) vy = postprocess(vy - e.movementY * rateY);
     }
 
     function handleMouseUp() {
+        if (movingElem != node) return;
+
         // console.log("up");
         movingElem = null;
 
         onChanged();
-        node.setAttribute("r", "5");
+        node.setAttribute("r", handleSmall);
     }
 
     onMount(() => {
@@ -71,7 +88,7 @@
     });
 </script>
 
-<circle {vx} {vy} bind:this={node} r="5"> </circle>
+<circle cx={cx + (vx ?? 0)} cy={cy + (vy ?? 0)} bind:this={node} r={handleSmall}> </circle>
 
 <style>
     circle {

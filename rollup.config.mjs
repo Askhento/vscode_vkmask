@@ -142,6 +142,7 @@ const svelteCommon = {
     watch: {
         clearScreen: false,
         skipWrite: false,
+        buildDelay: 500,
         // exclude: "../out",
     },
 };

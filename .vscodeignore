@@ -14,5 +14,6 @@ generateIgnoreFiles.sh
 ramdisk_scripts
 vsix-packages
 experiments
+test
 !node_modules/@vscode/codicons/dist/codicon.css
 !node_modules/@vscode/codicons/dist/codicon.ttf

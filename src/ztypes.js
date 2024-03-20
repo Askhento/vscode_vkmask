@@ -1501,10 +1501,10 @@ const ZLiquifiedPoint = z
 
 const liquifiedDefaultPoint = {
     type: ZLiquifiedTypes.Values.zoom,
-    anchor: ZFaceAnchor.Values.forehead,
+    anchor: ZFaceAnchor.Values.nose,
     offset: [0.0, 0.0],
-    radius: [150.0, 150.0],
-    scale: 10.0,
+    radius: [10.0, 10.0],
+    scale: 2.0,
 };
 
 const ZLiquifiedWarpEffect = ZBaseEffect.extend({
