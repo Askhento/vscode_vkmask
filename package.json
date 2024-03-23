@@ -331,7 +331,7 @@
         "package-win32-x64": "vsce package --target win32-x64 --ignoreFile .win32-x64.vscodeignore --out ./vsix-packages",
         "package-darwin-x64": "vsce package --target darwin-x64 --ignoreFile .darwin-x64.vscodeignore --out ./vsix-packages",
         "package-darwin-arm64": "vsce package --target darwin-arm64 --ignoreFile .darwin-arm64.vscodeignore --out ./vsix-packages",
-        "publish-extension": " vsce publish --packagePath $(find ./vsix-packages -iname *.vsix)",
+        "publish-extension": " npx vsce publish --packagePath $(find ./vsix-packages -iname *.vsix)",
         "generateIgnoreFiles": "./generateIgnoreFiles.sh darwin-x64 darwin-arm64 win32-x64",
         "generateBuiltins": "npx ts-node-esm ./src/generateBuiltins.ts"
     },
@@ -384,5 +384,5 @@
         "@img/sharp-libvips-darwin-x64": "1.0.1",
         "@img/sharp-win32-x64": "0.33.2"
     },
-    "optionalDependencies": {}
+    "optionalDependencies": { }
 }

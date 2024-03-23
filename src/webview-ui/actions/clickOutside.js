@@ -7,10 +7,17 @@ export function clickOutside(node) {
         }
     };
 
+    const handleBlur = (event) => {
+        // console.log("weee blur!");
+        node.dispatchEvent(new CustomEvent("click_outside", node));
+    };
+
+    window.addEventListener("blur", handleBlur, true);
     document.addEventListener("click", handleClick, true);
 
     return {
         destroy() {
+            window.removeEventListener("blur", handleBlur, true);
             document.removeEventListener("click", handleClick, true);
         },
     };

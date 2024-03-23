@@ -30,7 +30,12 @@
 </script>
 
 {#if infoList && (visible || infoOpened || errors.length)}
-    <div class="info-btn">
+    <div
+        on:focusout={() => {
+            console.log("outside", infoHeader);
+        }}
+        class="info-btn"
+    >
         <div class:error={errors.length} class="icon-wrapper">
             <span
                 on:click|stopPropagation={() => {
