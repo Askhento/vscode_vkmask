@@ -146,15 +146,17 @@
                 }}
             >
             </vscode-text-field>
-            <vscode-button
-                class="remove-tag-btn"
-                appearance="icon"
-                on:click|stopPropagation={() => {
-                    removeTag(index);
-                }}
-            >
-                <span class="codicon codicon-close" />
-            </vscode-button>
+            <div class="remove-btn-wrapper">
+                <vscode-button
+                    class="remove-tag-btn"
+                    appearance="icon"
+                    on:click|stopPropagation={() => {
+                        removeTag(index);
+                    }}
+                >
+                    <span class="codicon codicon-close" />
+                </vscode-button>
+            </div>
         </div>
     {/each}
     <InfoBox visible={infoVisible} info={params.info} />
@@ -162,10 +164,10 @@
 
 <style>
     * {
-        margin: var(--global-margin);
+        /* margin: var(--global-margin); */
 
-        padding: 0;
-        box-sizing: border-box;
+        /* padding: 0; */
+        /* box-sizing: border-box; */
     }
 
     span.label {
@@ -198,13 +200,12 @@
     }
 
     .tag-value-wrapper {
-        margin: 0;
-
         position: relative;
         display: flex;
         flex-direction: row;
-        justify-content: stretch;
+        /* justify-content: stretch; */
         align-items: center;
+        margin: unset;
     }
 
     vscode-text-field {
@@ -213,37 +214,17 @@
         flex-grow: 1;
     }
 
-    /* vscode-text-field > section {
-        margin: unset;
-    }
-
-    vscode-text-field > section > vscode-button {
-        margin: unset;
-    } */
-
-    .add-tag-btn {
-        /* display: inline-block; */
-        /* text-align: center; */
-        vertical-align: middle;
-    }
-
-    .remove-tag-btn {
+    .remove-btn-wrapper {
         position: absolute;
-        left: calc(100%);
-        /* top: 0; */
-        height: calc(0.9 * var(--global-block-height));
-        width: calc(0.9 * var(--global-block-height));
-
-        margin: 0;
+        left: calc(100% + var(--global-margin));
+        top: 0;
+        height: var(--global-block-height);
+        width: var(--global-block-height);
+        /* margin: var(--global-margin); */
+        /* margin-right: 0; */
+        margin: unset;
         padding: 0;
-
-        /* overflow: auto; */
-        /* display: inline-block; */
-        /* flex-grow: 1; */
-    }
-
-    .remove-tag-btn::part(control) {
-        height: calc(0.9 * var(--global-block-height));
-        width: calc(0.9 * var(--global-block-height));
+        display: flex;
+        align-items: center;
     }
 </style>
