@@ -30,25 +30,26 @@
 </script>
 
 {#if infoList && (visible || infoOpened || errors.length)}
-    <div
-        on:focusout={() => {
-            console.log("outside", infoHeader);
-        }}
-        class="info-btn"
-    >
-        <div class:error={errors.length} class="icon-wrapper">
+    <div class="info-btn">
+        <!-- <div class:error={errors.length} class="icon-wrapper">
             <span
                 on:click|stopPropagation={() => {
-                    console.log("info list", infoList);
+                    // console.log("info list", infoList);
                     infoOpened = !infoOpened;
                 }}
                 class="codicon codicon-info"
                 class:darker={infoOpened}
             />
-            <!-- <a href={clickLink}>
-            </a> -->
-        </div>
-        {#if true || (infoOpened && (infoList.length || errors.length))}
+        </div> -->
+        <vscode-button
+            appearance="icon"
+            on:click|stopPropagation={() => {
+                infoOpened = !infoOpened;
+            }}
+        >
+            <span class:error={errors.length} class="codicon codicon-info" />
+        </vscode-button>
+        {#if infoOpened && (infoList.length || errors.length)}
             <div use:clickOutside on:click_outside={handleClickOutside} class="info-box-wrapper">
                 <div class="info-header-wrapper">
                     <span class="codicon codicon-info"></span>
@@ -137,22 +138,6 @@
         z-index: 100;
     }
 
-    .info-hit-box {
-        background: red;
-        opacity: 0.5;
-        position: absolute;
-        top: 0;
-        right: 0;
-        height: 100%;
-        width: 100vw;
-        pointer-events: all;
-    }
-
-    :global(.control-wrapper):has(> div.info-hit-box) {
-        /* background: green; */
-        /* pointer-events: none; */
-    }
-
     .info-header-wrapper {
         display: flex;
         min-height: var(--global-block-height);
@@ -177,30 +162,15 @@
 
     .info-btn {
         position: absolute;
-        left: calc(100% - var(--global-block-height));
-        /* top: var(--global-margin); */
+        left: calc(100% - var(--global-block-height) - var(--global-margin));
         top: 0;
         height: var(--global-block-height);
         width: var(--global-block-height);
         margin: var(--global-margin);
         margin-right: 0;
-        /* margin: 0; */
         padding: 0;
-    }
-
-    a:link {
-        text-decoration: inherit;
-        color: inherit;
-        height: min-content;
         display: flex;
-        justify-content: center;
-        /* cursor: auto; */
-    }
-
-    a:visited {
-        text-decoration: inherit;
-        color: inherit;
-        /* cursor: auto; */
+        align-items: center;
     }
 
     .icon-wrapper {
@@ -244,9 +214,9 @@
         /* color: var(--badge-background); */
     }
 
-    .darker {
+    /* .darker {
         opacity: 0.5;
-    }
+    } */
 
     vscode-link {
         align-items: center;
