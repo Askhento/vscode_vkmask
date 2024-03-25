@@ -101,6 +101,7 @@
                     </ul>
                 {/if}
             </div>
+            <div class="info-hitbox"></div>
         {/if}
     </div>
 {/if}
@@ -120,6 +121,20 @@
     /* * {
         box-sizing: border-box;
     } */
+
+    .info-hitbox {
+        /* background: red;
+        opacity: 0.5; */
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        top: 0;
+        left: 0;
+        z-index: calc(var(--z-level-info) + 1);
+        margin: unset;
+        padding: unset;
+    }
     .info-box-wrapper {
         padding: var(--global-margin);
         position: absolute;
@@ -135,7 +150,7 @@
         border-radius: var(--global-border-raduis);
         right: 70%;
         top: 70%;
-        z-index: 100;
+        z-index: calc(var(--z-level-info) + 2);
     }
 
     .info-header-wrapper {

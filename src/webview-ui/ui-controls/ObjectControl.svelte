@@ -283,6 +283,7 @@
 
     .control-wrapper {
         position: relative;
+
         /* transition: all 0.5s ease; */
         /* border-radius: 0.5em; */
         /* border: 2px solid transparent; */
