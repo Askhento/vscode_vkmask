@@ -48,7 +48,7 @@
             <!-- <a href={clickLink}>
             </a> -->
         </div>
-        {#if infoOpened && (infoList.length || errors.length)}
+        {#if true || (infoOpened && (infoList.length || errors.length))}
             <div use:clickOutside on:click_outside={handleClickOutside} class="info-box-wrapper">
                 <div class="info-header-wrapper">
                     <span class="codicon codicon-info"></span>
@@ -70,7 +70,7 @@
 
                     <div class="info-header-wrapper">
                         <span class="codicon codicon-info error"></span>
-                        <span class="info-header">{l10n.t(infoErrorHeader) + " :"}</span>
+                        <span class="info-header">{l10n.t(infoErrorHeader) + ":"}</span>
                     </div>
                     <ul>
                         {#each errors as error}
@@ -84,10 +84,20 @@
                     <vscode-divider role="separator" />
                     <div class="info-header-wrapper">
                         <span class="codicon codicon-globe"></span>
-                        <vscode-link href={clickLink}
+                        <span class="info-header"
+                            >{l10n.t("locale.infobox.readmoreHeader") + ":"}</span
+                        >
+                        <!-- <vscode-link href={clickLink}
                             >{l10n.t("locale.infobox.readmore")}
-                        </vscode-link>
+                        </vscode-link> -->
                     </div>
+                    <ul>
+                        <li>
+                            <vscode-link href={clickLink}
+                                >{l10n.t("locale.infobox.readmoreOpen")}
+                            </vscode-link>
+                        </li>
+                    </ul>
                 {/if}
             </div>
         {/if}
@@ -145,8 +155,9 @@
 
     .info-header-wrapper {
         display: flex;
-
+        min-height: var(--global-block-height);
         align-content: center;
+        align-items: center;
     }
 
     .info-header {
@@ -156,6 +167,7 @@
 
     ul {
         margin: var(--global-margin);
+        margin-left: calc(4 * var(--global-margin));
         padding-left: calc(2 * var(--global-margin));
     }
 

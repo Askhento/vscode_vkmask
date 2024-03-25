@@ -95,7 +95,7 @@
         if (!isOpaque) errors.push(l10n.t("locale.projectManager.icon.error.usedTransparency"));
         if (size >= 60000)
             errors.push(
-                `${l10n.t("locale.projectManager.icon.error.maximumSize")} : ${Math.round(
+                `${l10n.t("locale.projectManager.icon.error.maximumSize")}: ${Math.round(
                     size / 1000
                 )}${l10n.t("locale.units.kiloByte")}`
             );
