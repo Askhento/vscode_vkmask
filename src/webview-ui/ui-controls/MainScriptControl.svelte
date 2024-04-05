@@ -185,7 +185,7 @@
             <!-- <div class="waiting">
                 <vscode-progress-ring />
             </div> -->
-            <Loading scale={2} />
+            <Loading scale={2} dark={true} />
         {/if}
         <InfoBox info={params.info} visible={infoVisible} />
     </span>

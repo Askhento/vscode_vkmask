@@ -428,7 +428,7 @@
             >
         </vscode-button>
         {#if waiting}
-            <Loading scale={2} />
+            <Loading scale={2} dark={true} />
         {/if}
         <InfoBox visible={infoVisible} info={params.info} />
     </span>

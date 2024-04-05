@@ -232,7 +232,7 @@
             <InfoBox visible={infoVisible} info={params.info} />
         {/key}
         {#if waiting}
-            <Loading scale={1} />
+            <Loading scale={1} dark={true} />
         {/if}
     </span>
 {/if}

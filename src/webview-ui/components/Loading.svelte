@@ -1,12 +1,13 @@
 <script>
     import * as l10n from "@vscode/l10n";
-    export let scale = 1;
+    export let scale = 1,
+        dark = false;
 </script>
 
 <div class="loading-wrapper">
     <vscode-progress-ring style="transform: scale({scale});" />
 </div>
-<div class="overlay"></div>
+<div class:dark class="overlay"></div>
 
 <style>
     * {
@@ -14,7 +15,6 @@
     }
     .overlay {
         opacity: 0.5;
-        background-color: black;
         position: fixed;
         width: 100vw;
         height: 100vh;
@@ -22,6 +22,10 @@
         left: 0;
         overflow: visible;
         z-index: var(--z-level-waiting);
+    }
+
+    .dark {
+        background-color: black;
     }
 
     .loading-wrapper {
