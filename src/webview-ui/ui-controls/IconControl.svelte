@@ -296,14 +296,17 @@
         border-radius: var(--global-image-radius);
 
         height: var(--global-block-height-borded);
+        min-width: var(--global-block-height-borded);
+
         margin-right: var(--global-margin);
-        aspect-ratio: 1 / 1;
+        /* aspect-ratio: 1 / 1; */
         border-radius: var(--global-image-radius);
     }
     span.file-preview-wrapper {
         /* margin: unset; */
         /* padding: unset; */
         height: var(--global-block-height);
+
         display: flex;
         align-content: center;
         justify-content: center;
@@ -319,9 +322,9 @@
     }
 
     vscode-button {
-        flex-grow: 1;
         min-width: 0;
         height: var(--global-block-height-borded);
+        width: 100%;
         /* pointer-events: all; */
     }
 

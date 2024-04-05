@@ -498,7 +498,8 @@
         display: inline-block;
         height: var(--global-block-height-borded);
 
-        aspect-ratio: 1 / 1;
+        min-width: var(--global-block-height-borded);
+
         border-radius: var(--global-image-radius);
         margin-right: var(--global-margin);
     }
