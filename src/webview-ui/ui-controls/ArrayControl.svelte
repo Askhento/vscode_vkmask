@@ -81,10 +81,6 @@
         const { needUpdate } = await applyDeps(component, stores, params.dependencies);
         if (needUpdate) onChanged();
     });
-
-    // ur 0 0 1 1
-    // >  0 1 0 1
-    // re 0 1 1 1
 </script>
 
 <!-- {#if params.userResizable || uiElements.length > 0}
