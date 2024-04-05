@@ -169,22 +169,31 @@
         border: none;
         /* padding: 0; */
         /* border-radius: 4px; */
-        /* height: var(--global-block-height); */
+        border-radius: var(--global-border-raduis);
+        height: var(--global-block-height);
         height: 100%;
-        width: 100%;
-        /* height: 40px; */
-        /* width: 40px; */
-        /* flex: 1 0 0px; */
     }
 
-    input[type="color"]::-webkit-color-swatch-wrapper {
-        /* border: 2px solid #000000; */
-        /* padding: 0; */
-        /* border: 2px solid blue; */
+    input[type="color"] {
+        appearance: none;
+        -moz-appearance: none;
+        -webkit-appearance: none;
+        background: none;
+        border: 0;
+        cursor: pointer;
+        height: var(--global-block-height-borded);
+        width: 100%;
+        outline: none;
+        padding: 0;
     }
-    input[type="color"]::-webkit-color-swatch {
-        border: 2px solid var(--input-background);
-        border-radius: 2px;
+
+    ::-webkit-color-swatch-wrapper {
+        padding: 0;
+    }
+
+    ::-webkit-color-swatch {
+        border: 0;
+        border-radius: var(--global-border-raduis);
     }
 
     /* input.alpha {

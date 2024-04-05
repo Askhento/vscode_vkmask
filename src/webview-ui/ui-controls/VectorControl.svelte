@@ -187,13 +187,14 @@
         row-gap: var(--global-margin);
         flex-direction: row;
         /* min-height: fit-content; */
-        justify-content: start;
+        /* justify-content: start; */
         flex-wrap: wrap;
         margin: 0;
         min-width: var(--global-min-width);
     }
 
     input.value {
+        box-sizing: content-box;
         color: var(--input-foreground);
         background: var(--input-background);
         border-radius: var(--global-border-raduis);
