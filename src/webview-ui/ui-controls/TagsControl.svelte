@@ -174,14 +174,17 @@
         padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
         padding-right: var(--global-label-control-gap);
-        margin: var(--global-margin) 0 var(--global-margin) 0;
-        height: 100%;
+        margin: unset;
+        height: var(--global-block-height);
 
         display: flex;
         justify-content: var(--label-justify);
+        align-items: var(--label-align);
     }
 
     span.label > span {
+        /* height: fit-content; */
+
         margin: 0;
         overflow: hidden;
         white-space: nowrap;
@@ -206,20 +209,27 @@
         /* justify-content: stretch; */
         align-items: center;
         margin: unset;
+        width: 100%;
     }
 
     vscode-text-field {
         margin: 0;
-        height: var(--global-block-height);
-        flex-grow: 1;
+        width: 100%;
+        height: var(--global-block-height-borded);
+    }
+
+    vscode-text-field::part(root) {
+        min-width: 0;
+        width: 100%;
+        height: var(--global-block-height-borded);
     }
 
     .remove-btn-wrapper {
         position: absolute;
         left: calc(100% + var(--global-margin));
         top: 0;
-        height: var(--global-block-height);
-        width: var(--global-block-height);
+        height: var(--global-block-height-borded);
+        width: var(--global-block-height-borded);
         /* margin: var(--global-margin); */
         /* margin-right: 0; */
         margin: unset;

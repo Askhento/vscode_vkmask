@@ -143,10 +143,6 @@
             {:else}
                 <span class="text-center missing-file">{value}</span>
             {/if}
-
-            {#if waiting}
-                <vscode-progress-ring />
-            {/if}
         </div>
         <vscode-button
             appearance={value == null ? "primary" : "secondary"}
@@ -184,13 +180,18 @@
                 >{l10n.t("locale.projectManager.mainScript.buttonRemove.label")}</span
             >
         </vscode-button>
+        {#if waiting || true}
+            <div class="waiting">
+                <vscode-progress-ring />
+            </div>
+        {/if}
         <InfoBox info={params.info} visible={infoVisible} />
     </span>
 {/if}
 
 <style>
     * {
-        margin: var(--global-margin);
+        margin: 0;
         /* padding: 0; */
         box-sizing: border-box;
     }
@@ -199,15 +200,16 @@
         padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
         padding-right: var(--global-label-control-gap);
-        margin: var(--global-margin) 0 var(--global-margin) 0;
 
-        /* height: var(--global-block-height); */
-        height: 100%;
+        height: var(--global-block-height);
         display: flex;
         justify-content: var(--label-justify);
+        align-items: var(--label-align);
     }
 
     span.label > span {
+        height: fit-content;
+
         margin: 0;
         overflow: hidden;
         white-space: nowrap;
@@ -216,16 +218,21 @@
 
     span.control-wrapper {
         padding-right: var(--global-body-padding-right);
+        padding-bottom: var(--global-margin);
+        padding-top: var(--global-margin);
+        padding-left: var(--global-margin);
+
         margin: unset;
         position: relative;
         display: flex;
+        row-gap: var(--global-margin);
         flex-direction: column;
     }
 
     .value-text {
-        height: var(--global-block-height);
+        height: var(--global-block-height-borded);
         display: flex;
-        justify-items: center;
+        align-items: center;
         position: relative;
     }
 
@@ -233,6 +240,10 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+    }
+
+    vscode-link {
+        height: fit-content;
     }
 
     .text-center {
@@ -243,17 +254,28 @@
         color: var(--missing-asset-color);
     }
 
-    vscode-progress-ring {
+    div.waiting {
+        width: 100%;
+        height: 100%;
         position: absolute;
-        left: calc(100% - var(--global-block-height));
+        left: 0;
         top: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    vscode-progress-ring {
         margin: unset;
-        height: var(--global-block-height);
-        width: var(--global-block-height);
+        height: 100%;
+        aspect-ratio: 1/1;
+    }
+    vscode-progress-ring::part(progress) {
+        transform: scale(2);
     }
 
     vscode-button {
-        height: var(--global-block-height);
+        height: var(--global-block-height-borded);
     }
 
     vscode-button::part(content) {
@@ -269,6 +291,7 @@
         padding: unset;
         /* display: inline-block; */
         width: 100%;
+        height: fit-content;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;

@@ -208,7 +208,7 @@
         padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
         padding-right: var(--global-label-control-gap);
-        margin: var(--global-margin) 0 var(--global-margin) 0;
+        margin: unset;
         height: 100%;
 
         justify-self: var(--label-justify);
@@ -218,6 +218,8 @@
 
     span.control-wrapper {
         padding-right: var(--global-body-padding-right);
+        padding-bottom: var(--global-margin);
+        padding-top: var(--global-margin);
 
         margin: unset;
         position: relative;

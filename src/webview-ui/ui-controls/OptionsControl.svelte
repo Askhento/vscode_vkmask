@@ -88,7 +88,7 @@
 
 <style>
     * {
-        margin: var(--global-margin);
+        margin: unset;
         padding: 0;
         box-sizing: border-box;
     }
@@ -105,22 +105,22 @@
   } */
     .control-wrapper {
         padding-right: var(--global-body-padding-right);
+        padding-bottom: var(--global-margin);
+        padding-top: var(--global-margin);
+        padding-left: var(--global-margin);
+
+        height: var(--global-block-height);
+
         position: relative;
         display: flex;
         margin: unset;
     }
+
     vscode-dropdown {
         width: 100%;
-        height: var(--global-block-height);
+        height: 100%;
+        /* height: var(--global-block-height); */
         min-width: 0;
-    }
-    vscode-dropdown::part(control) {
-        border-radius: var(--global-border-raduis);
-    }
-
-    .option {
-        margin: 0;
-        height: var(--global-block-height);
     }
 
     .option-text {
@@ -129,27 +129,21 @@
         margin-left: var(--global-margin);
     }
 
-    vscode-option::part(content) {
-        /* color: red; */
-        display: flex;
-        /* flex-direction: column; */
-        /* justify-content: center; */
-        align-items: center;
-        width: 100%;
-    }
-
     span.label {
         padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
         padding-right: var(--global-label-control-gap);
-        margin: var(--global-margin) 0 var(--global-margin) 0;
+        margin: unset;
 
         height: var(--global-block-height);
         display: flex;
         justify-content: var(--label-justify);
+        align-items: var(--label-align);
     }
 
     span.label > span {
+        height: fit-content;
+
         margin: 0;
         overflow: hidden;
         white-space: nowrap;

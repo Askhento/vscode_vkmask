@@ -72,7 +72,7 @@
         width: 100%;
         position: relative;
         right: 0;
-        height: var(--global-block-height);
+        height: var(--global-block-height-borded);
     }
     .dropdown {
         position: relative;
@@ -93,7 +93,7 @@
         transition: all 150ms ease-in-out;
         transform-origin: top;
         width: 100%;
-        height: var(--global-block-height);
+        height: var(--global-block-height-borded);
     }
 
     .dropdown-menu.active {
@@ -127,7 +127,7 @@
 
     vscode-button {
         min-width: 0;
-        height: var(--global-block-height);
+        height: var(--global-block-height-borded);
     }
 
     vscode-button::part(content) {
@@ -151,5 +151,6 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        height: fit-content;
     }
 </style>

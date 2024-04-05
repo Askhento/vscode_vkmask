@@ -118,9 +118,9 @@
 ></div> -->
 
 <style>
-    /* * {
+    * {
         box-sizing: border-box;
-    } */
+    }
 
     .info-hitbox {
         /* background: red;
@@ -177,12 +177,15 @@
 
     .info-btn {
         position: absolute;
-        left: calc(100% - var(--global-block-height) - var(--global-margin));
+        left: calc(100% - var(--global-body-padding-right) - var(--global-margin));
+        /* left: 100%; */
         top: 0;
         height: var(--global-block-height);
         width: var(--global-block-height);
         margin: var(--global-margin);
         margin-right: 0;
+        margin-top: 0;
+
         padding: 0;
         display: flex;
         align-items: center;

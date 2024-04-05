@@ -71,6 +71,9 @@
 
     span.control-wrapper {
         padding-right: var(--global-body-padding-right);
+        padding-bottom: var(--global-margin);
+        padding-top: var(--global-margin);
+        height: var(--global-block-height);
         margin: unset;
         position: relative;
         display: flex;
@@ -82,16 +85,19 @@
         padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
         padding-right: var(--global-label-control-gap);
-        margin: var(--global-margin) 0 var(--global-margin) 0;
+        margin: unset;
 
         height: var(--global-block-height);
         display: flex;
         justify-content: var(--label-justify);
+        align-items: var(--label-align);
         align-content: center;
         align-items: center;
     }
 
     span.label > span {
+        height: fit-content;
+
         margin: unset;
         height: fit-content;
         overflow: hidden;

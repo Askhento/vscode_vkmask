@@ -63,9 +63,12 @@
         height: var(--global-block-height);
         display: flex;
         justify-content: var(--label-justify);
+        align-items: var(--label-align);
     }
 
     span.label > span {
+        height: fit-content;
+
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;

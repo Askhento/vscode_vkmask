@@ -215,6 +215,8 @@
     }
 
     span.label > span {
+        height: fit-content;
+
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;

@@ -377,7 +377,7 @@
                         {#if asset.absPath && asset.type === "image"}
                             <img
                                 src={"data:image/png;base64," + (asset.preview ?? whiteData)}
-                                class="option-file-preview"
+                                class="file-preview"
                             />
                         {/if}
                         <span class="option-text">{`${asset.baseName}`}</span>
@@ -436,8 +436,8 @@
 
 <style>
     * {
-        margin: var(--global-margin);
-        /* padding: 0; */
+        margin: unset;
+        padding: 0;
         box-sizing: border-box;
     }
 
@@ -445,15 +445,16 @@
         padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
         padding-right: var(--global-label-control-gap);
-        margin: var(--global-margin) 0 var(--global-margin) 0;
-        height: 100%;
 
+        height: var(--global-block-height);
         display: flex;
         justify-content: var(--label-justify);
+        align-items: var(--label-align);
     }
 
     span.label > span {
-        margin: 0;
+        height: fit-content;
+
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
@@ -461,49 +462,30 @@
 
     span.control-wrapper {
         padding-right: var(--global-body-padding-right);
+        padding-bottom: var(--global-margin);
+        padding-top: var(--global-margin);
+        padding-left: var(--global-margin);
 
-        margin: unset;
         position: relative;
         display: flex;
         flex-direction: column;
+        row-gap: var(--global-margin);
     }
 
     div.dropdown-wrapper {
-        margin: unset;
+        padding: unset;
         display: flex;
         flex-direction: row;
-        position: relative;
-    }
-
-    vscode-progress-ring {
-        position: absolute;
-        left: calc(100%);
-        top: var(--global-margin);
-        margin: unset;
-        height: var(--global-block-height);
-        width: var(--global-block-height);
-    }
-
-    vscode-option {
-        margin: unset;
-        /* display: flex;
-        justify-items: center;
-        align-items: center;
-        align-content: center; */
-        /* justify-content: center; */
-        /* width: 100%; */
+        height: var(--global-block-height-borded);
+        /* position: relative; */
     }
 
     vscode-option::part(content) {
         display: flex;
         align-content: center;
     }
-
-    img.option-file-preview {
-        margin: unset;
-        display: inline-block;
-        height: var(--global-block-height);
-        width: var(--global-block-height);
+    vscode-option.builtin {
+        background-color: var(--vscode-inputValidation-warningBackground);
     }
 
     span.option-text {
@@ -512,47 +494,34 @@
 
     .file-preview {
         display: inline-block;
-        height: var(--global-block-height);
-        width: var(--global-block-height);
-        border-radius: var(--global-image-radius);
+        height: var(--global-block-height-borded);
 
-        /* margin: unset; */
-        /* flex-basis: var(--global-block-height); */
+        aspect-ratio: 1 / 1;
+        border-radius: var(--global-image-radius);
     }
 
     a {
-        margin: unset;
+        margin: var(--global-margin);
+        margin-left: 0;
         display: contents;
-        height: var(--global-block-height);
-        width: var(--global-block-height);
-    }
-    vscode-option.builtin {
-        background-color: var(--vscode-inputValidation-warningBackground);
+        height: 100%;
+        aspect-ratio: 1 / 1;
+        border-radius: var(--global-image-radius);
     }
 
-    vscode-dropdown {
-        /* margin: unset;
-        position: relative; */
-        /* width: 200px; */
-
-        height: var(--global-block-height);
-        /* width: 100%; */
-        width: calc(var(--global-grid-value-column-size) - 2 * var(--global-margin));
-        min-width: 0;
-    }
     /* vscode-dropdown.error {
     color: var(--vscode-errorForeground);
     animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   } */
 
-    vscode-dropdown::part(control) {
-        border-radius: var(--global-border-raduis);
+    vscode-dropdown {
+        margin-left: var(--global-margin);
+        width: 100%;
+        height: calc(var(--global-block-height) - 2 * var(--global-margin));
+        min-width: 0;
     }
-
     vscode-dropdown.missing-asset::part(control) {
         color: red;
-
-        /* width: var(--global-grid-value-column-size); */
     }
 
     vscode-text-field {
@@ -573,6 +542,10 @@
         animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     }
 
+    vscode-button {
+        height: calc(var(--global-block-height) - 2 * var(--global-margin));
+    }
+
     vscode-button::part(content) {
         min-width: 0;
     }
@@ -586,23 +559,20 @@
         padding: unset;
         /* display: inline-block; */
         width: 100%;
+        height: fit-content;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
 
-    /* 
-
-  vscode-text-field > section {
-    margin: unset;
-  }
-
-  vscode-text-field > section > vscode-button {
-    margin: unset;
-  }
-  .dropdown-btn {
-    display: inline-block;
-  } */
+    vscode-progress-ring {
+        position: absolute;
+        left: calc(100%);
+        top: var(--global-margin);
+        margin: unset;
+        height: var(--global-block-height);
+        width: var(--global-block-height);
+    }
 
     @keyframes shake {
         10%,

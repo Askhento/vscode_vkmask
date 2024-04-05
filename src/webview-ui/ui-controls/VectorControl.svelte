@@ -70,7 +70,7 @@
                 {#if index === 0}
                     <span class="label-text">{l10n.t(label)}</span>
                 {/if}
-                <span>{valueLabel}</span>
+                <span class="value-label-text">{valueLabel}</span>
             </span>
         {/each}
     </span>
@@ -131,7 +131,7 @@
 
 <style>
     * {
-        margin: var(--global-margin);
+        margin: 0;
 
         padding: 0;
         box-sizing: border-box;
@@ -145,11 +145,12 @@
         justify-content: space-around;
         /* flex-wrap: wrap; */
         margin: 0;
-        padding-right: var(--global-margin);
         min-width: var(--global-min-width);
 
+        padding-right: var(--global-label-control-gap);
         padding-left: var(--global-body-padding-left);
-        /* justify-content: var(--label-justify); */
+        /* justify-content: var(--label-justify);
+        align-items:  var(--label-align); */
     }
 
     span.label {
@@ -159,19 +160,31 @@
         height: var(--global-block-height);
         display: flex;
         justify-content: var(--label-justify);
+        align-items: var(--label-align);
         width: 100%;
         /* min-width: var(--global-min-width); */
     }
     span.label-text {
+        padding: var(--global-margin);
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
     }
 
+    span.value-label-text {
+        padding: var(--global-margin);
+    }
+
     .control-wrapper {
         padding-right: var(--global-body-padding-right);
+        padding-bottom: var(--global-margin);
+        padding-top: var(--global-margin);
+        padding-left: var(--global-margin);
+
+        padding-left: var(--global-margin);
         position: relative;
         display: flex;
+        row-gap: var(--global-margin);
         flex-direction: row;
         /* min-height: fit-content; */
         justify-content: start;
@@ -192,11 +205,10 @@
         font-family: inherit;
         font-size: var(--type-ramp-base-font-size);
         line-height: var(--type-ramp-base-line-height);
-        padding: 0;
         /* min-width: var(--input-min-width); */
         text-align: center;
         flex-grow: 1;
-        height: var(--global-block-height);
+        height: var(--global-block-height-borded);
         min-width: var(--global-min-width);
     }
 

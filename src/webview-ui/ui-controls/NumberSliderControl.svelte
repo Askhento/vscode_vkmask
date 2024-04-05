@@ -99,7 +99,7 @@
 
 <style>
     * {
-        margin: var(--global-margin);
+        margin: unset;
         padding: 0;
         /* padding: var(--global-margin); */
         /* margin: 0; */
@@ -120,11 +120,16 @@
 
     .control-wrapper {
         padding-right: var(--global-body-padding-right);
+        padding-bottom: var(--global-margin);
+        padding-top: var(--global-margin);
+        padding-left: var(--global-margin);
+
         margin: unset;
         position: relative;
         display: flex;
         justify-content: center;
         align-content: center;
+        height: var(--global-block-height);
     }
 
     div.display-value {
@@ -166,16 +171,16 @@
         padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
         padding-right: var(--global-label-control-gap);
-        margin: var(--global-margin) 0 var(--global-margin) 0;
-        height: 100%;
 
-        /* justify-self: var(--label-justify); */
         height: var(--global-block-height);
         display: flex;
         justify-content: var(--label-justify);
+        align-items: var(--label-align);
     }
 
     span.label > span {
+        height: fit-content;
+
         margin: 0;
         overflow: hidden;
         white-space: nowrap;
@@ -185,8 +190,7 @@
     input.slider {
         display: block;
         margin: 0;
-        margin: var(--global-margin);
-
+        height: var(--global-block-height);
         /* flex: 2 0 0px; */
     }
 
@@ -197,7 +201,8 @@
         cursor: pointer;
         width: 100%;
         /* width: 150px; */
-        height: var(--global-block-height);
+        height: 100%;
+        /* height: var(--global-block-height); */
         /* height: calc(var(--global-box-height) * 1px); */
         /*  slider progress trick  */
         /* overflow: hidden; */
@@ -239,10 +244,4 @@
     input[type="range"]:focus {
         outline: none;
     }
-    /* **** Chrome, Safari, Opera, and Edge Chromium ****
-    input[type="range"]:focus::-webkit-slider-thumb {
-        border: 1px solid var(--focus-border);
-        outline: 2px solid var(--focus-border);
-        outline-offset: 0.125rem;
-    } */
 </style>

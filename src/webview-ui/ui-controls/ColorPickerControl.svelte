@@ -121,13 +121,17 @@
 
 <style>
     * {
-        margin: var(--global-margin);
+        margin: unset;
         padding: unset;
         box-sizing: border-box;
     }
 
     .control-wrapper {
         padding-right: var(--global-body-padding-right);
+        padding-bottom: var(--global-margin);
+        padding-top: var(--global-margin);
+        padding-left: var(--global-margin);
+
         margin: unset;
         position: relative;
         display: flex;
@@ -138,14 +142,17 @@
         padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
         padding-right: var(--global-label-control-gap);
-        margin: var(--global-margin) 0 var(--global-margin) 0;
-        height: 100%;
+        /* margin: var(--global-margin) 0 var(--global-margin) 0; */
+        height: var(--global-block-height);
 
         display: flex;
         justify-content: var(--label-justify);
+        align-items: var(--label-align);
     }
 
     span.label > span {
+        height: fit-content;
+
         margin: 0;
         overflow: hidden;
         white-space: nowrap;

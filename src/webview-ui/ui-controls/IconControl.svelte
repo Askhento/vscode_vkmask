@@ -238,7 +238,7 @@
 
 <style>
     * {
-        margin: var(--global-margin);
+        margin: unset;
         /* padding: 0; */
         box-sizing: border-box;
     }
@@ -247,14 +247,17 @@
         padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
         padding-right: var(--global-label-control-gap);
-        margin: var(--global-margin) 0 var(--global-margin) 0;
-        height: 100%;
+        margin: unset;
+        height: var(--global-block-height);
 
         display: flex;
         justify-content: var(--label-justify);
+        align-items: var(--label-align);
     }
 
     span.label > span {
+        height: fit-content;
+
         margin: 0;
         overflow: hidden;
         white-space: nowrap;
@@ -263,10 +266,15 @@
 
     span.control-wrapper {
         padding-right: var(--global-body-padding-right);
+        padding-bottom: var(--global-margin);
+        padding-top: var(--global-margin);
+        padding-left: var(--global-margin);
+
         margin: unset;
         position: relative;
         display: flex;
         flex-direction: row;
+        height: var(--global-block-height);
         /* pointer-events: auto; */
 
         /* justify-content: center; */
@@ -283,18 +291,14 @@
     }
 
     img.file-preview {
-        margin: unset;
         display: inline-block;
-        height: var(--global-block-height);
-        width: var(--global-block-height);
-        /* margin: unset; */
-        /* flex-basis: var(--global-block-height); */
-        min-width: var(--global-block-height);
         border-radius: var(--global-image-radius);
 
-        /* flex-basis: var(--global-block-height); */
+        height: var(--global-block-height-borded);
+        margin-right: var(--global-margin);
+        aspect-ratio: 1 / 1;
+        border-radius: var(--global-image-radius);
     }
-
     span.file-preview-wrapper {
         /* margin: unset; */
         /* padding: unset; */
@@ -325,7 +329,7 @@
     vscode-button {
         flex-grow: 1;
         min-width: 0;
-        height: var(--global-block-height);
+        height: var(--global-block-height-borded);
         /* pointer-events: all; */
     }
 
@@ -335,6 +339,7 @@
 
     vscode-button::part(control) {
         overflow: hidden;
+        height: var(--global-block-height-borded);
     }
 
     .btn-text {
