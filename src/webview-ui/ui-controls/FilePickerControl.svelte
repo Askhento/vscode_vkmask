@@ -9,6 +9,7 @@
     import { getContext } from "svelte";
     import { RequestCommand, RequestTarget, SelectionType } from "src/types";
     import InfoBox from "../components/InfoBox.svelte";
+    import Loading from "../components/Loading.svelte";
     //@ts-expect-error
 
     const { assets, settings, messageHandler, selection } = getContext("stores");
@@ -384,10 +385,6 @@
                     </vscode-option>
                 {/each}
             </vscode-dropdown>
-
-            {#if waiting}
-                <vscode-progress-ring />
-            {/if}
         </div>
 
         <vscode-button
@@ -430,6 +427,9 @@
                 >{`${l10n.t("locale.controls.filepicker.buttonRemove.label")}`}</span
             >
         </vscode-button>
+        {#if waiting}
+            <Loading scale={2} />
+        {/if}
         <InfoBox visible={infoVisible} info={params.info} />
     </span>
 {/if}
@@ -482,6 +482,8 @@
 
     vscode-option::part(content) {
         display: flex;
+        margin-left: var(--global-margin);
+
         align-content: center;
     }
     vscode-option.builtin {
@@ -498,6 +500,7 @@
 
         aspect-ratio: 1 / 1;
         border-radius: var(--global-image-radius);
+        margin-right: var(--global-margin);
     }
 
     a {
@@ -515,7 +518,6 @@
   } */
 
     vscode-dropdown {
-        margin-left: var(--global-margin);
         width: 100%;
         height: calc(var(--global-block-height) - 2 * var(--global-margin));
         min-width: 0;
@@ -543,7 +545,7 @@
     }
 
     vscode-button {
-        height: calc(var(--global-block-height) - 2 * var(--global-margin));
+        height: var(--global-block-height-borded);
     }
 
     vscode-button::part(content) {
@@ -563,15 +565,6 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
-    }
-
-    vscode-progress-ring {
-        position: absolute;
-        left: calc(100%);
-        top: var(--global-margin);
-        margin: unset;
-        height: var(--global-block-height);
-        width: var(--global-block-height);
     }
 
     @keyframes shake {

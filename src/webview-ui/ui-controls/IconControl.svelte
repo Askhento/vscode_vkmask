@@ -6,6 +6,7 @@
     const print = logger("IconControl.svelte");
     import { getContext } from "svelte";
     import { RequestCommand, RequestTarget } from "src/types";
+    import Loading from "../components/Loading.svelte";
     //@ts-expect-error
     const { assets, settings, messageHandler } = getContext("stores");
 
@@ -231,7 +232,7 @@
             <InfoBox visible={infoVisible} info={params.info} />
         {/key}
         {#if waiting}
-            <vscode-progress-ring />
+            <Loading scale={1} />
         {/if}
     </span>
 {/if}
@@ -317,15 +318,6 @@
         /* min-width: var(--global-block-height); */
     }
 
-    vscode-progress-ring {
-        position: absolute;
-        left: calc(100% - 5px);
-        top: var(--global-margin);
-        margin: unset;
-        height: var(--global-block-height);
-        width: var(--global-block-height);
-    }
-
     vscode-button {
         flex-grow: 1;
         min-width: 0;
@@ -346,6 +338,7 @@
         margin: unset;
         padding: unset;
         /* display: inline-block; */
+        height: fit-content;
         width: 100%;
         overflow: hidden;
         white-space: nowrap;

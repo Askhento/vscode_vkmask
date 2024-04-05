@@ -7,6 +7,7 @@
     import { getContext } from "svelte";
     import { RequestCommand, RequestTarget } from "src/types";
     import InfoBox from "../components/InfoBox.svelte";
+    import Loading from "../components/Loading.svelte";
     //@ts-expect-error
     const { assets, settings, messageHandler } = getContext("stores");
 
@@ -180,10 +181,11 @@
                 >{l10n.t("locale.projectManager.mainScript.buttonRemove.label")}</span
             >
         </vscode-button>
-        {#if waiting || true}
-            <div class="waiting">
+        {#if waiting}
+            <!-- <div class="waiting">
                 <vscode-progress-ring />
-            </div>
+            </div> -->
+            <Loading scale={2} />
         {/if}
         <InfoBox info={params.info} visible={infoVisible} />
     </span>
@@ -252,26 +254,6 @@
 
     .missing-file {
         color: var(--missing-asset-color);
-    }
-
-    div.waiting {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        left: 0;
-        top: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-    }
-    vscode-progress-ring {
-        margin: unset;
-        height: 100%;
-        aspect-ratio: 1/1;
-    }
-    vscode-progress-ring::part(progress) {
-        transform: scale(2);
     }
 
     vscode-button {
