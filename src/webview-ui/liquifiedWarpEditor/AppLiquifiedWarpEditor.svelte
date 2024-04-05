@@ -91,7 +91,7 @@
         }
         // !!!!
         points = [...points];
-        console.log("liq point", points);
+        // console.log("liq point", points);
     }
 
     async function getSelection() {
@@ -274,6 +274,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
+    }
+
+    h1 {
+        width: 50%;
     }
 
     svg {

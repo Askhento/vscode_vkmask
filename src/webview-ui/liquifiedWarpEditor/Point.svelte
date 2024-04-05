@@ -27,7 +27,7 @@
 
     let { offset, anchor, radius, angle, type } = value;
 
-    console.log("point", value, anchors);
+    // console.log("point", value, anchors);
     // let anchorPos = anchors[anchor];
 
     $: anchorPos = anchors[anchor];

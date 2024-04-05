@@ -79,7 +79,6 @@
 
     onMount(() => {
         // console.log("parent", parentElem);
-        console.log("handle inti");
 
         node.addEventListener("mousedown", handleMouseDown);
 
