@@ -13,7 +13,8 @@
     } = info;
 
     let infoOpened = false;
-
+    $: translationExist = infoHeader.length > 0 && !l10n.t(infoHeader).startsWith("locale.");
+    $: console.log(translationExist, infoHeader);
     //  let infoOpened = false,
     //     visible = false,
     //     errors = [],
@@ -29,7 +30,7 @@
     }
 </script>
 
-{#if infoList && (visible || infoOpened || errors.length)}
+{#if infoList && (visible || infoOpened || errors.length) && translationExist}
     <div class="info-btn">
         <!-- <div class:error={errors.length} class="icon-wrapper">
             <span
@@ -88,7 +89,6 @@
                         <span class="info-header"
                             >{l10n.t("locale.infobox.readmoreHeader") + ":"}</span
                         >
-
                     </div>
                     <ul>
                         <li>
