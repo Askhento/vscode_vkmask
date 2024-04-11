@@ -7,7 +7,7 @@
         "url": "https://github.com/Askhento/vscode_vkmask"
     },
     "description": "%locale.contribution.extension.description%",
-    "version": "0.8.1",
+    "version": "0.8.2",
     "engines": {
         "vscode": "^1.74.0"
     },
