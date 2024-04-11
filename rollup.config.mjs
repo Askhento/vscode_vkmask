@@ -166,7 +166,7 @@ export default [
     // getSvelteEntry("plugins"),
     // getSvelteEntry("projectManager"),
     // getSvelteEntry("assetsManager"),
-    // getSvelteEntry("parameters"),
+    getSvelteEntry("parameters"),
     // getSvelteEntry("liquifiedWarpEditor"),
     extensionConfig,
 ];

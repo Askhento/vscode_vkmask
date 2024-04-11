@@ -13,7 +13,7 @@
 --global-grid-column-gap : 0;
 --global-grid-row-gap : 0.5rem; /* not used */
 --global-control-bottom-margin: 0.5rem;
---global-block-height : 3rem;
+--global-block-height : 2.2rem;
 --global-block-height-borded :calc(var(--global-block-height) - 2 * var(--global-margin));
 --global-label-control-gap : 10px;
 
