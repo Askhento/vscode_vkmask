@@ -44,14 +44,14 @@ export async function archiveProject() {
         vscode.commands.executeCommand("revealFileInOS", zipFileUri);
 
         vscode.window.showInformationMessage(
-            l10n.t(`locale.commands.archiveProject.doneMessage`, zipFile)
+            l10n.t("locale.commands.archiveProject.doneMessage", zipFile)
         );
 
         print("Copied " + results.length + " files", zipFileUri);
     } catch (error) {
         print("Archive error ", error);
         vscode.window.showInformationMessage(
-            l10n.t(`locale.commands.archiveProject.failMessage`, zipFileName)
+            l10n.t("locale.commands.archiveProject.failMessage", zipFileName)
         );
         return;
     }

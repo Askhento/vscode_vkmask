@@ -80,12 +80,9 @@ function processSourceBundles(translations, dryRun = false) {
     const mainBundlePath = path.join(__dirname, "bundle.l10n.json");
     const mainBundle = JSON.parse(fs.readFileSync(mainBundlePath).toString());
 
-    console.log("Parsing sources in ./src and ./webview-ui");
+    console.log("Parsing sources in ./src ");
     const sourcesRegex = /"(locale\..*?)"/gm;
-    const sourceParsedKeys = parseSourceKeys(
-        ["./src/**/**.{ts,js}", "./webview-ui/**/**.{ts,js,svelte}"],
-        sourcesRegex
-    );
+    const sourceParsedKeys = parseSourceKeys(["./src/**/*.{ts,js,svelte}"], sourcesRegex);
     let needWriteMain = false;
     Object.keys(sourceParsedKeys).forEach((key) => {
         if (key in mainBundle) return;

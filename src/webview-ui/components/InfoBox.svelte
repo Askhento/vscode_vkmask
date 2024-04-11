@@ -88,9 +88,7 @@
                         <span class="info-header"
                             >{l10n.t("locale.infobox.readmoreHeader") + ":"}</span
                         >
-                        <!-- <vscode-link href={clickLink}
-                            >{l10n.t("locale.infobox.readmore")}
-                        </vscode-link> -->
+
                     </div>
                     <ul>
                         <li>

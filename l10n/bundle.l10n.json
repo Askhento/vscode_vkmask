@@ -347,8 +347,6 @@
     "locale.controls.colorPicker.alpha.infoList": "locale.controls.colorPicker.alpha.infoList NEED TRANSLATION",
     "locale.parameters.model3d.model.infoList": "locale.parameters.model3d.model.infoList NEED TRANSLATION",
     "locale.parameters.group.main": "Main",
-    "locale.infobox.readmoreHeader": "Read the docs",
-    "locale.infobox.readmoreOpen": "Open",
 
     "locale.parameters.liquifiedwarp.point.type.zoom.label": "zoom",
     "locale.parameters.liquifiedwarp.point.type.shift.label": "shift",
@@ -363,5 +361,10 @@
     "locale.parameters.liquifiedwarp.group.points.label": "Points",
     "locale.parameters.liquifiedwarp.points.infoList": "locale.parameters.liquifiedwarp.points.infoList NEED TRANSLATION",
     "locale.arrayControl.removeButtonHint": "Remove",
-    "locale.screens.loading.hint": "Loading"
+    "locale.screens.loading.hint": "Loading",
+    "locale.infobox.readmoreHeader": "Read the docs",
+    "locale.infobox.readmoreOpen": "Open",
+    "locale.commands.archiveProject.startHint": "Archiving...",
+    "locale.commands.archiveProject.doneMessage": "Archive created {0}",
+    "locale.commands.archiveProject.failMessage": "Archive failed {0}"
 }

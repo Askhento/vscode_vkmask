@@ -7,6 +7,7 @@ export function parseSourceKeys(searchPaths, pattern) {
     const sourceMatches = glob.sync(searchPaths, { absolute: true });
     // console.log(sourceMatches);
     sourceMatches.forEach((sourcePath) => {
+        // console.log("src", sourcePath);
         const source = fs.readFileSync(sourcePath).toString();
         const match = [...source.matchAll(pattern)];
         for (const m of match) {

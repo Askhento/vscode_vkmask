@@ -362,5 +362,8 @@
     "locale.parameters.liquifiedwarp.group.points.label": "Точки",
     "locale.parameters.liquifiedwarp.points.infoList": "locale.parameters.liquifiedwarp.points.infoList NEED TRANSLATION",
     "locale.arrayControl.removeButtonHint": "Удалить",
-    "locale.screens.loading.hint": "Загрузка"
+    "locale.screens.loading.hint": "Загрузка",
+    "locale.commands.archiveProject.startHint": "Архивация...",
+    "locale.commands.archiveProject.doneMessage": "Архив создан {0}",
+    "locale.commands.archiveProject.failMessage": "Ошибка архивации {0}"
 }
