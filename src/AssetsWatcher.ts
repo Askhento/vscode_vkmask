@@ -8,6 +8,7 @@ import { EventEmitter } from "events";
 import { AssetsProcessor } from "./AssetsProcessor";
 import { Asset, AssetTypes } from "./types";
 import slash from "slash";
+import { assetInWhiteList } from "./assetWhitelist";
 
 class AssetsWatcher extends EventEmitter {
     public assets: Array<Asset> = [];
@@ -163,14 +164,16 @@ class AssetsWatcher extends EventEmitter {
 
         const files = await vscode.workspace.findFiles("**");
 
-        const newAssets = files.map(async (uri) => {
-            const slashedPath = slash(uri.fsPath);
-            return await this.processor.fileToAsset(
-                slashedPath,
-                this.getRelative(slashedPath),
-                true
-            );
-        });
+        const newAssets = files
+            .filter((uri) => assetInWhiteList(uri.fsPath))
+            .map(async (uri) => {
+                const slashedPath = slash(uri.fsPath);
+                return await this.processor.fileToAsset(
+                    slashedPath,
+                    this.getRelative(slashedPath),
+                    true
+                );
+            });
 
         print(`new assets count :  ${newAssets.length}`);
         // print(`builtin assets count :  ${this.builtInAssets.length}`);
@@ -195,10 +198,12 @@ class AssetsWatcher extends EventEmitter {
         // ! possibly add some debounce
 
         const watcher = vscode.workspace.createFileSystemWatcher(
+            // ? whitelist could be here ??? #opt
             new vscode.RelativePattern(this.directory, "**")
         );
 
         watcher.onDidCreate(async (e) => {
+            if (!assetInWhiteList(e.fsPath)) return;
             const slashedPath = slash(e.fsPath);
             const relativePath = this.getRelative(slashedPath);
             print("created file ", relativePath);
@@ -214,6 +219,7 @@ class AssetsWatcher extends EventEmitter {
         });
 
         watcher.onDidChange(async (e) => {
+            if (!assetInWhiteList(e.fsPath)) return;
             const slashedPath = slash(e.fsPath);
             const relativePath = this.getRelative(slashedPath);
             if (path.basename(relativePath) === "mask.json") return;
@@ -229,6 +235,7 @@ class AssetsWatcher extends EventEmitter {
         });
 
         watcher.onDidDelete((e) => {
+            if (!assetInWhiteList(e.fsPath)) return;
             const slashedPath = slash(e.fsPath);
             const relativePath = this.getRelative(slashedPath);
             print("deleted file ", relativePath);

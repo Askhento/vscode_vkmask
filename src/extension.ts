@@ -11,6 +11,7 @@ import { ParametersViewProvider } from "./panels/ParametersViewProvider";
 import { AssetsManagerViewProvider } from "./panels/AssetsManagerViewProvider";
 import { RecentProjects } from "./RecentProjectInfo";
 // import type { RecentProjectInfo } from "./RecentProjectInfo"
+import { archiveProject } from "./utils/archiveProject";
 import { messageHandler, MessageHandlerData } from "./MessageHandler";
 
 import { HotReload } from "./HotReload";
@@ -772,6 +773,16 @@ export async function activate(context: vscode.ExtensionContext) {
             // vscode.commands.executeCommand("workbench.action.openSettingsJson", {
             //     revealSetting: { key: "editor.renderWhitespace" },
             // });
+        })
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand("vkmask.archiveProject", async () => {
+            vscode.window.showInformationMessage(
+                l10n.t("locale.commands.archiveProject.startHint")
+            );
+
+            await archiveProject();
         })
     );
 

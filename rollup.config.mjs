@@ -162,11 +162,11 @@ function getSvelteEntry(name) {
 }
 
 export default [
-    getSvelteEntry("effects"),
-    getSvelteEntry("plugins"),
-    getSvelteEntry("projectManager"),
-    getSvelteEntry("assetsManager"),
-    getSvelteEntry("parameters"),
-    getSvelteEntry("liquifiedWarpEditor"),
+    // getSvelteEntry("effects"),
+    // getSvelteEntry("plugins"),
+    // getSvelteEntry("projectManager"),
+    // getSvelteEntry("assetsManager"),
+    // getSvelteEntry("parameters"),
+    // getSvelteEntry("liquifiedWarpEditor"),
     extensionConfig,
 ];

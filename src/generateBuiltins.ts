@@ -18,7 +18,6 @@ import { jsonPrettyArray } from "./utils/jsonStringify";
     const processor = new AssetsProcessor();
 
     const assetsDirents = await readdir(assetsPath, {
-        //@ts-expect-error
         recursive: true,
     });
 

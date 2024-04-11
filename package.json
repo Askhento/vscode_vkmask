@@ -85,6 +85,11 @@
                     "group": "navigation"
                 },
                 {
+                    "command": "vkmask.archiveProject",
+                    "when": "view == vkmask.projectManager",
+                    "group": "navigation"
+                },
+                {
                     "submenu": "vkmask.add_effect_submenu",
                     "when": "view == vkmask.effects && vkmask.appState != 'ERROR'",
                     "group": "navigation"
@@ -259,6 +264,12 @@
                 "title": "%locale.contribution.command.openSettings.title%",
                 "shortTitle": "%locale.contribution.command.openSettings.shortTitle%",
                 "icon": "$(settings-gear)"
+            },
+            {
+                "command": "vkmask.archiveProject",
+                "title": "%locale.contribution.command.archiveProject.title%",
+                "shortTitle": "%locale.contribution.command.archiveProject.shortTitle%",
+                "icon": "$(file-zip)"
             }
         ],
         "viewsContainers": {
@@ -318,7 +329,7 @@
     "scripts": {
         "prepublish": "npm run clear && npm run build",
         "clear": "rimraf -g ./out/**",
-        "dev": "npm run clear  && npm run watch",
+        "dev": " npm run watch",
         "build": "set NODE_ENV=production && rollup -c",
         "build-dev": "NODE_ENV=dev rollup -c",
         "watch": "set NODE_ENV=dev && rollup -c -w",
@@ -370,19 +381,22 @@
     "dependencies": {
         "@vscode/codicons": "^0.0.35",
         "@vscode/l10n": "^0.0.16",
+        "cross-zip": "^4.0.1",
         "fast-xml-parser": "^4.2.2",
         "json-source-map": "^0.6.1",
         "line-column": "^1.0.2",
+        "recursive-copy": "^2.0.14",
         "sharp": "^0.33.2",
         "slash": "^5.1.0",
         "smart-buffer": "^4.2.0",
         "zod": "^3.20.2",
-        "zod-validation-error": "^0.3.0",
+        "zod-validation-error": "^0.3.0"
+    },
+    "optionalDependencies": {
         "@img/sharp-darwin-arm64": "0.33.2",
         "@img/sharp-darwin-x64": "0.33.2",
         "@img/sharp-libvips-darwin-arm64": "1.0.1",
         "@img/sharp-libvips-darwin-x64": "1.0.1",
         "@img/sharp-win32-x64": "0.33.2"
-    },
-    "optionalDependencies": {}
+    }
 }
