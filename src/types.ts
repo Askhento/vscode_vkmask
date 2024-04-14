@@ -5,6 +5,7 @@ export const ViewIds = {
     plugins: "vkmask.plugins",
     projectManager: "vkmask.projectManager",
     liquifiedWarpEditor: "vkmask.liquifiedWarpEditor",
+    welcomeTemplates: "vkmask.welcomeTemplates",
 } as const;
 
 export const RequestTarget = {

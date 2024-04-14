@@ -156,6 +156,14 @@ export async function activate(context: vscode.ExtensionContext) {
     );
     webviewPanels.push(liquifiedWarpEditorPanel);
 
+    const welcomeTemplatesBuildPath = path.join(webviewsBuildPath, "welcomeTemplates");
+    const welcomeTemplatesPanel = new BaseWebviewPanel(
+        context.extensionUri,
+        welcomeTemplatesBuildPath,
+        ViewIds.welcomeTemplates
+    );
+    webviewPanels.push(welcomeTemplatesPanel);
+
     // liquifiedWarpEditorPanel.createOrShow();
 
     // webviewPanels.forEach((panel) => {
@@ -229,6 +237,9 @@ export async function activate(context: vscode.ExtensionContext) {
             if (provider.viewId !== ViewIds.projectManager)
                 await vscode.commands.executeCommand(provider.viewId + ".removeView");
         });
+
+        // ? add settings   #feat
+        welcomeTemplatesPanel.createOrShow();
     }
 
     function showConfigError(error: AppError) {
@@ -477,7 +488,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 break;
 
             case RequestCommand.createProject:
-                createProject();
+                createProject(payload);
                 break;
 
             case RequestCommand.getUploadedAsset:
@@ -617,7 +628,7 @@ export async function activate(context: vscode.ExtensionContext) {
         });
     }
 
-    function createProject() {
+    async function createProject(url = "") {
         // ! need to check if project already there !!!
 
         const options: vscode.SaveDialogOptions = {
@@ -629,25 +640,22 @@ export async function activate(context: vscode.ExtensionContext) {
         appState = AppState.loading;
         onSendAppState();
 
-        vscode.window.showSaveDialog(options).then(async (fileUri) => {
-            if (fileUri) {
-                print("new project folder", fileUri.fsPath);
-                const newProjectDir = fileUri;
-                const sampleProjectDir = vscode.Uri.joinPath(
-                    context.extensionUri,
-                    "res",
-                    "empty-project"
-                );
-                // print(sampleProjectDir)
+        const sampleProjectDir = vscode.Uri.joinPath(context.extensionUri, "res", "empty-project");
+        print("sample dir", sampleProjectDir.toString());
 
-                copyRecursiveSync(sampleProjectDir.fsPath, newProjectDir.fsPath);
-                recentProjectInfo.addInfo(newProjectDir.fsPath);
-                vscode.commands.executeCommand(`vscode.openFolder`, newProjectDir);
-            } else {
-                appState = oldState;
-                onSendAppState();
-            }
-        });
+        const fileUri = await vscode.window.showSaveDialog(options);
+        if (fileUri) {
+            print("new project folder", fileUri.fsPath);
+            const newProjectDir = fileUri;
+
+            // print(sampleProjectDir)
+            copyRecursiveSync(sampleProjectDir.fsPath, newProjectDir.fsPath);
+            recentProjectInfo.addInfo(newProjectDir.fsPath);
+            vscode.commands.executeCommand(`vscode.openFolder`, newProjectDir);
+        } else {
+            appState = oldState;
+            onSendAppState();
+        }
     }
 
     // function updateAppState() {
