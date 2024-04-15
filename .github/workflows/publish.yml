@@ -17,11 +17,13 @@ jobs:
             - uses: actions/setup-node@v2
               with:
                   node-version: 18.x
+            - run: ls
             - run: npm install -f
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - run: ls ./node_modules/@img
             - run: npx vsce --version
+            - run: cat package.json
             - shell: pwsh
               run: npm run package-full
 
@@ -29,11 +31,11 @@ jobs:
             # - run: npx vsce package --target ${{ env.target }}
             #   timeout-minutes: 1.5
             # - run: echo "${{ env.target }} package done"
-
-            - uses: actions/upload-artifact@v2
-              with:
-                  name: ${{ env.target }}
-                  path: "*.vsix"
+            - run: ls ./vsix_packages
+            # - uses: actions/upload-artifact@v2
+            #   with:
+            #       name: ${{ env.target }}
+            #       path: "*.vsix"
 
     # publish:
     #     runs-on: ubuntu-latest
