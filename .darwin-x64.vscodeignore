@@ -17,4 +17,6 @@ experiments
 test
 !node_modules/@vscode/codicons/dist/codicon.css
 !node_modules/@vscode/codicons/dist/codicon.ttf
-.*.vscodeignore
+
+!node_modules/@img/sharp-darwin-x64
+!node_modules/@img/sharp-libvips-darwin-x64
