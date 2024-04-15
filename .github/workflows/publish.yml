@@ -17,18 +17,21 @@ jobs:
             - uses: actions/setup-node@v2
               with:
                   node-version: 18.x
-            - run: ls
             - run: npm install -f
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - run: ls ./node_modules/@img
             - run: npx vsce --version
-            - run: cat package.json
+            # - run: cat package.json
             - shell: pwsh
               run: npm run package-full
+            - run: ls
+            - run: ls ./vsix-packages
 
             - shell: pwsh
               run: npm run publish-extension
+              env:
+                  VSCE_PAT: ${{ secrets.VSCE_PAT }}
             # - uses: actions/upload-artifact@v2
             #   with:
             #       name: ${{ env.target }}
