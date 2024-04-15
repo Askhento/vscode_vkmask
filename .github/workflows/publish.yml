@@ -10,7 +10,7 @@ on:
 
 jobs:
     build:
-        runs-on: ubuntu-latest
+        runs-on: windows-latest
 
         steps:
             - uses: actions/checkout@v2
@@ -21,9 +21,8 @@ jobs:
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             - run: ls ./node_modules/@img
-
             - run: npm run generateIgnoreFiles
-            - run: ls -la
+            - run: ls
             - run: npm run package-full
 
             #   run: echo "target=${{ matrix.platform }}-${{ matrix.arch }}" >> $env:GITHUB_ENV
