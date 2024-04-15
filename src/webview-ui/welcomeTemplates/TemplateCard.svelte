@@ -1,10 +1,16 @@
 <script>
-    export let data = {};
+    export let data = {},
+        onSelect;
     const { url, descHTML } = data;
 </script>
 
 <div class="card">
-    <div class="preview"></div>
+    <div
+        class="preview"
+        on:click={() => {
+            onSelect(url);
+        }}
+    ></div>
     <div class="desc">{@html descHTML}</div>
 </div>
 

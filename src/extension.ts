@@ -44,6 +44,7 @@ import { delayPromise } from "./utils/delayPromise";
 import { copyRecursiveSync } from "./utils/copyFilesRecursive";
 import { TabInfo } from "./TabInfo";
 import slash from "slash";
+import { downloadTemplate } from "./utils/downloadTemplate";
 
 // import { selection } from "./global";
 
@@ -629,8 +630,9 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 
     async function createProject(url = "") {
+        if (!url) return; // !!!!
         // ! need to check if project already there !!!
-
+        // ? translate #tr
         const options: vscode.SaveDialogOptions = {
             saveLabel: "Create",
             title: "Create mew vkmask project",
@@ -640,22 +642,22 @@ export async function activate(context: vscode.ExtensionContext) {
         appState = AppState.loading;
         onSendAppState();
 
-        const sampleProjectDir = vscode.Uri.joinPath(context.extensionUri, "res", "empty-project");
-        print("sample dir", sampleProjectDir.toString());
+        // print("url", url);
 
-        const fileUri = await vscode.window.showSaveDialog(options);
-        if (fileUri) {
-            print("new project folder", fileUri.fsPath);
-            const newProjectDir = fileUri;
-
-            // print(sampleProjectDir)
-            copyRecursiveSync(sampleProjectDir.fsPath, newProjectDir.fsPath);
-            recentProjectInfo.addInfo(newProjectDir.fsPath);
-            vscode.commands.executeCommand(`vscode.openFolder`, newProjectDir);
-        } else {
+        const newProjectUri = await vscode.window.showSaveDialog(options);
+        if (!newProjectUri || !(await downloadTemplate(newProjectUri.fsPath, url))) {
+            // on cancel
             appState = oldState;
             onSendAppState();
+            return;
         }
+
+        recentProjectInfo.addInfo(newProjectUri.fsPath);
+        vscode.commands.executeCommand(`vscode.openFolder`, newProjectUri);
+
+        // const sampleProjectDir = vscode.Uri.joinPath(context.extensionUri, "res", "empty-project");
+        // print("sample dir", sampleProjectDir.toString());
+        // copyRecursiveSync(sampleProjectDir.fsPath, newProjectDir.fsPath);
     }
 
     // function updateAppState() {
@@ -784,6 +786,7 @@ export async function activate(context: vscode.ExtensionContext) {
         })
     );
 
+    // todo hide when project missing
     context.subscriptions.push(
         vscode.commands.registerCommand("vkmask.archiveProject", async () => {
             vscode.window.showInformationMessage(

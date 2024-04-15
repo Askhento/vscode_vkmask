@@ -28,9 +28,9 @@
         print("recived ", data);
         const { payload, command } = data;
         switch (command) {
-            // case RequestCommand.updateAppState:
-            //     processAppState(payload);
-            //     break;
+            case RequestCommand.updateAppState:
+                processAppState(payload);
+                break;
 
             // case RequestCommand.getLogs:
             //     returnLogs(data);
@@ -43,6 +43,26 @@
             default:
                 break;
         }
+    }
+
+    function processAppState(payload) {
+        appState = payload.state;
+        print("state", payload);
+    }
+    async function getAppState() {
+        const { payload } = await messageHandler.request({
+            target: RequestTarget.extension,
+            command: RequestCommand.getAppState,
+        });
+        processAppState(payload);
+    }
+
+    function sendCreateNewProject(url) {
+        messageHandler.send({
+            command: RequestCommand.createProject,
+            target: RequestTarget.extension,
+            payload: url,
+        });
     }
 
     async function getLocatization() {
@@ -61,7 +81,7 @@
     async function init() {
         await getLocatization();
 
-        // await getAppState();
+        await getAppState();
         // if (appState === AppState.error) return;
         // getSettings();
     }
@@ -71,6 +91,9 @@
 
 <div class="main-container">
     <h1 class="top-header">l{l10n.t("locale.welcomeTemplates.topHeader")}</h1>
+    {#if appState === AppState.loading}
+        <Loading dark={true} scale={2} />
+    {/if}
     {#each templatesData as { name, children }, i}
         <vscode-divider class="divider" role="separator" />
         <div
@@ -95,7 +118,7 @@
         {#if $tabInfo[i]}
             <div class="card-container" transition:slide>
                 {#each children as data}
-                    <TemplateCard {data} />
+                    <TemplateCard {data} onSelect={sendCreateNewProject} />
                 {/each}
             </div>
         {/if}
@@ -118,6 +141,7 @@
         display: flex;
         justify-content: start;
         align-items: center;
+        cursor: pointer;
     }
     .card-container {
         display: flex;
