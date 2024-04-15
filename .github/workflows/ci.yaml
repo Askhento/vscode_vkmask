@@ -62,7 +62,7 @@ jobs:
             - shell: pwsh
               run: echo "target=${{ matrix.platform }}-${{ matrix.arch }}" >> $env:GITHUB_ENV
             - run: npx vsce package --target ${{ env.target }}
-              timeout-minutes: 1.5
+              timeout-minutes: 2
             - run: echo "${{ env.target }} package done"
 
             - uses: actions/upload-artifact@v2
