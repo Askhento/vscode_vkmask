@@ -10,7 +10,7 @@ on:
 
 jobs:
     build:
-        runs-on: windows-latest
+        runs-on: ubuntu-latest
 
         steps:
             - uses: actions/checkout@v2
@@ -23,13 +23,11 @@ jobs:
             - run: ls ./node_modules/@img
             - run: npx vsce --version
             # - run: cat package.json
-            - shell: pwsh
-              run: npm run package-full
+            - run: npm run package-full
             - run: ls
             - run: ls ./vsix-packages
 
-            - shell: pwsh
-              run: npx vsce publish -p ${{ secrets.VSCE_PAT }} --packagePath $(find . -iname *.vsix)
+            - run: npx vsce publish -p ${{ secrets.VSCE_PAT }} --packagePath $(find . -iname *.vsix)
               env:
                   VSCE_PAT: ${{ secrets.VSCE_PAT }}
             # - uses: actions/upload-artifact@v2
