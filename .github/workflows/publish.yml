@@ -10,7 +10,7 @@ on:
 
 jobs:
     build:
-        runs-on: windows-latest
+        runs-on: ubuntu-latest
 
         steps:
             - uses: actions/checkout@v2
@@ -20,17 +20,18 @@ jobs:
             - run: npm install -f
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            - shell: pwsh
-              run: npm run prepublish
+
+            - run: npm run generateIgnoreFiles
+            - run: npm run package-full
             #   run: echo "target=${{ matrix.platform }}-${{ matrix.arch }}" >> $env:GITHUB_ENV
             # - run: npx vsce package --target ${{ env.target }}
             #   timeout-minutes: 1.5
             # - run: echo "${{ env.target }} package done"
 
-            # - uses: actions/upload-artifact@v2
-            #   with:
-            #       name: ${{ env.target }}
-            #       path: "*.vsix"
+            - uses: actions/upload-artifact@v2
+              with:
+                  name: ${{ env.target }}
+                  path: "*.vsix"
 
     # publish:
     #     runs-on: ubuntu-latest
