@@ -27,11 +27,8 @@ jobs:
             - shell: pwsh
               run: npm run package-full
 
-            #   run: echo "target=${{ matrix.platform }}-${{ matrix.arch }}" >> $env:GITHUB_ENV
-            # - run: npx vsce package --target ${{ env.target }}
-            #   timeout-minutes: 1.5
-            # - run: echo "${{ env.target }} package done"
-            - run: ls ./vsix_packages
+            - shell: pwsh
+              run: npm run publish-extension
             # - uses: actions/upload-artifact@v2
             #   with:
             #       name: ${{ env.target }}
