@@ -23,8 +23,9 @@ jobs:
             - run: ls ./node_modules/@img
 
             - run: npm run generateIgnoreFiles
-            - run: ls
+            - run: ls -la
             - run: npm run package-full
+
             #   run: echo "target=${{ matrix.platform }}-${{ matrix.arch }}" >> $env:GITHUB_ENV
             # - run: npx vsce package --target ${{ env.target }}
             #   timeout-minutes: 1.5
