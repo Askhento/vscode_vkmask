@@ -10,11 +10,8 @@ on:
 
 jobs:
     build:
-        runs-on:
-            - os: windows-latest
-              platform: win32
-              arch: x64
-              npm_config_arch: x64
+        runs-on: windows-latest
+
         steps:
             - uses: actions/checkout@v2
             - uses: actions/setup-node@v2
