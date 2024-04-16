@@ -189,22 +189,6 @@
         align-items: center;
     }
 
-    .icon-wrapper {
-        display: flex;
-        justify-content: start;
-        align-content: center;
-        flex-wrap: wrap;
-        height: var(--global-block-height);
-        width: var(--global-block-height);
-    }
-
-    .icon-wrapper > span {
-        /* cursor: pointer; */
-        width: fit-content;
-        height: fit-content;
-        margin: 0;
-    }
-
     .error {
         color: red;
         /* color: var(--vscode-inputValidation-errorBackground); */
@@ -223,11 +207,6 @@
     vscode-divider {
         width: calc(100% + 2 * var(--global-margin));
         margin-left: calc(0px - var(--global-margin));
-    }
-
-    .icon-wrapper > span:hover {
-        opacity: 0.5;
-        /* color: var(--badge-background); */
     }
 
     /* .darker {

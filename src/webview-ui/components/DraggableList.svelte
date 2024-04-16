@@ -5,7 +5,7 @@
     export let elements = [],
         elementComponent,
         onDrop,
-        name = "List",
+        // name = "List",
         dndProps = { dropFromOthersDisabled: true };
 
     export let flipDurationMs = 300;

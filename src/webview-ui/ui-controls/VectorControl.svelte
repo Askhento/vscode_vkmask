@@ -218,7 +218,7 @@
         cursor: not-allowed;
     }
 
-    input.error {
+    /* input.error {
         color: red;
-    }
+    } */
 </style>

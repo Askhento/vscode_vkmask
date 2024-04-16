@@ -163,13 +163,6 @@
 </span>
 
 <style>
-    * {
-        /* margin: var(--global-margin); */
-
-        /* padding: 0; */
-        /* box-sizing: border-box; */
-    }
-
     span.label {
         padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);

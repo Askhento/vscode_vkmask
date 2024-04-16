@@ -29,7 +29,7 @@
         cy = 0,
         vx,
         vy,
-        speed,
+        // speed,
         parentElem,
         path,
         handleSizes = [2, 4],

@@ -3,7 +3,7 @@ import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
 // import esbuild from "rollup-plugin-esbuild";
 import typescript from "@rollup/plugin-typescript"; // esbuild have issues with svelte
-import json from "@rollup/plugin-json"
+import json from "@rollup/plugin-json";
 
 /** @type {import("rollup").RollupOptions} */
 export const extensionConfig = {
@@ -16,11 +16,14 @@ export const extensionConfig = {
     },
     plugins: [
         nodeResolve({
+            preferBuiltins: true,
         }),
         commonjs({
-            ignoreDynamicRequires: true
+            ignoreDynamicRequires: true,
         }),
-        typescript({}), json()],
+        typescript({}),
+        json(),
+    ],
     watch: {
         clearScreen: false,
         skipWrite: false,

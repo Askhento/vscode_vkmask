@@ -11,7 +11,7 @@
         ],
         "allowJs": true,
         "checkJs": false,
-        "sourceMap": false,
+        "sourceMap": true,
         "rootDir": "src",
         "strict": false, /* enable all strict type-checking options */
         "noUncheckedIndexedAccess": false,

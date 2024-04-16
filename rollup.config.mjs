@@ -132,6 +132,7 @@ const svelteCommon = {
             browser: true,
             dedupe: ["svelte"],
             extensions: [".js", ".ts", ".svelte"], //  added to solve UNRESOLVED it helped!
+            preferBuiltins: true, // suppress warning
         }),
         commonjs(),
 
@@ -162,12 +163,12 @@ function getSvelteEntry(name) {
 }
 
 export default [
-    getSvelteEntry("effects"),
-    getSvelteEntry("plugins"),
-    getSvelteEntry("projectManager"),
-    getSvelteEntry("assetsManager"),
-    getSvelteEntry("parameters"),
-    getSvelteEntry("liquifiedWarpEditor"),
+    // getSvelteEntry("effects"),
+    // getSvelteEntry("plugins"),
+    // getSvelteEntry("projectManager"),
+    // getSvelteEntry("assetsManager"),
+    // getSvelteEntry("parameters"),
+    // getSvelteEntry("liquifiedWarpEditor"),
     getSvelteEntry("welcomeTemplates"),
-    extensionConfig,
+    // extensionConfig,
 ];

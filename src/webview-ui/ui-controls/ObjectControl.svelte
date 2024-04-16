@@ -304,9 +304,6 @@
         margin-bottom: var(--global-grid-row-gap);
     }
 
-    .info-hit-box {
-    }
-
     .object-label {
         cursor: pointer;
         color: var(--vscode-descriptionForeground);

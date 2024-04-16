@@ -17,7 +17,6 @@
     export let expanded = true;
 
     export let value;
-    export let label;
     export let path;
     export let uiElements;
     export let params;
@@ -197,14 +196,6 @@
         padding: 0;
         margin-top: var(--global-margin);
     }  */
-
-    .label {
-        justify-self: var(--label-justify);
-        color: var(--vscode-descriptionForeground);
-        grid-column: 1/3;
-        justify-self: self-start;
-        cursor: pointer;
-    }
 
     /* span.label {
         padding-left: var(--global-body-padding-left);

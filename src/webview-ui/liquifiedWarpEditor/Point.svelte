@@ -140,11 +140,11 @@
 </g>
 
 <style>
-    div.controls-wrapper {
+    /* div.controls-wrapper {
         z-index: 20;
         pointer-events: all;
-        /* position: absolute; */
-    }
+        position: absolute;
+    } */
 
     circle {
         fill: red;
@@ -186,7 +186,7 @@
         transition-duration: 0.5s;
     }
 
-    .hidden {
+    /* .hidden {
         opacity: 0;
-    }
+    } */
 </style>

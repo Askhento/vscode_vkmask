@@ -5,7 +5,7 @@
     import NumberSliderControl from "./NumberSliderControl.svelte";
     import VectorControl from "./VectorControl.svelte";
 
-    export let label, value, path;
+    export let value, path;
 
     path = path.slice(0, -1); // meh :(
 

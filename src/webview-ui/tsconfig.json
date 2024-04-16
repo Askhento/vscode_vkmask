@@ -9,6 +9,7 @@
           "node",
           "svelte"
       ],
+      "sourceMap": true,
      "skipLibCheck": true,
      
     "ignoreDeprecations" : "5.0",

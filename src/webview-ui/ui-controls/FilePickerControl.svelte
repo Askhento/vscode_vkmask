@@ -527,23 +527,23 @@
         color: red;
     }
 
-    vscode-text-field {
-        /* position: absolute; */
-        /* display: flex; */
-        /* flex: 0 0 auto; */
-        /* z-index: 10; */
-        margin: unset;
-        /* width: 200px; */
-    }
+    /* vscode-text-field { */
+    /* position: absolute; */
+    /* display: flex; */
+    /* flex: 0 0 auto; */
+    /* z-index: 10; */
+    /* margin: unset; */
+    /* width: 200px; */
+    /* } */
 
-    vscode-text-field.error::part(control) {
-        /* border: calc(var(--border-width) * 1px) solid var(--vscode-errorForeground); */
-        background: var(--vscode-inputValidation-errorBackground);
-    }
+    /* vscode-text-field.error::part(control) { */
+    /* border: calc(var(--border-width) * 1px) solid var(--vscode-errorForeground); */
+    /* background: var(--vscode-inputValidation-errorBackground); */
+    /* } */
 
-    vscode-text-field.error {
+    /* vscode-text-field.error {
         animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-    }
+    } */
 
     vscode-button {
         height: var(--global-block-height-borded);

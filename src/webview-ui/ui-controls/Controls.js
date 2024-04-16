@@ -22,7 +22,6 @@ import ObjectControl from "./ObjectControl.svelte";
 import ArrayControl from "./ArrayControl.svelte";
 import MainScriptControl from "./MainScriptControl.svelte";
 import IconControl from "./IconControl.svelte";
-import TexturePickerControl from "./TexturePickerControl.svelte";
 import UVControl from "./UVControl.svelte";
 
 export const uiControlsMap = {
@@ -41,7 +40,6 @@ export const uiControlsMap = {
     [uiDescriptions.array.name]: ArrayControl,
     [uiDescriptions.mainScript.name]: MainScriptControl,
     [uiDescriptions.icon.name]: IconControl,
-    [uiDescriptions.texture.name]: TexturePickerControl,
     [uiDescriptions.uv_transform.name]: UVControl,
 };
 

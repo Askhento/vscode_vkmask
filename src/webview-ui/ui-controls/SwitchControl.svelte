@@ -44,7 +44,7 @@
         infoVisible = true;
     }}
 >
-    <vscode-checkbox role="checkbox" checked={value} on:click={onChange} />
+    <vscode-checkbox role="checkbox" checked={value} on:click={onChange} tabindex="1" />
     <InfoBox visible={infoVisible} info={params.info} />
 </span>
 

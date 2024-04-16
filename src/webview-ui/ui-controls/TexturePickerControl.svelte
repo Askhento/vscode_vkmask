@@ -227,12 +227,12 @@
         flex-direction: column;
     }
 
-    .value-text {
+    /* .value-text {
         height: var(--global-block-height);
         display: flex;
         justify-items: center;
         position: relative;
-    }
+    } */
 
     img.file-preview {
         display: inline-block;

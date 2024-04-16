@@ -338,7 +338,7 @@
         "publish-minor": "npm version minor ; npm run package",
         "unmount": "./ramdisk_scripts/darwin.sh 2 ./out",
         "package-full": "rimraf -g ./vsix-packages/** && npm run package-all",
-        "package-all": "mkdir vsix-packages && npm run package-win32-x64 && npm run package-darwin-x64 && npm run package-darwin-arm64",
+        "package-all": "mkdir ./vsix-packages && npm run package-win32-x64 && npm run package-darwin-x64 && npm run package-darwin-arm64",
         "package-win32-x64": "npx vsce package --target win32-x64 --ignoreFile .win32-x64.vscodeignore --out ./vsix-packages",
         "package-darwin-x64": "vsce package --target darwin-x64 --ignoreFile .darwin-x64.vscodeignore --out ./vsix-packages",
         "package-darwin-arm64": "vsce package --target darwin-arm64 --ignoreFile .darwin-arm64.vscodeignore --out ./vsix-packages",
