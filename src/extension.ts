@@ -579,11 +579,11 @@ export async function activate(context: vscode.ExtensionContext) {
 
     async function openProject(folder: string) {
         if (folder) {
+            folder = slash(folder);
             // notes : https://www.eliostruyf.com/opening-folders-visual-studio-code-extension/
             print("new folder", folder);
             const maskJsonFile = path.join(folder, "mask.json");
 
-            //!!! need a slash
             if (!fs.existsSync(maskJsonFile)) {
                 vscode.window.showErrorMessage(`Project does not seems to exist: \n${folder}`);
                 messageHandler.send({
