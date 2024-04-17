@@ -545,7 +545,6 @@ export const ZMaterialObject = z.preprocess(
             environment: ZTextureAsset({
                 info: { infoList: "locale.material.environment.infoList" },
                 label: "locale.material.environment.label",
-                info: { infoList: "locale.material.environment.infoList" },
                 group: "environment",
             }),
 

@@ -89,7 +89,7 @@ export class BaseWebviewPanel {
      */
     private _getWebviewContent() {
         // The CSS file from the Svelte build output
-        const stylesUri = getUri(this.webview, this._extensionUri, [this._buildPath, "bundle.css"]);
+        const stylesUri = getUri(this.webview, this._extensionUri, [this._buildPath, "main.css"]);
         const globalVarsUri = getUri(this.webview, this._extensionUri, [
             this._buildPath,
             "..",
@@ -97,7 +97,7 @@ export class BaseWebviewPanel {
         ]);
 
         // The JS file from the Svelte build output
-        const scriptUri = getUri(this.webview, this._extensionUri, [this._buildPath, "bundle.js"]);
+        const scriptUri = getUri(this.webview, this._extensionUri, [this._buildPath, "main.js"]);
 
         // console.log("base panel scriptUri", scriptUri);
         const codiconsUri = this.webview.asWebviewUri(

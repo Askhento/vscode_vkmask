@@ -18,10 +18,8 @@
     // import AddEffect from "./AddEffect.svelte";
     import * as l10n from "@vscode/l10n";
     import Loading from "../components/Loading.svelte";
-
     const print = logger("AppEffects.svelte");
     const origin = RequestTarget.effects;
-
     provideVSCodeDesignSystem().register(allComponents);
 
     const selection = writable<Selection>({ type: SelectionType.empty });
@@ -280,7 +278,6 @@
                 <List
                     elements={$effects}
                     elementComponent={Effect}
-                    name="Effects"
                     onDrop={async (newElements, dragId) => {
                         // !!! check type of selection
                         const newId = newElements.findIndex((e) => e.id === dragId);

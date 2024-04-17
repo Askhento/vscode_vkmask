@@ -754,11 +754,11 @@
         column-gap: var(--global-grid-column-gap);
         row-gap: var(--global-grid-row-gap);
     }
-
+    /* 
     .header-wrapper {
         display: flex;
         flex-direction: row;
-    }
+    } */
     .parameters-wrapper {
         position: relative;
         /* var(--global-body-padding-left) */

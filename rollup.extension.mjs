@@ -1,7 +1,7 @@
 // extension and common modules
 import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
-// import esbuild from "rollup-plugin-esbuild";
+import esbuild from "rollup-plugin-esbuild";
 import typescript from "@rollup/plugin-typescript"; // esbuild have issues with svelte
 import json from "@rollup/plugin-json";
 
@@ -21,7 +21,8 @@ export const extensionConfig = {
         commonjs({
             ignoreDynamicRequires: true,
         }),
-        typescript({}),
+        // typescript({}),
+        esbuild({}),
         json(),
     ],
     watch: {

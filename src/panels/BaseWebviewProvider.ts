@@ -62,7 +62,7 @@ export class BaseWebviewProvider implements WebviewViewProvider {
      */
     private _getWebviewContent() {
         // The CSS file from the Svelte build output
-        const stylesUri = getUri(this.webview, this._extensionUri, [this._buildPath, "bundle.css"]);
+        const stylesUri = getUri(this.webview, this._extensionUri, [this._buildPath, "main.css"]);
         const globalVarsUri = getUri(this.webview, this._extensionUri, [
             this._buildPath,
             "..",
@@ -70,7 +70,7 @@ export class BaseWebviewProvider implements WebviewViewProvider {
         ]);
 
         // The JS file from the Svelte build output
-        const scriptUri = getUri(this.webview, this._extensionUri, [this._buildPath, "bundle.js"]);
+        const scriptUri = getUri(this.webview, this._extensionUri, [this._buildPath, "main.js"]);
         const codiconsUri = this.webview.asWebviewUri(
             vscode.Uri.joinPath(
                 this._extensionUri,
@@ -81,6 +81,7 @@ export class BaseWebviewProvider implements WebviewViewProvider {
                 "codicon.css"
             )
         );
+        //
 
         const nonce = getNonce();
         // Tip: Install the es6-string-html VS Code extension to enable code highlighting below
@@ -94,8 +95,7 @@ export class BaseWebviewProvider implements WebviewViewProvider {
           <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${this.webview.cspSource} 'unsafe-inline'; img-src ${this.webview.cspSource} data:; style-src ${this.webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}' 'unsafe-inline';">
 
             <link rel="stylesheet" type="text/css" href="${globalVarsUri}">
-
-          <link rel="stylesheet" type="text/css" href="${stylesUri}">
+            <link rel="stylesheet" type="text/css" href="${stylesUri}">
           <link rel="stylesheet" type="text/css" href="${codiconsUri}">
 
           <script defer nonce="${nonce}" src="${scriptUri}"></script>

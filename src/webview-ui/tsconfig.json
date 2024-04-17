@@ -18,6 +18,6 @@
     "moduleResolution": "Bundler"
   },
 
-  "include": ["../webview-ui", "../types.ts"], 
+  "include": ["./", "../types.ts"], 
   "exclude": ["node_modules", "__sapper__/*"]
 }

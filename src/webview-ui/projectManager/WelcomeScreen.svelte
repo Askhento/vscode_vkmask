@@ -9,7 +9,6 @@
     import { getContext } from "svelte";
     //@ts-expect-error
     const { messageHandler } = getContext("stores");
-
     export let recentProjectInfo: RecentProjectInfo[] = [];
 
     async function getRecentProjectInfo() {
@@ -18,7 +17,6 @@
             target: RequestTarget.extension,
         });
 
-        // print(resp);
         recentProjectInfo = payload;
     }
 
@@ -144,28 +142,6 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-    }
-
-    .recent-link {
-        max-width: fit-content;
-        min-width: 0;
-        /* width: 5rem; */
-
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        margin-right: 1rem;
-    }
-
-    .recent-path {
-        /* width: 10rem; */
-        /* max-width: 15rem; */
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        margin-right: 1rem;
-
-        /* background-color: aquamarine; */
     }
 
     .recent-date {

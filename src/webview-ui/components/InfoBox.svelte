@@ -14,7 +14,7 @@
 
     let infoOpened = false;
     $: translationExist = infoHeader.length > 0 && !l10n.t(infoHeader).startsWith("locale.");
-    $: console.log(translationExist, infoHeader);
+    // $: console.log(translationExist, infoHeader);
     //  let infoOpened = false,
     //     visible = false,
     //     errors = [],

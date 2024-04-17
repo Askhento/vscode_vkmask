@@ -1,9 +1,11 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 
+// const l10n = await import("@vscode/l10n")
 import * as fs from "fs";
 import * as vscode from "vscode";
 import * as l10n from "@vscode/l10n";
+// const l10n = require("@vscode/l10n");
 import { EffectsViewProvider } from "./panels/EffectsViewProvider";
 import { ProjectManagerViewProvider } from "./panels/ProjectManagerViewProvider";
 import { PluginsViewProvider } from "./panels/PluginsViewProvider";
@@ -107,7 +109,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     maskConfig.on("error", onError);
 
-    const webviewsBuildPath = path.join("out", "panels", "webview-build");
+    const webviewsBuildPath = path.join("out", "webview-ui");
     const webviewProviders: Array<BaseWebviewProvider> = [];
 
     const effectsBuildPath = path.join(webviewsBuildPath, "effects");
@@ -850,7 +852,7 @@ export async function activate(context: vscode.ExtensionContext) {
         let watchLock = false;
         let watchTimeout: NodeJS.Timeout;
 
-        const webviewBuildDir = path.join(context.extensionPath, "out", "panels", "webview-build");
+        const webviewBuildDir = path.join(context.extensionPath, "out", "webview-ui");
         const webviewWatcher = vscode.workspace.createFileSystemWatcher(
             new vscode.RelativePattern(webviewBuildDir, "**")
         );
@@ -867,7 +869,7 @@ export async function activate(context: vscode.ExtensionContext) {
                     // watchLock = false;
                     vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction");
                     print("Reload due to file changed");
-                }, 2000);
+                }, 500);
                 // watchLock = true;
             })
         );
