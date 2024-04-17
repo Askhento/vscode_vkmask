@@ -23,6 +23,7 @@
     const messageHandler = new MessageHandler(handleMessageApp, origin);
     let appState = AppState.loading;
     let tabInfo = writable(templatesData.map((el) => false));
+    let locale = null;
 
     async function handleMessageApp(data: MessageHandlerData<any>) {
         print("recived ", data);
@@ -71,9 +72,10 @@
             command: RequestCommand.getLocalization,
         });
 
+        locale = payload;
         if (payload) {
             l10n.config({
-                contents: payload,
+                contents: locale,
             });
         }
     }
@@ -89,41 +91,43 @@
     init();
 </script>
 
-<div class="main-container">
-    <h1 class="top-header">l{l10n.t("locale.welcomeTemplates.topHeader")}</h1>
-    {#if appState === AppState.loading}
-        <Loading dark={true} scale={2} />
-    {/if}
-    {#each templatesData as { name, children }, i}
-        <vscode-divider class="divider" role="separator" />
-        <div
-            class="category-header"
-            on:click={() => {
-                if ($tabInfo[i]) {
-                    $tabInfo[i] = false;
-                    return;
-                }
-
-                $tabInfo = $tabInfo.map((tab) => false);
-
-                $tabInfo[i] = true;
-            }}
-        >
-            <i class="codicon codicon-chevron-{$tabInfo[i] ? 'down' : 'right'}" />
-
-            <h4 class="category">
-                {name}
-            </h4>
-        </div>
-        {#if $tabInfo[i]}
-            <div class="card-container" transition:slide>
-                {#each children as data}
-                    <TemplateCard {data} onSelect={sendCreateNewProject} />
-                {/each}
-            </div>
+{#key locale}
+    <div class="main-container">
+        <h1 class="top-header">{l10n.t("locale.welcomeTemplates.topHeader")}</h1>
+        {#if appState === AppState.loading}
+            <Loading dark={true} scale={2} />
         {/if}
-    {/each}
-</div>
+        {#each templatesData as { name, children }, i}
+            <vscode-divider class="divider" role="separator" />
+            <div
+                class="category-header"
+                on:click={() => {
+                    if ($tabInfo[i]) {
+                        $tabInfo[i] = false;
+                        return;
+                    }
+
+                    $tabInfo = $tabInfo.map((tab) => false);
+
+                    $tabInfo[i] = true;
+                }}
+            >
+                <i class="codicon codicon-chevron-{$tabInfo[i] ? 'down' : 'right'}" />
+
+                <h4 class="category">
+                    {name}
+                </h4>
+            </div>
+            {#if $tabInfo[i]}
+                <div class="card-container" transition:slide>
+                    {#each children as data}
+                        <TemplateCard {data} onSelect={sendCreateNewProject} />
+                    {/each}
+                </div>
+            {/if}
+        {/each}
+    </div>
+{/key}
 
 <style>
     .main-container {

@@ -17,6 +17,7 @@ export class RecentProjects {
         private infoStorageKey = "vkmask.recentProjects"
     ) {}
 
+    //? #bug need to compare paths with path.relative ?
     async addInfo(newPath: string) {
         if (!fs.existsSync(newPath)) {
             console.log(`RecentProjectInfo  addInfo: ${newPath} don't exist`);

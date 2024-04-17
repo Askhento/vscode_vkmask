@@ -344,7 +344,8 @@
         "package-darwin-arm64": "vsce package --target darwin-arm64 --ignoreFile .darwin-arm64.vscodeignore --out ./vsix-packages",
         "publish-extension": "find ./vsix-packages -iname *.vsix | xargs -n 1 npx vsce publish --packagePath",
         "generateIgnoreFiles": "./generateIgnoreFiles.sh darwin-x64 darwin-arm64 win32-x64",
-        "generateBuiltins": "npx ts-node-esm ./src/generateBuiltins.ts"
+        "generateBuiltins": "npx ts-node-esm ./src/generateBuiltins.ts",
+        "locale": "node ./l10n/update-missing-locale.mjs"
     },
     "devDependencies": {
         "@hyrious/esbuild-plugin-commonjs": "^0.2.4",
