@@ -593,7 +593,7 @@ export async function activate(context: vscode.ExtensionContext) {
                     payload: await recentProjectInfo.getInfo(),
                 });
             }
-            const folderUri = vscode.Uri.parse(folder);
+            const folderUri = vscode.Uri.file(folder);
             vscode.commands.executeCommand(`vscode.openFolder`, folderUri);
             return;
         }

@@ -1,4 +1,4 @@
-import * as path from "path";
+import { posix as path } from "path";
 import * as vscode from "vscode";
 import * as util from "util"; // has no default export
 import * as fs from "fs";

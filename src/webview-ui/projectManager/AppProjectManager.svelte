@@ -66,6 +66,7 @@
 
             case RequestCommand.getRecentProjectInfo:
                 recentProjectInfo = payload;
+                print("RECEMT", recentProjectInfo);
                 break;
 
             case RequestCommand.updateTabInfo:

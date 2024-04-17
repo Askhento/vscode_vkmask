@@ -1,6 +1,6 @@
 import * as vscode from "vscode";
 import * as fs from "fs";
-import * as path from "path";
+import { posix as path } from "path";
 
 import * as jsonMap from "json-source-map";
 import { jsonPrettyArray } from "./utils/jsonStringify";
@@ -13,6 +13,7 @@ import { EventEmitter } from "events";
 import { logger } from "./Logger";
 import { SelectionType, ErrorType } from "./types";
 import type { AppError, Selection } from "./types";
+import slash from "slash";
 
 const print = (...args: unknown[]) => logger.log(__filename, ...args);
 
@@ -326,7 +327,7 @@ export class MaskConfig extends EventEmitter {
             return false;
         }
 
-        const dir = vscode.workspace.workspaceFolders?.[0].uri.fsPath;
+        const dir = slash(vscode.workspace.workspaceFolders?.[0].uri.fsPath);
 
         if (!this.checkConfigAtPath(dir)) {
             print("No mask.json at " + dir);
