@@ -6,7 +6,7 @@ import { parseSourceKeys } from "./parseSourceKeys.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-function updateBundle(refBundle, bundleName, dryRun = false) {
+function updateBundle(refBundle, bundleName, config) {
     const lang = bundleName.split(".").at(-2);
     console.log(`\nReading ${bundleName} ... lang=${lang}`);
     const bundlePath = path.join(__dirname, bundleName);
@@ -26,8 +26,12 @@ function updateBundle(refBundle, bundleName, dryRun = false) {
         console.log(`Will add key ${key} to ${bundleName}`);
     });
 
+    if (config.sortKeys) {
+        bundle = getSortedBundle(bundle);
+    }
+
     if (needUpdate) {
-        if (dryRun) return;
+        if (config.dryRun) return;
         console.log(`Writing ${bundleName}`);
         fs.writeFileSync(bundlePath, JSON.stringify(bundle, null, "\t"));
     } else {
@@ -74,7 +78,16 @@ function checkExistingTranslations(bundleName, translations, dryRun = false) {
     }
 }
 
-function processSourceBundles(translations, dryRun = false) {
+function getSortedBundle(bundle) {
+    return Object.keys(bundle)
+        .sort()
+        .reduce((obj, key) => {
+            obj[key] = bundle[key];
+            return obj;
+        }, {});
+}
+
+function processSourceBundles(translations, config = { dryRun: false, sortKeys: false }) {
     console.log("Porcessing source bundles\n");
 
     const mainBundlePath = path.join(__dirname, "bundle.l10n.json");
@@ -91,6 +104,10 @@ function processSourceBundles(translations, dryRun = false) {
         needWriteMain = true;
     });
 
+    if (config.sortKeys) {
+        mainBundle = getSortedBundle(mainBundle);
+    }
+
     if (needWriteMain) {
         console.log(`Writing : bundle.l10n.json`);
         fs.writeFileSync(mainBundlePath, JSON.stringify(mainBundle, null, "\t"));
@@ -105,8 +122,10 @@ function processSourceBundles(translations, dryRun = false) {
     console.log("\nUpdating sources bundles");
 
     bundles.forEach((bundleName) => {
-        updateBundle(mainBundle, bundleName);
-        checkExistingTranslations(bundleName, translations, dryRun);
+        // fill missing keys, notify unknown
+        updateBundle(mainBundle, bundleName, config);
+        // // check if we can find existing translations from csv file
+        // checkExistingTranslations(bundleName, translations, config.dryRun);
     });
 }
 
@@ -157,8 +176,9 @@ const csvURL =
 const translations = {
     ru: await getTranslations(csvURL), // ! could be null
 };
+f;
 
-processSourceBundles(translations, false);
+processSourceBundles(translations, { dryRun: false, sortKeys: true });
 
 // processContributionBundles(translations, true);
 // console.log(translations);

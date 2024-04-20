@@ -1,5 +1,3 @@
-// !!! changed to js so that i dont get errors with rollup
-
 /*
     to get values stored in checks  
     ```
@@ -11,6 +9,7 @@
 */
 
 import { z } from "zod";
+import { mergician } from "mergician";
 
 export const uiDescriptions = {
     none: {
@@ -208,6 +207,13 @@ const AssetTypes = {
         directory: ["Textures"],
         typeName: "texture",
         label: "locale.assetTypes.texture.label",
+        info: {
+            clickLink:
+                "https://dev.vk.com/ru/masks/publication/resources#%D0%A2%D0%B5%D0%BA%D1%81%D1%82%D1%83%D1%80%D1%8B",
+
+            infoList: "locale.parameters.texture.infoList",
+            infoHeader: "locale.parameters.texture.infoHeader",
+        },
     },
     material: {
         defValue: "Materials/DefaultGrey.xml",
@@ -279,16 +285,16 @@ const ZPatchFitModeLabels = [
 ];
 
 const ZTechniqueAsset = (desc) =>
-    z.string().describe({ ...uiDescriptions.filepath, ...AssetTypes.technique, ...desc });
+    z.string().describe(mergician(uiDescriptions.filepath, AssetTypes.technique, desc));
 
 const ZModel3dAsset = (desc) =>
-    z.string().describe({ ...uiDescriptions.filepath, ...AssetTypes.model3d, ...desc });
+    z.string().describe(mergician(uiDescriptions.filepath, AssetTypes.model3d, desc));
 
 const ZTextureAsset = (desc) =>
-    z.string().describe({ ...uiDescriptions.filepath, ...AssetTypes.texture, ...desc });
+    z.string().describe(mergician(uiDescriptions.filepath, AssetTypes.texture, desc));
 
 const ZMaterialAsset = (desc) =>
-    z.string().describe({ ...uiDescriptions.filepath, ...AssetTypes.material, ...desc });
+    z.string().describe(mergician(uiDescriptions.filepath, AssetTypes.material, desc));
 
 const ZBlendModes = z.enum([
     "replace",
@@ -434,7 +440,7 @@ export const ZTextureObject =
     z
         .object({
             diffuse: ZTextureAsset({
-                info: { infoList: "locale.parameters.texture.diffuse.infoList" },
+                info: { infoHeader: "locale.parameters.texture.diffuse.infoHeader" },
                 label: "locale.parameters.texture.diffuse.label",
             }),
             blend_mode: ZBlendModes.describe({
@@ -523,27 +529,27 @@ export const ZMaterialObject = z.preprocess(
         .object({
             technique: ZTechniqueAsset({ label: "locale.material.technique.label" }),
             diffuse: ZTextureAsset({
-                info: { infoList: "locale.material.diffuse.infoList" },
+                info: { infoHeader: "locale.material.diffuse.infoHeader" },
                 label: "locale.material.diffuse.label",
                 group: "diffuse",
             }),
             normal: ZTextureAsset({
-                info: { infoList: "locale.material.normal.infoList" },
+                info: { infoHeader: "locale.material.normal.infoHeader" },
                 label: "locale.material.normal.label",
                 group: "normal",
             }),
             specular: ZTextureAsset({
-                info: { infoList: "locale.material.specular.infoList" },
+                info: { infoHeader: "locale.material.specular.infoHeader" },
                 label: "locale.material.specular.label",
                 group: "specular",
             }),
             emissive: ZTextureAsset({
-                info: { infoList: "locale.material.emissive.infoList" },
+                info: { infoHeader: "locale.material.emissive.infoHeader" },
                 label: "locale.material.emissive.label",
                 group: "emissive",
             }),
             environment: ZTextureAsset({
-                info: { infoList: "locale.material.environment.infoList" },
+                info: { infoHeader: "locale.material.environment.infoHeader" },
                 label: "locale.material.environment.label",
                 group: "environment",
             }),
@@ -973,9 +979,11 @@ const ZBeautifyEffect = ZBaseEffect.extend({
 });
 
 const lookupInfo = {
+    clickLink:
+        "https://dev.vk.com/ru/masks/publication/resources#%D0%A6%D0%B2%D0%B5%D1%82%D0%BE%D0%B2%D0%B0%D1%8F%20%D1%82%D0%B0%D0%B1%D0%BB%D0%B8%D1%86%D0%B0",
+
     infoList: "locale.parameters.colorfilter.lookup.infoList",
     infoHeader: "locale.parameters.colorfilter.lookup.infoHeader",
-    infoErrorHeader: "locale.parameters.colorfilter.lookup.infoErrorHeader",
 };
 
 const ZColorfilterEffect = ZBaseEffect.extend({
@@ -1748,7 +1756,6 @@ const iconInfo = {
 
     infoList: "locale.projectManager.icon.infoList",
     infoHeader: "locale.projectManager.icon.infoHeader",
-    infoErrorHeader: "locale.projectManager.icon.infoErrorHeader",
 };
 
 const ZIcon = z.string().describe({
@@ -1759,7 +1766,8 @@ const ZIcon = z.string().describe({
 
 const scriptInfo = {
     clickLink: "https://dev.vk.com/ru/masks/development/script-creation",
-    infoList: "locale.projectManager.mainScript.infoList",
+    infoHeader: "locale.projectManager.mainScript.infoHeader",
+    infoBody: "locale.projectManager.mainScript.infoBody",
 };
 const ZMainScriptAsset = z.string().describe({
     ...uiDescriptions.mainScript,
@@ -1776,7 +1784,13 @@ const MaskSettings = {
         optionLabels: UserHintOptionsLabels,
         defValue: UserHintOptions[0],
         label: "locale.projectManager.userHint.label",
-        info: { infoList: "locale.projectManager.userHint.infoList" },
+        info: {
+            clickLink:
+                "https://dev.vk.com/ru/masks/configuration#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B",
+            infoBody: "locale.projectManager.userHint.infoBody",
+            infoHeader: "locale.projectManager.userHint.infoHeader",
+            infoList: "locale.projectManager.userHint.infoList",
+        },
     }),
 
     // defValue, label, options = [], optionLabels = [], group = "main"
@@ -1785,7 +1799,13 @@ const MaskSettings = {
     mouse_input: z.boolean().describe({
         ...uiDescriptions.bool,
         label: "locale.projectManager.mouseInput.label",
-        info: { infoList: "locale.projectManager.mouseInput.infoList" },
+        info: {
+            clickLink:
+                "https://dev.vk.com/ru/masks/configuration#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B",
+            infoBody: "locale.projectManager.mouseInput.infoBody",
+            infoHeader: "locale.projectManager.mouseInput.infoHeader",
+            infoList: "locale.projectManager.mouseInput.infoList",
+        },
         defValue: false,
         showAlways: false,
         group: "permissions",

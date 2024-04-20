@@ -9,12 +9,18 @@
         clickLink = "",
         infoHeader = "",
         infoList = "",
-        infoErrorHeader = "",
+        infoErrorHeader = "locale.infobox.errorHeader",
+        infoBody = "",
     } = info;
 
     let infoOpened = false;
-    $: translationExist = infoHeader.length > 0 && !l10n.t(infoHeader).startsWith(`locale.`);
-    // $: console.log(translationExist, infoHeader);
+    $: headerTranslated = translationExits(infoHeader);
+    $: bodyTranslated = translationExits(infoBody);
+
+    function translationExits(str) {
+        return infoHeader.length > 0 && !l10n.t(str).startsWith(`locale.`);
+    }
+    // $: console.log(headerTranslated, infoHeader);
     //  let infoOpened = false,
     //     visible = false,
     //     errors = [],
@@ -30,7 +36,7 @@
     }
 </script>
 
-{#if infoList && (visible || infoOpened || errors.length) && translationExist}
+{#if infoList && (visible || infoOpened || errors.length) && headerTranslated}
     <div class="info-btn">
         <!-- <div class:error={errors.length} class="icon-wrapper">
             <span
@@ -60,6 +66,11 @@
                         {/each}
                     </span>
                 </div>
+                {#if bodyTranslated}
+                    <p>
+                        {l10n.t(infoBody)}
+                    </p>
+                {/if}
                 <ul>
                     {#each l10n.t(infoList).split("\n") as info}
                         <li class="info-text">
@@ -161,6 +172,10 @@
     .info-header {
         margin-left: var(--global-margin);
         text-wrap: wrap;
+    }
+
+    p {
+        margin-left: var(--global-margin);
     }
 
     ul {

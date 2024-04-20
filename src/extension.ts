@@ -188,15 +188,17 @@ export async function activate(context: vscode.ExtensionContext) {
     // });
 
     function checkLocalizationBundle(config = { forceUpdate: false }) {
-        l10nBundle = vscode.l10n.bundle;
-        if (!vscode.l10n.uri || config.forceUpdate) {
-            // bundle = fs.readFileSync(vscode.l10n.uri?.fsPath, { encoding: "utf-8" });
-            // default language
-            l10nBundle = fs.readFileSync(
-                path.join(context.extensionPath, "l10n", "bundle.l10n.json"),
-                { encoding: "utf-8" }
-            );
-        }
+        // l10nBundle = vscode.l10n.bundle;
+        const bundlePath = vscode.l10n.uri
+            ? vscode.l10n.uri.fsPath
+            : path.join(context.extensionPath, "l10n", "bundle.l10n.json");
+
+        // if (!vscode.l10n.uri) {
+        //     // bundle = fs.readFileSync(vscode.l10n.uri?.fsPath, { encoding: "utf-8" });
+        //     // default language
+        // }
+
+        l10nBundle = fs.readFileSync(bundlePath, { encoding: "utf-8" });
 
         l10n.config({ contents: l10nBundle });
     }
