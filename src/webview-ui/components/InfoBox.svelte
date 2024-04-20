@@ -16,9 +16,10 @@
     let infoOpened = false;
     $: headerTranslated = translationExits(infoHeader);
     $: bodyTranslated = translationExits(infoBody);
+    $: listTranslated = translationExits(infoList);
 
     function translationExits(str) {
-        return infoHeader.length > 0 && !l10n.t(str).startsWith(`locale.`);
+        return str.length > 0 && !l10n.t(str).startsWith(`locale.`);
     }
     // $: console.log(headerTranslated, infoHeader);
     //  let infoOpened = false,
@@ -36,7 +37,7 @@
     }
 </script>
 
-{#if infoList && (visible || infoOpened || errors.length) && headerTranslated}
+{#if (visible || infoOpened || errors.length) && headerTranslated}
     <div class="info-btn">
         <!-- <div class:error={errors.length} class="icon-wrapper">
             <span
@@ -56,7 +57,7 @@
         >
             <span class:error={errors.length} class="codicon codicon-info" />
         </vscode-button>
-        {#if infoOpened && (infoList.length || errors.length)}
+        {#if infoOpened}
             <div use:clickOutside on:click_outside={handleClickOutside} class="info-box-wrapper">
                 <div class="info-header-wrapper">
                     <span class="codicon codicon-info"></span>
@@ -71,13 +72,15 @@
                         {l10n.t(infoBody)}
                     </p>
                 {/if}
-                <ul>
-                    {#each l10n.t(infoList).split("\n") as info}
-                        <li class="info-text">
-                            {info}
-                        </li>
-                    {/each}
-                </ul>
+                {#if listTranslated}
+                    <ul>
+                        {#each l10n.t(infoList).split("\n") as info}
+                            <li class="info-text">
+                                {info}
+                            </li>
+                        {/each}
+                    </ul>
+                {/if}
                 {#if errors.length}
                     <vscode-divider role="separator" />
 
@@ -175,7 +178,7 @@
     }
 
     p {
-        margin-left: var(--global-margin);
+        margin-left: calc(4 * var(--global-margin));
     }
 
     ul {

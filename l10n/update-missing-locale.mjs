@@ -10,7 +10,7 @@ function updateBundle(refBundle, bundleName, config) {
     const lang = bundleName.split(".").at(-2);
     console.log(`\nReading ${bundleName} ... lang=${lang}`);
     const bundlePath = path.join(__dirname, bundleName);
-    const bundle = JSON.parse(fs.readFileSync(bundlePath));
+    let bundle = JSON.parse(fs.readFileSync(bundlePath));
     // console.log(bundleName);
     let needUpdate = false;
 
@@ -47,7 +47,7 @@ function checkExistingTranslations(bundleName, translations, dryRun = false) {
     }
 
     const bundlePath = path.join(__dirname, bundleName);
-    const bundle = JSON.parse(fs.readFileSync(bundlePath));
+    let bundle = JSON.parse(fs.readFileSync(bundlePath));
     let needUpdate = false;
 
     Object.keys(translations[lang]).forEach((key) => {
@@ -91,7 +91,7 @@ function processSourceBundles(translations, config = { dryRun: false, sortKeys: 
     console.log("Porcessing source bundles\n");
 
     const mainBundlePath = path.join(__dirname, "bundle.l10n.json");
-    const mainBundle = JSON.parse(fs.readFileSync(mainBundlePath).toString());
+    let mainBundle = JSON.parse(fs.readFileSync(mainBundlePath).toString());
 
     console.log("Parsing sources in ./src ");
     const sourcesRegex = /"(locale\..*?)"/gm;
@@ -176,7 +176,6 @@ const csvURL =
 const translations = {
     ru: await getTranslations(csvURL), // ! could be null
 };
-f;
 
 processSourceBundles(translations, { dryRun: false, sortKeys: true });
 
