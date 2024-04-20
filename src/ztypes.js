@@ -1750,6 +1750,7 @@ const iconInfo = {
     infoHeader: "locale.projectManager.icon.infoHeader",
     infoErrorHeader: "locale.projectManager.icon.infoErrorHeader",
 };
+
 const ZIcon = z.string().describe({
     ...uiDescriptions.icon,
     info: iconInfo,

@@ -187,9 +187,9 @@ export async function activate(context: vscode.ExtensionContext) {
     //     });
     // });
 
-    function checkLocalizationBundle() {
+    function checkLocalizationBundle(config = { forceUpdate: false }) {
         l10nBundle = vscode.l10n.bundle;
-        if (!vscode.l10n.uri) {
+        if (!vscode.l10n.uri || config.forceUpdate) {
             // bundle = fs.readFileSync(vscode.l10n.uri?.fsPath, { encoding: "utf-8" });
             // default language
             l10nBundle = fs.readFileSync(
@@ -263,7 +263,6 @@ export async function activate(context: vscode.ExtensionContext) {
         }
     }
 
-    // ! selection should go outside of maskConfig.
     async function onSelection(newSelection: Selection) {
         const { type, id } = newSelection as Selection;
 
@@ -421,7 +420,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 });
                 break;
 
-            case RequestCommand.getExtensionURI: // !!!!!!!! alyarm !!!!!!
+            case RequestCommand.getExtensionURI:
                 messageHandler.send({
                     ...data,
                     target: origin,
@@ -852,9 +851,10 @@ export async function activate(context: vscode.ExtensionContext) {
         let watchLock = false;
         let watchTimeout: NodeJS.Timeout;
 
-        const webviewBuildDir = path.join(context.extensionPath, "out", "webview-ui");
+        // const webviewBuildDir = path.join(context.extensionPath, "out", "webview-ui");
         const webviewWatcher = vscode.workspace.createFileSystemWatcher(
-            new vscode.RelativePattern(webviewBuildDir, "**")
+            // "{,}"
+            new vscode.RelativePattern(context.extensionPath, "{out/**,l10n/bundle.l10n*}")
         );
 
         context.subscriptions.push(
@@ -867,6 +867,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 if (watchTimeout) clearTimeout(watchTimeout);
                 watchTimeout = setTimeout(() => {
                     // watchLock = false;
+                    checkLocalizationBundle({ forceUpdate: true });
                     vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction");
                     print("Reload due to file changed");
                 }, 500);

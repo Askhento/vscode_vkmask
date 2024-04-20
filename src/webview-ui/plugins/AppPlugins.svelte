@@ -172,7 +172,6 @@
                 <List
                     elements={$plugins}
                     elementComponent={Plugin}
-                    name="Plugins"
                     onDrop={(newElements, dragId) => {
                         const newId = newElements.findIndex((e) => e.id === dragId);
                         if (newId === dragId) return;
