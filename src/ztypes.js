@@ -266,7 +266,10 @@ const ZText = z.string().describe(uiDescriptions.text);
 const ZTags = z.string().describe({
     ...uiDescriptions.tags,
     label: "locale.parameters.tags.label",
-    info: { infoList: "locale.parameters.tags.infoList" },
+    info: {
+        infoBody: "locale.parameters.tags.infoBody",
+        infoHeader: "locale.parameters.tags.infoHeader",
+    },
 });
 
 const ZVisibleType = z.enum(["always", "face", "animation", "mouth_open"]);
@@ -379,7 +382,11 @@ const ZTextureAnimation = z
             ...uiDescriptions.enum,
 
             label: "locale.parameters.textureAnimation.type.label",
-            info: { infoList: "locale.parameters.textureAnimation.type.infoList" },
+            info: {
+                clickLink: "https://dev.vk.com/ru/masks/animation/textures",
+                infoBody: "locale.parameters.textureAnimation.type.infoBody",
+                infoHeader: "locale.parameters.textureAnimation.type.infoHeader",
+            },
             options: Object.keys(ZAnimationType.Values),
             optionLabels: ZAnimationTypeLabels,
             defValue: ZAnimationType.Values.mouth_open,
@@ -387,7 +394,12 @@ const ZTextureAnimation = z
         trigget_start: ZEventTrigger.describe({
             ...uiDescriptions.enum,
             label: "locale.parameters.textureAnimation.triggerStart.label",
-            info: { infoList: "locale.parameters.textureAnimation.triggerStart.infoList" },
+            info: {
+                clickLink: "https://dev.vk.com/ru/masks/animation/textures",
+                infoBody: "locale.parameters.textureAnimation.triggerStart.infoBody",
+                infoHeader: "locale.parameters.textureAnimation.triggerStart.infoHeader",
+                infoList: "locale.parameters.textureAnimation.triggerStart.infoList",
+            },
             options: Object.keys(ZEventTrigger.Values),
             optionLabels: ZEventTriggerLabels,
             defValue: ZEventTrigger.Values.mouth_open,
@@ -395,7 +407,12 @@ const ZTextureAnimation = z
         trigget_stop: ZEventTrigger.describe({
             ...uiDescriptions.enum,
             label: "locale.parameters.textureAnimation.triggerStop.label",
-            info: { infoList: "locale.parameters.textureAnimation.triggerStop.infoList" },
+            info: {
+                clickLink: "https://dev.vk.com/ru/masks/animation/textures",
+                infoBody: "locale.parameters.textureAnimation.triggerStop.infoBody",
+                infoHeader: "locale.parameters.textureAnimation.triggerStop.infoHeader",
+                infoList: "locale.parameters.textureAnimation.triggerStop.infoList",
+            },
             options: Object.keys(ZEventTrigger.Values),
             optionLabels: ZEventTriggerLabels,
             defValue: ZEventTrigger.Values.mouth_close,
@@ -408,7 +425,11 @@ const ZTextureAnimation = z
             valueLabel: "locale.parameters.textureAnimation.fps.valueLabel",
             // valueTemplate: (val) => Math.floor(val * 100),
             label: "locale.parameters.textureAnimation.fps.label",
-            info: { infoList: "locale.parameters.textureAnimation.fps.infoList" },
+            info: {
+                clickLink: "https://dev.vk.com/ru/masks/animation/textures",
+                infoBody: "locale.parameters.textureAnimation.fps.infoBody",
+                infoHeader: "locale.parameters.textureAnimation.fps.infoHeader",
+            },
         }),
     })
     .describe({
@@ -446,7 +467,12 @@ export const ZTextureObject =
             blend_mode: ZBlendModes.describe({
                 ...uiDescriptions.enum,
                 label: "locale.parameters.texture.blendMode.label",
-                info: { infoList: "locale.parameters.texture.blendMode.infoList" },
+                info: {
+                    clickLink:
+                        "https://dev.vk.com/ru/masks/effects/facemodel#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20texture",
+                    infoHeader: "locale.parameters.texture.blendMode.infoHeader",
+                    infoBody: "locale.parameters.texture.blendMode.infoBody",
+                },
                 options: Object.keys(ZBlendModes.Values),
                 optionLabels: ZBlendModesLabels,
                 defValue: ZBlendModes.Values.replace,
@@ -454,7 +480,12 @@ export const ZTextureObject =
             color: ZColorAlpha.describe({
                 ...uiDescriptions.colorAlpha,
                 label: "locale.parameters.texture.color.label",
-                info: { infoList: "locale.parameters.texture.color.infoList" },
+                info: {
+                    clickLink:
+                        "https://dev.vk.com/ru/masks/effects/facemodel#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20texture",
+                    infoHeader: "locale.parameters.texture.color.infoHeader",
+                    infoBody: "locale.parameters.texture.color.infoBody",
+                },
             }),
             // lit: ZBool.describe(uiDesc riptions.bool({ label: "Lit" })),
             // !!! probably will miss texture property
@@ -738,35 +769,45 @@ const ZFacemodelEffect = ZBaseEffect.extend({
         ...uiDescriptions.bool,
         defValue: true,
         label: "locale.parameters.facemodel.mouth.label",
-        info: { infoList: "locale.parameters.facemodel.mouth.infoList" },
+        info: {
+            clickLink:
+                "https://dev.vk.com/ru/masks/effects/facemodel#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20%D1%8D%D1%84%D1%84%D0%B5%D0%BA%D1%82%D0%B0",
+            infoBody: "locale.parameters.facemodel.mouth.infoBody",
+            infoHeader: "locale.parameters.facemodel.mouth.infoHeader",
+        },
         group: "visible",
     }),
     eyes: ZBool.describe({
         ...uiDescriptions.bool,
         defValue: true,
         label: "locale.parameters.facemodel.eyes.label",
-        info: { infoList: "locale.parameters.facemodel.eyes.infoList" },
+        info: {
+            clickLink:
+                "https://dev.vk.com/ru/masks/effects/facemodel#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20%D1%8D%D1%84%D1%84%D0%B5%D0%BA%D1%82%D0%B0",
+            infoBody: "locale.parameters.facemodel.eyes.infoBody",
+            infoHeader: "locale.parameters.facemodel.eyes.infoHeader",
+        },
         group: "visible",
     }),
-    position: ZArray3D.describe({
-        ...uiDescriptions.array3d,
-        label: "locale.parameters.facemodel.position.label",
-        info: { infoList: "locale.parameters.facemodel.position.infoList" },
-        group: "transform",
-    }),
-    scale: ZArray3D.describe({
-        ...uiDescriptions.array3d,
-        defValue: [1, 1, 1],
-        label: "locale.parameters.facemodel.scale.label",
-        info: { infoList: "locale.parameters.facemodel.scale.infoList" },
-        group: "transform",
-    }),
-    rotation: ZArray3D.describe({
-        ...uiDescriptions.array3d,
-        label: "locale.parameters.facemodel.rotation.label",
-        info: { infoList: "locale.parameters.facemodel.rotation.infoList" },
-        group: "transform",
-    }),
+    // position: ZArray3D.describe({
+    //     ...uiDescriptions.array3d,
+    //     label: "locale.parameters.facemodel.position.label",
+    //     info: { infoList: "locale.parameters.facemodel.position.infoList" },
+    //     group: "transform",
+    // }),
+    // scale: ZArray3D.describe({
+    //     ...uiDescriptions.array3d,
+    //     defValue: [1, 1, 1],
+    //     label: "locale.parameters.facemodel.scale.label",
+    //     info: { infoList: "locale.parameters.facemodel.scale.infoList" },
+    //     group: "transform",
+    // }),
+    // rotation: ZArray3D.describe({
+    //     ...uiDescriptions.array3d,
+    //     label: "locale.parameters.facemodel.rotation.label",
+    //     info: { infoList: "locale.parameters.facemodel.rotation.infoList" },
+    //     group: "transform",
+    // }),
     texture: ZTextureObject,
 }).describe({
     ...uiDescriptions.object,
@@ -960,7 +1001,11 @@ const ZBeautifyEffect = ZBaseEffect.extend({
         ...uiDescriptions.numberSlider,
         defValue: 0.65,
         label: "locale.parameters.beautify.mix.label",
-        info: { infoList: "locale.parameters.beautify.mix.infoList" },
+        info: {
+            clickLink: "https://dev.vk.com/ru/masks/effects/beautify",
+            infoHeader: "locale.parameters.beautify.mix.infoHeader",
+            infoBody: "locale.parameters.beautify.mix.infoBody",
+        },
     }),
 }).describe({
     ...uiDescriptions.object,
