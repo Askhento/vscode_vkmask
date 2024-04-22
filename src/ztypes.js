@@ -222,6 +222,12 @@ const AssetTypes = {
         directory: ["Materials"],
         typeName: "material",
         label: "locale.assetTypes.material.label",
+        info: {
+            clickLink: "",
+            infoList: "locale.parameters.material.infoList",
+            infoHeader: "locale.parameters.material.infoHeader",
+            infoBody: "locale.parameters.material.infoBody",
+        },
     },
     technique: {
         defValue: null, //"Techniques/DiffUnlit.xml",
@@ -230,6 +236,13 @@ const AssetTypes = {
         directory: ["Techniques"],
         typeName: "technique",
         label: "locale.assetTypes.technique.label",
+        info: {
+            clickLink:
+                "https://dev.vk.com/ru/masks/effects/model3d#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%BE%D0%B2",
+            infoBody: "locale.parameters.material.technique.infoBody",
+            infoList: "locale.parameters.material.technique.infoList",
+            infoHeader: "locale.parameters.material.technique.infoHeader",
+        },
     },
     renderPath: {
         defValue: null, //"",
@@ -560,27 +573,57 @@ export const ZMaterialObject = z.preprocess(
         .object({
             technique: ZTechniqueAsset({ label: "locale.material.technique.label" }),
             diffuse: ZTextureAsset({
-                info: { infoHeader: "locale.material.diffuse.infoHeader" },
+                info: {
+                    infoHeader: "locale.material.diffuse.infoHeader",
+                    infoBody: "locale.material.diffuse.infoBody",
+                    infoList: "locale.parameters.texture.infoList",
+                    clickLink:
+                        "https://dev.vk.com/ru/masks/effects/model3d#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%BE%D0%B2",
+                },
                 label: "locale.material.diffuse.label",
                 group: "diffuse",
             }),
             normal: ZTextureAsset({
-                info: { infoHeader: "locale.material.normal.infoHeader" },
+                info: {
+                    infoHeader: "locale.material.normal.infoHeader",
+                    infoBody: "locale.material.normal.infoBody",
+                    infoList: "locale.parameters.texture.infoList",
+                    clickLink:
+                        "https://dev.vk.com/ru/masks/effects/model3d#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%BE%D0%B2",
+                },
                 label: "locale.material.normal.label",
                 group: "normal",
             }),
             specular: ZTextureAsset({
-                info: { infoHeader: "locale.material.specular.infoHeader" },
+                info: {
+                    infoHeader: "locale.material.specular.infoHeader",
+                    infoBody: "locale.material.specular.infoBody",
+                    infoList: "locale.parameters.texture.infoList",
+                    clickLink:
+                        "https://dev.vk.com/ru/masks/effects/model3d#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%BE%D0%B2",
+                },
                 label: "locale.material.specular.label",
                 group: "specular",
             }),
             emissive: ZTextureAsset({
-                info: { infoHeader: "locale.material.emissive.infoHeader" },
+                info: {
+                    infoHeader: "locale.material.emissive.infoHeader",
+                    infoBody: "locale.material.emissive.infoBody",
+                    infoList: "locale.parameters.texture.infoList",
+                    clickLink:
+                        "https://dev.vk.com/ru/masks/effects/model3d#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%BE%D0%B2",
+                },
                 label: "locale.material.emissive.label",
                 group: "emissive",
             }),
             environment: ZTextureAsset({
-                info: { infoHeader: "locale.material.environment.infoHeader" },
+                info: {
+                    infoHeader: "locale.material.environment.infoHeader",
+                    infoBody: "locale.material.environment.infoBody",
+                    infoList: "locale.parameters.texture.infoList",
+                    clickLink:
+                        "https://dev.vk.com/ru/masks/effects/model3d#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%BE%D0%B2",
+                },
                 label: "locale.material.environment.label",
                 group: "environment",
             }),
@@ -590,7 +633,13 @@ export const ZMaterialObject = z.preprocess(
                 defValue: [1.0, 1.0, 1.0, 1.0],
                 group: "diffuse",
                 label: "locale.material.diffuseColor.label",
-                info: { infoList: "locale.material.diffuseColor.infoList" },
+                info: {
+                    infoHeader: "locale.material.diffuseColor.infoHeader",
+                    infoBody: "locale.material.diffuseColor.infoBody",
+                    infoList: "locale.material.diffuseColor.infoList",
+                    clickLink:
+                        "https://dev.vk.com/ru/masks/effects/model3d#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%BE%D0%B2",
+                },
             }),
             MatSpecColor: ZArray4D.describe({
                 ...uiDescriptions.colorAlpha,
@@ -598,14 +647,26 @@ export const ZMaterialObject = z.preprocess(
                 group: "specular",
                 showAlways: false,
                 label: "locale.material.specularColor.label",
-                info: { infoList: "locale.material.specularColor.infoList" },
+                info: {
+                    infoHeader: "locale.material.specularColor.infoHeader",
+                    infoBody: "locale.material.specularColor.infoBody",
+                    infoList: "locale.material.specularColor.infoList",
+                    clickLink:
+                        "https://dev.vk.com/ru/masks/effects/model3d#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%BE%D0%B2",
+                },
             }),
             MatEmissiveColor: ZArray3D.describe({
                 ...uiDescriptions.color,
                 showAlways: false,
                 group: "emissive",
                 label: "locale.material.emissiveColor.label",
-                info: { infoList: "locale.material.emissiveColor.infoList" },
+                info: {
+                    infoHeader: "locale.material.emissiveColor.infoHeader",
+                    infoBody: "locale.material.emissiveColor.infoBody",
+                    infoList: "locale.material.emissiveColor.infoList",
+                    clickLink:
+                        "https://dev.vk.com/ru/masks/effects/model3d#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%BE%D0%B2",
+                },
             }),
             MatEnvMapColor: ZArray3D.describe({
                 ...uiDescriptions.color,
@@ -613,27 +674,51 @@ export const ZMaterialObject = z.preprocess(
                 group: "environment",
                 showAlways: false,
                 label: "locale.material.environmentColor.label",
-                info: { infoList: "locale.material.environmentColor.infoList" },
+                info: {
+                    infoHeader: "locale.material.environmentColor.infoHeader",
+                    infoBody: "locale.material.environmentColor.infoBody",
+                    infoList: "locale.material.environmentColor.infoList",
+                    clickLink:
+                        "https://dev.vk.com/ru/masks/effects/model3d#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%BE%D0%B2",
+                },
             }),
             Roughness: ZNumberSlider.describe({
                 ...uiDescriptions.numberSlider,
                 defValue: 0.5,
                 showAlways: false,
                 label: "locale.material.roughness.label",
-                info: { infoList: "locale.material.roughness.infoList" },
+                info: {
+                    infoHeader: "locale.material.roughness.infoHeader",
+                    infoBody: "locale.material.roughness.infoBody",
+                    infoList: "locale.material.roughness.infoList",
+                    clickLink:
+                        "https://dev.vk.com/ru/masks/effects/model3d#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%BE%D0%B2",
+                },
             }),
             Metallic: ZNumberSlider.describe({
                 ...uiDescriptions.numberSlider,
                 defValue: 0.5,
                 showAlways: false,
                 label: "locale.material.metallness.label",
-                info: { infoList: "locale.material.metallness.infoList" },
+                info: {
+                    infoHeader: "locale.material.metallness.infoHeader",
+                    infoBody: "locale.material.metallness.infoBody",
+                    infoList: "locale.material.metallness.infoList",
+                    clickLink:
+                        "https://dev.vk.com/ru/masks/effects/model3d#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%BE%D0%B2",
+                },
             }),
 
             cull: ZCullMode.describe({
                 ...uiDescriptions.enum,
                 label: "locale.material.culling.label",
-                info: { infoList: "locale.material.culling.infoList" },
+                info: {
+                    infoHeader: "locale.material.culling.infoHeader",
+                    infoBody: "locale.material.culling.infoBody",
+                    infoList: "locale.material.culling.infoList",
+                    clickLink:
+                        "https://dev.vk.com/ru/masks/effects/model3d#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%BE%D0%B2",
+                },
                 options: Object.keys(ZCullMode.Values),
                 optionLabels: CullModeLabels,
                 defValue: ZCullMode.Values.ccw,
@@ -641,7 +726,13 @@ export const ZMaterialObject = z.preprocess(
             fill: ZFillMode.describe({
                 ...uiDescriptions.enum,
                 label: "locale.material.fill.label",
-                info: { infoList: "locale.material.fill.infoList" },
+                info: {
+                    infoHeader: "locale.material.fill.infoHeader",
+                    infoBody: "locale.material.fill.infoBody",
+                    infoList: "locale.material.fill.infoList",
+                    clickLink:
+                        "https://dev.vk.com/ru/masks/effects/model3d#%D0%9F%D0%B0%D1%80%D0%B0%D0%BC%D0%B5%D1%82%D1%80%D1%8B%20%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%BE%D0%B2",
+                },
                 options: Object.keys(ZFillMode.Values),
                 optionLabels: FillModeLabels,
                 defValue: ZFillMode.Values.solid,
@@ -902,6 +993,7 @@ const ZPatchEffect = ZBaseEffect.extend({
         ...uiDescriptions.enum,
         label: "locale.parameters.patch.anchor.label",
         info: {
+            clickLink: "https://dev.vk.com/ru/masks/effects/patch",
             infoList: "locale.parameters.patch.anchor.infoList",
             infoHeader: "locale.parameters.patch.anchor.infoHeader",
             infoBody: "locale.parameters.patch.anchor.infoBody",
@@ -915,6 +1007,7 @@ const ZPatchEffect = ZBaseEffect.extend({
         ...uiDescriptions.enum,
         label: "locale.parameters.patch.visible.label",
         info: {
+            clickLink: "https://dev.vk.com/ru/masks/effects/patch",
             infoList: "locale.parameters.patch.visible.infoList",
             infoHeader: "locale.parameters.patch.visible.infoHeader",
             infoBody: "locale.parameters.patch.visible.infoBody",
@@ -928,6 +1021,7 @@ const ZPatchEffect = ZBaseEffect.extend({
         ...uiDescriptions.enum,
         label: "locale.parameters.patch.fit.label",
         info: {
+            clickLink: "https://dev.vk.com/ru/masks/effects/patch",
             infoList: "locale.parameters.patch.fit.infoList",
             infoHeader: "locale.parameters.patch.fit.infoHeader",
             infoBody: "locale.parameters.patch.fit.infoBody",
@@ -942,6 +1036,7 @@ const ZPatchEffect = ZBaseEffect.extend({
         defValue: [1, 1],
         label: "locale.parameters.patch.size.label",
         info: {
+            clickLink: "https://dev.vk.com/ru/masks/effects/patch",
             infoList: "locale.parameters.patch.size.infoList",
             infoHeader: "locale.parameters.patch.size.infoHeader",
             infoBody: "locale.parameters.patch.size.infoBody",
@@ -953,6 +1048,7 @@ const ZPatchEffect = ZBaseEffect.extend({
         ...uiDescriptions.array3d,
         label: "locale.parameters.patch.offset.label",
         info: {
+            clickLink: "https://dev.vk.com/ru/masks/effects/patch",
             infoList: "locale.parameters.patch.offset.infoList",
             infoHeader: "locale.parameters.patch.offset.infoHeader",
             infoBody: "locale.parameters.patch.offset.infoBody",
@@ -964,6 +1060,7 @@ const ZPatchEffect = ZBaseEffect.extend({
         ...uiDescriptions.bool,
         label: "locale.parameters.patch.allowRotation.label",
         info: {
+            clickLink: "https://dev.vk.com/ru/masks/effects/patch",
             infoList: "locale.parameters.patch.allowRotation.infoList",
             infoHeader: "locale.parameters.patch.allowRotation.infoHeader",
             infoBody: "locale.parameters.patch.allowRotation.infoBody",
@@ -974,6 +1071,7 @@ const ZPatchEffect = ZBaseEffect.extend({
         ...uiDescriptions.array3d,
         label: "locale.parameters.patch.rotation.label",
         info: {
+            clickLink: "https://dev.vk.com/ru/masks/effects/patch",
             infoList: "locale.parameters.patch.rotation.infoList",
             infoHeader: "locale.parameters.patch.rotation.infoHeader",
             infoBody: "locale.parameters.patch.rotation.infoBody",
@@ -1245,7 +1343,11 @@ const ZPlaneEffect = ZBaseEffect.extend({
     anchor: ZFaceAnchor.describe({
         ...uiDescriptions.enum,
         label: "locale.parameters.plane.anchor.label",
-        info: { infoList: "locale.parameters.plane.anchor.infoList" },
+        info: {
+            infoBody: "locale.parameters.plane.anchor.infoBody",
+            infoHeader: "locale.parameters.plane.anchor.infoHeader",
+            infoList: "locale.parameters.plane.anchor.infoList",
+        },
         group: "anchor",
 
         options: Object.keys(ZFaceAnchor.Values),
@@ -1255,20 +1357,32 @@ const ZPlaneEffect = ZBaseEffect.extend({
     position: ZArray3D.describe({
         ...uiDescriptions.array3d,
         label: "locale.parameters.plane.position.label",
-        info: { infoList: "locale.parameters.plane.position.infoList" },
+        info: {
+            infoBody: "locale.parameters.plane.position.infoBody",
+            infoHeader: "locale.parameters.plane.position.infoHeader",
+            infoList: "locale.parameters.plane.position.infoList",
+        },
         group: "transform",
     }),
     scale: ZArray3D.describe({
         ...uiDescriptions.array3d,
         defValue: [1, 1, 1],
         label: "locale.parameters.plane.scale.label",
-        info: { infoList: "locale.parameters.plane.scale.infoList" },
+        info: {
+            infoBody: "locale.parameters.plane.scale.infoBody",
+            infoHeader: "locale.parameters.plane.scale.infoHeader",
+            infoList: "locale.parameters.plane.scale.infoList",
+        },
         group: "transform",
     }),
     rotation: ZArray3D.describe({
         ...uiDescriptions.array3d,
         label: "locale.parameters.plane.rotation.label",
-        info: { infoList: "locale.parameters.plane.rotation.infoList" },
+        info: {
+            infoBody: "locale.parameters.plane.rotation.infoBody",
+            infoHeader: "locale.parameters.plane.rotation.infoHeader",
+            infoList: "locale.parameters.plane.rotation.infoList",
+        },
         group: "transform",
     }),
     material: ZMaterial,
