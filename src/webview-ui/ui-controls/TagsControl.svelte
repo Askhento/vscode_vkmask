@@ -159,7 +159,7 @@
             </div>
         </div>
     {/each}
-    <InfoBox visible={infoVisible} info={params.info} />
+    <InfoBox bind:visible={infoVisible} info={params.info} />
 </span>
 
 <style>

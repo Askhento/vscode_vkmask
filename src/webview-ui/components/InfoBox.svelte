@@ -33,6 +33,7 @@
     function handleClickOutside() {
         setTimeout(() => {
             infoOpened = false;
+            visible = false;
         }, 0);
     }
 </script>

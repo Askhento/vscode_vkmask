@@ -92,7 +92,7 @@
             onChange();
         }}
     />
-    <InfoBox visible={infoVisible} info={params.info} />
+    <InfoBox bind:visible={infoVisible} info={params.info} />
 </span>
 
 {#if params.alpha}

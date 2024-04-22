@@ -83,7 +83,7 @@
             >
         {/each}
     </vscode-dropdown>
-    <InfoBox visible={infoVisible} info={params.info} />
+    <InfoBox bind:visible={infoVisible} info={params.info} />
 </span>
 
 <style>

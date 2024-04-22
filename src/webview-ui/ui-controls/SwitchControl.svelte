@@ -45,7 +45,7 @@
     }}
 >
     <vscode-checkbox role="checkbox" checked={value} on:click={onChange} tabindex="1" />
-    <InfoBox visible={infoVisible} info={params.info} />
+    <InfoBox bind:visible={infoVisible} info={params.info} />
 </span>
 
 <!-- <label class="switch">

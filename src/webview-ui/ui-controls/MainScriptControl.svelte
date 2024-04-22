@@ -120,7 +120,7 @@
         on:mouseleave={() => {
             infoVisible = false;
         }}
-        on:mouseover={() => {
+        on:mouseenter={() => {
             infoVisible = true;
         }}><span>{l10n.t(label)}</span></span
     >
@@ -130,7 +130,7 @@
         on:mouseleave={() => {
             infoVisible = false;
         }}
-        on:mouseover={() => {
+        on:mouseenter={() => {
             infoVisible = true;
         }}
     >
@@ -187,7 +187,7 @@
             </div> -->
             <Loading scale={2} dark={true} />
         {/if}
-        <InfoBox info={params.info} visible={infoVisible} />
+        <InfoBox info={params.info} bind:visible={infoVisible} />
     </span>
 {/if}
 

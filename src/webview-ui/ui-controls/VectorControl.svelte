@@ -124,7 +124,7 @@
                     onChanged();
                 }}
             />
-            <InfoBox visible={infoVisible} info={params.info} />
+            <InfoBox bind:visible={infoVisible} info={params.info} />
         {/each}
     </span>
 {/if}

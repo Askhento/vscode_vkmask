@@ -229,7 +229,7 @@
         >
         </vscode-button> -->
         {#key iconAsset}
-            <InfoBox visible={infoVisible} info={params.info} />
+            <InfoBox bind:visible={infoVisible} info={params.info} />
         {/key}
         {#if waiting}
             <Loading scale={1} dark={true} />

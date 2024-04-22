@@ -90,7 +90,7 @@
         max={params.max ?? 1}
         {step}
     />
-    <InfoBox visible={infoVisible} info={params.info} />
+    <InfoBox bind:visible={infoVisible} info={params.info} />
 </span>
 
 <!-- </span> -->

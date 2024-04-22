@@ -430,7 +430,7 @@
         {#if waiting}
             <Loading scale={2} dark={true} />
         {/if}
-        <InfoBox visible={infoVisible} info={params.info} />
+        <InfoBox bind:visible={infoVisible} info={params.info} />
     </span>
 {/if}
 
