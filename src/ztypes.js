@@ -1271,7 +1271,12 @@ const ZModel3dEffect = ZBaseEffect.extend({
     anchor: ZFaceAnchor.describe({
         ...uiDescriptions.enum,
         label: "locale.parameters.model3d.anchor.label",
-        info: { infoList: "locale.parameters.model3d.anchor.infoList" },
+        info: {
+            clickLink: "https://dev.vk.com/ru/masks/effects/model3d",
+            infoList: "locale.parameters.model3d.anchor.infoList",
+            infoBody: "locale.parameters.model3d.anchor.infoBody",
+            infoHeader: "locale.parameters.model3d.anchor.infoHeader",
+        },
         group: "anchor",
 
         options: Object.keys(ZFaceAnchor.Values),
@@ -1281,26 +1286,46 @@ const ZModel3dEffect = ZBaseEffect.extend({
     model: ZModel3dAsset({
         label: "locale.parameters.model3d.model.label",
         group: "model",
-        info: { infoList: "locale.parameters.model3d.model.infoList" },
+        info: {
+            clickLink: "https://dev.vk.com/ru/masks/effects/model3d",
+            infoList: "locale.parameters.model3d.model.infoList",
+            infoBody: "locale.parameters.model3d.model.infoBody",
+            infoHeader: "locale.parameters.model3d.model.infoHeader",
+        },
         structural: true,
     }),
     position: ZArray3D.describe({
         ...uiDescriptions.array3d,
         label: "locale.parameters.model3d.position.label",
-        info: { infoList: "locale.parameters.model3d.position.infoList" },
+        info: {
+            clickLink: "https://dev.vk.com/ru/masks/effects/model3d",
+            infoList: "locale.parameters.model3d.position.infoList",
+            infoBody: "locale.parameters.model3d.position.infoBody",
+            infoHeader: "locale.parameters.model3d.position.infoHeader",
+        },
         group: "transform",
     }),
     scale: ZArray3D.describe({
         ...uiDescriptions.array3d,
         defValue: [1, 1, 1],
         label: "locale.parameters.model3d.scale.label",
-        info: { infoList: "locale.parameters.model3d.scale.infoList" },
+        info: {
+            clickLink: "https://dev.vk.com/ru/masks/effects/model3d",
+            infoList: "locale.parameters.model3d.scale.infoList",
+            infoBody: "locale.parameters.model3d.scale.infoBody",
+            infoHeader: "locale.parameters.model3d.scale.infoHeader",
+        },
         group: "transform",
     }),
     rotation: ZArray3D.describe({
         ...uiDescriptions.array3d,
         label: "locale.parameters.model3d.rotation.label",
-        info: { infoList: "locale.parameters.model3d.rotation.infoList" },
+        info: {
+            clickLink: "https://dev.vk.com/ru/masks/effects/model3d",
+            infoList: "locale.parameters.model3d.rotation.infoList",
+            infoBody: "locale.parameters.model3d.rotation.infoBody",
+            infoHeader: "locale.parameters.model3d.rotation.infoHeader",
+        },
         group: "transform",
     }),
     material: ZMaterialArray,
