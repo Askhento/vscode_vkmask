@@ -901,7 +901,11 @@ const ZPatchEffect = ZBaseEffect.extend({
     anchor: ZPatchAnchor.describe({
         ...uiDescriptions.enum,
         label: "locale.parameters.patch.anchor.label",
-        info: { infoList: "locale.parameters.patch.anchor.infoList" },
+        info: {
+            infoList: "locale.parameters.patch.anchor.infoList",
+            infoHeader: "locale.parameters.patch.anchor.infoHeader",
+            infoBody: "locale.parameters.patch.anchor.infoBody",
+        },
         group: "anchor",
         options: Object.keys(ZPatchAnchor.Values),
         optionLabels: ZPatchAnchorLabels,
@@ -910,7 +914,11 @@ const ZPatchEffect = ZBaseEffect.extend({
     visible: ZVisibleType.describe({
         ...uiDescriptions.enum,
         label: "locale.parameters.patch.visible.label",
-        info: { infoList: "locale.parameters.patch.visible.infoList" },
+        info: {
+            infoList: "locale.parameters.patch.visible.infoList",
+            infoHeader: "locale.parameters.patch.visible.infoHeader",
+            infoBody: "locale.parameters.patch.visible.infoBody",
+        },
         group: "advanced",
         options: Object.keys(ZVisibleType.Values),
         optionLabels: ZVisibleTypeLabels,
@@ -919,7 +927,11 @@ const ZPatchEffect = ZBaseEffect.extend({
     fit: ZPatchFitMode.describe({
         ...uiDescriptions.enum,
         label: "locale.parameters.patch.fit.label",
-        info: { infoList: "locale.parameters.patch.fit.infoList" },
+        info: {
+            infoList: "locale.parameters.patch.fit.infoList",
+            infoHeader: "locale.parameters.patch.fit.infoHeader",
+            infoBody: "locale.parameters.patch.fit.infoBody",
+        },
         group: "advanced",
         options: Object.keys(ZPatchFitMode.Values),
         optionLabels: ZPatchFitModeLabels,
@@ -929,27 +941,43 @@ const ZPatchEffect = ZBaseEffect.extend({
         ...uiDescriptions.array2d,
         defValue: [1, 1],
         label: "locale.parameters.patch.size.label",
-        info: { infoList: "locale.parameters.patch.size.infoList" },
+        info: {
+            infoList: "locale.parameters.patch.size.infoList",
+            infoHeader: "locale.parameters.patch.size.infoHeader",
+            infoBody: "locale.parameters.patch.size.infoBody",
+        },
         group: "transform",
         dependencies: patchAnchorDeps,
     }),
     offset: ZArray3D.describe({
         ...uiDescriptions.array3d,
         label: "locale.parameters.patch.offset.label",
-        info: { infoList: "locale.parameters.patch.offset.infoList" },
+        info: {
+            infoList: "locale.parameters.patch.offset.infoList",
+            infoHeader: "locale.parameters.patch.offset.infoHeader",
+            infoBody: "locale.parameters.patch.offset.infoBody",
+        },
         group: "transform",
         dependencies: patchAnchorDeps,
     }),
     allow_rotation: ZBool.describe({
         ...uiDescriptions.bool,
         label: "locale.parameters.patch.allowRotation.label",
-        info: { infoList: "locale.parameters.patch.allowRotation.infoList" },
+        info: {
+            infoList: "locale.parameters.patch.allowRotation.infoList",
+            infoHeader: "locale.parameters.patch.allowRotation.infoHeader",
+            infoBody: "locale.parameters.patch.allowRotation.infoBody",
+        },
         group: "anchor",
     }),
     rotation: ZArray3D.describe({
         ...uiDescriptions.array3d,
         label: "locale.parameters.patch.rotation.label",
-        info: { infoList: "locale.parameters.patch.rotation.infoList" },
+        info: {
+            infoList: "locale.parameters.patch.rotation.infoList",
+            infoHeader: "locale.parameters.patch.rotation.infoHeader",
+            infoBody: "locale.parameters.patch.rotation.infoBody",
+        },
         group: "transform",
         dependencies: patchAnchorDeps,
     }),
