@@ -1,5 +1,7 @@
 <script lang="ts">
     import * as l10n from "@vscode/l10n";
+    import { get_current_component } from "svelte/internal";
+    const component = get_current_component();
 
     import { createEventDispatcher } from "svelte";
     import { onMount, tick, afterUpdate } from "svelte";
@@ -10,9 +12,12 @@
     import { RequestCommand, RequestTarget, SelectionType } from "src/types";
     import InfoBox from "../components/InfoBox.svelte";
     import Loading from "../components/Loading.svelte";
-    //@ts-expect-error
+    import { applyDeps } from "../common/controlDependencies";
 
-    const { assets, settings, messageHandler, selection } = getContext("stores");
+    const stores = getContext("stores");
+
+    //@ts-expect-error
+    const { assets, settings, messageHandler, selection } = stores;
 
     const whiteData = "R0lGODlhAQABAIAAAP7//wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==";
     const missingTextureData =
@@ -23,6 +28,7 @@
         params,
         path;
 
+    export let infoErrors = [];
     let infoVisible = false;
 
     // print("INIT", value, params);
@@ -194,8 +200,10 @@
     }
 
     onMount(async () => {
-        await tick();
+        const { needUpdate } = await applyDeps(component, stores, params.dependencies);
+        if (needUpdate) onChange();
 
+        await tick();
         // print("mount", currentAsset);
         setControlElementValue(currentAsset?.baseName);
         setDropDownValue(String(filteredAssets.findIndex((op) => op.path === value)));
@@ -430,7 +438,9 @@
         {#if waiting}
             <Loading scale={2} dark={true} />
         {/if}
-        <InfoBox bind:visible={infoVisible} info={params.info} />
+        {#key infoErrors}
+            <InfoBox bind:visible={infoVisible} info={{ ...params.info, errors: infoErrors }} />
+        {/key}
     </span>
 {/if}
 

@@ -79,6 +79,8 @@
 	"locale.fillModes.point.label": "Point",
 	"locale.fillModes.solid.label": "Solid",
 	"locale.fillModes.wireframe.label": "Wireframe",
+	"locale.infoErrors.textures.maxHeight": "locale.infoErrors.textures.maxHeight NEED TRANSLATION",
+	"locale.infoErrors.textures.maxWiwidth": "locale.infoErrors.textures.maxWiwidth NEED TRANSLATION",
 	"locale.infobox.errorHeader": "locale.infobox.errorHeader NEED TRANSLATION",
 	"locale.infobox.readmoreHeader": "Read the docs",
 	"locale.infobox.readmoreOpen": "Open",

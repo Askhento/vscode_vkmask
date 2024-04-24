@@ -200,6 +200,39 @@ const ZLightTypeLabels = [
     "locale.lightTypes.direct.label", //"Direct"
 ];
 
+const MAX_TEXTURE_SIZE_PX = 128;
+const textureAssetErrorDeps = [
+    {
+        source: ["stores", "assets"],
+        postprocess: (_, assets, component) => {
+            const { value, params } = component;
+            const assetIndex = assets.findIndex((v) => v.path === value);
+            if (assetIndex < 0) {
+                return { needUpdate: false };
+            }
+            const { width, height, size, isOpaque } = assets[assetIndex];
+
+            component.infoErrors = [];
+
+            if (height > MAX_TEXTURE_SIZE_PX)
+                component.infoErrors.push([
+                    "locale.infoErrors.textures.maxHeight",
+                    MAX_TEXTURE_SIZE_PX,
+                    height,
+                ]);
+
+            if (width > MAX_TEXTURE_SIZE_PX)
+                component.infoErrors.push([
+                    "locale.infoErrors.textures.maxWiwidth",
+                    MAX_TEXTURE_SIZE_PX,
+                    width,
+                ]);
+
+            return { needUpdate: false }; // without this will infinte loop
+        },
+    },
+];
+
 const AssetTypes = {
     texture: {
         defValue: null, //"Textures/Spot.png",
@@ -207,6 +240,7 @@ const AssetTypes = {
         directory: ["Textures"],
         typeName: "texture",
         label: "locale.assetTypes.texture.label",
+        dependencies: textureAssetErrorDeps,
         info: {
             clickLink:
                 "https://dev.vk.com/ru/masks/publication/resources#%D0%A2%D0%B5%D0%BA%D1%81%D1%82%D1%83%D1%80%D1%8B",

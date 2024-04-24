@@ -36,6 +36,8 @@
             visible = false;
         }, 0);
     }
+
+    console.log("err", errors);
 </script>
 
 {#if (visible || infoOpened || errors.length) && headerTranslated}
@@ -89,10 +91,11 @@
                         <span class="codicon codicon-info error"></span>
                         <span class="info-header">{l10n.t(infoErrorHeader) + ":"}</span>
                     </div>
+
                     <ul>
                         {#each errors as error}
                             <li class="error">
-                                {l10n.t(error)}
+                                {l10n.t(...error)}
                             </li>
                         {/each}
                     </ul>

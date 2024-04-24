@@ -21,7 +21,13 @@ export function applyDeps(component, stores, dependencies) {
 
         const value = getValueByPath(dataSource, relSourcePath);
 
-        if (postprocess) return postprocess(previous, value, component);
+        if (postprocess) {
+            try {
+                return postprocess(previous, value, component);
+            } catch (error) {
+                console.log("Error apply deps:", component.path, error);
+            }
+        }
 
         return value;
     }, null);
