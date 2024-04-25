@@ -36,8 +36,6 @@
             visible = false;
         }, 0);
     }
-
-    console.log("err", errors);
 </script>
 
 {#if (visible || infoOpened || errors.length) && headerTranslated}

@@ -200,7 +200,7 @@ const ZLightTypeLabels = [
     "locale.lightTypes.direct.label", //"Direct"
 ];
 
-const MAX_TEXTURE_SIZE_PX = 128;
+const MAX_TEXTURE_SIZE_PX = 2048;
 const textureAssetErrorDeps = [
     {
         source: ["stores", "assets"],
@@ -227,6 +227,12 @@ const textureAssetErrorDeps = [
                     MAX_TEXTURE_SIZE_PX,
                     width,
                 ]);
+
+            if (width % 2 !== 0)
+                component.infoErrors.push(["locale.infoErrors.textures.oddWidth", width]);
+
+            if (height % 2 !== 0)
+                component.infoErrors.push(["locale.infoErrors.textures.oddHeight", height]);
 
             return { needUpdate: false }; // without this will infinte loop
         },
@@ -1191,6 +1197,53 @@ const lookupInfo = {
     infoHeader: "locale.parameters.colorfilter.lookup.infoHeader",
 };
 
+const LOOKUP_MAX_SIZE_PX = 512;
+const LOOKUP_MAX_SIZE_BYTES = 600 * 1000;
+const lookupErrorDeps = [
+    {
+        source: ["stores", "assets"],
+        postprocess: (_, assets, component) => {
+            const { value, params } = component;
+            const assetIndex = assets.findIndex((v) => v.path === value);
+            if (assetIndex < 0) {
+                return { needUpdate: false };
+            }
+            const { width, height, size, isOpaque } = assets[assetIndex];
+
+            component.infoErrors = [];
+
+            if (height > LOOKUP_MAX_SIZE_PX)
+                component.infoErrors.push([
+                    "locale.infoErrors.textures.maxHeight",
+                    LOOKUP_MAX_SIZE_PX,
+                    height,
+                ]);
+
+            if (width > LOOKUP_MAX_SIZE_PX)
+                component.infoErrors.push([
+                    "locale.infoErrors.textures.maxWiwidth",
+                    LOOKUP_MAX_SIZE_PX,
+                    width,
+                ]);
+
+            if (width % 2 !== 0)
+                component.infoErrors.push(["locale.infoErrors.textures.oddWidth", width]);
+
+            if (height % 2 !== 0)
+                component.infoErrors.push(["locale.infoErrors.textures.oddHeight", height]);
+
+            if (size > LOOKUP_MAX_SIZE_BYTES)
+                component.infoErrors.push([
+                    "locale.infoErrors.colorfilter.lookup.maxSize",
+                    Math.floor(LOOKUP_MAX_SIZE_BYTES / 1000),
+                    Math.floor(size / 1000),
+                ]);
+
+            return { needUpdate: false }; // without this will infinte loop
+        },
+    },
+];
+
 const ZColorfilterEffect = ZBaseEffect.extend({
     name: z.literal("colorfilter").describe(uiDescriptions.none),
     anchor: ZPatchAnchor.describe({
@@ -1288,6 +1341,7 @@ const ZColorfilterEffect = ZBaseEffect.extend({
         label: "locale.parameters.colorfilter.lookup.label",
         info: lookupInfo,
         group: "colorfilter",
+        dependencies: lookupErrorDeps,
     }),
     intensity: ZNumberSlider.describe({
         ...uiDescriptions.numberSlider,

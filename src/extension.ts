@@ -763,6 +763,7 @@ export async function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(
         vscode.commands.registerCommand("vkmask.dumpLogs", async () => {
             const dumpPath = maskConfig.currentConfigDir;
+            // todo add timeout in case view not initialized
             const responses = (await Promise.all(
                 webviewProviders.map((provider) => {
                     if (provider.disposed) return Promise.resolve([]);
