@@ -7,7 +7,7 @@
         "url": "https://github.com/Askhento/vscode_vkmask"
     },
     "description": "%locale.contribution.extension.description%",
-    "version": "0.8.6",
+    "version": "0.8.7",
     "engines": {
         "vscode": "^1.74.0"
     },
@@ -403,5 +403,5 @@
         "zod": "^3.20.2",
         "zod-validation-error": "^0.3.0"
     },
-    "optionalDependencies": { }
+    "optionalDependencies": {}
 }
