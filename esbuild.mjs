@@ -4,7 +4,7 @@ import sveltePreprocess from "svelte-preprocess";
 import { globSync } from "glob";
 import { commonjs } from "@hyrious/esbuild-plugin-commonjs";
 
-const production = process.env.NODE_ENV.trim() == "production";
+const production = (process.env.NODE_ENV ?? "production").trim() == "production";
 
 const timePlugin = {
     name: "rebuild-log",
