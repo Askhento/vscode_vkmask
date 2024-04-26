@@ -340,14 +340,15 @@
         "package-full": "rimraf -g ./vsix-packages/** && npm run package-all",
         "package-all": "mkdir ./vsix-packages && npm run package-win32-x64 && npm run package-darwin-x64 && npm run package-darwin-arm64",
         "package-win32-x64": "npx vsce package --target win32-x64 --ignoreFile .win32-x64.vscodeignore --out ./vsix-packages",
-        "package-darwin-x64": "vsce package --target darwin-x64 --ignoreFile .darwin-x64.vscodeignore --out ./vsix-packages",
-        "package-darwin-arm64": "vsce package --target darwin-arm64 --ignoreFile .darwin-arm64.vscodeignore --out ./vsix-packages",
+        "package-darwin-x64": "npx vsce package --target darwin-x64 --ignoreFile .darwin-x64.vscodeignore --out ./vsix-packages",
+        "package-darwin-arm64": "npx vsce package --target darwin-arm64 --ignoreFile .darwin-arm64.vscodeignore --out ./vsix-packages",
         "publish-extension": "find ./vsix-packages -iname *.vsix | xargs -n 1 npx vsce publish --packagePath",
         "generateIgnoreFiles": "./generateIgnoreFiles.sh darwin-x64 darwin-arm64 win32-x64",
         "generateBuiltins": "npx ts-node-esm ./src/generateBuiltins.ts",
         "locale": "node ./l10n/update-missing-locale.mjs"
     },
     "devDependencies": {
+
         "@hyrious/esbuild-plugin-commonjs": "^0.2.4",
         "@hyrious/esbuild-plugin-svelte": "^0.2.2",
         "@rollup/plugin-commonjs": "^25.0.7",
@@ -404,5 +405,8 @@
         "smart-buffer": "^4.2.0",
         "zod": "^3.20.2",
         "zod-validation-error": "^0.3.0"
+    },
+    "optionalDependencies": {
+
     }
 }

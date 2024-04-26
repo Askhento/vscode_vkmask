@@ -20,6 +20,8 @@ jobs:
             - run: npm install -f
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - run: npm i -O @img/sharp-darwin-arm64 @img/sharp-darwin-x64 @img/sharp-libvips-darwin-arm64 @img/sharp-libvips-darwin-x64 @img/sharp-win32-x64
             - run: ls ./node_modules/@img
             - run: npx vsce --version
             # - run: cat package.json
