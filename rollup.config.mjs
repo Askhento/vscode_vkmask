@@ -11,10 +11,10 @@ import copy from "rollup-plugin-copy-watch";
 import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import typescript from "@rollup/plugin-typescript"; // esbuild have issues with svelte
-import esbuild from "rollup-plugin-esbuild";
+// import esbuild from "rollup-plugin-esbuild";
 
-import { typescript as svelteTypescript } from "svelte-preprocess-esbuild";
-import { transformSync } from "esbuild";
+// import { typescript as svelteTypescript } from "svelte-preprocess-esbuild";
+// import { transformSync } from "esbuild";
 const tsconfigSvelte = fs.readFileSync("./src/webview-ui/tsconfig.json");
 
 import { extensionConfig } from "./rollup.extension.mjs";
@@ -64,16 +64,16 @@ const svelteCommon = {
             targets: [{ src: "./src/webview-ui/global.css", dest: "./out/webview-ui" }],
         }),
 
-        // typescript({
-        //     tsconfig: "./src/webview-ui/tsconfig.json",
-        //     // rootDirs: ["./src", "../src"],
-        //     sourceMap: true,
-        //     inlineSources: !production,
-        // }),
-        esbuild({
+        typescript({
             tsconfig: "./src/webview-ui/tsconfig.json",
+            // rootDirs: ["./src", "../src"],
             sourceMap: true,
+            inlineSources: !production,
         }),
+        // esbuild({
+        //     tsconfig: "./src/webview-ui/tsconfig.json",
+        //     sourceMap: true,
+        // }),
         svelte({
             include: "./src/webview-ui/**/*.svelte",
             preprocess: [

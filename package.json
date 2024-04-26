@@ -330,15 +330,13 @@
         "prepublish": "npm run clear && npm run build",
         "clear": "rimraf -g ./out/**",
         "dev": "node esbuild.mjs",
-        "build": "set NODE_ENV=production && rollup -c",
-        "build-dev": "NODE_ENV=dev rollup -c",
-        "watch": "set NODE_ENV=dev && rollup -c -w",
+        "build": "set NODE_ENV=production && node esbuild.mjs",
         "test": "vitest run",
         "publish-patch": "npm version patch ; npm run package",
         "publish-minor": "npm version minor ; npm run package",
         "unmount": "./ramdisk_scripts/darwin.sh 2 ./out",
         "package-full": "rimraf -g ./vsix-packages/** && npm run package-all",
-        "package-all": "mkdir ./vsix-packages && npm run package-win32-x64 && npm run package-darwin-x64 && npm run package-darwin-arm64",
+        "package-all": "mkdir vsix-packages & npm run package-win32-x64 && npm run package-darwin-x64 && npm run package-darwin-arm64",
         "package-win32-x64": "npx vsce package --target win32-x64 --ignoreFile .win32-x64.vscodeignore --out ./vsix-packages",
         "package-darwin-x64": "npx vsce package --target darwin-x64 --ignoreFile .darwin-x64.vscodeignore --out ./vsix-packages",
         "package-darwin-arm64": "npx vsce package --target darwin-arm64 --ignoreFile .darwin-arm64.vscodeignore --out ./vsix-packages",
@@ -405,5 +403,5 @@
         "zod": "^3.20.2",
         "zod-validation-error": "^0.3.0"
     },
-    "optionalDependencies": {}
+    "optionalDependencies": { }
 }

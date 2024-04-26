@@ -4,6 +4,8 @@ import sveltePreprocess from "svelte-preprocess";
 import { globSync } from "glob";
 import { commonjs } from "@hyrious/esbuild-plugin-commonjs";
 
+const production = process.env.NODE_ENV.trim() == "production";
+
 const timePlugin = {
     name: "rebuild-log",
     setup({ onStart, onEnd }) {
@@ -30,16 +32,16 @@ const configCommon = {
     logLevel: "info",
 };
 
-const extensionCtx = await esbuild.context({
+const extensionCfg = {
     ...configCommon,
     entryPoints: ["./src/extension.ts"],
     format: "cjs",
     tsconfig: "./tsconfig.json",
     platform: "node",
     plugins: [commonjs({}), timePlugin],
-});
+};
 
-const svelteCtx = await esbuild.context({
+const svelteCfg = {
     ...configCommon,
     entryPoints: [
         "./src/webview-ui/global.css",
@@ -66,6 +68,12 @@ const svelteCtx = await esbuild.context({
         commonjs({}),
         timePlugin,
     ],
-});
+};
 
-await Promise.all([extensionCtx.watch({}), svelteCtx.watch({})]);
+if (!production) {
+    const extensionCtx = await esbuild.context(extensionCfg);
+    const svelteCtx = await esbuild.context(svelteCfg);
+    await Promise.all([extensionCtx.watch({}), svelteCtx.watch({})]);
+} else {
+    await Promise.all([esbuild.build(extensionCfg), esbuild.build(svelteCfg)]);
+}
