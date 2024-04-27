@@ -329,7 +329,7 @@
     "scripts": {
         "prepublish": "npm run clear && npm run build",
         "clear": "rimraf -g ./out/**",
-        "dev": "node esbuild.mjs",
+        "dev": "set NODE_ENV=dev && node esbuild.mjs",
         "build": "set NODE_ENV=production && node esbuild.mjs",
         "test": "vitest run",
         "publish-patch": "npm version patch ; npm run package",
@@ -403,5 +403,5 @@
         "zod": "^3.20.2",
         "zod-validation-error": "^0.3.0"
     },
-    "optionalDependencies": {}
+    "optionalDependencies": { }
 }
