@@ -542,18 +542,18 @@ export const ZTextureObject =
             }),
             // lit: ZBool.describe(uiDesc riptions.bool({ label: "Lit" })),
             // !!! probably will miss texture property
-            // u_transform: ZArray3D.describe({
-            //     ...uiDescriptions.uv_transform,
-            //     label: "locale.parameters.texture.uvTransform.label",
-            //     info: { infoList: "locale.parameters.texture.uvTransform.infoList" },
-            //     defValue: [1, 0, 0],
-            // }),
-            // v_transform: ZArray3D.describe({
-            //     ...uiDescriptions.uv_transform,
-            //     label: "locale.parameters.texture.uvTransform.label",
-            //     info: { infoList: "locale.parameters.texture.uvTransform.infoList" },
-            //     defValue: [0, 1, 0],
-            // }),
+            u_transform: ZArray3D.describe({
+                ...uiDescriptions.uv_transform,
+                label: "locale.parameters.texture.uvTransform.label",
+                info: { infoList: "locale.parameters.texture.uvTransform.infoList" },
+                defValue: [1, 0, 0],
+            }),
+            v_transform: ZArray3D.describe({
+                ...uiDescriptions.uv_transform,
+                label: "locale.parameters.texture.uvTransform.label",
+                info: { infoList: "locale.parameters.texture.uvTransform.infoList" },
+                defValue: [0, 1, 0],
+            }),
             animation: ZTextureAnimation,
             // render_order: ZNumberSlider.describe(
             //     {...uiDescriptions.numberSlider,

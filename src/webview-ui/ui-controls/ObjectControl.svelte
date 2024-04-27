@@ -90,7 +90,7 @@
 
         // console.log("tabinfo", $tabInfo, path);
 
-        Object.entries(uiElements).forEach(([key, el]) => {
+        Object.entries(uiElements).forEach(([elName, el]) => {
             const group = el.uiDescription.group;
             const compGroup = el.uiDescription.compositionGroup;
             if (group === undefined) {
@@ -109,14 +109,18 @@
                         uiElement: el.uiElement,
                         expanded: true,
                         label: el.uiDescription.label,
+                        composition: true,
+                        // uiDescription: el.uiDescription,
                         value: {
-                            [key]: el,
+                            [elName]: el,
                         },
                     };
                 }
-                uiElementsGroupData[group].elements[compGroup].value[key] = el;
+
+                uiElementsGroupData[group].elements[compGroup].value[elName] = el;
+                // console.log("comp grou1p", uiElementsGroupData[group].elements[compGroup]);
             } else {
-                uiElementsGroupData[group].elements[key] = el;
+                uiElementsGroupData[group].elements[elName] = el;
             }
         });
         // console.log("group data: ", uiElementsGroupData);
@@ -173,38 +177,41 @@
                     class:main-group-bottom-margin={!groupData.disableMargin}
                     class="group-wrapper"
                 >
-                    {#each Object.entries(groupData.elements) as [key, data]}
+                    {#each Object.entries(groupData.elements) as [elName, data]}
                         {#if data.value === null && (data.uiDescription.name === "object" || data.uiDescription.name === "array")}
                             <span class="missing-key-label"
-                                ><span>{l10n.t(data.uiDescription.label ?? key)}</span></span
+                                ><span>{l10n.t(data.uiDescription.label ?? elName)}</span></span
                             >
                             <span class="right-button-wrapper">
                                 <vscode-button
                                     class="add-key-btn"
                                     on:click={() => {
                                         // console.log(data.uiDescription);
-                                        addKey(key, data);
+                                        addKey(elName, data);
                                     }}
                                 >
                                     <span slot="start" class="codicon codicon-add" />
                                     <span class="btn-text"
                                         >{l10n.t(
                                             `Add ${l10n
-                                                .t(data.uiDescription.label ?? key)
+                                                .t(data.uiDescription.label ?? elName)
                                                 .toLowerCase()}`
                                         )}</span
                                     >
                                 </vscode-button>
                             </span>
                         {:else}
+                            <!-- {console.log("EL", elName, data)} -->
                             <svelte:component
                                 this={data.uiElement}
                                 error={data.error}
-                                value={value[key] ??
+                                value={value[elName] ?? // we have a value in config
+                                    data.value ?? // for composition
+                                    // for animation object etc
                                     (data.uiDescription.name === "object" ||
                                         data.uiDescription.defValue)}
-                                label={data.label ?? data.uiDescription.label ?? key}
-                                path={[...path, key]}
+                                label={data.label ?? data.uiDescription.label ?? elName}
+                                path={[...path, elName]}
                                 params={data.uiDescription}
                                 uiElements={data.value}
                                 on:changed
