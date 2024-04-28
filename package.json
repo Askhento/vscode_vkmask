@@ -43,6 +43,11 @@
                     "type": "boolean",
                     "default": false,
                     "description": "%locale.contribution.userSettings.experimentalFeatures.description%"
+                },
+                "vkmask.testMaskPath": {
+                    "type": "string",
+                    "default": "",
+                    "description": "%locale.contribution.userSettings.testMaskPath.description%"
                 }
             }
         },
@@ -86,6 +91,11 @@
                 },
                 {
                     "command": "vkmask.archiveProject",
+                    "when": "view == vkmask.projectManager",
+                    "group": "navigation"
+                },
+                {
+                    "command": "vkmask.testMaskOpen",
                     "when": "view == vkmask.projectManager",
                     "group": "navigation"
                 },
@@ -270,7 +280,14 @@
                 "title": "%locale.contribution.command.archiveProject.title%",
                 "shortTitle": "%locale.contribution.command.archiveProject.shortTitle%",
                 "icon": "$(file-zip)"
+            },
+            {
+                "command": "vkmask.testMaskOpen",
+                "title": "%locale.contribution.command.testMaskOpen.title%",
+                "shortTitle": "%locale.contribution.command.testMaskOpen.shortTitle%",
+                "icon": "./res/icons/vkmask_main_icon.svg"
             }
+
         ],
         "viewsContainers": {
             "activitybar": [

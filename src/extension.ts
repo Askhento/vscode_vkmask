@@ -26,6 +26,7 @@ const print = (...args: any) => logger.log(__filename, ...args);
 
 import { assetsWatcher } from "./AssetsWatcher";
 import { userSettings } from "./UserSettings";
+import { testMask } from "./openTestMask";
 import { jsonPrettyArray } from "./utils/jsonStringify";
 import {
     RequestCommand,
@@ -84,6 +85,15 @@ export async function activate(context: vscode.ExtensionContext) {
             payload: currentConfig,
         });
     });
+
+    testMask.updateExecutionPath(userSettings.settings["vkmask.testMaskPath"].value);
+    userSettings.on("configChanged:vkmask.testMaskPath", (testMaskPath) => {
+        print("path updated", testMaskPath.value);
+        if (testMask.updateExecutionPath(testMaskPath.value)) return;
+        vscode.window.showErrorMessage("locale.errorMessage.wrongTestMask");
+        // userSettings.updateSettings
+    });
+
     let experimentalFeatures =
         context.extensionMode === vscode.ExtensionMode.Development ||
         userSettings.settings["vkmask.experimentalFeatures"].value;
@@ -797,6 +807,17 @@ export async function activate(context: vscode.ExtensionContext) {
             );
 
             await archiveProject();
+        })
+    );
+
+    context.subscriptions.push(
+        vscode.commands.registerCommand("vkmask.testMaskOpen", async () => {
+            if (appState === AppState.error && error === ErrorType.configMissing) {
+                vscode.window.showErrorMessage("locale.commands.testMaskOpen.configMissing");
+                return;
+            }
+            print("opening test mask!");
+            testMask.open(maskConfig.pathMaskJSON);
         })
     );
 
