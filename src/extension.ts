@@ -16,7 +16,6 @@ import { RecentProjects } from "./RecentProjectInfo";
 import { archiveProject } from "./utils/archiveProject";
 import { messageHandler, MessageHandlerData } from "./MessageHandler";
 
-import { HotReload } from "./HotReload";
 // const { exec } = require('node:child_process');
 
 import { posix as path } from "path";
