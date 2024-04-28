@@ -11,7 +11,7 @@
 
     let { u_transform, v_transform } = value;
 
-    console.log("UV", value, path);
+    // console.log("UV", value, path);
 
     let mat = [
         u_transform.value ?? u_transform.uiDescription.defValue,

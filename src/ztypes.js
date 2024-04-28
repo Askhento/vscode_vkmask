@@ -104,7 +104,7 @@ export const uiDescriptions = {
         name: "uv_transform",
         label: "UV transform",
         group: "uv_transform",
-        defValue: [0, 0, 0],
+        defValue: null,
         groupExpanded: false,
         compositionGroup: "uv_transform",
     },

@@ -129,7 +129,7 @@ function processSourceBundles(translations, config = { dryRun: false, sortKeys: 
     });
 }
 
-function processContributionBundles(translations, dryRun = false) {
+function processContributionBundles(translations, config = { sortKeys: true, dryRun: false }) {
     console.log("");
     console.log("Parsing package.json keys");
 
@@ -143,7 +143,7 @@ function processContributionBundles(translations, dryRun = false) {
     Object.keys(parsedPackageKeys).forEach((key) => {
         if (key in mainPackgeJSONBundle) return;
         console.log(`New key found : ${key}`);
-        mainPackgeJSONBundle[key] = sourceParsedKeys[key];
+        mainPackgeJSONBundle[key] = parsedPackageKeys[key];
         needWriteMainPackageJSON = true;
     });
 
@@ -164,7 +164,7 @@ function processContributionBundles(translations, dryRun = false) {
     console.log("Updating package.json bundles");
 
     packageJSONBundles.forEach((bundleName) => {
-        updateBundle(mainPackgeJSONBundle, path.join("..", bundleName), false);
+        updateBundle(mainPackgeJSONBundle, path.join("..", bundleName), config);
         // checkExistingTranslations(bundleName, translations, dryRun);
     });
 }
@@ -179,7 +179,7 @@ const translations = {
 
 processSourceBundles(translations, { dryRun: false, sortKeys: true });
 
-// processContributionBundles(translations, true);
+processContributionBundles(translations, { dryRun: false, sortKeys: true });
 // console.log(translations);
 
 // path.readdirSync()
