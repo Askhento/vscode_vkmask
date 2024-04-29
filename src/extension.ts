@@ -642,34 +642,49 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 
     async function createProject(url = "") {
-        if (!url) return; // !!!!
         // ! need to check if project already there !!!
         // ? translate #tr
         const options: vscode.SaveDialogOptions = {
-            saveLabel: "Create",
-            title: "Create mew vkmask project",
+            saveLabel: l10n.t("locale.infoMessage.createProject.label"),
+            title: l10n.t("locale.infoMessage.createProject.title"),
         };
+        const newProjectUri = await vscode.window.showSaveDialog(options);
 
         const oldState = appState;
         appState = AppState.loading;
         onSendAppState();
 
-        // print("url", url);
-
-        const newProjectUri = await vscode.window.showSaveDialog(options);
-        if (!newProjectUri || !(await downloadTemplate(newProjectUri.fsPath, url))) {
+        if (!newProjectUri) {
             // on cancel
             appState = oldState;
             onSendAppState();
             return;
         }
 
+        if (!url) {
+            // print("sample dir", sampleProjectDir.toString());
+            const sampleProjectDir = vscode.Uri.joinPath(
+                context.extensionUri,
+                "res",
+                "empty-project"
+            );
+            copyRecursiveSync(sampleProjectDir.fsPath, newProjectUri.fsPath);
+        } else {
+            // ! could be network error
+            try {
+                await downloadTemplate(newProjectUri.fsPath, url);
+            } catch (error) {
+                vscode.window.showErrorMessage(
+                    l10n.t("locale.errorMessage.cannotDownloadTemplate")
+                );
+                appState = oldState;
+                onSendAppState();
+                return;
+            }
+        }
+
         recentProjectInfo.addInfo(newProjectUri.fsPath);
         vscode.commands.executeCommand(`vscode.openFolder`, newProjectUri);
-
-        // const sampleProjectDir = vscode.Uri.joinPath(context.extensionUri, "res", "empty-project");
-        // print("sample dir", sampleProjectDir.toString());
-        // copyRecursiveSync(sampleProjectDir.fsPath, newProjectDir.fsPath);
     }
 
     // function updateAppState() {
