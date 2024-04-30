@@ -7,7 +7,7 @@
         "url": "https://github.com/Askhento/vscode_vkmask"
     },
     "description": "%locale.contribution.extension.description%",
-    "version": "0.8.7",
+    "version": "0.8.8",
     "engines": {
         "vscode": "^1.74.0"
     },
@@ -287,7 +287,6 @@
                 "shortTitle": "%locale.contribution.command.testMaskOpen.shortTitle%",
                 "icon": "./res/icons/vkmask_main_icon.svg"
             }
-
         ],
         "viewsContainers": {
             "activitybar": [
@@ -420,5 +419,5 @@
         "zod": "^3.20.2",
         "zod-validation-error": "^0.3.0"
     },
-    "optionalDependencies": { }
+    "optionalDependencies": {}
 }
