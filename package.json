@@ -96,7 +96,7 @@
                 },
                 {
                     "command": "vkmask.testMaskOpen",
-                    "when": "view == vkmask.projectManager",
+                    "when": "view == vkmask.projectManager && config.vkmask.experimentalFeatures",
                     "group": "navigation"
                 },
                 {
@@ -419,5 +419,5 @@
         "zod": "^3.20.2",
         "zod-validation-error": "^0.3.0"
     },
-    "optionalDependencies": {}
+    "optionalDependencies": { }
 }
