@@ -29,7 +29,7 @@
         path;
 
     export let infoErrors = [];
-    let infoVisible = false;
+    export let infoVisible = false;
 
     // print("INIT", value, params);
 
@@ -199,10 +199,14 @@
         onChange();
     }
 
-    onMount(async () => {
+    async function updateDeps() {
         const { needUpdate } = await applyDeps(component, stores, params.dependencies);
         if (needUpdate) onChange();
+        return needUpdate;
+    }
 
+    onMount(async () => {
+        await updateDeps();
         await tick();
         // print("mount", currentAsset);
         setControlElementValue(currentAsset?.baseName);
@@ -321,7 +325,7 @@
                     //     inputElement.focus();
                     //   }, 1000);
                 }}
-                on:change={(e) => {
+                on:change={async (e) => {
                     //   value = e.target.value;
                     // print("drop change", e.target.value, filteredAssets[parseInt(e.target.value)]);
                     // print("change dropdonw");
@@ -330,6 +334,7 @@
                     // checkAssetExists();
                     setControlElementValue(currentAsset?.baseName);
 
+                    if (await updateDeps()) return;
                     onChange();
                     // searchValue = "";
                     // inputElement.value = "";

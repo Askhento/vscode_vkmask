@@ -234,6 +234,8 @@ const textureAssetErrorDeps = [
             if (height % 2 !== 0)
                 component.infoErrors.push(["locale.infoErrors.textures.oddHeight", height]);
 
+            // console.log("errors added", component.infoErrors);
+            component.params = component.params; // to trigger rerender
             return { needUpdate: false }; // without this will infinte loop
         },
     },
