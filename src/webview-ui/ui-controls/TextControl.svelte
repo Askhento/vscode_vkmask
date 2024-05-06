@@ -32,33 +32,51 @@
 
 {#if label}
     <span class="label" title={l10n.t(label)}><span>{l10n.t(label)}</span></span>
-    <vscode-text-field
-        class="value"
-        type="text"
-        {value}
-        on:keydown={({ key, target }) => {
-            // console.log(key);
-            if (key === "Enter") {
-                value = target.value;
-                target.blur();
-                sendValue();
-            } else if (key === "Escape") {
-                target.value = value;
-                target.blur();
-            }
-        }}
-    />
+    <div class="control-wrapper">
+        <vscode-text-field
+            class="value"
+            type="text"
+            {value}
+            on:keydown={({ key, target }) => {
+                // console.log(key);
+                if (key === "Enter") {
+                    value = target.value;
+                    target.blur();
+                    sendValue();
+                } else if (key === "Escape") {
+                    target.value = value;
+                    target.blur();
+                }
+            }}
+        />
+    </div>
 {/if}
 
 <style>
     * {
-        margin: var(--global-margin);
-        /* padding: 0; */
+        margin: 0;
+        padding: 0;
         box-sizing: border-box;
     }
 
+    .control-wrapper {
+        padding-right: var(--global-body-padding-right);
+        padding-bottom: var(--global-margin);
+        padding-top: var(--global-margin);
+        padding-left: var(--global-margin);
+
+        margin: unset;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        height: var(--global-block-height);
+    }
+
     span.label {
+        padding: var(--global-margin);
         padding-left: var(--global-body-padding-left);
+        padding-right: var(--global-label-control-gap);
 
         height: var(--global-block-height);
         display: flex;
@@ -76,14 +94,15 @@
 
     vscode-text-field {
         /* margin: unset; */
-        height: var(--global-block-height);
+        height: 100%;
+        /* height: var(--global-block-height); */
         text-align: center;
-        /* min-width: 0; */
-        padding-right: var(--global-body-padding-right);
+        /* padding-right: var(--global-body-padding-right); */
     }
 
     vscode-text-field::part(root) {
         min-width: 0;
+        width: 100%;
     }
 
     /* input {
