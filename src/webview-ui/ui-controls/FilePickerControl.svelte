@@ -172,6 +172,7 @@
             type: SelectionType.asset,
         };
 
+        // !!!!!!! control target
         messageHandler.send({
             command: RequestCommand.updateSelection,
             origin: RequestTarget.control,

@@ -24,7 +24,7 @@ export class AssetsProcessor {
         ignoreDeclaration: true,
     });
 
-    readFileType(ext: string, buffer: Buffer) {
+    getFileType(ext: string, buffer: Buffer) {
         let type = "unknown";
         // !!!! error handling
 
@@ -101,7 +101,7 @@ export class AssetsProcessor {
         const { ext, name } = path.parse(absPath);
         // const absPath = path.resolve(file);
         const fileBuffer = fs.readFileSync(absPath);
-        const type = await this.readFileType(ext, fileBuffer);
+        const type = await this.getFileType(ext, fileBuffer);
 
         const typesToProcess = new Set([AssetTypes.image, AssetTypes.model3d]);
 
