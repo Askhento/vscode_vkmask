@@ -1056,7 +1056,7 @@ const ZPatchEffect = ZBaseEffect.extend({
         group: "advanced",
         options: Object.keys(ZVisibleType.Values),
         optionLabels: ZVisibleTypeLabels,
-        defValue: ZVisibleType.Values.always,
+        defValue: ZVisibleType.Values.face,
     }),
     fit: ZPatchFitMode.describe({
         ...uiDescriptions.enum,
@@ -1274,7 +1274,7 @@ const ZColorfilterEffect = ZBaseEffect.extend({
         group: "advanced",
         options: Object.keys(ZVisibleType.Values),
         optionLabels: ZVisibleTypeLabels,
-        defValue: ZVisibleType.Values.always,
+        defValue: ZVisibleType.Values.face,
     }),
     fit: ZPatchFitMode.describe({
         ...uiDescriptions.enum,
