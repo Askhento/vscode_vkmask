@@ -583,7 +583,7 @@ export const ZTextureObject =
                 },
                 uv_transform: {
                     label: "locale.parameters.texture.group.uvTransform.label",
-                    defExpanded: false,
+                    defExpanded: true,
                 },
             },
         });

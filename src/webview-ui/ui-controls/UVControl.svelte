@@ -154,10 +154,10 @@
         const cos = prettyNumber(Math.cos(radRot));
         const sin = prettyNumber(Math.sin(radRot));
 
-        mat[0][0] = cos; // * scale[0];
-        mat[0][1] = -sin; // * scale[0]; // evil hack
-        mat[1][0] = sin; // * scale[1];
-        mat[1][1] = cos; // * scale[1];
+        mat[0][0] = cos * scale[0];
+        mat[0][1] = -sin * scale[0]; // evil hack
+        mat[1][0] = sin * scale[1];
+        mat[1][1] = cos * scale[1];
 
         // translation = matMult([[0.5, 0.5]], matSub(identity, transformMat));
         mat[0][2] = prettyNumber(0.5 * (1 - mat[0][0] - mat[0][1]));
@@ -185,7 +185,7 @@
     function scaleChanged(e) {
         // console.log("offset ", e.detail);
         setRotation();
-        // sendValue();
+        sendValue();
     }
 
     function sendValue() {
@@ -225,13 +225,14 @@
     params={{ valueLabels: ["X", "Y"] }}
     on:changed={scaleChanged}
 />
-<VectorControl
+
+<!-- <VectorControl
     bind:value={pivot}
     {path}
     label={"locale.controls.uvTransform.pivot"}
     params={{ valueLabels: ["X", "Y"] }}
     on:changed={() => {}}
-/>
+/> -->
 
 <!-- <div>{label}</div>
 <div class="control-wrapper">
