@@ -62,3 +62,12 @@ vscode-option::part(content) {
     align-items: center;
     width: 100%;
 }
+
+vscode-button::part(content) {
+    justify-content: center;
+    min-width: 0;
+}
+
+vscode-button::part(control) {
+    overflow: hidden;
+}

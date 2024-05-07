@@ -222,20 +222,12 @@
         margin-left: -50vw;
     }
 
-    vscode-button::part(content) {
-        min-width: 0;
-    }
-
-    vscode-button::part(control) {
-        overflow: hidden;
-    }
-
     .btn-text {
         margin: unset;
         padding: unset;
         /* display: inline-block; */
         width: 100%;
-
+        height: fit-content;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;

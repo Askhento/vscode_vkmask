@@ -179,7 +179,7 @@
                 >
                     {#each Object.entries(groupData.elements) as [elName, data]}
                         {#if data.value === null && (data.uiDescription.name === "object" || data.uiDescription.name === "array")}
-                            <span class="missing-key-label"
+                            <span class="label"
                                 ><span>{l10n.t(data.uiDescription.label ?? elName)}</span></span
                             >
                             <span class="right-button-wrapper">
@@ -288,6 +288,24 @@
         background: yellow;
     } */
 
+    span.label {
+        padding: var(--global-margin);
+        padding-left: var(--global-body-padding-left);
+        padding-right: var(--global-label-control-gap);
+
+        height: var(--global-block-height);
+        display: flex;
+        justify-content: var(--label-justify);
+        align-items: var(--label-align);
+    }
+
+    span.label > span {
+        height: fit-content;
+
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
     .control-wrapper {
         position: relative;
 
@@ -338,7 +356,7 @@
         height: var(--global-block-height);
     }
 
-    span.missing-key-label {
+    /* span.missing-key-label {
         justify-self: var(--label-justify);
         margin: var(--global-margin);
         height: var(--global-block-height);
@@ -348,22 +366,31 @@
 
     span.missing-key-label > span {
         margin: var(--global-margin);
-    }
+    } */
 
     .right-button-wrapper {
         position: relative;
         grid-column: 2/3;
-        margin: var(--global-margin);
+        /* margin: var(--global-margin); */
         padding-right: var(--global-body-padding-right);
+        padding-bottom: var(--global-margin);
+        padding-top: var(--global-margin);
+        padding-left: var(--global-margin);
+
         height: var(--global-block-height);
     }
 
     .add-key-btn {
         width: 100%;
+        height: 100%;
         margin: unset;
+    }
+    vscode-button {
+        height: var(--global-block-height-borded);
     }
 
     vscode-button::part(content) {
+        justify-content: center;
         min-width: 0;
     }
 
@@ -376,7 +403,7 @@
         padding: unset;
         /* display: inline-block; */
         width: 100%;
-
+        height: fit-content;
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
