@@ -180,7 +180,7 @@
     .right-button-wrapper {
         position: relative;
         grid-column: 2/3;
-        margin: var(--global-margin);
+        padding-left: var(--global-margin);
         padding-right: var(--global-body-padding-right);
         height: var(--global-block-height);
     }
