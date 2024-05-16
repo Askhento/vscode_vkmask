@@ -32,10 +32,10 @@ jobs:
             - run: npx vsce publish -p ${{ secrets.VSCE_PAT }} --packagePath $(find ./vsix-packages -iname *.vsix)
               env:
                   VSCE_PAT: ${{ secrets.VSCE_PAT }}
-            # - uses: actions/upload-artifact@v2
-            #   with:
-            #       name: ${{ env.target }}
-            #       path: "*.vsix"
+            - uses: actions/upload-artifact@v2
+              with:
+                  name: "packs"
+                  path: "./vsix-packages"
 
     # publish:
     #     runs-on: ubuntu-latest
