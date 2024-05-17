@@ -51,13 +51,9 @@ import { downloadTemplate } from "./utils/downloadTemplate";
 // import { selection } from "./global";
 
 export async function activate(context: vscode.ExtensionContext) {
-    // const localizedString = vscode.l10n.t(
-    //     "Your extension got activated with the {0} language!",
-    //     vscode.env.language
-    // );
-
-    // vscode.window.showInformationMessage(localizedString);
-    // selection = { type: SelectionType.empty };
+    const thisExtension = vscode.extensions.getExtension("askhento.vkmask");
+    const [major, minor, patch] = thisExtension.packageJSON.version.split(".");
+    if (minor % 2 !== 0) vscode.window.showInformationMessage("Running pre-release");
 
     let l10nBundle: string | l10n.l10nJsonFormat;
     checkLocalizationBundle();
