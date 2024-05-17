@@ -84,6 +84,7 @@
     "locale.fillModes.solid.label": "Сплошное",
     "locale.fillModes.wireframe.label": "Сетка",
     "locale.infoErrors.colorfilter.lookup.maxSize": "Размер текстуры превышает {0} пикселей: {1} пикселей",
+    "locale.infoErrors.model3d.processorError": "Модель не была распознана, материал будет недоступен. Попробуйте другую модель.",
     "locale.infoErrors.textures.maxHeight": "Высота текстуры превышает лимит {0} пикселей: {1} пикселей",
     "locale.infoErrors.textures.maxWiwidth": "Ширина текстуры превышает лимит {0} пикселей: {1} пикселей",
     "locale.infoErrors.textures.oddHeight": "Нечетная высота текстуры: {0} пикселей",

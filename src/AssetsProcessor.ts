@@ -106,8 +106,16 @@ export class AssetsProcessor {
         const typesToProcess = new Set([AssetTypes.image, AssetTypes.model3d]);
 
         let processOutput = {};
+
         if (typesToProcess.has(type)) {
-            processOutput = await this.read(type, fileBuffer);
+            try {
+                processOutput = await this.read(type, fileBuffer);
+            } catch (error) {
+                console.log("cannot process asset", error, relativePath, fileBuffer);
+                processOutput = {
+                    processorError: true,
+                };
+            }
         }
 
         // const baseName = path.basename(file);
@@ -414,8 +422,10 @@ export const assetProcessors: Record<string, AssetProcessor> = {
     [AssetTypes.model3d]: {
         read: (buffer: Buffer) => {
             const modelBuffer = SmartBuffer.fromBuffer(buffer);
+            console.log("reading buffer", modelBuffer);
 
             const version = modelBuffer.readString(4);
+            console.log("model version", version);
 
             // !!! only for UMDL
             // my mac seems to be Little endian

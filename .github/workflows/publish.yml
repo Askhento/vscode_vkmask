@@ -29,7 +29,6 @@ jobs:
             - run: npm install -f
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    
 
             # - run: npm i -O @img/sharp-darwin-arm64 @img/sharp-darwin-x64 @img/sharp-libvips-darwin-arm64 @img/sharp-libvips-darwin-x64 @img/sharp-win32-x64
             - run: npm list
@@ -44,7 +43,7 @@ jobs:
               run: npx vsce publish -p ${{ secrets.VSCE_PAT }}  --packagePath $(find ./vsix-packages -iname *.vsix)
               env:
                   VSCE_PAT: ${{ secrets.VSCE_PAT }}
-                  PRE_RELEASE: ${{ github.event.inputs.pre-release && '--pre-release' || ''}}
+                  PRE_RELEASE: ${{ github.event.inputs.pre-release && 'pre_release' || ''}}
             - uses: actions/upload-artifact@v2
               with:
                   name: "packs"

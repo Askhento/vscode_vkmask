@@ -26,7 +26,8 @@
     export let label = "empty",
         value,
         params,
-        path;
+        path,
+        disabled = false;
 
     export let infoErrors = [];
     export let infoVisible = false;
@@ -304,7 +305,7 @@
             <vscode-dropdown
                 class:error={filteredAssets.length === 0}
                 position="above"
-                disabled={typedAssets.length === 0 || waiting}
+                disabled={typedAssets.length === 0 || waiting || disabled}
                 class:missing-asset={value && currentAsset == null}
                 value={dropDownIndex}
                 bind:this={dropdown}
@@ -403,7 +404,7 @@
 
         <vscode-button
             appearance={value == null ? "primary" : "secondary"}
-            disabled={waiting}
+            disabled={waiting || disabled}
             class="upload-button"
             on:click|stopPropagation={() => {
                 uploadAsset();

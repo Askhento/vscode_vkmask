@@ -20,6 +20,7 @@
     export let path;
     export let uiElements;
     export let params;
+    export let disabled = false;
 
     let nesting = params.group == null;
 
@@ -125,6 +126,7 @@
                     this={data.uiElement}
                     expanded={true}
                     value={value[index]}
+                    {disabled}
                     label={l10n.t(params.elementName ?? "element") + " " + index}
                     path={[...path, index]}
                     params={data.uiDescription}

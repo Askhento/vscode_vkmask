@@ -855,14 +855,22 @@ export const ZMaterialArray = z.preprocess(
                     const assetIndex = assets.findIndex((v) => v.path === modelPath);
 
                     if (assetIndex < 0) {
+                        // force empty material list
                         if (value.length) {
-                            component.value = [];
+                            // component.value = [];
+                            component.disabled = true;
                             return { needUpdate: true };
                         }
                         return { needUpdate: false };
                     }
 
-                    const { numGeometries } = assets[assetIndex];
+                    const { numGeometries, processorError } = assets[assetIndex];
+
+                    if (processorError) {
+                        // component.value = [];
+                        component.disabled = true;
+                        return { needUpdate: false };
+                    }
 
                     if (value.length === numGeometries) return { needUpdate: false }; // without this will infinte loop
 
@@ -1396,6 +1404,29 @@ const ZColorfilterEffect = ZBaseEffect.extend({
     },
 });
 
+const modelDeps = [
+    {
+        source: ["stores", "assets"],
+        postprocess: (_, assets, component) => {
+            const { value, params } = component;
+            const assetIndex = assets.findIndex((v) => v.path === value);
+            if (assetIndex < 0) {
+                return { needUpdate: false };
+            }
+            const { processorError } = assets[assetIndex];
+
+            component.infoErrors = [];
+
+            if (processorError) {
+                component.infoErrors.push(["locale.infoErrors.model3d.processorError"]);
+            }
+
+            component.infoErrors = component.infoErrors; // to trigger rerender
+            return { needUpdate: false }; // without this will infinte loop
+        },
+    },
+];
+
 const ZModel3dEffect = ZBaseEffect.extend({
     name: z.literal("model3d").describe(uiDescriptions.none),
     anchor: ZFaceAnchor.describe({
@@ -1422,6 +1453,7 @@ const ZModel3dEffect = ZBaseEffect.extend({
             infoBody: "locale.parameters.model3d.model.infoBody",
             infoHeader: "locale.parameters.model3d.model.infoHeader",
         },
+        dependencies: modelDeps,
         structural: true,
     }),
     position: ZArray3D.describe({
