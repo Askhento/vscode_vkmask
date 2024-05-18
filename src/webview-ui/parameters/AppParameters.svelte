@@ -634,7 +634,7 @@
 </script>
 
 <div class="parameters-wrapper">
-    {#if $selectionStack.length !== 0}
+    {#if $selectionStack.length !== 0 && false}
         <vscode-button
             on:click|stopPropagation={() => {
                 removeUndo();
