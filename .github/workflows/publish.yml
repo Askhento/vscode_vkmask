@@ -42,7 +42,7 @@ jobs:
             - run: ls ./vsix-packages
             - run: cat ./package.json
             - if: ${{ github.event.inputs.publish }}
-              run: npx vsce publish -p ${{ secrets.VSCE_PAT }} ${{ github.event.inputs.pre-release == true && '--pre-release' || ''}} --packagePath $(find ./vsix-packages -iname *.vsix)
+              run: npx vsce publish -p ${{ secrets.VSCE_PAT }} ${{ github.event.inputs.pre-release == 'true' && '--pre-release' || ''}} --packagePath $(find ./vsix-packages -iname *.vsix)
               env:
                   VSCE_PAT: ${{ secrets.VSCE_PAT }}
             - uses: actions/upload-artifact@v2
