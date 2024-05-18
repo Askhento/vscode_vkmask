@@ -351,7 +351,7 @@
         "publish-patch": "npm version patch ; npm run package",
         "publish-minor": "npm version minor ; npm run package",
         "unmount": "./ramdisk_scripts/darwin.sh 2 ./out",
-        "package-all": "mkdir vsix-packages & rimraf -g ./vsix-packages/** && bash ./package.sh darwin-x64 darwin-arm64 win32-x64",
+        "package-all": "rimraf -g ./vsix-packages/** && mkdir vsix-packages && bash ./package.sh darwin-x64 darwin-arm64 win32-x64",
         "publish-extension": "find ./vsix-packages -iname *.vsix | xargs -n 1 npx vsce publish --packagePath",
         "generateIgnoreFiles": "bash ./generateIgnoreFiles.sh darwin-x64 darwin-arm64 win32-x64",
         "generateBuiltins": "npx ts-node-esm ./src/generateBuiltins.ts",
