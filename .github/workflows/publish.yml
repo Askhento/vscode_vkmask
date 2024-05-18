@@ -34,16 +34,17 @@ jobs:
             - run: npm list
             - run: ls ./node_modules/@img
             - run: npx vsce --version
-            # - run: cat package.json
+
             - run: npm run package-full
+              env:
+                  PRE_RELEASE: ${{ github.event.inputs.pre-release}}
             - run: ls
             - run: ls ./vsix-packages
             - run: cat ./package.json
             - if: ${{ github.event.inputs.publish }}
-              run: npx vsce publish -p ${{ secrets.VSCE_PAT }}  --packagePath $(find ./vsix-packages -iname *.vsix)
+              run: npx vsce publish -p ${{ secrets.VSCE_PAT }} ${{ github.event.inputs.pre-release && '--pre-release' || ''}} --packagePath $(find ./vsix-packages -iname *.vsix)
               env:
                   VSCE_PAT: ${{ secrets.VSCE_PAT }}
-                  PRE_RELEASE: ${{ github.event.inputs.pre-release && 'pre_release' || ''}}
             - uses: actions/upload-artifact@v2
               with:
                   name: "packs"
