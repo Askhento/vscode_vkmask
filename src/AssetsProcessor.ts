@@ -475,7 +475,7 @@ export const assetProcessors: Record<string, AssetProcessor> = {
                 numGeometries,
                 vertCount,
                 indexCount,
-                sizeBytes: Buffer.byteLength(buffer),
+                sizeBytes: modelBuffer.length,
             };
         },
         write: () => {
