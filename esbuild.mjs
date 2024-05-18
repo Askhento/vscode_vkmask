@@ -31,7 +31,7 @@ const configCommon = {
     external: ["vscode"],
     minify: false,
     logLevel: "info",
-    sourcemap: production ? undefined : "linked",
+    sourcemap: production ? undefined : "inline",
 };
 
 /** @type {import("esbuild").BuildOptions} */
