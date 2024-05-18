@@ -32,8 +32,6 @@ jobs:
                   npm list
                   ls ./node_modules/@img
                   npx vsce --version
-                  ls
-                  ls ./vsix-packages
 
             - run: ./publish.sh ${{ github.event.inputs.publish }}
               env:
