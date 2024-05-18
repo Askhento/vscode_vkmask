@@ -77,7 +77,7 @@ export class AssetsProcessor {
 
     async read(type: string, fileBuffer: Buffer) {
         if (!(type in assetProcessors)) {
-            print(`read type ${type} not in proccessors`);
+            print(`read: type ${type} not in proccessors`);
             return {};
         }
 
@@ -86,7 +86,7 @@ export class AssetsProcessor {
 
     async write(type: string, data: any) {
         if (!(type in assetProcessors)) {
-            print(`write type ${type} not in proccessors`);
+            print(`write: type ${type} not in proccessors`);
             return {};
         }
 
@@ -111,7 +111,7 @@ export class AssetsProcessor {
             try {
                 processOutput = await this.read(type, fileBuffer);
             } catch (error) {
-                console.log("cannot process asset", error, relativePath, fileBuffer);
+                console.error("cannot process asset", error, relativePath, fileBuffer);
                 processOutput = {
                     processorError: true,
                 };
@@ -418,14 +418,14 @@ export const assetProcessors: Record<string, AssetProcessor> = {
             return "";
         },
     },
-
+    //vscode://file/f:/PROJECTOS_SSD/urhovk/vscode_vkmask/out/extension.js:15524:19
     [AssetTypes.model3d]: {
         read: (buffer: Buffer) => {
             const modelBuffer = SmartBuffer.fromBuffer(buffer);
-            console.log("reading buffer", modelBuffer);
+            // console.log("reading buffer", modelBuffer, modelBuffer.length, modelBuffer.readOffset);
 
             const version = modelBuffer.readString(4);
-            console.log("model version", version);
+            // console.log("model version", version);
 
             // !!! only for UMDL
             // my mac seems to be Little endian
@@ -471,6 +471,7 @@ export const assetProcessors: Record<string, AssetProcessor> = {
             // console.log(`numGeometries = ${numGeometries}`);
 
             return {
+                version,
                 numGeometries,
                 vertCount,
                 indexCount,

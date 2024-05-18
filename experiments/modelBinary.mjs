@@ -9,7 +9,7 @@ import { SmartBuffer } from "smart-buffer";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-const file = path.join(__dirname, "Cubin.mdl");
+const file = path.join(__dirname, "Glass.mdl");
 
 const elementTypeSizes = {
     INT: 4, // INT
@@ -40,6 +40,7 @@ const LEGACY_VERTEXELEMENTS = [
 
 const modelBuffer = SmartBuffer.fromBuffer(fs.readFileSync(file));
 
+console.log("len = ", modelBuffer.length);
 const version = modelBuffer.readString(4);
 
 // !!! only for UMDL

@@ -23,6 +23,7 @@ const timePlugin = {
     },
 };
 
+/** @type {import("esbuild").BuildOptions} */
 const configCommon = {
     outbase: "./src",
     outdir: "./out",
@@ -30,15 +31,23 @@ const configCommon = {
     external: ["vscode"],
     minify: false,
     logLevel: "info",
+    sourcemap: production ? undefined : "linked",
 };
 
+/** @type {import("esbuild").BuildOptions} */
 const extensionCfg = {
     ...configCommon,
     entryPoints: ["./src/extension.ts"],
     format: "cjs",
     tsconfig: "./tsconfig.json",
     platform: "node",
-    plugins: [commonjs({}), timePlugin],
+    plugins: [
+        // ! not sure why i was using it for
+        // commonjs({
+        //     requireReturnsDefault: true,
+        // }),
+        timePlugin,
+    ],
 };
 
 const svelteCfg = {
