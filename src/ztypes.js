@@ -857,7 +857,7 @@ export const ZMaterialArray = z.preprocess(
                     if (assetIndex < 0) {
                         // force empty material list
                         if (value.length) {
-                            // component.value = [];
+                            component.value = [];
                             component.disabled = true;
                             return { needUpdate: true };
                         }

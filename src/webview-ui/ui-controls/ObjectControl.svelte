@@ -153,7 +153,9 @@
     <!-- {#key uiElementsGroupData} -->
     {#if expanded}
         {#each Object.entries(uiElementsGroupData) as [groupName, groupData]}
-            {#if groupData.label != null && Object.keys(groupData.elements).length !== 0}
+            {@const elemCount = Object.keys(groupData.elements).length}
+            {@const elementsEntries = Object.entries(groupData.elements)}
+            {#if groupData.label != null && elemCount !== 0 && !(elemCount === 1 && Array.isArray(elementsEntries[0][1].value) && elementsEntries[0][1].value.length === 0)}
                 <vscode-divider class="divider" role="separator" />
                 <div
                     class="group-label"
@@ -177,7 +179,7 @@
                     class:main-group-bottom-margin={!groupData.disableMargin}
                     class="group-wrapper"
                 >
-                    {#each Object.entries(groupData.elements) as [elName, data]}
+                    {#each elementsEntries as [elName, data]}
                         {#if data.value === null && (data.uiDescription.name === "object" || data.uiDescription.name === "array")}
                             <span class="label"
                                 ><span>{l10n.t(data.uiDescription.label ?? elName)}</span></span
