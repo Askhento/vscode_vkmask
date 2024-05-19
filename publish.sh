@@ -12,8 +12,7 @@ npm run package-all
 cmd=(--packagePath $(find ./vsix-packages -iname *.vsix))
 
 if [[ -n $VSCE_PAT ]]; then
-    echo "PAT = ${VSCE_PAT}"
-    cmd+=("-p $VSCE_PAT")
+    cmd+=(-p $VSCE_PAT)
 fi
 
 if [[ $RELEASE == "false" ]]; then
