@@ -22,6 +22,7 @@ fi
 
 if [[ $publish == "true" ]]; then
     echo "will publish"
+    echo "npx vsce publish ${cmd[@]}"
     npx vsce publish "${cmd[@]}"
 else
     echo "dry run"
