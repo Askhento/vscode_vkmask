@@ -9,7 +9,7 @@ npm run generateIgnoreFiles
 
 npm run package-all
 
-cmd=("--packagePath $(find ./vsix-packages -iname *.vsix)")
+cmd=(--packagePath "$(find ./vsix-packages -iname *.vsix)")
 
 if [[ -n $VSCE_PAT ]]; then
     cmd+=("-p $VSCE_PAT")
