@@ -21,6 +21,7 @@ vitest-setup.js
 vitest.config.mjs
 !node_modules/@vscode/codicons/dist/codicon.css
 !node_modules/@vscode/codicons/dist/codicon.ttf
+*.sh
 *.vscodeignore
 
 
