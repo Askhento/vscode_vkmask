@@ -14,7 +14,7 @@
     value = value ?? params.defValue;
     // value = 0.5;
 
-    // $: console.log("from slider", params);
+    // $: console.log("from slider", params, value);
 
     const dispatch = createEventDispatcher();
 

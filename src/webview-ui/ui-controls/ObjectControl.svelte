@@ -217,11 +217,11 @@
                             </span>
                         {:else}
                             <!-- {console.log("EL", elName, data)} -->
+                            <!-- value[elName] ?? // we have a value in config -->
                             <svelte:component
                                 this={data.uiElement}
                                 error={data.error}
-                                value={value[elName] ?? // we have a value in config
-                                    data.value ?? // for composition
+                                value={data.value ?? // for composition
                                     // for animation object etc
                                     (data.uiDescription.name === "object" ||
                                         data.uiDescription.defValue)}
