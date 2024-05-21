@@ -16,6 +16,7 @@ ramdisk_scripts
 vsix-packages
 experiments
 test
+out/test
 esbuild.mjs
 vitest-setup.js
 vitest.config.mjs
