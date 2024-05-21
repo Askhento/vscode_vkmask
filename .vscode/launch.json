@@ -39,18 +39,19 @@
 			}
 
 		},
-		{
-			"name": "Extension Tests",
-			"type": "extensionHost",
-			"request": "launch",
-			"args": [
-				"--extensionDevelopmentPath=${workspaceFolder}",
-				"--extensionTestsPath=${workspaceFolder}/out/test/suite/index"
-			],
-			"outFiles": [
-				"${workspaceFolder}/out/test/**/*.js"
-			],
-			"preLaunchTask": "${defaultBuildTask}"
-		}
+        {
+            "name": "Extension Tests",
+            "type": "extensionHost",
+            "request": "launch",
+            "runtimeExecutable": "vscode-test",
+            "args": [
+                "--disable-extensions",
+                "--extensionDevelopmentPath=${workspaceFolder}",
+            ],
+            "testConfiguration": "${workspaceFolder}/.vscode-test.js",
+            "outFiles": ["${workspaceFolder}/out/test/**/*.js"],
+            "preLaunchTask": "pretest-compile",
+
+        }
 	]
 }

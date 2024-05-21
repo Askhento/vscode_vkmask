@@ -27,6 +27,16 @@
 
             
 		},
+        {
+            "type": "npm",
+            "script": "pretest",
+            "label": "pretest-compile",
+        },
+                {
+            "type": "npm",
+            "script": "build",
+            "label": "prod-build"
+        }
 
 		
 		
