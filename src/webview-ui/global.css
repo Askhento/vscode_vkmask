@@ -84,3 +84,9 @@ vscode-button::part(content) {
 vscode-button::part(control) {
     overflow: hidden;
 }
+
+vscode-divider {
+    /* color: rgb(204, 204, 204);
+     */
+    opacity : 0.5;
+}
