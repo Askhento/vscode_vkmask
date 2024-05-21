@@ -248,9 +248,11 @@
     {#key $selection}
         {#key $assets}
             {#if Object.keys(assetGroups).length}
-                {#each Object.entries(assetGroups) as [groupName, groupData]}
+                {#each Object.entries(assetGroups) as [groupName, groupData], groupInd}
                     <!-- content here -->
-                    <vscode-divider class="divider" role="separator" />
+                    {#if groupInd !== 0}
+                        <vscode-divider class="divider" role="separator" />
+                    {/if}
                     <div
                         class="group-label"
                         on:click={() => {
@@ -310,17 +312,20 @@
     .group-label > span {
         /* color: red; */
         display: inline-block;
-        margin-left: var(--global-margin);
+        /* margin-left: var(--global-margin); */
     }
 
     .group-label {
         cursor: pointer;
         color: var(--vscode-descriptionForeground);
-        margin: var(--global-margin);
+        margin: var(--global-margin) 0;
         display: flex;
-        /* justify-items: end; */
+        align-items: center;
     }
 
+    .group-label > i {
+        margin: 0 2px;
+    }
     vscode-divider {
         width: 200vw;
         margin-left: -50vw;

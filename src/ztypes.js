@@ -14,7 +14,7 @@ import { mergician } from "mergician";
 export const uiDescriptions = {
     none: {
         name: "none",
-        group: "main",
+        group: undefined,
     },
     numberSlider: {
         name: "numberSlider",

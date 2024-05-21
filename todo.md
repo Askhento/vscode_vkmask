@@ -1,3 +1,5 @@
--   on add effect set goog default
+-   on add effect set good default
 -   test vscodeignore
 -   fix number slider object Object
+-   check liquify indent level
+-   xstate

@@ -653,6 +653,7 @@
             {/if}
         </div> -->
         <!-- {#key selection} -->
+        <!-- label={uiElements.uiDescription.label ?? $effects[selection.id].name} -->
         {#key uiElements}
             {#if selection.type === SelectionType.effect}
                 {#if $effects}
@@ -661,7 +662,6 @@
                             expanded={true}
                             nesting={false}
                             value={$effects[selection.id]}
-                            label={uiElements.uiDescription.label ?? $effects[selection.id].name}
                             params={uiElements.uiDescription}
                             path={[SelectionType.effect, selection.id]}
                             uiElements={uiElements.value}
@@ -672,6 +672,7 @@
                     {/if}
                 {/if}
                 <!-- {/key} -->
+                <!-- label={uiElements.uiDescription.label ?? plugins[selection.id].name} -->
             {:else if selection.type === SelectionType.plugin}
                 {#if plugins}
                     {#if uiElements}
@@ -679,7 +680,6 @@
                             expanded={true}
                             nesting={false}
                             value={plugins[selection.id]}
-                            label={uiElements.uiDescription.label ?? plugins[selection.id].name}
                             params={uiElements.uiDescription}
                             path={[SelectionType.plugin, selection.id]}
                             uiElements={uiElements.value}
@@ -706,12 +706,12 @@
                     </div>
                     <vscode-divider role="separator" />
 
+                    <!-- label={selection.path} -->
                     {#if uiElements}
                         <ObjectControl
                             expanded={true}
                             nesting={false}
                             value={asset}
-                            label={selection.path}
                             params={uiElements.uiDescription}
                             path={[SelectionType.asset]}
                             uiElements={uiElements.value}

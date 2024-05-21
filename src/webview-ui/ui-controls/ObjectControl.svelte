@@ -7,7 +7,7 @@
 
     export let nesting = true;
     export let value;
-    export let label;
+    // export let label;
     export let path;
     export let params;
     export let expanded = params.defExpanded;
@@ -124,6 +124,14 @@
                 uiElementsGroupData[group].elements[elName] = el;
             }
         });
+
+        // remove empty groups
+        for (let [groupKey, groupData] of Object.entries(uiElementsGroupData)) {
+            if (Object.keys(groupData.elements).length === 0) {
+                // console.log("removing ", groupKey, Object.keys(groupData.elements));
+                delete uiElementsGroupData[groupKey];
+            }
+        }
         // console.log("group data: ", uiElementsGroupData);
     }
     // function splitElements() {
@@ -144,20 +152,23 @@
 </script>
 
 <div class="control-wrapper" class:add-key-color={addKeyHover}>
-    {#if nesting}
+    <!-- {#if nesting}
         <vscode-divider role="separator" />
         <span class="object-label" class:expanded on:click={toggle}>
             <i class="codicon codicon-chevron-{expanded ? 'down' : 'right'}" />
             <span>{l10n.t(label)}</span>
         </span>
-    {/if}
+    {/if} -->
     <!-- {#key uiElementsGroupData} -->
     {#if expanded}
-        {#each Object.entries(uiElementsGroupData) as [groupName, groupData]}
+        {#each Object.entries(uiElementsGroupData) as [groupName, groupData], groupInd}
             {@const elemCount = Object.keys(groupData.elements).length}
             {@const elementsEntries = Object.entries(groupData.elements)}
+            <!-- <pre>{`grInd ${groupInd} level ${groupData.indentLevel}`}</pre> -->
             {#if groupData.label != null && elemCount !== 0 && !(elemCount === 1 && Array.isArray(elementsEntries[0][1].value) && elementsEntries[0][1].value.length === 0)}
-                <vscode-divider class="divider" role="separator" />
+                {#if !(groupInd === 0 && groupData.indentLevel === 0)}
+                    <vscode-divider class="divider" role="separator" />
+                {/if}
                 <div
                     class="group-label"
                     style:padding-left={`calc(var(--global-body-padding-left) * ${groupData.indentLevel})`}
@@ -333,26 +344,32 @@
         margin-bottom: var(--global-grid-row-gap);
     }
 
-    .object-label {
+    /* .object-label {
         cursor: pointer;
         color: var(--vscode-descriptionForeground);
         margin: var(--global-margin);
         margin-left: 0;
         display: flex;
-    }
-
-    .group-label > span,
-    .object-label > span {
+    } */
+    /* .object-label > span */
+    .group-label > span {
         /* color: red; */
         display: inline-block;
-        margin-left: var(--global-margin);
+        /* margin-left: var(--global-margin); */
     }
 
     .group-label {
         cursor: pointer;
         color: var(--vscode-descriptionForeground);
-        margin: var(--global-margin);
+        margin: var(--global-margin) 0;
+        /* margin-left: 2px;
+        margin-right: 2px; */
         display: flex;
+        align-items: center;
+    }
+
+    .group-label > i {
+        margin: 0 2px;
     }
 
     .add-key-btn {
