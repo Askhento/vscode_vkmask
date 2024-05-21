@@ -8,6 +8,8 @@ platforms=$@
 
 function packExt {
     ignoreFile=".$1.vscodeignore"
+    npx vsce ls --ignoreFile "$ignoreFile"
+
     if [ "$RELEASE" == "true" ]; then
         echo Normal release
         npx vsce package --target "$1" --ignoreFile "$ignoreFile" --out ./vsix-packages

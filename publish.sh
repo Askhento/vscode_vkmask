@@ -7,6 +7,7 @@ echo "version is release: ${RELEASE}"
 
 npm run generateIgnoreFiles
 
+
 npm run package-all
 
 cmd=(--packagePath $(find ./vsix-packages -iname *.vsix))
