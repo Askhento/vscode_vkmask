@@ -73,7 +73,7 @@
         }
 
         Object.entries(params.groups).forEach(([groupKey, groupData]) => {
-            const { defExpanded, label, disableMargin } = groupData;
+            const { defExpanded, label, disableMargin, indentLevel = 0 } = groupData;
             const tabKey = [...path, groupKey].join(".");
             if (!(tabKey in $tabInfo)) $tabInfo[tabKey] = defExpanded;
 
@@ -82,6 +82,7 @@
             uiElementsGroupData[groupKey] = {
                 expanded: $tabInfo[tabKey],
                 disableMargin,
+                indentLevel,
                 label,
                 elements: {},
                 compositionGroups: {},
@@ -159,6 +160,7 @@
                 <vscode-divider class="divider" role="separator" />
                 <div
                     class="group-label"
+                    style:padding-left={`calc(var(--global-body-padding-left) * ${groupData.indentLevel})`}
                     on:click={() => {
                         uiElementsGroupData[groupName].expanded =
                             !uiElementsGroupData[groupName].expanded;

@@ -580,10 +580,12 @@ export const ZTextureObject =
                 animation: {
                     label: "locale.parameters.texture.group.animation.label",
                     defExpanded: false,
+                    indentLevel: 1,
                 },
                 uv_transform: {
                     label: "locale.parameters.texture.group.uvTransform.label",
                     defExpanded: true,
+                    indentLevel: 1,
                 },
             },
         });

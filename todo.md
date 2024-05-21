@@ -1,0 +1,3 @@
+-   on add effect set goog default
+-   test vscodeignore
+-   fix number slider object Object
