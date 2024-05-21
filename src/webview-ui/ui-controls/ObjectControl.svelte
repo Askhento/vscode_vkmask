@@ -192,24 +192,24 @@
                     class:main-group-bottom-margin={!groupData.disableMargin}
                     class="group-wrapper"
                 >
-                    {#each elementsEntries as [elName, data]}
-                        {#if data.value === null && (data.uiDescription.name === "object" || data.uiDescription.name === "array")}
+                    {#each elementsEntries as [elName, elData]}
+                        {#if elData.value === null && (elData.uiDescription.name === "object" || elData.uiDescription.name === "array")}
                             <span class="label"
-                                ><span>{l10n.t(data.uiDescription.label ?? elName)}</span></span
+                                ><span>{l10n.t(elData.uiDescription.label ?? elName)}</span></span
                             >
                             <span class="right-button-wrapper">
                                 <vscode-button
                                     class="add-key-btn"
                                     on:click={() => {
                                         // console.log(data.uiDescription);
-                                        addKey(elName, data);
+                                        addKey(elName, elData);
                                     }}
                                 >
                                     <span slot="start" class="codicon codicon-add" />
                                     <span class="btn-text"
                                         >{l10n.t(
                                             `Add ${l10n
-                                                .t(data.uiDescription.label ?? elName)
+                                                .t(elData.uiDescription.label ?? elName)
                                                 .toLowerCase()}`
                                         )}</span
                                     >
@@ -218,17 +218,18 @@
                         {:else}
                             <!-- {console.log("EL", elName, data)} -->
                             <!-- value[elName] ?? // we have a value in config -->
+                            <!-- elData.value ?? // for composition -->
                             <svelte:component
-                                this={data.uiElement}
-                                error={data.error}
-                                value={data.value ?? // for composition
+                                this={elData.uiElement}
+                                error={elData.error}
+                                value={value[elName] ??
                                     // for animation object etc
-                                    (data.uiDescription.name === "object" ||
-                                        data.uiDescription.defValue)}
-                                label={data.label ?? data.uiDescription.label ?? elName}
+                                    (elData.uiDescription.name === "object" ||
+                                        elData.uiDescription.defValue)}
+                                label={elData.label ?? elData.uiDescription.label ?? elName}
                                 path={[...path, elName]}
-                                params={data.uiDescription}
-                                uiElements={data.value}
+                                params={elData.uiDescription}
+                                uiElements={elData.value}
                                 on:changed
                             />
                         {/if}

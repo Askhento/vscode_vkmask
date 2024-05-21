@@ -124,7 +124,7 @@
     }
 
     function checkAssetExists() {
-        if (!typedAssets) {
+        if (typedAssets == null) {
             currentAsset = null;
             return;
         }
@@ -132,6 +132,7 @@
         const assetIndex = typedAssets.findIndex((element) => {
             return element.path === value;
         });
+        // print("asset ", value, typedAssets, assetIndex);
 
         if (assetIndex < 0) {
             currentAsset = null;

@@ -3,4 +3,6 @@
 -   fix number slider object Object
 -   check liquify indent level
 -   xstate
--   fix generate buildins
+-   fix generate buildins & abs path as a wildcard???
+-   clean impl comp groups
+-   test patch with test.mask all blocks
