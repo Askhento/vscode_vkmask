@@ -261,6 +261,7 @@
 </script>
 
 <!-- <pre> {JSON.stringify(maskSettings, null, "\t")}</pre> -->
+<div class="shadow-top"></div>
 <div class="project-manager-wrapper">
     {#key appState}
         {#if appState === AppState.loading}
@@ -275,7 +276,6 @@
                                 nesting={false}
                                 value={maskSettings}
                                 params={uiElements.uiDescription}
-                                label={"MaskSettings"}
                                 path={["maskSettings"]}
                                 uiElements={uiElements.value}
                                 on:changed={onChanged}

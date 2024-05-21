@@ -164,7 +164,7 @@
     init();
 </script>
 
-<!-- <AddPlugin /> -->
+<div class="shadow-top"></div>
 {#if appState === AppState.running}
     {#key $selection}
         {#key $plugins}

@@ -633,6 +633,7 @@
     init();
 </script>
 
+<div class="shadow-top"></div>
 <div class="parameters-wrapper">
     {#if $selectionStack.length !== 0 && false}
         <vscode-button

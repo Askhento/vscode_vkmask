@@ -244,6 +244,8 @@
     // }
 </script>
 
+<div class="shadow-top"></div>
+
 {#if appState === AppState.running}
     {#key $selection}
         {#key $assets}
