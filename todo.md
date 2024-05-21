@@ -3,3 +3,4 @@
 -   fix number slider object Object
 -   check liquify indent level
 -   xstate
+-   fix generate buildins
