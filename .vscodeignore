@@ -24,4 +24,6 @@ vitest.config.mjs
 !node_modules/@vscode/codicons/dist/codicon.ttf
 *.sh
 *.vscodeignore
-
+.vscode-test.js
+test.esbuild.mjs
+todo.md

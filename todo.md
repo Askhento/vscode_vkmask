@@ -1,8 +1,8 @@
 -   on add effect set good default
--   test vscodeignore
 -   fix number slider object Object
--   check liquify indent level
+-   check liquify points indent level
 -   xstate
 -   fix generate buildins & abs path as a wildcard???
 -   clean impl comp groups
 -   test patch with test.mask all blocks
+-   show all files for package during publish
