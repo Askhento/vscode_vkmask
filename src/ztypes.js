@@ -1052,7 +1052,7 @@ const ZPatchEffect = ZBaseEffect.extend({
         group: "anchor",
         options: Object.keys(ZPatchAnchor.Values),
         optionLabels: ZPatchAnchorLabels,
-        defValue: ZFaceAnchor.Values.forehead,
+        defValue: ZPatchAnchor.Values.free,
     }),
     visible: ZVisibleType.describe({
         ...uiDescriptions.enum,
@@ -1084,7 +1084,7 @@ const ZPatchEffect = ZBaseEffect.extend({
     }),
     size: ZArray2D.describe({
         ...uiDescriptions.array2d,
-        defValue: [1, 1],
+        defValue: [100, 100],
         label: "locale.parameters.patch.size.label",
         info: {
             clickLink: "https://dev.vk.com/ru/masks/effects/patch",

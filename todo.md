@@ -5,4 +5,5 @@
 -   fix generate buildins & abs path as a wildcard???
 -   clean impl comp groups
 -   test patch with test.mask all blocks
--   show all files for package during publish
+-   vector control noticed bug of mirroring values for offset and rotation patch
+-   applyvaluabypath add option to remove key
