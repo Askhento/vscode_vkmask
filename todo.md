@@ -1,14 +1,13 @@
 -   fix number slider object Object
+-   clean impl comp groups
 -   check liquify points indent level
 -   xstate
 -   fix generate buildins & abs path as a wildcard???
--   clean impl comp groups
--   test patch with test.mask all blocks
+-   test.mask texture animation workflow test
 -   vector control noticed bug of mirroring values for offset and rotation patch
 -   make scrollbars similar to native
--   add info patch fullscreen anchor disabled transform
 -   split ztypes at least to front and backend to improve readability and faster coompile time
--   test.mask texture animation workflow test
 -   transition ztypes to typescript
 -   set iconcontrol errors in ztypes
 -   option control seems to react on alt
+-   TypeError: component.path is not iterable for material model3d

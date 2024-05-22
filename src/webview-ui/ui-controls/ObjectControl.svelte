@@ -1,6 +1,6 @@
 <script>
     import * as l10n from "@vscode/l10n";
-    import { createEventDispatcher, onMount } from "svelte";
+    import { createEventDispatcher, onMount, tick } from "svelte";
     import { getContext } from "svelte";
     //@ts-expect-error
     const { tabInfo } = getContext("stores");
@@ -47,6 +47,19 @@
                 path: ["tabInfo"],
             },
         ]);
+    }
+
+    async function scrollGroupToView(groupId) {
+        await tick();
+        const groupElement = document.getElementById(groupId);
+        // console.log("SCROLL", groupElement, groupId);
+        groupElement?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "nearest",
+        });
+
+        setTimeout(() => {}, 1000);
     }
 
     let uiElementsGroupData = {};
@@ -164,7 +177,9 @@
         {#each Object.entries(uiElementsGroupData) as [groupName, groupData], groupInd}
             {@const elemCount = Object.keys(groupData.elements).length}
             {@const elementsEntries = Object.entries(groupData.elements)}
+            {@const groupId = `group-wrapper-${groupName}`}
             <!-- <pre>{`grInd ${groupInd} level ${groupData.indentLevel}`}</pre> -->
+            <!-- !removing empty array groups -->
             {#if groupData.label != null && elemCount !== 0 && !(elemCount === 1 && Array.isArray(elementsEntries[0][1].value) && elementsEntries[0][1].value.length === 0)}
                 {#if !(groupInd === 0 && groupData.indentLevel === 0)}
                     <vscode-divider class="divider" role="separator" />
@@ -179,6 +194,8 @@
                         const tabKey = [...path, groupName].join(".");
                         $tabInfo[tabKey] = uiElementsGroupData[groupName].expanded;
                         onTab();
+
+                        if ($tabInfo[tabKey]) scrollGroupToView(groupId);
                         // console.log($tabInfo);
                     }}
                 >
@@ -189,6 +206,7 @@
             {/if}
             {#if uiElementsGroupData[groupName].expanded}
                 <div
+                    id={groupId}
                     class:main-group-bottom-margin={!groupData.disableMargin}
                     class="group-wrapper"
                 >
