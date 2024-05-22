@@ -1,4 +1,3 @@
--   on add effect set good default
 -   fix number slider object Object
 -   check liquify points indent level
 -   xstate
@@ -6,5 +5,10 @@
 -   clean impl comp groups
 -   test patch with test.mask all blocks
 -   vector control noticed bug of mirroring values for offset and rotation patch
--   applyvaluabypath add option to remove key
 -   make scrollbars similar to native
+-   add info patch fullscreen anchor disabled transform
+-   split ztypes at least to front and backend to improve readability and faster coompile time
+-   test.mask texture animation workflow test
+-   transition ztypes to typescript
+-   set iconcontrol errors in ztypes
+-   option control seems to react on alt

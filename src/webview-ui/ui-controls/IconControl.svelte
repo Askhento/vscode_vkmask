@@ -93,13 +93,13 @@
 
         // print(iconAsset);
         let errors = [];
-        if (!isOpaque) errors.push(l10n.t("locale.projectManager.icon.error.usedTransparency"));
+        if (!isOpaque) errors.push([l10n.t("locale.projectManager.icon.error.usedTransparency")]);
         if (size >= 60000)
-            errors.push(
+            errors.push([
                 `${l10n.t("locale.projectManager.icon.error.maximumSize")}: ${Math.round(
                     size / 1000
-                )}${l10n.t("locale.units.kiloByte")}`
-            );
+                )}${l10n.t("locale.units.kiloByte")}`,
+            ]);
         // can modify if needed!
         params.info.errors = errors;
     }

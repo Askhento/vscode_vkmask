@@ -657,22 +657,24 @@
         <!-- label={uiElements.uiDescription.label ?? $effects[selection.id].name} -->
         {#key uiElements}
             {#if selection.type === SelectionType.effect}
-                {#if $effects}
-                    {#if uiElements}
-                        <ObjectControl
-                            expanded={true}
-                            nesting={false}
-                            value={$effects[selection.id]}
-                            params={uiElements.uiDescription}
-                            path={[SelectionType.effect, selection.id]}
-                            uiElements={uiElements.value}
-                            on:changed={onChanged}
-                        />
-                    {:else}
-                        <div>{l10n.t("locale.parameters.unknownEffect")}</div>
+                <!-- key in order to trigger deps/ -->
+                {#key $effects}
+                    {#if $effects}
+                        {#if uiElements}
+                            <ObjectControl
+                                expanded={true}
+                                nesting={false}
+                                value={$effects[selection.id]}
+                                params={uiElements.uiDescription}
+                                path={[SelectionType.effect, selection.id]}
+                                uiElements={uiElements.value}
+                                on:changed={onChanged}
+                            />
+                        {:else}
+                            <div>{l10n.t("locale.parameters.unknownEffect")}</div>
+                        {/if}
                     {/if}
-                {/if}
-                <!-- {/key} -->
+                {/key}
                 <!-- label={uiElements.uiDescription.label ?? plugins[selection.id].name} -->
             {:else if selection.type === SelectionType.plugin}
                 {#if plugins}

@@ -6,10 +6,13 @@
         info = {};
     let {
         errors = [],
+        warnings = [],
         clickLink = "",
         infoHeader = "",
         infoList = "",
         infoErrorHeader = "locale.infobox.errorHeader",
+        infoWarningHeader = "locale.infobox.warningHeader",
+
         infoBody = "",
     } = info;
 
@@ -39,10 +42,10 @@
     }
 </script>
 
-{#key info.errors}
-    {#if (visible || infoOpened || info.errors?.length) && headerTranslated}
-        <div class="info-btn">
-            <!-- <div class:error={errors.length} class="icon-wrapper">
+<!-- {#key info.errors || info.warnings} -->
+{#if (visible || infoOpened || info.errors?.length || info.warnings?.length) && headerTranslated}
+    <div class="info-btn">
+        <!-- <div class:error={errors.length} class="icon-wrapper">
             <span
                 on:click|stopPropagation={() => {
                     // console.log("info list", infoList);
@@ -52,80 +55,97 @@
                 class:darker={infoOpened}
             />
         </div> -->
-            <vscode-button
-                appearance="icon"
-                on:click|stopPropagation={() => {
-                    infoOpened = !infoOpened;
-                }}
-            >
-                <span class:error={info.errors?.length} class="codicon codicon-info" />
-            </vscode-button>
-            {#if infoOpened}
-                <div
-                    use:clickOutside
-                    on:click_outside={handleClickOutside}
-                    class="info-box-wrapper"
-                >
+        <vscode-button
+            appearance="icon"
+            on:click|stopPropagation={() => {
+                infoOpened = !infoOpened;
+            }}
+        >
+            <span
+                class:warning={info.warnings?.length}
+                class:error={info.errors?.length}
+                class="codicon codicon-info"
+            />
+        </vscode-button>
+        {#if infoOpened}
+            <div use:clickOutside on:click_outside={handleClickOutside} class="info-box-wrapper">
+                {#if errors.length}
+                    <vscode-divider role="separator" />
+
                     <div class="info-header-wrapper">
-                        <span class="codicon codicon-info"></span>
-                        <span>
-                            {#each l10n.t(infoHeader).split("\n") as header, i}
-                                <div class="info-header">{header}</div>
-                            {/each}
-                        </span>
+                        <span class="codicon codicon-info error"></span>
+                        <span class="info-header">{l10n.t(infoErrorHeader) + ":"}</span>
                     </div>
-                    {#if bodyTranslated}
-                        <p>
-                            {l10n.t(infoBody)}
-                        </p>
-                    {/if}
-                    {#if listTranslated}
-                        <ul>
-                            {#each l10n.t(infoList).split("\n") as info}
-                                <li class="info-text">
-                                    {info}
-                                </li>
-                            {/each}
-                        </ul>
-                    {/if}
-                    {#if errors.length}
-                        <vscode-divider role="separator" />
 
-                        <div class="info-header-wrapper">
-                            <span class="codicon codicon-info error"></span>
-                            <span class="info-header">{l10n.t(infoErrorHeader) + ":"}</span>
-                        </div>
-
-                        <ul>
-                            {#each errors as error}
-                                <li class="error">
-                                    {l10n.t(...error)}
-                                </li>
-                            {/each}
-                        </ul>
-                    {/if}
-                    {#if clickLink}
-                        <vscode-divider role="separator" />
-                        <div class="info-header-wrapper">
-                            <span class="codicon codicon-globe"></span>
-                            <span class="info-header"
-                                >{l10n.t("locale.infobox.readmoreHeader") + ":"}</span
-                            >
-                        </div>
-                        <ul>
-                            <li>
-                                <vscode-link href={clickLink}
-                                    >{l10n.t("locale.infobox.readmoreOpen")}
-                                </vscode-link>
+                    <ul>
+                        {#each errors as error}
+                            <li class="error">
+                                {l10n.t(...error)}
                             </li>
-                        </ul>
-                    {/if}
+                        {/each}
+                    </ul>
+                {/if}
+                {#if warnings.length}
+                    <vscode-divider role="separator" />
+
+                    <div class="info-header-wrapper">
+                        <span class="codicon codicon-info warning"></span>
+                        <span class="info-header">{l10n.t(infoErrorHeader) + ":"}</span>
+                    </div>
+
+                    <ul>
+                        {#each warnings as error}
+                            <li class="warning">
+                                {l10n.t(...error)}
+                            </li>
+                        {/each}
+                    </ul>
+                {/if}
+                <div class="info-header-wrapper">
+                    <span class="codicon codicon-info"></span>
+                    <span>
+                        {#each l10n.t(infoHeader).split("\n") as header, i}
+                            <div class="info-header">{header}</div>
+                        {/each}
+                    </span>
                 </div>
-                <div class="info-hitbox"></div>
-            {/if}
-        </div>
-    {/if}
-{/key}
+                {#if bodyTranslated}
+                    <p>
+                        {l10n.t(infoBody)}
+                    </p>
+                {/if}
+                {#if listTranslated}
+                    <ul>
+                        {#each l10n.t(infoList).split("\n") as info}
+                            <li class="info-text">
+                                {info}
+                            </li>
+                        {/each}
+                    </ul>
+                {/if}
+                {#if clickLink}
+                    <vscode-divider role="separator" />
+                    <div class="info-header-wrapper">
+                        <span class="codicon codicon-globe"></span>
+                        <span class="info-header"
+                            >{l10n.t("locale.infobox.readmoreHeader") + ":"}</span
+                        >
+                    </div>
+                    <ul>
+                        <li>
+                            <vscode-link href={clickLink}
+                                >{l10n.t("locale.infobox.readmoreOpen")}
+                            </vscode-link>
+                        </li>
+                    </ul>
+                {/if}
+            </div>
+            <div class="info-hitbox"></div>
+        {/if}
+    </div>
+{/if}
+
+<!-- {/key} -->
 
 <!-- <div
     class="info-hit-box"
@@ -219,6 +239,10 @@
     .error {
         color: red;
         /* color: var(--vscode-inputValidation-errorBackground); */
+    }
+
+    .warning {
+        color: var(--vscode-inputValidation-warningBorder);
     }
 
     /* .codicon-info:before {

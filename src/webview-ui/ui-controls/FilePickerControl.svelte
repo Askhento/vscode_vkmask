@@ -29,7 +29,7 @@
         path,
         disabled = false;
 
-    export let infoErrors = [];
+    export let runtimeInfo = {};
     export let infoVisible = false;
 
     // print("INIT", value, params);
@@ -446,8 +446,8 @@
         {#if waiting}
             <Loading scale={2} dark={true} />
         {/if}
-        {#key infoErrors}
-            <InfoBox bind:visible={infoVisible} info={{ ...params.info, errors: infoErrors }} />
+        {#key runtimeInfo}
+            <InfoBox bind:visible={infoVisible} info={{ ...params.info, ...runtimeInfo }} />
         {/key}
     </span>
 {/if}

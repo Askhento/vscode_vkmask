@@ -213,29 +213,35 @@ const textureAssetErrorDeps = [
             }
             const { width, height, size, isOpaque } = assets[assetIndex];
 
-            component.infoErrors = [];
+            component.runtimeInfo.errors = [];
 
             if (height > MAX_TEXTURE_SIZE_PX)
-                component.infoErrors.push([
-                    "locale.infoErrors.textures.maxHeight",
+                component.runtimeInfo.errors.push([
+                    "locale.runtimeInfo.errors.textures.maxHeight",
                     MAX_TEXTURE_SIZE_PX,
                     height,
                 ]);
 
             if (width > MAX_TEXTURE_SIZE_PX)
-                component.infoErrors.push([
-                    "locale.infoErrors.textures.maxWiwidth",
+                component.runtimeInfo.errors.push([
+                    "locale.runtimeInfo.errors.textures.maxWiwidth",
                     MAX_TEXTURE_SIZE_PX,
                     width,
                 ]);
 
             if (width % 2 !== 0)
-                component.infoErrors.push(["locale.infoErrors.textures.oddWidth", width]);
+                component.runtimeInfo.errors.push([
+                    "locale.runtimeInfo.errors.textures.oddWidth",
+                    width,
+                ]);
 
             if (height % 2 !== 0)
-                component.infoErrors.push(["locale.infoErrors.textures.oddHeight", height]);
+                component.runtimeInfo.errors.push([
+                    "locale.runtimeInfo.errors.textures.oddHeight",
+                    height,
+                ]);
 
-            component.infoErrors = component.infoErrors; // to trigger rerender
+            component.runtimeInfo = component.runtimeInfo; // to trigger rerender
             return { needUpdate: false }; // without this will infinte loop
         },
     },
@@ -1022,7 +1028,14 @@ const patchAnchorDeps = [
         source: ["stores", "effects"],
         relPath: ["..", "anchor"],
         postprocess: (_, anchor, component) => {
-            if (anchor === ZPatchAnchor.Values.fullscreen) component.disabled = true;
+            component.runtimeInfo.warnings = [];
+            if (anchor === ZPatchAnchor.Values.fullscreen) {
+                component.runtimeInfo.warnings.push([
+                    "locale.runtimeInfo.warnings.patch.anchor.fullscreen.transformDisabled",
+                ]);
+                component.disabled = true;
+            }
+            component.runtimeInfo = component.runtimeInfo;
             return { needUpdate: false };
         },
     },
@@ -1222,36 +1235,42 @@ const lookupErrorDeps = [
             }
             const { width, height, size, isOpaque } = assets[assetIndex];
 
-            component.infoErrors = [];
+            component.runtimeInfo.errors = [];
 
             if (height > LOOKUP_MAX_SIZE_PX)
-                component.infoErrors.push([
-                    "locale.infoErrors.textures.maxHeight",
+                component.runtimeInfo.errors.push([
+                    "locale.runtimeInfo.errors.textures.maxHeight",
                     LOOKUP_MAX_SIZE_PX,
                     height,
                 ]);
 
             if (width > LOOKUP_MAX_SIZE_PX)
-                component.infoErrors.push([
-                    "locale.infoErrors.textures.maxWiwidth",
+                component.runtimeInfo.errors.push([
+                    "locale.runtimeInfo.errors.textures.maxWiwidth",
                     LOOKUP_MAX_SIZE_PX,
                     width,
                 ]);
 
             if (width % 2 !== 0)
-                component.infoErrors.push(["locale.infoErrors.textures.oddWidth", width]);
+                component.runtimeInfo.errors.push([
+                    "locale.runtimeInfo.errors.textures.oddWidth",
+                    width,
+                ]);
 
             if (height % 2 !== 0)
-                component.infoErrors.push(["locale.infoErrors.textures.oddHeight", height]);
+                component.runtimeInfo.errors.push([
+                    "locale.runtimeInfo.errors.textures.oddHeight",
+                    height,
+                ]);
 
             if (size > LOOKUP_MAX_SIZE_BYTES)
-                component.infoErrors.push([
-                    "locale.infoErrors.colorfilter.lookup.maxSize",
+                component.runtimeInfo.errors.push([
+                    "locale.runtimeInfo.errors.colorfilter.lookup.maxSize",
                     Math.floor(LOOKUP_MAX_SIZE_BYTES / 1000),
                     Math.floor(size / 1000),
                 ]);
 
-            component.infoErrors = component.infoErrors; // trigger reactivity
+            component.runtimeInfo = component.runtimeInfo; // trigger reactivity
             return { needUpdate: false }; // without this will infinte loop
         },
     },
@@ -1418,13 +1437,15 @@ const modelDeps = [
             }
             const { processorError } = assets[assetIndex];
 
-            component.infoErrors = [];
+            component.runtimeInfo.errors = [];
 
             if (processorError) {
-                component.infoErrors.push(["locale.infoErrors.model3d.processorError"]);
+                component.runtimeInfo.errors.push([
+                    "locale.runtimeInfo.errors.model3d.processorError",
+                ]);
             }
 
-            component.infoErrors = component.infoErrors; // to trigger rerender
+            component.runtimeInfo = component.runtimeInfo; // to trigger rerender
             return { needUpdate: false }; // without this will infinte loop
         },
     },

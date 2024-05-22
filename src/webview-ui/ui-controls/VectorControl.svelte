@@ -14,6 +14,7 @@
         path,
         params,
         error = null,
+        runtimeInfo = {},
         disabled = false;
 
     let infoVisible = false;
@@ -124,7 +125,9 @@
                     onChanged();
                 }}
             />
-            <InfoBox bind:visible={infoVisible} info={params.info} />
+            {#key runtimeInfo}
+                <InfoBox bind:visible={infoVisible} info={{ ...params.info, ...runtimeInfo }} />
+            {/key}
         {/each}
     </span>
 {/if}
