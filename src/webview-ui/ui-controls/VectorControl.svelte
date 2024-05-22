@@ -47,7 +47,7 @@
     // }
 
     onMount(() => {
-        // component.test();
+        // console.log("VECOTR", path, value, params.dependencies);
         applyDeps(component, stores, params.dependencies);
     });
     // todo : add slider to move all values at the same time

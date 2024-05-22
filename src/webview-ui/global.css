@@ -52,9 +52,9 @@ body {
     overflow-x: hidden;
     position: relative;
             /* width: 100vw; */
-    
 
 }
+
 
 vscode-dropdown::part(listbox) {
     top: calc(100%);

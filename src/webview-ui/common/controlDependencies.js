@@ -12,6 +12,10 @@ export function applyDeps(component, stores, dependencies) {
     };
 
     return dependencies.reduce((previous, { source, relPath, postprocess }) => {
+        if (!component.path) {
+            console.error("component null path");
+            return { needUpdate: false };
+        }
         const componentPath = [...component.path];
         componentPath.shift(); // remove root to be able to override in ztypes
         const relSourcePath = relPath ? resolveRelative(relPath, componentPath) : [];
@@ -25,7 +29,8 @@ export function applyDeps(component, stores, dependencies) {
             try {
                 return postprocess(previous, value, component);
             } catch (error) {
-                console.log("Error apply deps:", component.path, error);
+                console.error("Error apply deps:", component.path, error);
+                return { needUpdate: false };
             }
         }
 

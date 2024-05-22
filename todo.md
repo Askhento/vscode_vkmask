@@ -10,4 +10,6 @@
 -   transition ztypes to typescript
 -   set iconcontrol errors in ztypes
 -   option control seems to react on alt
--   TypeError: component.path is not iterable for material model3d
+-   TypeError: component.path is not iterable for material model3d, seems like applyDeps
+    vector transform seems to trigger twice and path is undefined
+-   vectorControl not complete applyDeps
