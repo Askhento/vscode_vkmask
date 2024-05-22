@@ -53,8 +53,8 @@
         position="above"
         value={String(options.findIndex((op) => op === value))}
         on:change={(e) => {
-            // console.log("optoins", e);
             value = options[parseInt(e.target.value)];
+            console.log("optoins", e.target.value, value, typeof value);
             onChange();
         }}
         on:keydown|capture={(e) => {

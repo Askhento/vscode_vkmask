@@ -7,8 +7,10 @@ export default defineConfig(({ mode }) => ({
     resolve: {
         conditions: mode === "test" ? ["browser"] : [],
     },
+    esbuild: true,
+
     test: {
-        include: ["./test/**"],
+        include: ["./test/unit/**"],
 
         environment: "jsdom",
         setupFiles: ["./vitest-setup.js"],

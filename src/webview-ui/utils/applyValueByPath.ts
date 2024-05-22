@@ -1,3 +1,5 @@
+import { isObject } from "../../utils/isObject";
+
 export function applyValueByPath2(obj, path, value) {
     // parts = path.split(".");
     // console.log("apply!", obj, path, value);
@@ -18,8 +20,9 @@ export function applyValueByPath2(obj, path, value) {
             // I need to remove obj key or array element
             if (Array.isArray(obj)) {
                 // need to splice
-                obj = obj.splice(lastPath, 1);
-            } else {
+                // method mutates array in this case
+                obj.splice(lastPath, 1);
+            } else if (isObject(obj)) {
                 // use delete or spread
                 const { [lastPath]: removed, ...rest } = obj;
                 obj = rest;
@@ -32,6 +35,8 @@ export function applyValueByPath2(obj, path, value) {
         return obj;
     } else {
         // !!! could be terrible
+        // this is for adding nested obj structures
+        // probably sometimes it should be an array
         if (obj[lastPath] == null) obj[lastPath] = {};
         const elem = obj[lastPath];
 

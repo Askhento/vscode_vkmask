@@ -1,4 +1,4 @@
-import SwitchControl from "../../../src/webview-ui/ui-controls/SwitchControl.svelte";
+import SwitchControl from "../../../../src/webview-ui/ui-controls/SwitchControl.svelte";
 import userEvent from "@testing-library/user-event";
 import { render, screen, fireEvent } from "@testing-library/svelte";
 import { expect, test, vi } from "vitest";

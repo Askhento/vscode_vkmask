@@ -10,6 +10,7 @@
 
 import { z } from "zod";
 import { mergician } from "mergician";
+import { isObject } from "./utils/isObject";
 
 export const uiDescriptions = {
     none: {
@@ -334,7 +335,7 @@ const ZVisibleTypeLabels = [
     "locale.visibleTypes.mouthOpen.label", //"Mouth open"
 ];
 
-const ZPatchFitMode = z.enum(["none", "crop", "pad"]);
+const ZPatchFitMode = z.enum([null, "crop", "pad"]);
 const ZPatchFitModeLabels = [
     "locale.patchFitModex.none.label", //"None",
     "locale.patchFitModex.crop.label", //"Crop",
@@ -1078,9 +1079,9 @@ const ZPatchEffect = ZBaseEffect.extend({
             infoBody: "locale.parameters.patch.fit.infoBody",
         },
         group: "advanced",
-        options: Object.keys(ZPatchFitMode.Values),
+        options: Object.values(ZPatchFitMode.Values),
         optionLabels: ZPatchFitModeLabels,
-        defValue: ZPatchFitMode.Values.none,
+        defValue: null,
     }),
     size: ZArray2D.describe({
         ...uiDescriptions.array2d,
@@ -2265,10 +2266,6 @@ export const ZMaskConfig = z.object({
     effects: ZEffects.default([]),
     plugins: ZPlugins.default([]),
 });
-
-function isObject(val) {
-    return typeof val === "object" && !Array.isArray(val) && val !== null;
-}
 
 function replaceObjectSynonim(obj, nameFrom, nameTo) {
     if (obj.hasOwnProperty(nameFrom)) {

@@ -7,3 +7,4 @@
 -   test patch with test.mask all blocks
 -   vector control noticed bug of mirroring values for offset and rotation patch
 -   applyvaluabypath add option to remove key
+-   make scrollbars similar to native
