@@ -59,7 +59,6 @@
             inline: "nearest",
         });
 
-        setTimeout(() => {}, 1000);
     }
 
     let uiElementsGroupData = {};

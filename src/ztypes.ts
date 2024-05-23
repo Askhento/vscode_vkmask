@@ -34,7 +34,7 @@ export const uiDescriptions = {
         defValue: 0,
         steps: 100,
         valueLabel: "",
-        showAlways: true,
+
         valueTemplate: (val) => {
             return val;
         },
@@ -45,7 +45,6 @@ export const uiDescriptions = {
         group: "main",
         defValue: [0, 0],
         valueLabels: ["X", "Y"],
-        showAlways: true,
     },
     array3d: {
         name: "array3d",
@@ -53,7 +52,6 @@ export const uiDescriptions = {
         group: "main",
         defValue: [0, 0, 0],
         valueLabels: ["X", "Y", "Z"],
-        showAlways: true,
     },
     array4d: {
         name: "array4d",
@@ -61,7 +59,6 @@ export const uiDescriptions = {
         group: "main",
         defValue: [0, 0, 0, 0],
         valueLabels: ["X", "Y", "Z", "W"],
-        showAlways: true,
     },
 
     enum: {
@@ -95,7 +92,7 @@ export const uiDescriptions = {
         label: "Script",
         group: "Advanced",
         defValue: null,
-        showAlways: true,
+
         info: null,
     },
     icon: { name: "icon", label: "Icon", group: "main", defValue: null, info: null },
@@ -576,14 +573,14 @@ export const ZTextureObject =
             //         max: 100,
             //         min: -100,
             //         defValue: 0,
-            //         showAlways: false,
+            //
             //         label: "Render order",
             //     }
             // ),
         })
         .describe({
             ...uiDescriptions.object,
-            showAlways: false,
+
             label: "locale.parameters.texture.label",
             info: { infoList: "locale.parameters.texture.infoList" },
             group: "texture",
@@ -703,7 +700,7 @@ export const ZMaterialObject = z.preprocess(
                 ...uiDescriptions.colorAlpha,
                 defValue: [0.0, 0.0, 0.0, 1.0],
                 group: "specular",
-                showAlways: false,
+
                 label: "locale.material.specularColor.label",
                 info: {
                     infoHeader: "locale.material.specularColor.infoHeader",
@@ -715,7 +712,7 @@ export const ZMaterialObject = z.preprocess(
             }),
             MatEmissiveColor: ZArray3D.describe({
                 ...uiDescriptions.color,
-                showAlways: false,
+
                 group: "emissive",
                 label: "locale.material.emissiveColor.label",
                 info: {
@@ -730,7 +727,7 @@ export const ZMaterialObject = z.preprocess(
                 ...uiDescriptions.color,
                 defValue: [1.0, 1.0, 1.0],
                 group: "environment",
-                showAlways: false,
+
                 label: "locale.material.environmentColor.label",
                 info: {
                     infoHeader: "locale.material.environmentColor.infoHeader",
@@ -743,7 +740,7 @@ export const ZMaterialObject = z.preprocess(
             Roughness: ZNumberSlider.describe({
                 ...uiDescriptions.numberSlider,
                 defValue: 0.5,
-                showAlways: false,
+
                 label: "locale.material.roughness.label",
                 info: {
                     infoHeader: "locale.material.roughness.infoHeader",
@@ -756,7 +753,7 @@ export const ZMaterialObject = z.preprocess(
             Metallic: ZNumberSlider.describe({
                 ...uiDescriptions.numberSlider,
                 defValue: 0.5,
-                showAlways: false,
+
                 label: "locale.material.metallness.label",
                 info: {
                     infoHeader: "locale.material.metallness.infoHeader",
@@ -1693,7 +1690,7 @@ const ZLightBase = {
     color: ZColor.describe({
         ...uiDescriptions.color,
         defValue: [1, 1, 1],
-        showAlways: true,
+
         label: "locale.parameters.light.color.label",
         info: {
             infoList: "locale.parameters.light.color.infoList",
@@ -1705,7 +1702,7 @@ const ZLightBase = {
     brightness: ZNumberSlider.describe({
         ...uiDescriptions.numberSlider,
         defValue: 1,
-        showAlways: true,
+
         label: "locale.parameters.light.brightness.label",
         info: {
             infoList: "locale.parameters.light.brightness.infoList",
@@ -1717,7 +1714,7 @@ const ZLightBase = {
     specular_intensity: ZNumberSlider.describe({
         ...uiDescriptions.numberSlider,
         defValue: 1,
-        showAlways: true,
+
         label: "locale.parameters.light.specularFactor.label",
         info: {
             infoList: "locale.parameters.light.specularFactor.infoList",
@@ -2267,7 +2264,7 @@ const MaskSettings = {
             infoList: "locale.projectManager.mouseInput.infoList",
         },
         defValue: false,
-        showAlways: false,
+
         group: "permissions",
     }),
     script: ZMainScriptAsset,
