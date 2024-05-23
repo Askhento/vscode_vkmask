@@ -199,6 +199,36 @@ const ZFaceAnchorLabels = [
     "locale.faceAnchors.upperLip.label", //"Upper lip",
 ];
 
+const ZModel3dAnchors = z.enum([
+    "free",
+    "face",
+    "right_eye",
+    "left_eye",
+    "middle_eyes",
+    "forehead",
+    "nose",
+    "mouth",
+    "right_cheek",
+    "left_cheek",
+    "lower_lip",
+    "upper_lip",
+]);
+
+const ZModel3dAnchorLabels = [
+    "locale.patchAnchors.free.label",
+    "locale.faceAnchors.face.label", //"Face",
+    "locale.faceAnchors.rightEye.label", //"Right eye",
+    "locale.faceAnchors.leftEye.label", //"Left eye",
+    "locale.faceAnchors.betweenEyes.label", //"Between eyes",
+    "locale.faceAnchors.forehead.label", //"Forehead",
+    "locale.faceAnchors.nose.label", //"Nose",
+    "locale.faceAnchors.mouth.label", //"Mouth",
+    "locale.faceAnchors.rightCheek.label", //"Right cheek",
+    "locale.faceAnchors.leftCheek.label", //"Left cheek",
+    "locale.faceAnchors.lowerLip.label", //"Lower lip",
+    "locale.faceAnchors.upperLip.label", //"Upper lip",
+];
+
 const ZLightType = z.enum(["point", "ambient", "direct"]);
 const ZLightTypeLabels = [
     "locale.lightTypes.point.label", //"Point",
@@ -1462,7 +1492,7 @@ const modelDeps = [
 
 const ZModel3dEffect = ZBaseEffect.extend({
     name: z.literal("model3d").describe(uiDescriptions.none),
-    anchor: ZFaceAnchor.describe({
+    anchor: ZModel3dAnchors.describe({
         ...uiDescriptions.enum,
         label: "locale.parameters.model3d.anchor.label",
         info: {
@@ -1473,9 +1503,9 @@ const ZModel3dEffect = ZBaseEffect.extend({
         },
         group: "anchor",
 
-        options: Object.keys(ZFaceAnchor.Values),
-        optionLabels: ZFaceAnchorLabels,
-        defValue: ZFaceAnchor.Values.forehead,
+        options: Object.keys(ZModel3dAnchors.Values),
+        optionLabels: ZModel3dAnchorLabels,
+        defValue: ZModel3dAnchors.Values.face,
     }),
     model: ZModel3dAsset({
         label: "locale.parameters.model3d.model.label",

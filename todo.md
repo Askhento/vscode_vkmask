@@ -19,6 +19,7 @@
 -   add vector control drag multiple values or change quicklly
 -   clone default material to have a base to work from
 -   for model3d set values so that is fits to screen
+    especially true if anchor is free, then model spawns out of frustum
 -   find a way to trigger deps without key block in parameters app
 -   asset group scrroll into view
 -   find a way to profile bottleneck spots when loading extension
