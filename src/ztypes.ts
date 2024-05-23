@@ -4,13 +4,21 @@
     const minValue = schema.shape.name._def.checks.find(({ kind }) => kind === "min").value;
     
     ```
-
-    biggest issue is parameters with 2 and more options 
 */
 
 import { z } from "zod";
 import { mergician } from "mergician";
 import { isObject } from "./utils/isObject";
+// import { Info, uiDescription } from "./types";
+
+import {
+    BaseControlAPI,
+    NumberSliderControlParameters,
+    BaseControlParameters,
+    FilePickerControlParameters,
+    ControlDependency,
+} from "./webview-ui/types";
+import { Asset } from "./types";
 
 export const uiDescriptions = {
     none: {
@@ -204,8 +212,8 @@ const ZLightTypeLabels = [
 const MAX_TEXTURE_SIZE_PX = 2048;
 const textureAssetErrorDeps = [
     {
-        source: ["stores", "assets"],
-        postprocess: (_, assets, component) => {
+        source: "assets",
+        postprocess: (assets: Asset[], component: BaseControlAPI<FilePickerControlParameters>) => {
             const { value, params } = component;
             const assetIndex = assets.findIndex((v) => v.path === value);
             if (assetIndex < 0) {
@@ -854,12 +862,16 @@ export const ZMaterialArray = z.preprocess(
         ...uiDescriptions.array,
         dependencies: [
             {
-                source: ["stores", "effects"],
+                source: "effects",
                 relPath: ["..", "model"],
             },
             {
-                source: ["stores", "assets"],
-                postprocess: (modelPath, assets, component) => {
+                source: "assets",
+                postprocess: (
+                    assets: Asset[],
+                    component: BaseControlAPI<FilePickerControlParameters>,
+                    modelPath: string
+                ) => {
                     const { value, params } = component;
                     const assetIndex = assets.findIndex((v) => v.path === modelPath);
 
@@ -1025,9 +1037,9 @@ const ZPatchAnchorLabels = [
 
 const patchAnchorDeps = [
     {
-        source: ["stores", "effects"],
+        source: "effects",
         relPath: ["..", "anchor"],
-        postprocess: (_, anchor, component) => {
+        postprocess: (anchor: z.infer<typeof ZPatchAnchor>, component: BaseControlAPI) => {
             component.runtimeInfo.warnings = [];
             if (anchor === ZPatchAnchor.Values.fullscreen) {
                 component.runtimeInfo.warnings.push([
@@ -1043,9 +1055,9 @@ const patchAnchorDeps = [
 
 // const patchRotationDeps = [
 //     {
-//         source: ["stores", "effects"],
+//         source:  "effects",
 //         relPath: ["..", "allow_rotation"],
-//         postprocess: (_, allowRotation, component) => {
+//         postprocess: (allowRotation, component) => {
 //             if (!allowRotation) component.disabled = true;
 //             return { needUpdate: false };
 //         },
@@ -1226,8 +1238,8 @@ const LOOKUP_MAX_SIZE_PX = 512;
 const LOOKUP_MAX_SIZE_BYTES = 600 * 1000;
 const lookupErrorDeps = [
     {
-        source: ["stores", "assets"],
-        postprocess: (_, assets, component) => {
+        source: "assets",
+        postprocess: (assets: Asset[], component: BaseControlAPI<FilePickerControlParameters>) => {
             const { value, params } = component;
             const assetIndex = assets.findIndex((v) => v.path === value);
             if (assetIndex < 0) {
@@ -1428,8 +1440,8 @@ const ZColorfilterEffect = ZBaseEffect.extend({
 
 const modelDeps = [
     {
-        source: ["stores", "assets"],
-        postprocess: (_, assets, component) => {
+        source: "assets",
+        postprocess: (assets: Asset[], component: BaseControlAPI<FilePickerControlParameters>) => {
             const { value, params } = component;
             const assetIndex = assets.findIndex((v) => v.path === value);
             if (assetIndex < 0) {
@@ -1449,7 +1461,7 @@ const modelDeps = [
             return { needUpdate: false }; // without this will infinte loop
         },
     },
-];
+] as ControlDependency[];
 
 const ZModel3dEffect = ZBaseEffect.extend({
     name: z.literal("model3d").describe(uiDescriptions.none),
@@ -1851,9 +1863,9 @@ const ZLightPointEffect = z
             ...uiDescriptions.array3d,
             // dependencies: [
             //     {
-            //         source: ["stores", "effects"],
+            //         source:  "effects",
             //         relPath: ["..", "range"],
-            //         postprocess: (_, range, component) => {
+            //         postprocess: (range, component) => {
             //             component.disabled = range > 500;
             //             return null;
             //         },

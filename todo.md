@@ -13,3 +13,9 @@
 -   TypeError: component.path is not iterable for material model3d, seems like applyDeps
     vector transform seems to trigger twice and path is undefined
 -   vectorControl not complete applyDeps
+-   add data source for project manager just in case :D
+-   remove deps data source 0 store
+-   deal with light source type legacy thing
+-   add vector control drag multiple values or change quicklly
+-   clone default material to have a base to work from
+-   for model3d set values so that is fits to screen
