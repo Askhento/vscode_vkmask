@@ -1,15 +1,11 @@
 import { get } from "svelte/store";
 import { getValueByPath, resolveRelative } from "../utils/applyValueByPath";
+import type { ControlDependency } from "../types";
 // import { RequestTarget, RequestCommand, SelectionType, AppState } from "../../../src/types";
 
-export function applyDeps(component, stores, dependencies) {
+export function applyDeps(component, stores, dependencies: ControlDependency[]) {
     if (!dependencies) return { needUpdate: false };
     // console.log("aplydeps!", dependencies);
-
-    const dataSources = {
-        component,
-        stores,
-    };
 
     return dependencies.reduce((previous, { source, relPath, postprocess }) => {
         if (!component.path) {

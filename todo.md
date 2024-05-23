@@ -5,6 +5,8 @@
 -   fix generate buildins & abs path as a wildcard???
 -   test.mask texture animation workflow test
 -   vector control noticed bug of mirroring values for offset and rotation patch
+    this is due to uiDescription defValue same instance array
+    this issue was fixed in arraycontrol default element, seems like need to deepcopy some parameters
 -   make scrollbars similar to native
 -   split ztypes at least to front and backend to improve readability and faster coompile time
 -   set iconcontrol errors in ztypes
@@ -18,3 +20,5 @@
 -   clone default material to have a base to work from
 -   for model3d set values so that is fits to screen
 -   find a way to trigger deps without key block in parameters app
+-   asset group scrroll into view
+-   find a way to profile bottleneck spots when loading extension

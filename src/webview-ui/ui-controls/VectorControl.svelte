@@ -4,7 +4,7 @@
     import { createEventDispatcher, onMount, getContext } from "svelte";
     import { get_current_component } from "svelte/internal";
     const component = get_current_component();
-    import { applyDeps } from "../common/controlDependencies";
+    import { applyDeps } from "../common/applyDeps";
     import InfoBox from "../components/InfoBox.svelte";
     const stores = getContext("stores");
     const { assets, settings, messageHandler, effects } = stores;

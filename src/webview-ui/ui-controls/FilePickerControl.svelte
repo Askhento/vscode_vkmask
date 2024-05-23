@@ -12,7 +12,7 @@
     import { RequestCommand, RequestTarget, SelectionType } from "src/types";
     import InfoBox from "../components/InfoBox.svelte";
     import Loading from "../components/Loading.svelte";
-    import { applyDeps } from "../common/controlDependencies";
+    import { applyDeps } from "../common/applyDeps";
 
     const stores = getContext("stores");
 
