@@ -90,7 +90,7 @@
 
                     <div class="info-header-wrapper">
                         <span class="codicon codicon-info warning"></span>
-                        <span class="info-header">{l10n.t(infoErrorHeader) + ":"}</span>
+                        <span class="info-header">{l10n.t(infoWarningHeader) + ":"}</span>
                     </div>
 
                     <ul>
