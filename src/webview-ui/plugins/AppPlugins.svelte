@@ -9,7 +9,6 @@
     import { RequestTarget, RequestCommand, SelectionType, AppState } from "../../../src/types";
     import type { Selection } from "../../../src/types";
     import Plugin from "./Plugin.svelte";
-    import AddPlugin from "./AddPlugin.svelte";
     import { logger, logDump } from "../logger";
     import Loading from "../components/Loading.svelte";
     const print = logger("AppPlugins.svelte");

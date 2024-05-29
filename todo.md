@@ -25,3 +25,4 @@
 -   find a way to profile bottleneck spots when loading extension
 -   tags does not remove key if last oone removed
 -   add occluder effect
+-   seems like ColorFilter folder is separate from textures

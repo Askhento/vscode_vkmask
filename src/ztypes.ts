@@ -1350,7 +1350,7 @@ const ZColorfilterEffect = ZBaseEffect.extend({
         group: "anchor",
         options: Object.keys(ZPatchAnchor.Values),
         optionLabels: ZPatchAnchorLabels,
-        defValue: ZFaceAnchor.Values.forehead,
+        defValue: ZPatchAnchor.Values.fullscreen,
     }),
     visible: ZVisibleType.describe({
         ...uiDescriptions.enum,
@@ -2077,6 +2077,8 @@ const ZPostEffectEffect = ZBaseEffect.extend({
     intensity: ZNumberSlider.describe({
         ...uiDescriptions.numberSlider,
         defValue: 1,
+        valueLabel: "%",
+        valueTemplate: (val) => Math.floor(val * 100),
         label: "locale.parameters.posteffect.intensity.label",
         info: {
             infoList: "locale.parameters.posteffect.intensity.infoList",
@@ -2125,26 +2127,6 @@ export const ZEffects = ZEffect.array().describe(uiDescriptions.array);
 
 export const effectNames = [...new Set(ZEffect.options.map((val) => val.shape.name.value))];
 // console.log("effectsNames", effectNames);
-export const effectDefaults = {};
-effectNames.forEach((name, i) => {
-    effectDefaults[name] = {
-        data: {
-            name,
-        },
-    };
-    //   const result = ZEffect.safeParse({ name: name });
-
-    //   if (result.success) {
-    //     // console.log("ztypes data");
-    //     // console.log(result.data)
-    //     effectDefaults[name] = {
-    //       data: result.data,
-    //       type: EffectsList[i],
-    //     };
-    //   } else {
-    //     console.log(result.error);
-    //   }
-});
 
 const ZPerspectivePlugin = z
     .object({

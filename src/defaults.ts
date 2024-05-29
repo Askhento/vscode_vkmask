@@ -8,6 +8,16 @@ export const effectDefaults = {
         name: "beautify",
         mix: 1,
     },
+    colorfilter: {
+        name: "colorfilter",
+        intensity: 1,
+        anchor: "fullscreen",
+    },
+    posteffect: {
+        name: "posteffect",
+        type: "sharpen",
+        intensity: 1,
+    },
 };
 
 export const pluginDefaults = {};

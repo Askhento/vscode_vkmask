@@ -5,7 +5,7 @@
     const { effects, selection, messageHandler } = getContext("stores");
     import { RequestTarget, RequestCommand, SelectionType } from "../../../src/types";
 
-    import { effectNames, effectDefaults } from "../../../src/ztypes.js";
+    import { effectNames } from "../../../src/ztypes.js";
     import Dropdown from "../components/Dropdown.svelte";
 
     // open={addListOpened}
