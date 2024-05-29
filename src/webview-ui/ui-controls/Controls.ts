@@ -1,6 +1,5 @@
 import {
     effectNames,
-    effectDefaults,
     uiDescriptions,
     EffectsList,
     ZEffect,

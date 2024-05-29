@@ -1248,13 +1248,15 @@ const ZBeautifyEffect = ZBaseEffect.extend({
     name: z.literal("beautify").describe(uiDescriptions.none),
     mix: ZNumberSlider.describe({
         ...uiDescriptions.numberSlider,
-        defValue: 0.65,
+        defValue: 1.0,
         label: "locale.parameters.beautify.mix.label",
         info: {
             clickLink: "https://dev.vk.com/ru/masks/effects/beautify",
             infoHeader: "locale.parameters.beautify.mix.infoHeader",
             infoBody: "locale.parameters.beautify.mix.infoBody",
         },
+        valueTemplate: (val) => Math.floor(val * 100),
+        valueLabel: "%",
     }),
 }).describe({
     ...uiDescriptions.object,

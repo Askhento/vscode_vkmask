@@ -14,6 +14,7 @@ import { logger } from "./Logger";
 import { SelectionType, ErrorType } from "./types";
 import type { AppError, Selection } from "./types";
 import slash from "slash";
+import { effectDefaults, pluginDefaults } from "./defaults";
 
 const print = (...args: unknown[]) => logger.log(__filename, ...args);
 
@@ -212,9 +213,11 @@ export class MaskConfig extends EventEmitter {
 
         const effectObjects = this.maskJSON.effects;
 
-        const newEffect = {
+        const newEffect = effectDefaults[name] ?? {
             name,
         };
+
+        if (!(name in effectDefaults)) print(`effect ${name} not in defaults`);
 
         if (
             globalThis.selection !== undefined &&
@@ -243,9 +246,11 @@ export class MaskConfig extends EventEmitter {
 
         const pluginObjects = this.maskJSON.plugins;
 
-        const newPlugin = {
+        const newPlugin = pluginDefaults[name] ?? {
             name,
         };
+
+        if (!(name in pluginDefaults)) print(`plugin ${name} not in defaults`);
 
         if (
             globalThis.selection !== undefined &&
@@ -375,14 +380,6 @@ export class MaskConfig extends EventEmitter {
             return false;
         }
 
-        // if (this.sourceMaskJSON === undefined) {
-        //     print("mask json source is undefined")
-        //     return {
-        //         success : false,
-        //         message :
-        //     }
-        // }
-
         // this.maskJSON = this.sourceMaskJSON.data;
         // print(this.sourceMaskJSON.data);
 
@@ -452,112 +449,4 @@ export class MaskConfig extends EventEmitter {
     // Values returned in the callback of `hotRequire` must
     // have a `dispose` function.
     dispose() {}
-
-    // // these  will try to deal with changes made programmatically
-    // public saveLockCallback: (() => void) | undefined;
-    // public async saveConfig(document?: vscode.TextDocument) {
-    //     if (document == null) {
-    //         print("saveConfig : null document");
-    //         return false;
-    //     }
-
-    //     return await document.save();
-    // }
-
-    // // todo : add clear locks methods
-    // public setupSelectLock() {
-    //     this.selectionLockCallback = () => {
-    //         // print("selection lock ");
-    //         // this.sendEffects();
-    //         this.selectionLockCallback = undefined;
-    //         //   this.saveConfig();
-    //     };
-    // }
-
-    // public setSelection(pointer: Record<jsonMap.PointerProp, jsonMap.Location>) {
-
-    // }
-
-    // public removeFromConfig(id: number) {
-
-    //     return this.showConfig().then((editor) => {
-
-    //         this.maskJSON?.effects.splice(id, 1);
-
-    //         // const newConfigString = this.prettyJson(this.maskJSON)
-    //         const newConfigString = jsonPrettyArray(this.maskJSON)
-
-    //         return editor.edit((builder) => {
-
-    //             builder.delete(new vscode.Range(0, 0, editor.document.lineCount, 0))
-    //             builder.insert(new vscode.Position(0, 0), newConfigString);
-
-    //             if (this.selectedEffectId === undefined) {
-    //                 print("removing from config, but selected is undefined!");
-    //                 return;
-    //             }
-
-    //             if (id < this.selectedEffectId) {
-    //                 this.selectedEffectId = Math.max(0, this.selectedEffectId - 1);
-    //                 print("removing after selectedId " + this.selectedEffectId);
-
-    //                 if (this.selectedEffectId !== undefined) {
-    //                     this.parseConfig(); // need to refresh in order to have current pointers
-    //                     this.showEffect(this.selectedEffectId);
-    //                 }
-
-    //             } else if (id === this.selectedEffectId) {
-    //                 print("removing selected effect")
-    //                 this.selectedEffectId = undefined;
-    //                 // var postion = editor.selection.end;
-    //                 // editor.selection = new vscode.Selection(postion, postion);
-    //             }
-
-    //             print("selected after remove " + this.selectedEffectId);
-
-    //         })
-
-    //     });
-    // }
-
-    // public swapEffects(start: number, target: number) {
-    //     if (!this.maskJSON) return;
-
-    //     const newEffects = this.maskJSON.effects;
-
-    //     if (start < target) {
-    //         newEffects.splice(target + 1, 0, newEffects[start]);
-    //         newEffects.splice(start, 1);
-    //     } else {
-    //         newEffects.splice(target, 0, newEffects[start]);
-    //         newEffects.splice(start + 1, 1);
-    //     }
-
-    //     this.maskJSON.effects = newEffects;
-
-    //     this.writeConfig();
-    // }
-
-    // public addPropertyToEffect(effectId: number, prop: object) {
-    //     if (!this.maskJSON) return;
-
-    //     //! need to check object
-
-    //     this.maskJSON.effects[effectId] = { ...this.maskJSON.effects[effectId], ...prop };
-
-    //     this.writeConfig();
-    // }
-
-    // public addEffect(effectObject: object) {
-    //     if (!this.maskJSON) return;
-    //     // this.maskJSON?.effects.splice(id , 1);
-    //     // this.maskJSON.effects[idOld];
-
-    //     const newEffect = effectObject as z.infer<typeof ZBaseEffect>;
-    //     this.maskJSON.effects.unshift(newEffect);
-
-    //     if (this.selectedEffectId) this.selectedEffectId++; // add new always in front
-
-    //     this.writeConfig();
-    // }
 }
