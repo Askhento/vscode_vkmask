@@ -43,21 +43,27 @@ export const uiDescriptions = {
         name: "array2d",
         label: "Vec2",
         group: "main",
-        defValue: [0, 0],
+        get defValue() {
+            return [0, 0];
+        },
         valueLabels: ["X", "Y"],
     },
     array3d: {
         name: "array3d",
         label: "Vec3",
         group: "main",
-        defValue: [0, 0, 0],
+        get defValue() {
+            return [0, 0, 0];
+        },
         valueLabels: ["X", "Y", "Z"],
     },
     array4d: {
         name: "array4d",
         label: "Vec4",
         group: "main",
-        defValue: [0, 0, 0, 0],
+        get defValue() {
+            return [0, 0, 0, 0];
+        },
         valueLabels: ["X", "Y", "Z", "W"],
     },
 
@@ -98,12 +104,21 @@ export const uiDescriptions = {
     icon: { name: "icon", label: "Icon", group: "main", defValue: null, info: null },
     texture: { name: "texture", label: "Texture", group: "main", defValue: "" },
     // !!!! color alpha redundant here
-    color: { name: "color", label: "Color", group: "main", defValue: [1, 1, 1] },
+    color: {
+        name: "color",
+        label: "Color",
+        group: "main",
+        get defValue() {
+            return [1, 1, 1];
+        },
+    },
     colorAlpha: {
         name: "colorAlpha",
         label: "Color",
         group: "main",
-        defValue: [1, 1, 1, 1],
+        get defValue() {
+            return [1, 1, 1, 1];
+        },
         alpha: true,
     },
     uv_transform: {
@@ -120,7 +135,9 @@ export const uiDescriptions = {
         name: "object",
         label: "Object",
         group: "main",
-        defValue: {},
+        get defValue() {
+            return {};
+        },
         defExpanded: true,
         groups: { main: { label: null, defExpanded: true } },
     },
@@ -129,8 +146,10 @@ export const uiDescriptions = {
         label: "Array",
         group: "main",
         elementName: "element",
-        defaultElement: "defalult",
-        defValue: [],
+        defaultElement: null,
+        get defValue() {
+            return [];
+        },
         userResizable: false,
     },
 
@@ -1509,13 +1528,14 @@ const ZModel3dEffect = ZBaseEffect.extend({
     }),
     model: ZModel3dAsset({
         label: "locale.parameters.model3d.model.label",
-        group: "model",
         info: {
             clickLink: "https://dev.vk.com/ru/masks/effects/model3d",
             infoList: "locale.parameters.model3d.model.infoList",
             infoBody: "locale.parameters.model3d.model.infoBody",
             infoHeader: "locale.parameters.model3d.model.infoHeader",
         },
+        group: "model",
+
         dependencies: modelDeps,
         structural: true,
     }),

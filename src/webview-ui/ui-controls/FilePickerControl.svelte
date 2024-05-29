@@ -203,14 +203,15 @@
     }
 
     async function updateDeps() {
+        // console.log("file", component.path, component, value, params.dependencies);
         const { needUpdate } = await applyDeps(component, stores, params.dependencies);
         if (needUpdate) onChange();
         return needUpdate;
     }
 
     onMount(async () => {
-        await updateDeps();
         await tick();
+        await updateDeps();
         // print("mount", currentAsset);
         setControlElementValue(currentAsset?.baseName);
         setDropDownValue(String(filteredAssets.findIndex((op) => op.path === value)));

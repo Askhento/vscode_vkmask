@@ -23,3 +23,5 @@
 -   find a way to trigger deps without key block in parameters app
 -   asset group scrroll into view
 -   find a way to profile bottleneck spots when loading extension
+-   tags does not remove key if last oone removed
+-   add occluder effect
