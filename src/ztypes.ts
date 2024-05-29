@@ -1364,7 +1364,7 @@ const ZColorfilterEffect = ZBaseEffect.extend({
         group: "advanced",
         options: Object.keys(ZVisibleType.Values),
         optionLabels: ZVisibleTypeLabels,
-        defValue: ZVisibleType.Values.face,
+        defValue: ZVisibleType.Values.always,
     }),
     fit: ZPatchFitMode.describe({
         ...uiDescriptions.enum,

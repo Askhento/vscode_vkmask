@@ -12,6 +12,7 @@ export const effectDefaults = {
         name: "colorfilter",
         intensity: 1,
         anchor: "fullscreen",
+        visible: "always",
     },
     posteffect: {
         name: "posteffect",
