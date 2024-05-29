@@ -26,3 +26,4 @@
 -   tags does not remove key if last oone removed
 -   add occluder effect
 -   seems like ColorFilter folder is separate from textures, so need default colorfilters
+-   asset watcher need to work only for specified folder structures
