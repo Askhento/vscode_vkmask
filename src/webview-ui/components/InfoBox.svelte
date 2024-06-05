@@ -70,8 +70,6 @@
         {#if infoOpened}
             <div use:clickOutside on:click_outside={handleClickOutside} class="info-box-wrapper">
                 {#if errors.length}
-                    <vscode-divider role="separator" />
-
                     <div class="info-header-wrapper">
                         <span class="codicon codicon-info error"></span>
                         <span class="info-header">{l10n.t(infoErrorHeader) + ":"}</span>
@@ -84,10 +82,9 @@
                             </li>
                         {/each}
                     </ul>
+                    <vscode-divider role="separator" />
                 {/if}
                 {#if warnings.length}
-                    <vscode-divider role="separator" />
-
                     <div class="info-header-wrapper">
                         <span class="codicon codicon-info warning"></span>
                         <span class="info-header">{l10n.t(infoWarningHeader) + ":"}</span>
@@ -100,6 +97,7 @@
                             </li>
                         {/each}
                     </ul>
+                    <vscode-divider role="separator" />
                 {/if}
                 <div class="info-header-wrapper">
                     <span class="codicon codicon-info"></span>
@@ -192,7 +190,9 @@
 
     .info-header-wrapper {
         display: flex;
-        min-height: var(--global-block-height);
+        /* min-height: var(--global-block-height); */
+        /* height: var(--global-block-height); */
+        height: fit-content;
         align-content: center;
         align-items: center;
     }
@@ -200,6 +200,12 @@
     .info-header {
         margin-left: var(--global-margin);
         text-wrap: wrap;
+        height: fit-content;
+    }
+
+    .info-header-wrapper .codicon::before {
+        font-size: 0.8rem;
+        /* height: 5px; */
     }
 
     p {
@@ -226,7 +232,7 @@
         margin: var(--global-margin);
         margin-right: 0;
         margin-top: 0;
-        margin-left: calc(var(--global-margin) * 2);
+        margin-left: calc(var(--global-margin) * 1.5);
 
         padding: 0;
         display: flex;

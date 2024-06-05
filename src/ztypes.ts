@@ -2247,6 +2247,7 @@ const iconInfo = {
 
     infoList: "locale.projectManager.icon.infoList",
     infoHeader: "locale.projectManager.icon.infoHeader",
+    infoBody: "locale.projectManager.icon.infoBody",
 };
 
 const ZIcon = z.string().describe({
