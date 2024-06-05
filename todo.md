@@ -27,3 +27,4 @@
 -   add occluder effect
 -   seems like ColorFilter folder is separate from textures, so need default colorfilters
 -   asset watcher need to work only for specified folder structures
+-   texture color set deps if techinue uses alpha channel

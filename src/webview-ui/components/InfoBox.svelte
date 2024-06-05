@@ -127,17 +127,13 @@
                     <vscode-divider role="separator" />
                     <div class="info-header-wrapper">
                         <span class="codicon codicon-globe"></span>
-                        <span class="info-header"
+                        <!-- <span class="info-header"
                             >{l10n.t("locale.infobox.readmoreHeader") + ":"}</span
-                        >
+                        > -->
+                        <vscode-link href={clickLink}
+                            >{l10n.t("locale.infobox.readmoreHeader")}
+                        </vscode-link>
                     </div>
-                    <ul>
-                        <li>
-                            <vscode-link href={clickLink}
-                                >{l10n.t("locale.infobox.readmoreOpen")}
-                            </vscode-link>
-                        </li>
-                    </ul>
                 {/if}
             </div>
             <div class="info-hitbox"></div>
@@ -230,6 +226,7 @@
         margin: var(--global-margin);
         margin-right: 0;
         margin-top: 0;
+        margin-left: calc(var(--global-margin) * 2);
 
         padding: 0;
         display: flex;
