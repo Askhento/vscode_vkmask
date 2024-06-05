@@ -9,6 +9,7 @@
     import { logger, logDump } from "../logger";
     import { writable } from "svelte/store";
     import Loading from "../components/Loading.svelte";
+    import ShadowTop from "../components/ShadowTop.svelte";
     const print = logger("AssetManager.svelte");
     provideVSCodeDesignSystem().register(allComponents);
 
@@ -244,7 +245,7 @@
     // }
 </script>
 
-<div class="shadow-top"></div>
+<ShadowTop></ShadowTop>
 
 {#if appState === AppState.running}
     {#key $selection}

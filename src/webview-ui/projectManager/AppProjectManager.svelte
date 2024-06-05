@@ -23,6 +23,7 @@
     import { MaskSettingsParserForUI } from "../ui-controls/Controls.js";
     import type { RecentProjectInfo } from "src/RecentProjectInfo";
     import Loading from "../components/Loading.svelte";
+    import ShadowTop from "../components/ShadowTop.svelte";
 
     provideVSCodeDesignSystem().register(allComponents);
 
@@ -260,8 +261,7 @@
     init();
 </script>
 
-<!-- <pre> {JSON.stringify(maskSettings, null, "\t")}</pre> -->
-<div class="shadow-top"></div>
+<ShadowTop></ShadowTop>
 <div class="project-manager-wrapper">
     {#key appState}
         {#if appState === AppState.loading}

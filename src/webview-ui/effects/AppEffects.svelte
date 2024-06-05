@@ -1,4 +1,6 @@
 <script lang="ts">
+    import ShadowTop from "../components/ShadowTop.svelte";
+
     import { setContext } from "svelte";
     import { writable } from "svelte/store";
     import { provideVSCodeDesignSystem, allComponents } from "@vscode/webview-ui-toolkit";
@@ -270,7 +272,8 @@
     init();
 </script>
 
-<div class="shadow-top"></div>
+<ShadowTop></ShadowTop>
+
 {#if appState === AppState.running}
     {#key $selection}
         {#key $effects}

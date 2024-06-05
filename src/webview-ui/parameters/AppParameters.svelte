@@ -48,6 +48,7 @@
     import InfoTableControl from "../ui-controls/InfoTableControl.svelte";
     import { effect } from "zod";
     import Loading from "../components/Loading.svelte";
+    import ShadowTop from "../components/ShadowTop.svelte";
 
     provideVSCodeDesignSystem().register(allComponents);
 
@@ -633,7 +634,8 @@
     init();
 </script>
 
-<div class="shadow-top"></div>
+<ShadowTop></ShadowTop>
+
 <div class="parameters-wrapper">
     {#if $selectionStack.length !== 0 && false}
         <vscode-button

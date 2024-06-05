@@ -1,4 +1,6 @@
 <script lang="ts">
+    import ShadowTop from "../components/ShadowTop.svelte";
+
     import * as l10n from "@vscode/l10n";
     import { setContext } from "svelte";
     import { writable } from "svelte/store";
@@ -163,7 +165,8 @@
     init();
 </script>
 
-<div class="shadow-top"></div>
+<ShadowTop></ShadowTop>
+
 {#if appState === AppState.running}
     {#key $selection}
         {#key $plugins}
