@@ -9,7 +9,9 @@
     export let options,
         name = "Menu",
         icon = "menu",
-        extraStyle = "";
+        extraStyle = "",
+        disabled = false,
+        title = "";
 
     function onClickAnywhere(e) {
         if (e.target !== menuButton) menuActive = false;
@@ -34,7 +36,13 @@
 {#if options}
     {#key options}
         <div class="dropdown" style={extraStyle}>
-            <vscode-button class="menu-button" bind:this={menuButton} on:click={toggleMenu}>
+            <vscode-button
+                {title}
+                {disabled}
+                class="menu-button"
+                bind:this={menuButton}
+                on:click={toggleMenu}
+            >
                 <span style="pointer-events: none;" slot="start" class="codicon codicon-{icon}" />
                 <span style="pointer-events: none;" class="btn-text">{l10n.t(name)}</span>
             </vscode-button>

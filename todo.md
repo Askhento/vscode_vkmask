@@ -17,6 +17,7 @@
 -   seems like ColorFilter folder is separate from textures, so need default colorfilters
 -   texture color set deps if techinue uses alpha channel
 -   integrate into explorer when no folder
+-   tabInfo not updating in some places after recomplile
 
 -   add logic to always select something
 -   tags does not remove key if last oone removed

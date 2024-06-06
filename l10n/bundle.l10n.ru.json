@@ -50,6 +50,7 @@
     "locale.controls.filepicker.selectFilePlaceholder": "Выделить ресурс",
     "locale.controls.tags.buttonAdd.label": "Добавить тэг",
     "locale.controls.tags.buttonAddNewTag.label": "Новый тэг",
+    "locale.controls.tags.dropdown.disabledHint": "Все тэги задействованы, создайте новый",
     "locale.controls.uvTransform.pivot": "Опорная точка",
     "locale.controls.uvTransform.rotation": "Вращение",
     "locale.controls.uvTransform.scale": "Размер",

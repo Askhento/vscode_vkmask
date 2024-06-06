@@ -17,8 +17,7 @@
 
     import { provideVSCodeDesignSystem, allComponents } from "@vscode/webview-ui-toolkit";
 
-    import { MessageHandler } from "../common/MessageHandler";
-    import type { MessageHandlerData } from "../common/MessageHandler";
+    import { MessageHandler, type MessageHandlerData } from "../common/MessageHandler";
 
     import {
         RequestTarget,

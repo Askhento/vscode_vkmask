@@ -1,27 +1,28 @@
-<script lang="js">
+<script lang="ts">
     import * as l10n from "@vscode/l10n";
 
     import { createEventDispatcher, tick } from "svelte";
     import Dropdown from "../components/Dropdown.svelte";
     import { getContext } from "svelte";
     import InfoBox from "../components/InfoBox.svelte";
-    //@ts-expect-error
-    const { allTags } = getContext("stores");
+    import TextInput from "../components/TextInput.svelte";
+    import { type DataStores } from "../types";
+
+    const { allTags } = getContext("stores") as DataStores;
 
     // console.log("tags all ", $allTags);
 
     export let label, value, path, params;
     let infoVisible = false;
     let tags = [];
-    let tagElems = [];
     let tagOptions = [];
 
     $: {
         tagOptions = [...$allTags];
-        if (value != null) {
+
+        if (value) {
             tags = value.split(";");
         }
-
         if (tags && tags.length) {
             tagOptions = tagOptions.filter((tag) => tags.indexOf(tag) < 0);
         }
@@ -31,19 +32,11 @@
             },
             tag,
         ]);
-        tagOptions = [
-            [
-                () => {
-                    addTag();
-                },
-                `+ ${l10n.t("locale.controls.tags.buttonAddNewTag.label")}`,
-            ],
-            ...tagOptions,
-        ];
-        // console.log("tags", tagOptions);
+        console.log("tags", tagOptions, $allTags, tags);
     }
     const dispatch = createEventDispatcher();
-    $: {
+
+    function onChange() {
         dispatch("changed", [
             {
                 value,
@@ -53,31 +46,33 @@
     }
 
     function joinTags() {
-        // .filter((tag) => tag.length)
         value = tags.join(";");
+        onChange();
+    }
 
-        // console.log("joined! " + value);
+    function checkTagExist(tag) {
+        return $allTags.has(tag) || tags.findIndex((v) => v === tag) !== -1;
     }
 
     async function addTag(newTag = "") {
-        tagElems = [];
-        // if()
-        tags.push(newTag);
+        tags.unshift(newTag);
         tags = tags;
-        // console.log("tags should rerender!!!! ", tags);
 
-        // //#impr focus on new
-        // await tick();
-        // tagElems.at(-1).focus();
         joinTags();
     }
 
     function removeTag(index) {
-        tagElems = [];
         // console.log("removeing tag", index);
         tags.splice(index, 1);
         // console.log("new tags", tags);
         tags = tags;
+        if (tags.length === 0) {
+            tags = [];
+            value = null;
+            onChange();
+            return;
+        }
+
         joinTags();
     }
 </script>
@@ -111,47 +106,55 @@
             <span class="codicon codicon-add" />
             Add new tag
         </vscode-button> -->
-    <Dropdown options={tagOptions} name={l10n.t("locale.controls.tags.buttonAdd.label")} icon="" />
-    {#each tags as tag, index}
+    {#key tagOptions}
+        <Dropdown
+            options={tagOptions}
+            disabled={tagOptions.length === 0}
+            title={tagOptions.length === 0
+                ? l10n.t("locale.controls.tags.dropdown.disabledHint")
+                : null}
+            name={l10n.t("locale.controls.tags.buttonAdd.label")}
+            icon=""
+        />
+    {/key}
+    <TextInput
+        onChange={(newTag) => {
+            // add or nothing
+            if (!newTag || checkTagExist(newTag)) return;
+            addTag(newTag);
+        }}
+    />
+    {#each tags as tag, tagIndex}
         <div class="tag-value-wrapper">
-            <vscode-text-field
-                value={tags[index]}
-                bind:this={tagElems[index]}
-                on:keydown={(e) => {
-                    switch (e.key) {
-                        case "Backspace":
-                            if (e.target) {
-                                const newValue = e.target.value;
-                                if (newValue === "" && index > 0) {
-                                    removeTag(index);
-                                }
-                            }
-                            break;
-                        case "Escape":
-                            e.target.value = tag;
-                            e.target.blur();
-                            break;
-                        case "Enter":
-                            e.target.blur();
-                        default:
-                            break;
+            <TextInput
+                value={tag}
+                onChange={(newTag, e) => {
+                    // console.log(
+                    //     newTag,
+                    //     $allTags.has(newTag),
+                    //     tags.findIndex((v) => v === newTag),
+                    //     checkTagExist(newTag)
+                    // );
+                    if (checkTagExist(newTag)) {
+                        e.target.value = tag;
+                        console.log("hewer");
+                        return;
                     }
+                    $allTags.delete(tag);
+                    $allTags.add(newTag);
+
+                    tags[tagIndex] = newTag;
+                    joinTags();
+                    tags = tags;
                 }}
-                on:change={(e) => {
-                    if (e.target) {
-                        tags[index] = e.target.value;
-                        // console.log("changed tag", tags[index]);
-                        joinTags();
-                    }
-                }}
-            >
-            </vscode-text-field>
+            ></TextInput>
+
             <div class="remove-btn-wrapper">
                 <vscode-button
                     class="remove-tag-btn"
                     appearance="icon"
                     on:click|stopPropagation={() => {
-                        removeTag(index);
+                        removeTag(tagIndex);
                     }}
                 >
                     <span class="codicon codicon-close" />
@@ -190,7 +193,7 @@
 
     .control-wrapper {
         padding: var(--global-margin);
-        padding-right: calc(var(--global-body-padding-right) + var(--global-margin));
+        padding-right: calc(var(--global-body-padding-right));
 
         margin: unset;
         position: relative;
@@ -209,28 +212,16 @@
         width: 100%;
     }
 
-    vscode-text-field {
-        margin: 0;
-        width: 100%;
-        height: var(--global-block-height-borded);
-    }
-
-    vscode-text-field::part(root) {
-        min-width: 0;
-        width: 100%;
-        height: var(--global-block-height-borded);
-    }
-
     .remove-btn-wrapper {
         position: absolute;
-        left: calc(100% + var(--global-margin));
+        left: calc(100% + 0.5 * var(--global-margin));
         top: 0;
         height: var(--global-block-height-borded);
         width: var(--global-block-height-borded);
         /* margin: var(--global-margin); */
         /* margin-right: 0; */
         margin: unset;
-        margin-left: calc(var(--global-margin) * 0.5);
+        /* margin-left: calc(var(--global-margin) * 0.5); */
 
         padding: 0;
         display: flex;

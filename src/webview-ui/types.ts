@@ -1,4 +1,7 @@
+import type { Asset, Selection } from "src/types";
 import type { ComponentProps } from "svelte";
+import type { MessageHandler } from "./common/MessageHandler";
+import { Writable } from "svelte/store";
 
 export interface Info {
     clickLink?: string;
@@ -30,12 +33,24 @@ export interface BaseControlAPI<T extends BaseControlParameters = BaseControlPar
     };
 }
 
+export interface DataStores {
+    assets: Writable<Asset[]>;
+    settings: Writable<{}>;
+    messageHandler: MessageHandler;
+    allTags: Writable<Set<string>>;
+    effects: Writable<any[]>;
+    plugins: Writable<any[]>;
+    selection: Writable<Selection>;
+    tabInfo: Writable<Record<string, boolean>>;
+}
+
 export type ControlDataStores =
     | "assets"
     | "settings"
     | "messageHandler"
     | "allTags"
     | "effects"
+    | "plugins"
     | "selection"
     | "tabInfo";
 
