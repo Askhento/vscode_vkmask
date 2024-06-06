@@ -207,6 +207,17 @@
         print("created asset : ", payload);
     }
 
+    async function scrollGroupToView(groupId) {
+        await tick();
+        const groupElement = document.getElementById(groupId);
+        // console.log("SCROLL", groupElement, groupId);
+        groupElement?.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+            inline: "nearest",
+        });
+    }
+
     async function removeAsset(assetPath) {
         if ($selection.type === SelectionType.asset) {
             if ($selection.path === assetPath) {
@@ -251,18 +262,22 @@
     {#key $selection}
         {#key $assets}
             {#if Object.keys(assetGroups).length}
-                {#each Object.entries(assetGroups) as [groupName, groupData], groupInd}
+                {#each Object.entries(assetGroups) as [groupName, groupData], groupIndex}
+                    {@const groupId = `asset-group${groupIndex}`}
                     <!-- content here -->
-                    {#if groupInd !== 0}
+                    {#if groupIndex !== 0}
                         <vscode-divider class="divider" role="separator" />
                     {/if}
                     <div
                         class="group-label"
+                        id={groupId}
                         on:click={() => {
                             groupData.expanded = !groupData.expanded;
 
                             // const tabKey = [groupName].join(".");
                             $tabInfo[groupName] = groupData.expanded;
+
+                            if (groupData.expanded) scrollGroupToView(groupId);
                             sendTabInfo();
                         }}
                     >
