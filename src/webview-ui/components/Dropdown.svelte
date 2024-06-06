@@ -48,7 +48,7 @@
                             action();
                         }}
                     >
-                        {label}
+                        <span class="btn-text">{label}</span>
                         {#if icon}
                             <span slot="start" class="codicon codicon-{icon}" />
                         {/if}
