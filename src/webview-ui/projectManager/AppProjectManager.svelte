@@ -262,6 +262,10 @@
 </script>
 
 <ShadowTop></ShadowTop>
+<!-- <OverlayScrollbarsComponent options={{ scrollbars: { theme: "os-theme-light" } }}>
+    <div>lololol</div>
+</OverlayScrollbarsComponent> -->
+
 <div class="project-manager-wrapper">
     {#key appState}
         {#if appState === AppState.loading}
