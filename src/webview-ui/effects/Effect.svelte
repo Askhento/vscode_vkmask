@@ -41,7 +41,7 @@
                 {tag
                     .split(";")
                     .filter((t) => t.length)
-                    .join(" or ")}
+                    .join(", ")}
             </span>
         {/if}
         <vscode-button

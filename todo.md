@@ -18,9 +18,9 @@
 -   texture color set deps if techinue uses alpha channel
 -   integrate into explorer when no folder
 -   tabInfo not updating in some places after recomplile
+-   add tag rename in effects panel
 
 -   add logic to always select something
--   tags does not remove key if last oone removed
 -   vectorControl not complete applyDeps
 -   option control seems to react on alt
 -   fix number slider object Object
