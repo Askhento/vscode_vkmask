@@ -643,11 +643,10 @@ export async function activate(context: vscode.ExtensionContext) {
             saveLabel: l10n.t("locale.commands.createProject.buttonLabel"),
             title: l10n.t("locale.commands.createProject.title"),
         };
-        const newProjectUri = await vscode.window.showSaveDialog(options);
-
         const oldState = appState;
         appState = AppState.loading;
         onSendAppState();
+        const newProjectUri = await vscode.window.showSaveDialog(options);
 
         if (!newProjectUri) {
             // on cancel
