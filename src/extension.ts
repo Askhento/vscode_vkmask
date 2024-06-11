@@ -606,13 +606,13 @@ export async function activate(context: vscode.ExtensionContext) {
         // ? need to check if new folder have mask.json
         const options: vscode.OpenDialogOptions = {
             canSelectMany: false,
-            openLabel: "Open",
+            openLabel: l10n.t("locale.commands.openProject.openButton.label"),
             canSelectFiles: true,
             canSelectFolders: false,
             filters: {
-                "mask.json config": ["json"],
+                [l10n.t("locale.commands.openProject.filterMaskJson")]: ["json"],
             },
-            title: "Select mask.json file",
+            title: l10n.t("locale.commands.openProject.title"),
         };
 
         const oldState = appState;
@@ -639,10 +639,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
     async function createProject(url = "") {
         // ! need to check if project already there !!!
-        // ? translate #tr
         const options: vscode.SaveDialogOptions = {
-            saveLabel: l10n.t("locale.infoMessage.createProject.label"),
-            title: l10n.t("locale.infoMessage.createProject.title"),
+            saveLabel: l10n.t("locale.commands.createProject.buttonLabel"),
+            title: l10n.t("locale.commands.createProject.title"),
         };
         const newProjectUri = await vscode.window.showSaveDialog(options);
 

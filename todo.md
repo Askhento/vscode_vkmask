@@ -18,8 +18,12 @@
 -   texture color set deps if techinue uses alpha channel
 -   integrate into explorer when no folder
 -   tabInfo not updating in some places after recomplile
--   add tag rename in effects panel
+-   add tag rename in effects
+-   add parameter shaders
+-   add spirv visual https://github.com/gleblebedev/SpirVisualEditor
+-   add option to open project in any place
 
+-   filepicker when null need to reset selected index
 -   add logic to always select something
 -   vectorControl not complete applyDeps
 -   option control seems to react on alt
@@ -29,5 +33,5 @@
     vector transform seems to trigger twice and path is undefined
 -   find a way to profile bottleneck spots when loading extension
 
--   fix generate buildins & abs path as a wildcard???
+-   fix generate buildins & abs path as a wildcard??? need when published my path is different
 -   asset watcher need to work only for specified folder structures
