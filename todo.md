@@ -23,6 +23,7 @@
 -   add spirv visual https://github.com/gleblebedev/SpirVisualEditor
 -   add option to open project in any place
 -   clear recent project which do not exist before shwo welcome
+-   show template download progress
 
 -   filepicker when null need to reset selected index
 -   add logic to always select something

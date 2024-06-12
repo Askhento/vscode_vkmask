@@ -71,7 +71,7 @@ export function zipSync(inPath, outPath) {
         cwd: path.dirname(inPath),
         maxBuffer: Infinity,
     };
-    cp.execFileSync(getZipCommand(), getZipArgs(inPath, outPath), opts);
+    cp.execFileSync(getZipCommand(inPath), getZipArgs(inPath, outPath), opts);
 }
 function unzip(inPath, outPath, cb) {
     if (!cb) cb = function () {};
@@ -88,11 +88,11 @@ export function unzipSync(inPath, outPath) {
     };
     cp.execFileSync(getUnzipCommand(), getUnzipArgs(inPath, outPath), opts);
 }
-function getZipCommand() {
+function getZipCommand(inPath) {
     if (process.platform === "win32") {
         return "powershell.exe";
     } else {
-        return "zip";
+        return `cd ${inPath}; zip`;
     }
 }
 function getUnzipCommand() {
@@ -119,7 +119,7 @@ function getZipArgs(inPath, outPath) {
         ];
     } else {
         const fileName = path.basename(inPath);
-        return ["-r", "-y", outPath, fileName];
+        return ["-r", "-y", outPath, "."];
     }
 }
 function getUnzipArgs(inPath, outPath) {
