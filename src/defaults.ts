@@ -6,7 +6,7 @@ export const effectDefaults = {
     },
     beautify: {
         name: "beautify",
-        mix: 1,
+        mix: 0.65,
     },
     colorfilter: {
         name: "colorfilter",
