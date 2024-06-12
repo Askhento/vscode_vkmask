@@ -1,3 +1,6 @@
+// import { ZEffect } from "./ztypes";
+// import z from "zod";
+
 export const effectDefaults = {
     patch: {
         name: "patch",
@@ -19,6 +22,7 @@ export const effectDefaults = {
         type: "sharpen",
         intensity: 1,
     },
+    facemodel: {},
 };
 
 export const pluginDefaults = {};

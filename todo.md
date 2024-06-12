@@ -24,6 +24,7 @@
 -   add option to open project in any place
 -   clear recent project which do not exist before shwo welcome
 -   show template download progress
+-   archive add setting to save in specific folder
 
 -   filepicker when null need to reset selected index
 -   add logic to always select something
