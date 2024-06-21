@@ -1,7 +1,7 @@
 import { posix as path } from "path";
 import * as fs from "fs";
 import os from "os";
-import cp from "child_process";
+import cp, { SpawnSyncOptions, SpawnSyncOptionsWithBufferEncoding } from "child_process";
 
 function zip(inPath, outPath, cb) {
     if (!cb) cb = function () {};
@@ -56,22 +56,30 @@ function zip(inPath, outPath, cb) {
 }
 export function zipSync(inPath, outPath) {
     if (process.platform === "win32") {
-        if (fs.statSync(inPath).isFile()) {
-            const inFile = fs.readFileSync(inPath);
-            const tmpPath = path.join(os.tmpdir(), "cross-zip-" + Date.now());
-            fs.mkdirSync(tmpPath);
-            fs.writeFileSync(path.join(tmpPath, path.basename(inPath)), inFile);
-            inPath = tmpPath;
-        }
+        // if (fs.statSync(inPath).isFile()) {
+        //     const inFile = fs.readFileSync(inPath);
+        //     const tmpPath = path.join(os.tmpdir(), "cross-zip-" + Date.now());
+        //     fs.mkdirSync(tmpPath);
+        //     fs.writeFileSync(path.join(tmpPath, path.basename(inPath)), inFile);
+        //     inPath = tmpPath;
+        // }
 
         if (fs.statSync(outPath, { throwIfNoEntry: false })?.isFile())
             fs.rmSync(outPath, { recursive: true, maxRetries: 3 });
     }
-    const opts = {
-        cwd: path.dirname(inPath),
-        maxBuffer: Infinity,
-    };
-    cp.execFileSync(getZipCommand(inPath), getZipArgs(inPath, outPath), opts);
+
+    // todo find why this not working\
+    if (process.platform === "win32") {
+        cp.execFileSync(getZipCommand(inPath), getZipArgs(inPath, outPath), {
+            maxBuffer: Infinity,
+        });
+    } else {
+        cp.spawnSync(getZipCommand(inPath), getZipArgs(inPath, outPath), {
+            cwd: inPath,
+            maxBuffer: Infinity,
+            shell: true
+        });
+    }
 }
 function unzip(inPath, outPath, cb) {
     if (!cb) cb = function () {};
@@ -92,7 +100,7 @@ function getZipCommand(inPath) {
     if (process.platform === "win32") {
         return "powershell.exe";
     } else {
-        return `cd ${inPath}; zip`;
+        return `zip`;
     }
 }
 function getUnzipCommand() {
@@ -119,7 +127,7 @@ function getZipArgs(inPath, outPath) {
         ];
     } else {
         const fileName = path.basename(inPath);
-        return ["-r", "-y", outPath, "."];
+        return ["-r", "-y", quotePath(outPath), "."];
     }
 }
 function getUnzipArgs(inPath, outPath) {
