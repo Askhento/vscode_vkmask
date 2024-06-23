@@ -43,7 +43,8 @@ export class AssetsProcessor {
                 try {
                     const rawJson = buffer.toString();
                     const parsedJson = JSON.parse(rawJson);
-                    const jsonType = parsedJson.techniques ? "material" : "error";
+                    const jsonType =
+                        parsedJson.techniques || parsedJson.technique ? "material" : "error";
                     type = "json_" + jsonType;
                 } catch (e) {
                     type = "json_error";
@@ -251,17 +252,17 @@ export const assetProcessors: Record<string, AssetProcessor> = {
             }
 
             if (materialObj.textures) {
-                materialTextures.forEach((key) => {
-                    if (!(key in materialObj.textures)) return;
-                    let value = materialObj.textures[key];
-                    materialObj[key] = value;
+                materialTextures.forEach((textureName) => {
+                    if (!(textureName in materialObj.textures)) return;
+                    let value = materialObj.textures[textureName];
+                    materialObj[textureName] = value;
                 });
             }
 
-            // delete materialObj.shaderParameters;
+            if (materialObj.technique == null)
+                materialObj.technique = materialObj.techniques?.[0]?.name;
 
-            // ? what if missing
-            materialObj.technique = materialObj.techniques?.[0]?.name;
+            //? will it reload if wrong material object
 
             return materialObj;
         },

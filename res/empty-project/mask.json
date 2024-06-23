@@ -1,9 +1,6 @@
 {
     "preview": "icon.png",
     "script": "main.as",
-
-    "mouse_input": true,
-
     "effects": [
         {
             "name": "patch",
@@ -11,9 +8,7 @@
             "texture": {
                 "color": [ 1, 1, 1, 1 ]
             },
-            "size": [ 1.0, 2.0 ]
+            "size": [ 100.0, 100.0 ]
         }
-    ],
-
-    "plugins": [ ]
+    ]
 }

@@ -52,6 +52,7 @@ import { downloadTemplate } from "./utils/downloadTemplate";
 
 export async function activate(context: vscode.ExtensionContext) {
     const thisExtension = vscode.extensions.getExtension("askhento.vkmask");
+
     const [major, minor, patch] = thisExtension.packageJSON.version.split(".");
     if (minor % 2 !== 0) vscode.window.showInformationMessage("Running pre-release");
 
@@ -82,7 +83,7 @@ export async function activate(context: vscode.ExtensionContext) {
         });
     });
 
-    testMask.updateExecutionPath(userSettings.settings["vkmask.testMaskPath"].value);
+    testMask.updateExecutionPath(slash(userSettings.settings["vkmask.testMaskPath"].value));
     userSettings.on("configChanged:vkmask.testMaskPath", (testMaskPath) => {
         print("path updated", testMaskPath.value);
         if (testMask.updateExecutionPath(testMaskPath.value)) return;
@@ -172,8 +173,6 @@ export async function activate(context: vscode.ExtensionContext) {
     );
     webviewPanels.push(welcomeTemplatesPanel);
 
-    // liquifiedWarpEditorPanel.createOrShow();
-
     // webviewPanels.forEach((panel) => {
     //     // ? will cause an error for webview panel already disposed?
     //     context.subscriptions.push(
@@ -212,14 +211,11 @@ export async function activate(context: vscode.ExtensionContext) {
     // ? multiple errors could occur
     // ? multiple time  like removed and added config
     async function onError(newError: AppError) {
-        appState = AppState.error;
-
-        await vscode.commands.executeCommand("setContext", "vkmask.appState", appState);
-
-        error = newError.value;
-
         switch (newError.type) {
             case ErrorType.configMissing:
+                appState = AppState.error;
+                await vscode.commands.executeCommand("setContext", "vkmask.appState", appState);
+                error = newError.value;
                 onConfigMissing();
                 break;
 
@@ -321,7 +317,7 @@ export async function activate(context: vscode.ExtensionContext) {
         });
     }
 
-    /* 
+    /*
     ┌─────────────────────────────────────────────────────────────────────────────┐
     │     communications                                                          │
     └─────────────────────────────────────────────────────────────────────────────┘
@@ -910,7 +906,7 @@ export async function activate(context: vscode.ExtensionContext) {
         vscode.commands.executeCommand("workbench.action.webview.openDeveloperTools");
     }
 
-    /* 
+    /*
     ┌─────────────────────────────────────────────────────────────────────────────┐
     │     extension lifecycle                                                     │
     └─────────────────────────────────────────────────────────────────────────────┘

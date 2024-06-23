@@ -179,6 +179,7 @@ class AssetsWatcher extends EventEmitter {
         // print(`builtin assets count :  ${this.builtInAssets.length}`);
 
         this.assets = await Promise.all(newAssets);
+        // print("test assets", this.assets);
         // this.assets = [...this.builtInAssets, ...newAssets];
     }
 

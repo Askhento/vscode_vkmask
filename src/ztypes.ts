@@ -1688,6 +1688,9 @@ const ZPlaneEffect = ZBaseEffect.extend({
     },
 });
 
+const ZOccluderEffect = ZBaseEffect.extend({
+    name: z.literal("occluder").describe(uiDescriptions.none),
+});
 // const ZBaseTest = ZBaseEffect.extend(
 //     {
 //         name: z.literal("light"),
@@ -2114,6 +2117,7 @@ export const EffectsList = [
     ZLiquifiedWarpEffect,
     ZColorfilterEffect,
     ZPostEffectEffect,
+    ZOccluderEffect,
 ];
 
 // export const ZEffect = z
@@ -2407,6 +2411,7 @@ export const ZMaskConfigPreprocess = z.preprocess(
                                             z.literal("colorfilter"),
                                             z.literal("liquifiedwarp"),
                                             z.literal("plane"),
+                                            z.literal("occluder"),
                                         ])
                                         .optional(),
                                 })
