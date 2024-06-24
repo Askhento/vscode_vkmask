@@ -2,13 +2,12 @@
     "name": "vkmask",
     "displayName": "vkmask",
     "publisher": "askhento",
-
     "icon": "./res/icons/vkmask_main_icon_128.png",
     "repository": {
         "url": "https://github.com/Askhento/vscode_vkmask"
     },
     "description": "%locale.contribution.extension.description%",
-    "version": "0.11.4",
+    "version": "0.11.5",
     "engines": {
         "vscode": "^1.74.0"
     },
@@ -406,7 +405,6 @@
         "@img/sharp-libvips-darwin-arm64": "1.0.2",
         "@img/sharp-libvips-darwin-x64": "1.0.2",
         "@img/sharp-win32-x64": "0.33.4",
-
         "@vscode/codicons": "^0.0.35",
         "@vscode/l10n": "^0.0.16",
         "fast-xml-parser": "^4.2.2",
