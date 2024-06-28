@@ -1,4 +1,5 @@
 <script lang="ts">
+    import * as l10n from "@vscode/l10n";
     import { SelectionType } from "../../../src/types";
     import { getContext } from "svelte";
     //@ts-expect-error
@@ -34,7 +35,7 @@
         }
         onSelect();
     }}
-    ><span class="effect-name-text">{name ?? "unknown-effect"}</span>
+    ><span class="effect-name-text">{name ?? l10n.t("locale.effects.unknownEffect")}</span>
     <span class="effect-btn-wrapper">
         {#if tag}
             <span class="effect-tag">

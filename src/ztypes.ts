@@ -2401,19 +2401,7 @@ export const ZMaskConfigPreprocess = z.preprocess(
                                 .passthrough(),
                             z
                                 .object({
-                                    name: z
-                                        .union([
-                                            z.literal("ambientLight"),
-                                            z.literal("pointLight"),
-                                            z.literal("directLight"),
-                                            z.literal("posteffect"),
-                                            z.literal("beautify"),
-                                            z.literal("colorfilter"),
-                                            z.literal("liquifiedwarp"),
-                                            z.literal("plane"),
-                                            z.literal("occluder"),
-                                        ])
-                                        .optional(),
+                                    name: z.string().optional(),
                                 })
                                 .passthrough(),
                         ])

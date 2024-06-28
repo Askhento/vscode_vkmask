@@ -26,7 +26,9 @@
 -   show template download progress
 -   template show that download started
 -   archive add setting to save in specific folder
-- 
+-   recent projects will not correctly deal with case insesitive paths
+-   material obj add support
+-   material obj button move to a file
 
 -   filepicker when null need to reset selected index
 -   add logic to always select something

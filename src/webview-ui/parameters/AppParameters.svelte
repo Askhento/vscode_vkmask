@@ -73,14 +73,14 @@
     const selectionStack = writable([]);
 
     function addToUndo(newSelection: Selection) {
-        print("add undo", newSelection);
+        // print("add undo", newSelection);
         if (newSelection.type === SelectionType.empty || selection.type === SelectionType.empty) {
             $selectionStack = [];
             return;
         }
         $selectionStack.push(selection);
         $selectionStack = $selectionStack;
-        print("sel stack", $selectionStack);
+        // print("sel stack", $selectionStack);
     }
 
     function removeUndo() {
@@ -108,7 +108,7 @@
         const { payload, command } = data;
         switch (command) {
             case RequestCommand.updateSelection:
-                addToUndo(payload); // old selection
+                // addToUndo(payload); // old selection
                 processSelection(payload);
                 break;
 
@@ -348,6 +348,8 @@
         error = null;
 
         if (!selectedIsKnown()) {
+            print("here", selection, $effects);
+            appState = AppState.running;
             uiElements = null; // will make a blink, but solves null null value for unnull uiElement
             return;
         }
@@ -423,7 +425,6 @@
         appState = AppState.loading;
         // await getTabInfo();
 
-        // print("new selection", selection);
         uiElements = null; // this prevents new effects be applied to old uiElements
         switch (newSelection.type) {
             case SelectionType.effect:
@@ -672,7 +673,9 @@
                                 on:changed={onChanged}
                             />
                         {:else}
-                            <div>{l10n.t("locale.parameters.unknownEffect")}</div>
+                            <div class="empty-parameters">
+                                {l10n.t("locale.parameters.unknownEffect")}
+                            </div>
                         {/if}
                     {/if}
                 {/key}
@@ -690,7 +693,9 @@
                             on:changed={onChanged}
                         />
                     {:else}
-                        <div>{l10n.t("locale.parameters.unknownPlugin")}</div>
+                        <div class="empty-parameters">
+                            {l10n.t("locale.parameters.unknownPlugin")}
+                        </div>
                     {/if}
                 {/if}
             {:else if selection.type === SelectionType.asset}
@@ -722,7 +727,9 @@
                             on:changed={onChanged}
                         />
                     {:else}
-                        <div>{l10n.t("locale.parameters.unknownAsset")}</div>
+                        <div class="empty-parameters">
+                            {l10n.t("locale.parameters.unknownAsset")}
+                        </div>
                     {/if}
                 {:else}
                     <InfoTableControl value={asset} />
