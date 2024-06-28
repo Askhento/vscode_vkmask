@@ -1688,9 +1688,9 @@ const ZPlaneEffect = ZBaseEffect.extend({
     },
 });
 
-const ZOccluderEffect = ZBaseEffect.extend({
+const ZOccluderEffect = ZModel3dEffect.extend({
     name: z.literal("occluder").describe(uiDescriptions.none),
-});
+}).omit({ material: true });
 // const ZBaseTest = ZBaseEffect.extend(
 //     {
 //         name: z.literal("light"),
@@ -2401,7 +2401,7 @@ export const ZMaskConfigPreprocess = z.preprocess(
                                 .passthrough(),
                             z
                                 .object({
-                                    name: z.string().optional(),
+                                    name: z.string().optional(), // keep unknown effects
                                 })
                                 .passthrough(),
                         ])
