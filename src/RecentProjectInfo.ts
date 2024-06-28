@@ -1,6 +1,8 @@
 import * as vscode from "vscode";
 import { posix as path } from "path";
 import * as fs from "fs";
+import slash from "slash";
+import { trueCasePathSync } from "./utils/trueCasePathSync";
 
 export interface RecentProjectInfo {
     name: string;
@@ -32,41 +34,67 @@ export class RecentProjects {
             dateModified: new Date().getTime(),
         };
 
-        let newInfo = oldInfo.filter((info) => newPath !== info.path);
         newInfo.push(newEntry);
-        newInfo.sort((a, b) => b.dateModified - a.dateModified);
-        newInfo = newInfo.slice(0, this.maxInfoCount);
 
-        console.log("ProjectInfo : ", newInfo);
         return this.updateInfo(newInfo);
     }
 
-    async updateExist() {
-        const oldInfo = await this.getInfo();
-        let newInfo = oldInfo.filter((info) => fs.existsSync(info.path));
-        await this.updateInfo(newInfo);
-    }
+    // async updateExist() {
+    //     const oldInfo = await this.getInfo();
+    //     let newInfo = oldInfo.filter((info) => fs.existsSync(info.path));
+    //     await this.updateInfo(newInfo);
+    // }
 
-    // todo clear if mask.json missing
-    async getInfo() {
-        let storedInfo = (await this.context.globalState.get(
-            this.infoStorageKey
-        )) as RecentProjectInfo[];
-        if (storedInfo === undefined) storedInfo = [];
+    static async processInfo(storedInfo: RecentProjectInfo[]) {
         let newInfo = storedInfo
+            .map((info) => {
+                info.path = path.normalize(info.path);
+                info.path = slash(trueCasePathSync(fs.realpathSync(info.path)));
+                info.name = path.basename(info.path);
+                return info;
+            })
             .filter((info) => {
+                console.log(fs.existsSync(info.path), info.path);
                 const maskJsonFile = path.join(info.path, "mask.json");
+
                 return fs.existsSync(maskJsonFile);
             })
             .sort((a, b) => b.dateModified - a.dateModified);
-        return newInfo;
+
+        let uniqueInfo = [];
+        outerLoop: for (let i = 0; i < newInfo.length - 1; i++) {
+            const nextInfo = newInfo[i];
+
+            for (let j = 0; j < uniqueInfo.length; j++) {
+                const unique = uniqueInfo[j];
+
+                console.log(unique.path, nextInfo.path, path.relative(unique.path, nextInfo.path));
+                if (path.relative(unique.path, nextInfo.path) === "") {
+                    continue outerLoop;
+                }
+            }
+
+            uniqueInfo.push(nextInfo);
+        }
+
+        uniqueInfo = uniqueInfo.slice(0, this.maxInfoCount);
+
+        return uniqueInfo;
+    }
+
+    async getInfo(): RecentProjectInfo[] {
+        let storedInfo = await this.context.globalState.get(this.infoStorageKey);
+        if (storedInfo === undefined) storedInfo = [];
+        const processedInfo = RecentProjects.processInfo(storedInfo);
+        return processedInfo;
+    }
+
+    async updateInfo(newInfo: RecentProjectInfo[]) {
+        const processedInfo = RecentProjects.processInfo(newInfo);
+        return this.context.globalState.update(this.infoStorageKey, processedInfo);
     }
 
     async clearInfo() {
         return this.updateInfo([]);
-    }
-
-    async updateInfo(newInfo: RecentProjectInfo[]) {
-        return this.context.globalState.update(this.infoStorageKey, newInfo);
     }
 }
