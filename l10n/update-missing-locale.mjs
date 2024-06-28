@@ -3,6 +3,7 @@ import * as path from "path";
 import { fileURLToPath } from "url";
 import { csvToObject, getTranslations } from "./downloadLocaleCSV.mjs";
 import { parseSourceKeys } from "./parseSourceKeys.mjs";
+import * as jsonMap from "json-source-map";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -12,28 +13,29 @@ function updateBundle(refBundle, bundleName, config) {
     const bundlePath = path.join(__dirname, bundleName);
     let bundle = JSON.parse(fs.readFileSync(bundlePath));
     // console.log(bundleName);
-    let needUpdate = false;
 
     Object.keys(bundle).forEach((key) => {
         if (key in refBundle) return;
         console.log(`\x1b[33m Unknown key in ${bundlePath}. \n\t${key} : ${bundle[key]}\x1b[0m`);
     });
 
+    const addedBundleKeys = new Set();
+
     Object.keys(refBundle).forEach((key) => {
         if (key in bundle) return;
-        needUpdate = true;
         bundle[key] = refBundle[key];
-        console.log(`Will add key ${key} to ${bundleName}`);
+        addedBundleKeys.add(key);
     });
 
     if (config.sortKeys) {
         bundle = getSortedBundle(bundle);
     }
 
-    if (needUpdate) {
+    if (addedBundleKeys.size) {
         if (config.dryRun) return;
         console.log(`Writing ${bundleName}`);
         fs.writeFileSync(bundlePath, JSON.stringify(bundle, null, "\t"));
+        printAddedKeys(addedBundleKeys, bundlePath);
     } else {
         console.log(`No update required for ${bundleName}.`);
     }
@@ -96,21 +98,22 @@ function processSourceBundles(translations, config = { dryRun: false, sortKeys: 
     console.log("Parsing sources in ./src ");
     const sourcesRegex = /"(locale\..*?)"/gm;
     const sourceParsedKeys = parseSourceKeys(["./src/**/*.{ts,js,svelte}"], sourcesRegex);
-    let needWriteMain = false;
+    const addedBundleKeys = new Set();
     Object.keys(sourceParsedKeys).forEach((key) => {
         if (key in mainBundle) return;
         console.log(`New key found : ${key}`);
         mainBundle[key] = sourceParsedKeys[key];
-        needWriteMain = true;
+        addedBundleKeys.add(key);
     });
 
     if (config.sortKeys) {
         mainBundle = getSortedBundle(mainBundle);
     }
 
-    if (needWriteMain) {
+    if (addedBundleKeys.size) {
         console.log(`Writing : bundle.l10n.json`);
         fs.writeFileSync(mainBundlePath, JSON.stringify(mainBundle, null, "\t"));
+        printAddedKeys(addedBundleKeys, mainBundlePath);
     } else {
         console.log("No need to write bundle.l10n.json");
     }
@@ -169,6 +172,19 @@ function processContributionBundles(translations, config = { sortKeys: true, dry
     });
 }
 
+function printAddedKeys(addedKeysSet, bundlePath) {
+    const rawBundle = fs.readFileSync(bundlePath).toString();
+    const { data, pointers } = jsonMap.parse(rawBundle);
+
+    Object.keys(data).forEach((key) => {
+        if (!addedKeysSet.has(key)) return;
+
+        const { value, valueEnd } = pointers[`/${key}`];
+        const keyUrl = `\t${bundlePath}:${valueEnd.line + 1}:${valueEnd.column - 3}`;
+        console.log(`Added key ${key} to \n`, keyUrl);
+    });
+}
+
 const csvURL =
     // "https://psv4.userapi.com/c237031/u102637718/docs/d52/b36c541f409c/Klyuchi.csv?extra=Nh_KsAQh7F56wfS3nuVmsADxmPVqbZu06Wb1JWULyY1Sp2BEUgwNzHVokfLOUWbuCma5Lck05CiESRiGMJBOEOlA8J1_dTEYKZBP0RL55IN1x9FI0Xi1GOr8veFT1tTH1CEtewgygxhryXYn7gqb606Fkg&dl=1";
     path.join(__dirname, "./translationKeys.csv");
@@ -177,9 +193,13 @@ const translations = {
     ru: await getTranslations(csvURL), // ! could be null
 };
 
-processSourceBundles(translations, { dryRun: false, sortKeys: true });
+function main() {
+    processSourceBundles(translations, { dryRun: false, sortKeys: true });
+    processContributionBundles(translations, { dryRun: false, sortKeys: true });
+}
 
-processContributionBundles(translations, { dryRun: false, sortKeys: true });
-// console.log(translations);
-
-// path.readdirSync()
+main();
+// printAddedKeys(
+//     new Set(["locale.parameters.textureAnimation.label"]),
+//     "F:/PROJECTOS_SSD/urhovk/vscode_vkmask/l10n/bundle.l10n.ru.json"
+// );
