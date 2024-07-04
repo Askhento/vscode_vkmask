@@ -6,6 +6,23 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Run without prelaunch",
+            "type": "extensionHost",
+            "request": "launch",
+            "autoAttachChildProcesses": false,
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}",
+                "--disable-extensions"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/out/**/*.js"
+            ],
+            "env": {
+                "NODE_ENV": "dev"
+            }
+
+        },
+        {
             "name": "Run Extension",
             "type": "extensionHost",
             "request": "launch",
@@ -21,23 +38,6 @@
             },
             "preLaunchTask": "${defaultBuildTask}",
             // "preLaunchTask" : "npm: watch"
-
-        },
-        {
-            "name": "Run without prelaunch",
-            "type": "extensionHost",
-            "request": "launch",
-            "autoAttachChildProcesses": false,
-            "args": [
-                "--extensionDevelopmentPath=${workspaceFolder}",
-                "--disable-extensions"
-            ],
-            "outFiles": [
-                "${workspaceFolder}/out/**/*.js"
-            ],
-            "env": {
-                "NODE_ENV": "dev"
-            }
 
         },
         {
