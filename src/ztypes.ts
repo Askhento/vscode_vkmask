@@ -880,10 +880,10 @@ export const ZMaterialObject = z.preprocess(
         })
 );
 
-const ZMaterial = ZMaterialAsset({ label: "locale.materialAsset.label", group: "materials" });
-// z
-//     .union([ZMaterialAsset({ label: "Material" }), ZMaterialObject])
-//     .describe(uiDescriptions.union);
+const ZMaterial = z
+    .union([ZMaterialAsset({ label: "Material" }), ZMaterialObject])
+    .describe(uiDescriptions.union);
+// ZMaterialAsset({ label: "locale.materialAsset.label", group: "materials" });
 
 // async function updateArrayLength() {
 //         const modelPath = getValueByPath($effects, resolveRelative(relPath, path));
