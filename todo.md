@@ -29,6 +29,7 @@
 -   recent projects will not correctly deal with case insesitive paths
 -   material obj add support
 -   material obj button move to a file
+- add value input for slider, keep minmax as non force just a hint
 
 -   filepicker when null need to reset selected index
 -   add logic to always select something

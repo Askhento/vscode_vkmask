@@ -13,7 +13,7 @@ export async function downloadTemplate(targetDir, urlStr) {
 
     const tmpDir = slash(os.tmpdir());
 
-    console.log("down", zipFileBase, urlStr, targetDir);
+    // console.log("down", zipFileBase, urlStr, targetDir);
 
     const tmpZipFile = await downloadFile(url, zipFileBase, tmpDir);
 

@@ -85,6 +85,7 @@ export class RecentProjects {
         let storedInfo = await this.context.globalState.get(this.infoStorageKey, []);
         // ? seems like default will do the trick                                ^^^
         // if (!Array.isArray(storedInfo)) storedInfo = [];
+        //?  do i need to fix info, it could be broken but after one update should be fixed
         // const processedInfo = RecentProjects.processInfo(storedInfo);
         return storedInfo;
     }

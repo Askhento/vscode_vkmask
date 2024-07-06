@@ -662,6 +662,9 @@ export async function activate(context: vscode.ExtensionContext) {
         } else {
             // ! could be network error
             try {
+                vscode.window.showInformationMessage(
+                    l10n.t("locale.infoMessage.downloadStarted", newProjectUri.fsPath)
+                );
                 await downloadTemplate(newProjectUri.fsPath, url);
             } catch (error) {
                 vscode.window.showErrorMessage(

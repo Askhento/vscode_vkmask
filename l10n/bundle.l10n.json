@@ -90,6 +90,7 @@
 	"locale.fillModes.point.label": "Point",
 	"locale.fillModes.solid.label": "Solid",
 	"locale.fillModes.wireframe.label": "Wireframe",
+	"locale.infoMessage.downloadStarted": "locale.infoMessage.downloadStarted NEED TRANSLATION",
 	"locale.infobox.errorHeader": "locale.infobox.errorHeader NEED TRANSLATION",
 	"locale.infobox.readmoreHeader": "Read the docs",
 	"locale.infobox.readmoreOpen": "Open",
