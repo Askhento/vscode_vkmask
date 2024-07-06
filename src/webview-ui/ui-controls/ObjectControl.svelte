@@ -58,7 +58,6 @@
             block: "center",
             inline: "nearest",
         });
-
     }
 
     let uiElementsGroupData = {};
@@ -240,8 +239,9 @@
                             <svelte:component
                                 this={elData.uiElement}
                                 error={elData.error}
-                                value={value[elName] ??
-                                    // for animation object etc
+                                value={value?.[elName] ??
+                                    // ?. is for deps of complex types,
+                                    // they try to render with undefined
                                     (elData.uiDescription.name === "object" ||
                                         elData.uiDescription.defValue)}
                                 label={elData.label ?? elData.uiDescription.label ?? elName}

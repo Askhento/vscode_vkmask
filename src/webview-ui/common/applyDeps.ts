@@ -26,7 +26,7 @@ export function applyDeps(component, stores, dependencies: ControlDependency[]) 
             try {
                 return postprocess(value, component, previous);
             } catch (error) {
-                console.error("Error apply deps:", component.path, error);
+                console.error("Error apply deps:", component, value, previous, error);
                 return { needUpdate: false };
             }
         }
