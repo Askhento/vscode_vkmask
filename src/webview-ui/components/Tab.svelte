@@ -1,16 +1,16 @@
 <script lang="ts">
-    import { getContext, tick } from "svelte";
+    import { createEventDispatcher, getContext, tick } from "svelte";
     import type { DataStores } from "../types";
 
     const stores = getContext("stores");
-    const { tabInfo } = stores as DataStores;
+    const { tabInfo, messageHandler } = stores as DataStores;
+    const dispatch = createEventDispatcher();
 
     export let defExpanded = false,
         tabPathKey = "",
         label,
         disableMargin = false,
         indentLevel = 0,
-        onTab = (e) => {},
         isWrapped = true;
 
     let expanded = $tabInfo[tabPathKey] ?? defExpanded ?? false;
@@ -26,6 +26,14 @@
             block: pos,
             inline: "nearest",
         });
+    }
+
+    function onTab() {
+        dispatch("changed", [
+            {
+                path: ["tabInfo"],
+            },
+        ]);
     }
 </script>
 
@@ -43,7 +51,7 @@
                 $tabInfo[tabPathKey] = expanded;
 
                 scrollGroupToView(labelElement, "center");
-                onTab(expanded);
+                onTab();
             }}
         >
             <i class="codicon codicon-chevron-{expanded ? 'down' : 'right'}" />

@@ -2,23 +2,16 @@
     import * as l10n from "@vscode/l10n";
     import { createEventDispatcher, onMount, tick } from "svelte";
     import { getContext } from "svelte";
+    import Tab from "../components/Tab.svelte";
     const { tabInfo } = getContext("stores");
 
-    export let nesting = true;
     export let value;
     // export let label;
     export let path;
     export let params;
     export let expanded = params.defExpanded;
     export let uiElements;
-
-    if (params.group != null) nesting = false;
-
-    // console.log("obj params", params);
-    // console.log("exp", expanded);
-    function toggle() {
-        expanded = !expanded;
-    }
+    export let indentLevel = 0;
 
     function addKey(key, data) {
         value[key] = JSON.parse(JSON.stringify(data.uiDescription.defValue));
@@ -38,25 +31,6 @@
                 structural: true,
             },
         ]);
-    }
-
-    function onTab() {
-        dispatch("changed", [
-            {
-                path: ["tabInfo"],
-            },
-        ]);
-    }
-
-    async function scrollGroupToView(groupId) {
-        await tick();
-        const groupElement = document.getElementById(groupId);
-        // console.log("SCROLL", groupElement, groupId);
-        groupElement?.scrollIntoView({
-            behavior: "smooth",
-            block: "center",
-            inline: "nearest",
-        });
     }
 
     let uiElementsGroupData = {};
@@ -91,6 +65,7 @@
 
             uiElementsGroupData[groupKey] = {
                 expanded: $tabInfo[tabKey],
+                defExpanded,
                 disableMargin,
                 indentLevel,
                 label,
@@ -162,51 +137,22 @@
 </script>
 
 <div class="control-wrapper" class:add-key-color={addKeyHover}>
-    <!-- {#if nesting}
-        <vscode-divider role="separator" />
-        <span class="object-label" class:expanded on:click={toggle}>
-            <i class="codicon codicon-chevron-{expanded ? 'down' : 'right'}" />
-            <span>{l10n.t(label)}</span>
-        </span>
-    {/if} -->
-    <!-- {#key uiElementsGroupData} -->
     {#if expanded}
         {#each Object.entries(uiElementsGroupData) as [groupName, groupData], groupInd}
             {@const elemCount = Object.keys(groupData.elements).length}
             {@const elementsEntries = Object.entries(groupData.elements)}
-            {@const groupId = `group-wrapper-${groupName}`}
-            <!-- <pre>{`grInd ${groupInd} level ${groupData.indentLevel}`}</pre> -->
+            {@const tabPathKey = [...path, "_groups", groupName].join(".")}
+
             <!-- !removing empty array groups -->
             {#if groupData.label != null && elemCount !== 0 && !(elemCount === 1 && Array.isArray(elementsEntries[0][1].value) && elementsEntries[0][1].value.length === 0)}
                 {#if !(groupInd === 0 && groupData.indentLevel === 0)}
                     <vscode-divider class="divider" role="separator" />
                 {/if}
-                <div
-                    class="group-label"
-                    style:padding-left={`calc(var(--global-body-padding-left) * ${groupData.indentLevel})`}
-                    on:click={() => {
-                        uiElementsGroupData[groupName].expanded =
-                            !uiElementsGroupData[groupName].expanded;
-
-                        const tabKey = [...path, groupName].join(".");
-                        $tabInfo[tabKey] = uiElementsGroupData[groupName].expanded;
-                        onTab();
-
-                        if ($tabInfo[tabKey]) scrollGroupToView(groupId);
-                        // console.log($tabInfo);
-                    }}
-                >
-                    <i class="codicon codicon-chevron-{groupData.expanded ? 'down' : 'right'}" />
-
-                    <span>{l10n.t(groupData.label)}</span>
-                </div>
-            {/if}
-
-            {#if uiElementsGroupData[groupName].expanded}
-                <div
-                    id={groupId}
-                    class:main-group-bottom-margin={!groupData.disableMargin}
-                    class="group-wrapper"
+                <Tab
+                    defExpanded={groupData.defExpanded}
+                    label={l10n.t(groupData.label)}
+                    {tabPathKey}
+                    indentLevel={indentLevel + 1}
                 >
                     {#each elementsEntries as [elName, elData]}
                         {#if elData.value === null && (elData.uiDescription.name === "object" || elData.uiDescription.name === "array")}
@@ -246,32 +192,16 @@
                                 label={elData.label ?? elData.uiDescription.label ?? elName}
                                 path={[...path, elName]}
                                 params={elData.uiDescription}
+                                indentLevel={indentLevel + 1}
                                 uiElements={elData.value}
                                 on:changed
                             />
                         {/if}
                     {/each}
-                </div>
-                <!-- group-wrapper -->
+                </Tab>
             {/if}
         {/each}
     {/if}
-    <!-- {/key} -->
-
-    <!-- <div class="elements-wrapper" style="padding-left: {nesting ? '0.2em' : '0'};">
-            {#each Object.entries(uiElementsVisible) as [key, data]}
-                <svelte:component
-                    this={data.uiElement}
-                    expanded={true}
-                    value={value[key] ?? data.uiDescription.defValue}
-                    label={data.uiDescription.label ?? key}
-                    path={[...path, key]}
-                    params={data.uiDescription}
-                    uiElements={data.value}
-                    on:changed
-                />
-            {/each}
-        </div> -->
 
     <!-- {#if Object.keys(uiElementsHidden).length}
             <div class="add-key-wrapper">
@@ -341,54 +271,16 @@
     }
     .control-wrapper {
         position: relative;
-
-        /* transition: all 0.5s ease; */
-        /* border-radius: 0.5em; */
-        /* border: 2px solid transparent; */
         grid-column: 1/3;
     }
-    .group-wrapper {
-        /* padding: 0 0 0 0.5em; */
-        /* margin: 0 0 0 0.5em; */
+
+    /* .group-wrapper {
         display: grid;
         grid-template-columns:
             minmax(var(--global-grid-label-min-width), var(--global-grid-label-column-size))
             minmax(var(--global-value-min-width), var(--global-grid-value-column-size));
         column-gap: var(--global-grid-column-gap);
-        /* row-gap: var(--global-grid-row-gap); */
-    }
-
-    .main-group-bottom-margin {
-        margin-bottom: var(--global-grid-row-gap);
-    }
-
-    /* .object-label {
-        cursor: pointer;
-        color: var(--vscode-descriptionForeground);
-        margin: var(--global-margin);
-        margin-left: 0;
-        display: flex;
     } */
-    /* .object-label > span */
-    .group-label > span {
-        /* color: red; */
-        display: inline-block;
-        /* margin-left: var(--global-margin); */
-    }
-
-    .group-label {
-        cursor: pointer;
-        color: var(--vscode-descriptionForeground);
-        margin: var(--global-margin) 0;
-        /* margin-left: 2px;
-        margin-right: 2px; */
-        display: flex;
-        align-items: center;
-    }
-
-    .group-label > i {
-        margin: 0 2px;
-    }
 
     .add-key-btn {
         margin: var(--global-margin);

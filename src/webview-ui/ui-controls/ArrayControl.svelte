@@ -141,6 +141,7 @@
                     path={[...path, index]}
                     params={data.uiDescription}
                     uiElements={data.value}
+                    indentLevel={indentLevel + 1}
                     on:changed
                 />
             </Tab>

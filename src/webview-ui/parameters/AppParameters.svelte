@@ -664,8 +664,8 @@
                     {#if $effects}
                         {#if uiElements}
                             <ObjectControl
+                                indentLevel={-1}
                                 expanded={true}
-                                nesting={false}
                                 value={$effects[selection.id]}
                                 params={uiElements.uiDescription}
                                 path={[SelectionType.effect, selection.id]}
@@ -684,8 +684,8 @@
                 {#if plugins}
                     {#if uiElements}
                         <ObjectControl
+                            indentLevel={-1}
                             expanded={true}
-                            nesting={false}
                             value={plugins[selection.id]}
                             params={uiElements.uiDescription}
                             path={[SelectionType.plugin, selection.id]}
@@ -718,8 +718,8 @@
                     <!-- label={selection.path} -->
                     {#if uiElements}
                         <ObjectControl
+                            indentLevel={-1}
                             expanded={true}
-                            nesting={false}
                             value={asset}
                             params={uiElements.uiDescription}
                             path={[SelectionType.asset]}

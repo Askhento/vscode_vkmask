@@ -32,7 +32,7 @@
             },
             tag,
         ]);
-        console.log("tags", tagOptions, $allTags, tags);
+        // console.log("tags", tagOptions, $allTags, tags);
     }
     const dispatch = createEventDispatcher();
 
