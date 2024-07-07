@@ -42,6 +42,7 @@ export interface DataStores {
     plugins: Writable<any[]>;
     selection: Writable<Selection>;
     tabInfo: Writable<Record<string, boolean>>;
+    viewId: string;
 }
 
 export type ControlDataStores =

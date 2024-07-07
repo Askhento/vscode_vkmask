@@ -58,13 +58,8 @@
 
         Object.entries(params.groups).forEach(([groupKey, groupData]) => {
             const { defExpanded, label, disableMargin, indentLevel = 0 } = groupData;
-            const tabKey = [...path, groupKey].join(".");
-            if (!(tabKey in $tabInfo)) $tabInfo[tabKey] = defExpanded;
-
-            // console.log(tabKey, $tabInfo[tabKey]);
 
             uiElementsGroupData[groupKey] = {
-                expanded: $tabInfo[tabKey],
                 defExpanded,
                 disableMargin,
                 indentLevel,

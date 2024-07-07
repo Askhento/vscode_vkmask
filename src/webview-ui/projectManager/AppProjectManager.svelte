@@ -39,7 +39,7 @@
 
     const messageHandler = new MessageHandler(handleMessageApp, origin);
 
-    setContext("stores", { assets, settings, messageHandler, tabInfo });
+    setContext("stores", { assets, settings, messageHandler, tabInfo, viewId: origin });
 
     function handleMessageApp(data: MessageHandlerData<any>) {
         print("recived ", data);
@@ -277,7 +277,7 @@
                         {#key uiElements}
                             <ObjectControl
                                 expanded={true}
-                                nesting={false}
+                                indentLevel={-1}
                                 value={maskSettings}
                                 params={uiElements.uiDescription}
                                 path={["maskSettings"]}

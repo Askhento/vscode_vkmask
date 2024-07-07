@@ -101,6 +101,7 @@
         effects,
         selection,
         tabInfo,
+        viewId: origin,
     });
 
     function handleMessageApp(data: MessageHandlerData<any>) {
