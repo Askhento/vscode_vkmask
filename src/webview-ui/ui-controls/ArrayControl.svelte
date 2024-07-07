@@ -7,12 +7,13 @@
     const component = get_current_component();
     import { applyDeps } from "../common/applyDeps";
     const stores = getContext("stores");
-    // const { assets, settings, messageHandler, effects } = stores;
+    // const { tabInfo } = stores;
 
     import { logger } from "../logger";
     const print = logger("ArrayControl.svelte");
 
     import { createEventDispatcher } from "svelte";
+    import Tab from "../components/Tab.svelte";
 
     export let expanded = true;
 
@@ -21,6 +22,7 @@
     export let uiElements;
     export let params;
     export let disabled = false;
+    export let indentLevel = 0;
 
     let nesting = params.group == null;
 
@@ -91,12 +93,14 @@
         </span>
     {/if}
 {/if} -->
-<div class="elements-wrapper">
-    {#if expanded}
-        {#if uiElements}
-            {#each uiElements as data, index}
-                <!-- {@debug data, value} -->
-                <!-- <svelte:component
+<!-- <div class="elements-wrapper"> -->
+{#if expanded}
+    {#if uiElements}
+        {#each uiElements as data, index}
+            {@const elementName = l10n.t(params.elementName ?? "element") + " " + index}
+            {@const tabPathKey = [...path, "_elements", index].join(".")}
+            <!-- {@debug data, value} -->
+            <!-- <svelte:component
                     this={data.uiElement}
                     expanded={true}
                     bind:value={value[index]}
@@ -104,7 +108,13 @@
                     params={data.uiDescription}
                     uiElements={data.value}
                   /> -->
-
+            <Tab
+                defExpanded={data.uiDescription.defExpanded}
+                label={elementName}
+                {tabPathKey}
+                indentLevel={indentLevel + 1}
+                isWrapped={uiElements.length > 1 || data.uiDescription.name === "object"}
+            >
                 {#if params.userResizable}
                     <span class="right-button-wrapper">
                         <!-- style="grid-row : {index + 1} / {index + 2}" -->
@@ -127,31 +137,33 @@
                     expanded={true}
                     value={value[index]}
                     {disabled}
-                    label={l10n.t(params.elementName ?? "element") + " " + index}
+                    label={elementName}
                     path={[...path, index]}
                     params={data.uiDescription}
                     uiElements={data.value}
                     on:changed
                 />
+            </Tab>
 
-                {#if index < uiElements.length - 1}
-                    <vscode-divider role="separator" />
-                {/if}
-            {/each}
-        {/if}
-
-        {#if params.userResizable}
-            <span class="right-button-wrapper">
-                <vscode-button class="add-btn" on:click={addElement}>
-                    <span slot="start" class="codicon codicon-add" />
-                    <span class="btn-text"
-                        >{`${l10n.t("locale.arrayControl.addButtonHint")} ${l10n.t(params.elementName)}`}</span
-                    >
-                </vscode-button>
-            </span>
-        {/if}
+            {#if index < uiElements.length - 1}
+                <vscode-divider role="separator" />
+            {/if}
+        {/each}
     {/if}
-</div>
+
+    {#if params.userResizable}
+        <span class="right-button-wrapper">
+            <vscode-button class="add-btn" on:click={addElement}>
+                <span slot="start" class="codicon codicon-add" />
+                <span class="btn-text"
+                    >{`${l10n.t("locale.arrayControl.addButtonHint")} ${l10n.t(params.elementName)}`}</span
+                >
+            </vscode-button>
+        </span>
+    {/if}
+{/if}
+
+<!-- </div> -->
 
 <style>
     * {
@@ -160,9 +172,7 @@
         padding: 0;
         box-sizing: border-box;
     }
-    .elements-wrapper {
-        /* padding: 0.2em 0 0 0.5em; */
-        /* margin: 0 0 0 0.5em; */
+    /* .elements-wrapper {
         position: relative;
         grid-column: 1/3;
         display: grid;
@@ -170,8 +180,7 @@
             minmax(var(--global-grid-label-min-width), var(--global-grid-label-column-size))
             minmax(var(--global-value-min-width), var(--global-grid-value-column-size));
         column-gap: var(--global-grid-column-gap);
-        /* row-gap: var(--global-grid-row-gap); */
-    }
+    } */
 
     .add-btn,
     .remove-btn {

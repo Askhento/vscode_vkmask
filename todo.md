@@ -8,6 +8,7 @@
 -   add data source for project manager just in case :D
 -   deal with light source type legacy thing
 
+-   list element add named slots https://learn.svelte.dev/tutorial/slot-props
 -   add vector control drag multiple values or change quicklly
 -   clone default material to have a base to work from
 -   texture color set deps if techinue uses alpha channel

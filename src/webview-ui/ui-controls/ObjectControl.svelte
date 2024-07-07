@@ -2,7 +2,6 @@
     import * as l10n from "@vscode/l10n";
     import { createEventDispatcher, onMount, tick } from "svelte";
     import { getContext } from "svelte";
-    //@ts-expect-error
     const { tabInfo } = getContext("stores");
 
     export let nesting = true;
