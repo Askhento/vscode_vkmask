@@ -105,6 +105,9 @@
         display: inline-block;
         /* margin-left: var(--global-margin); */
     }
+    .group-label > span::first-letter {
+        text-transform: capitalize;
+    }
 
     .group-label {
         cursor: pointer;
