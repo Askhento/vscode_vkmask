@@ -95,7 +95,7 @@
 {#if expanded}
     {#if uiElements}
         {#each uiElements as data, index}
-            {@const elementName = l10n.t(params.elementName ?? "element") + " " + index}
+            {@const elementName = l10n.t(params.elementName ?? "element") + " #" + (index + 1)}
             {@const tabPathKey = [...path, "_elements", index].join(".")}
 
             <Tab
