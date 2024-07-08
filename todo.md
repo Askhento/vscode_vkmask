@@ -10,6 +10,7 @@
 
 -   list element add named slots https://learn.svelte.dev/tutorial/slot-props
 -   add vector control drag multiple values or change quicklly
+-   extend tabinfo to uiInfo
 -   clone default material to have a base to work from
 -   texture color set deps if techinue uses alpha channel
 -   add tag rename in effects

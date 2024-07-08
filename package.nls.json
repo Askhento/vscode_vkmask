@@ -62,5 +62,6 @@
 	"locale.contribution.userSettings.test-mask-path.description": "locale.contribution.userSettings.test-mask-path.description NEED TRANSLATION",
 	"locale.contribution.command.testMaskOpen.title": "locale.contribution.command.testMaskOpen.title NEED TRANSLATION",
 	"locale.contribution.command.testMaskOpen.shortTitle": "locale.contribution.command.testMaskOpen.shortTitle NEED TRANSLATION",
-	"locale.contribution.userSettings.testMaskPath.description": "locale.contribution.userSettings.testMaskPath.description NEED TRANSLATION"
+	"locale.contribution.userSettings.testMaskPath.description": "locale.contribution.userSettings.testMaskPath.description NEED TRANSLATION",
+	"locale.contribution.userSettings.archivePath.description": "locale.contribution.userSettings.archivePath.description NEED TRANSLATION"
 }

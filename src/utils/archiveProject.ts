@@ -13,26 +13,38 @@ import { zipSync } from "./zip";
 const print = (...args: any) => logger.log(__filename, ...args);
 
 const patterns = assetWhiteListExt.map((e) => `**/*.${e}`);
-export async function archiveProject() {
+export async function archiveProject(userArchivePath = "") {
     if (!vscode.workspace.workspaceFolders?.length) {
         print("Unable to archive workspace empty");
         return;
     }
     //? could be null
-    const directory = slash(vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath);
+    const projectDirectory = slash(vscode.workspace.workspaceFolders?.[0]?.uri?.fsPath);
+    let archiveDirectory = projectDirectory;
+
+    try {
+        const { isDirectory } = fs.statSync(userArchivePath, { throwIfNoEntry: false });
+        if (isDirectory) {
+            archiveDirectory = slash(userArchivePath);
+        }
+    } catch (error) {
+        print("user archive path is wrong : ", userArchivePath);
+    }
+
+    print("archive dir", archiveDirectory, projectDirectory);
 
     // todo cancellable notification
     // https://www.eliostruyf.com/creating-timer-dismissable-notifications-visual-studio-code-extension/
     // https://www.eliostruyf.com/cancel-progress-programmatically-visual-studio-code-extensions/
 
-    const zipFileName = path.basename(directory);
+    const zipFileName = path.basename(projectDirectory);
     const tmpDir = slash(os.tmpdir());
     const tmpProjectClone = path.join(tmpDir, "vscode-vkmask", zipFileName); // ? add uuid
-    const zipFile = path.join(directory, `${zipFileName}.zip`);
+    const zipFile = path.join(archiveDirectory, `${zipFileName}.zip`);
     const zipFileUri = vscode.Uri.file(zipFile);
 
     try {
-        const results = await copy(directory, tmpProjectClone, {
+        const results = await copy(projectDirectory, tmpProjectClone, {
             overwrite: true,
             dot: false,
             junk: false,

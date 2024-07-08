@@ -48,11 +48,6 @@ div.shadow-top {
 
 }
 
-html {
-    /* top : 0; */
-    /* position: absolute; */
-    /* height: 100%; */
-}
 
 body:not([data-scroll='0']) {
      div.shadow-top {

@@ -44,6 +44,11 @@
                     "default": false,
                     "description": "%locale.contribution.userSettings.experimentalFeatures.description%"
                 },
+                "vkmask.archivePath": {
+                    "type": "string",
+                    "default": "",
+                    "description": "%locale.contribution.userSettings.archivePath.description%"
+                },
                 "vkmask.testMaskPath": {
                     "type": "string",
                     "default": "",

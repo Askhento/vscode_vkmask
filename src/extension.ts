@@ -814,7 +814,9 @@ export async function activate(context: vscode.ExtensionContext) {
                 l10n.t("locale.commands.archiveProject.startHint")
             );
 
-            await archiveProject();
+            const archivePath = (await userSettings.getSettings()["vkmask.archivePath"]
+                .value) as string;
+            await archiveProject(archivePath);
         })
     );
 
