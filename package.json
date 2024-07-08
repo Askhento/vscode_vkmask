@@ -178,7 +178,13 @@
                 },
                 {
                     "command": "vkmask.add_plugin.fixeddetection"
+                },
+
+                {
+                    "command": "vkmask.add_plugin.pickerui",
+                    "when": "config.vkmask.experimentalFeatures"
                 }
+
             ],
             "vkmask.add_asset_submenu": [
                 {
@@ -256,6 +262,11 @@
                 "command": "vkmask.add_plugin.fixeddetection",
                 "title": "%locale.contribution.command.addSubMenuHint.plugin.fixeddetection.title%",
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.plugin.fixeddetection.shortTtitle%"
+            },
+            {
+                "command": "vkmask.add_plugin.pickerui",
+                "title": "%locale.contribution.command.addSubMenuHint.plugin.pickerui.title%",
+                "shortTitle": "%locale.contribution.command.addSubMenuHint.plugin.pickerui.shortTtitle%"
             },
             {
                 "command": "vkmask.add_asset.material",

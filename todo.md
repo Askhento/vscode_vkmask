@@ -7,6 +7,7 @@
 -   split ztypes at least to front and backend to improve readability and faster coompile time
 -   add data source for project manager just in case :D
 -   deal with light source type legacy thing
+-   differenct size and offset types of units ex : px, %
 
 -   list element add named slots https://learn.svelte.dev/tutorial/slot-props
 -   add vector control drag multiple values or change quicklly
@@ -16,7 +17,6 @@
 -   add tag rename in effects
 -   add value input for slider, keep minmax as non force just a hint
 -   add option to open project in any place
--   archive add setting to save in specific folder
 -   for model3d set values so that is fits to screen
 -   defaults for model3d so it is in view and attached to head
     especially true if anchor is free, then model spawns out of frustum

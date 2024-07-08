@@ -34,6 +34,8 @@
     "locale.contribution.command.addSubMenuHint.plugin.mirror.title": "mirror",
     "locale.contribution.command.addSubMenuHint.plugin.perspective.shortTtitle": "perspective",
     "locale.contribution.command.addSubMenuHint.plugin.perspective.title": "perspective",
+    "locale.contribution.command.addSubMenuHint.plugin.pickerui.shortTtitle": "pickerui",
+    "locale.contribution.command.addSubMenuHint.plugin.pickerui.title": "pickerui",
     "locale.contribution.command.archiveProject.shortTitle": "Архивировать проект",
     "locale.contribution.command.archiveProject.title": "Архивировать поект в zip файл",
     "locale.contribution.command.dumpLogs.shortTitle": "ВК маски логи",
@@ -61,6 +63,7 @@
     "locale.contribution.userSettings.experimentalFeatures.description": "Включить экспериментальные возможности",
     "locale.contribution.userSettings.keepLogs.description": "Писать логи работы",
     "locale.contribution.userSettings.outputChannel.description": "Открыть консоль работы расширения",
+    "locale.contribution.userSettings.test-mask-path.description": "locale.contribution.userSettings.test-mask-path.description NEED TRANSLATION",
     "locale.contribution.userSettings.testMaskPath.description": "Путь до исполняемого файла приложения test.mask",
     "locale.contribution.userSettings.useBuiltins.description": "Показывать встроенные ресурсы движка масок"
 }

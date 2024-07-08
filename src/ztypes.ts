@@ -2202,7 +2202,54 @@ const ZFixedDetectionPlugin = z
     })
     .describe({ ...uiDescriptions.object, label: "locale.parameters.fixedDeteciton.label" });
 
-export const PluginsList = [ZMirrorPlugin, ZPerspectivePlugin, ZFixedDetectionPlugin];
+const ZPickeruiPlugin = z
+    .object({
+        name: z.literal("pickerui").describe(uiDescriptions.none),
+
+        rotation: z.array(z.string().describe(uiDescriptions.text)).describe({
+            ...uiDescriptions.array,
+            elementName: "locale.parameters.pickerui.tags.elementName",
+            info: { infoList: "locale.parameters.pickerui.tags.infoList" },
+            group: "tags",
+            defaultElement: "",
+            defValue: [""],
+            userResizable: true,
+        }),
+        icons: z.array(ZTextureAsset({})).describe({
+            ...uiDescriptions.array,
+            elementName: "locale.parameters.pickerui.icons.elementName",
+            info: { infoList: "locale.parameters.pickerui.icons.infoList" },
+            group: "icons",
+            defaultElement: "",
+            defValue: [""],
+            userResizable: true,
+        }),
+    })
+    .describe({
+        ...uiDescriptions.object,
+        label: "locale.parameters.pickerui.label",
+        groups: {
+            main: {
+                label: "locale.parameters.group.main",
+                defExpanded: true,
+            },
+            icons: {
+                label: "locale.parameters.icons.label",
+                defExpanded: false,
+            },
+            tags: {
+                label: "locale.parameters.tags.label",
+                defExpanded: false,
+            },
+        },
+    });
+
+export const PluginsList = [
+    ZMirrorPlugin,
+    ZPerspectivePlugin,
+    ZFixedDetectionPlugin,
+    ZPickeruiPlugin,
+];
 
 export const ZPlugin = z.union(PluginsList).describe(uiDescriptions.union);
 
