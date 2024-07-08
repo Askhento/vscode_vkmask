@@ -24,8 +24,6 @@
     export let disabled = false;
     export let indentLevel = 0;
 
-    let nesting = params.group == null;
-
     // if (!value) value = params
 
     /// print("params", params);
@@ -99,15 +97,7 @@
         {#each uiElements as data, index}
             {@const elementName = l10n.t(params.elementName ?? "element") + " " + index}
             {@const tabPathKey = [...path, "_elements", index].join(".")}
-            <!-- {@debug data, value} -->
-            <!-- <svelte:component
-                    this={data.uiElement}
-                    expanded={true}
-                    bind:value={value[index]}
-                    bind:label={index}
-                    params={data.uiDescription}
-                    uiElements={data.value}
-                  /> -->
+
             <Tab
                 defExpanded={data.uiDescription.defExpanded}
                 label={elementName}
@@ -232,16 +222,5 @@
     vscode-divider {
         width: 200vw;
         margin-left: -50vw;
-    }
-
-    .btn-text {
-        margin: unset;
-        padding: unset;
-        /* display: inline-block; */
-        width: 100%;
-        height: fit-content;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
     }
 </style>

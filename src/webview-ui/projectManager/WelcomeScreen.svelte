@@ -166,22 +166,22 @@
         /* width: fit-content; */
         width: 100%;
     }
-
+    /* 
     vscode-button::part(content) {
         min-width: 0;
     }
 
     vscode-button::part(control) {
         overflow: hidden;
-    }
+    } */
 
     .button-text {
-        /* width: 100%; */
-        /* min-width: 5rem; */
-        width: fit-content;
-        white-space: nowrap;
+        /* margin: unset;
+        padding: unset;
+        width: 100%;
+        height: fit-content;
         overflow: hidden;
-        text-overflow: ellipsis;
-        /* white-space: nowrap; */
+        white-space: nowrap;
+        text-overflow: ellipsis; */
     }
 </style>

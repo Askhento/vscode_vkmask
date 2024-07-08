@@ -564,29 +564,6 @@
         animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
     } */
 
-    vscode-button {
-        height: var(--global-block-height-borded);
-    }
-
-    vscode-button::part(content) {
-        min-width: 0;
-    }
-
-    vscode-button::part(control) {
-        overflow: hidden;
-    }
-
-    .btn-text {
-        margin: unset;
-        padding: unset;
-        /* display: inline-block; */
-        width: 100%;
-        height: fit-content;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
-    }
-
     @keyframes shake {
         10%,
         90% {

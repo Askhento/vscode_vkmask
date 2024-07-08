@@ -89,9 +89,22 @@ vscode-option::part(content) {
     width: 100%;
 }
 
+vscode-button {
+    height : var(--global-block-height-borded);
+}
 vscode-button::part(content) {
     justify-content: center;
     min-width: 0;
+}
+
+vscode-button span{
+    margin: unset;
+        padding: unset;
+        width: 100%;
+        height: fit-content;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
 }
 
 vscode-button::part(control) {
