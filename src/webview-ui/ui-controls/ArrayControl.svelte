@@ -185,6 +185,8 @@
         padding-left: var(--global-margin);
         padding-right: var(--global-body-padding-right);
         height: var(--global-block-height);
+        display: flex;
+        align-items: center;
     }
 
     /* .remove-btn {
