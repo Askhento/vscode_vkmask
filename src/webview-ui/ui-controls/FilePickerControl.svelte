@@ -27,6 +27,7 @@
         value,
         params,
         path,
+        display = true,
         disabled = false;
 
     export let runtimeInfo = {};

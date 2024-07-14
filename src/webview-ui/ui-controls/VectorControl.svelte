@@ -1,7 +1,7 @@
 <script>
     import * as l10n from "@vscode/l10n";
     import { reduceError } from "../common/errorParsing";
-    import { createEventDispatcher, onMount, getContext } from "svelte";
+    import { createEventDispatcher, onMount, getContext, tick } from "svelte";
     import { get_current_component } from "svelte/internal";
     const component = get_current_component();
     import { applyDeps } from "../common/applyDeps";
@@ -45,11 +45,17 @@
     // export function test() {
     //     console.log("test vector control");
     // }
+    async function updateDeps() {
+        // console.log("file", component.path, component, value, params.dependencies);
+        const { needUpdate } = await applyDeps(component, stores, params.dependencies);
+        if (needUpdate) onChanged();
+        return needUpdate;
+    }
 
-    onMount(() => {
+    onMount(async () => {
         // console.log("VECOTR", path, value, params.dependencies);
-
-        applyDeps(component, stores, params.dependencies);
+        await tick();
+        await updateDeps();
     });
     // todo : add slider to move all values at the same time
 

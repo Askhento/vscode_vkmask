@@ -10,6 +10,7 @@
     export let defExpanded = false,
         tabPathKey = "",
         label,
+        display = true,
         disableMargin = false,
         indentLevel = 0,
         isWrapped = true;
@@ -42,7 +43,7 @@
 </script>
 
 {#if isWrapped}
-    <div class="tab-wrapper" bind:this={tabWrapperElement}>
+    <div class="tab-wrapper" class:no-display={!display} bind:this={tabWrapperElement}>
         <!-- {#if !(groupInd === 0 && groupData.indentLevel === 0)} -->
         <vscode-divider class="divider" role="separator" />
         <!-- {/if} -->
@@ -72,7 +73,9 @@
         </div>
     </div>
 {:else}
-    <slot></slot>
+    <div class="group-wrapper">
+        <slot></slot>
+    </div>
 {/if}
 
 <style>
@@ -87,14 +90,13 @@
     }
 
     .group-wrapper {
-        /* padding: 0 0 0 0.5em; */
-        /* margin: 0 0 0 0.5em; */
         display: grid;
+        grid-column: 1/3;
+
         grid-template-columns:
             minmax(var(--global-grid-label-min-width), var(--global-grid-label-column-size))
             minmax(var(--global-value-min-width), var(--global-grid-value-column-size));
         column-gap: var(--global-grid-column-gap);
-        /* row-gap: var(--global-grid-row-gap); */
     }
 
     .main-group-bottom-margin {
@@ -120,5 +122,9 @@
 
     .group-label > i {
         margin: 0 2px;
+    }
+
+    .no-display {
+        display: none;
     }
 </style>

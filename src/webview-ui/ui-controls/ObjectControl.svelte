@@ -42,7 +42,6 @@
     });
 
     function groupElements() {
-        // console.log("objectcontol rerender", uiElementsGroupData);
         // uiElementsGroupData = {
         //     main: {
         //         expanded: true,
@@ -137,64 +136,69 @@
             {@const elemCount = Object.keys(groupData.elements).length}
             {@const elementsEntries = Object.entries(groupData.elements)}
             {@const tabPathKey = [...path, "_groups", groupName].join(".")}
-
+            {@const diplayGroupElements =
+                elemCount !== 0 &&
+                !(
+                    elemCount === 1 &&
+                    Array.isArray(elementsEntries[0][1].value) &&
+                    elementsEntries[0][1].value.length === 0
+                )}
             <!-- !removing empty array groups -->
-            {#if groupData.label != null && elemCount !== 0 && !(elemCount === 1 && Array.isArray(elementsEntries[0][1].value) && elementsEntries[0][1].value.length === 0)}
-                {#if !(groupInd === 0 && groupData.indentLevel === 0)}
-                    <vscode-divider class="divider" role="separator" />
-                {/if}
-                <Tab
-                    defExpanded={groupData.defExpanded}
-                    label={l10n.t(groupData.label)}
-                    {tabPathKey}
-                    indentLevel={indentLevel + 1}
-                >
-                    {#each elementsEntries as [elName, elData]}
-                        {#if elData.value === null && (elData.uiDescription.name === "object" || elData.uiDescription.name === "array")}
-                            <span class="label"
-                                ><span>{l10n.t(elData.uiDescription.label ?? elName)}</span></span
-                            >
-                            <span class="right-button-wrapper">
-                                <vscode-button
-                                    class="add-key-btn"
-                                    on:click={() => {
-                                        // console.log(data.uiDescription);
-                                        addKey(elName, elData);
-                                    }}
-                                >
-                                    <span slot="start" class="codicon codicon-add" />
-                                    <span class="btn-text"
-                                        >{l10n.t(
-                                            `Add ${l10n
-                                                .t(elData.uiDescription.label ?? elName)
-                                                .toLowerCase()}`
-                                        )}</span
-                                    >
-                                </vscode-button>
-                            </span>
-                        {:else}
-                            <!-- {console.log("EL", elName, data)} -->
-                            <!-- value[elName] ?? // we have a value in config -->
-                            <!-- elData.value ?? // for composition -->
-                            <svelte:component
-                                this={elData.uiElement}
-                                error={elData.error}
-                                value={value?.[elName] ??
-                                    // ?. is for deps of complex types,
-                                    // they try to render with undefined
-                                    (elData.uiDescription.name === "object" ||
-                                        elData.uiDescription.defValue)}
-                                label={elData.label ?? elData.uiDescription.label ?? elName}
-                                path={[...path, elName]}
-                                params={elData.uiDescription}
-                                indentLevel={indentLevel + 1}
-                                uiElements={elData.value}
-                                on:changed
-                            />
-                        {/if}
-                    {/each}
-                </Tab>
+
+            {#if !(groupInd === 0 && groupData.indentLevel === 0)}
+                <vscode-divider class="divider" role="separator" />
             {/if}
+            <Tab
+                display={diplayGroupElements}
+                defExpanded={groupData.defExpanded}
+                label={l10n.t(groupData.label ?? "")}
+                {tabPathKey}
+                indentLevel={indentLevel + 1}
+                isWrapped={groupData.label != null}
+            >
+                {#each elementsEntries as [elName, elData]}
+                    {#if elData.value === null && (elData.uiDescription.name === "object" || elData.uiDescription.name === "array")}
+                        <span class="label"
+                            ><span>{l10n.t(elData.uiDescription.label ?? elName)}</span></span
+                        >
+                        <span class="right-button-wrapper">
+                            <vscode-button
+                                class="add-key-btn"
+                                on:click={() => {
+                                    // console.log(data.uiDescription);
+                                    addKey(elName, elData);
+                                }}
+                            >
+                                <span slot="start" class="codicon codicon-add" />
+                                <span class="btn-text"
+                                    >{l10n.t(
+                                        `Add ${l10n
+                                            .t(elData.uiDescription.label ?? elName)
+                                            .toLowerCase()}`
+                                    )}</span
+                                >
+                            </vscode-button>
+                        </span>
+                    {:else}
+                        <svelte:component
+                            this={elData.uiElement}
+                            display={diplayGroupElements}
+                            error={elData.error}
+                            value={value?.[elName] ??
+                                // ?. is for deps of complex types,
+                                // they try to render with undefined
+                                (elData.uiDescription.name === "object" ||
+                                    elData.uiDescription.defValue)}
+                            label={elData.label ?? elData.uiDescription.label ?? elName}
+                            path={[...path, elName]}
+                            params={elData.uiDescription}
+                            indentLevel={indentLevel + 1}
+                            uiElements={elData.value}
+                            on:changed
+                        />
+                    {/if}
+                {/each}
+            </Tab>
         {/each}
     {/if}
 

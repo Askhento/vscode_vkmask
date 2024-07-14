@@ -40,7 +40,7 @@ export function applyDeps(component, stores, dependencies: ControlDependency[]) 
             try {
                 return postprocess(dataSources, component, previous);
             } catch (error) {
-                console.error("Error apply deps:", component, value, previous, error);
+                console.error("Error apply deps:", component, previous, error);
                 return null;
             }
         }
