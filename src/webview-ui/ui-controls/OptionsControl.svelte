@@ -18,7 +18,7 @@
     // );
 
     const dispatch = createEventDispatcher();
-    function onChange() {
+    function onChanged() {
         dispatch("changed", [
             {
                 value,
@@ -55,7 +55,7 @@
         on:change={(e) => {
             value = options[parseInt(e.target.value)];
             // console.log("optoins", e.target.value, value, typeof value);
-            onChange();
+            onChanged();
         }}
         on:keydown|capture={(e) => {
             if (e.key === "Meta") {

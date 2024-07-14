@@ -6,9 +6,10 @@
     ```
 */
 
-import { z } from "zod";
+import { Effect, z } from "zod";
 import { mergician } from "mergician";
 import { isObject } from "./utils/isObject";
+import { applyValueByPath2 } from "./webview-ui/utils/applyValueByPath";
 // import { Info, uiDescription } from "./types";
 
 import {
@@ -258,8 +259,11 @@ const ZLightTypeLabels = [
 const MAX_TEXTURE_SIZE_PX = 2048;
 const textureAssetErrorDeps = [
     {
-        source: "assets",
-        postprocess: (assets: Asset[], component: BaseControlAPI<FilePickerControlParameters>) => {
+        sources: [{ key: "assets" }],
+        postprocess: (
+            [assets]: [Asset[]],
+            component: BaseControlAPI<FilePickerControlParameters>
+        ) => {
             const { value, params } = component;
             const assetIndex = assets.findIndex((v) => v.path === value);
             if (assetIndex < 0) {
@@ -308,7 +312,7 @@ const AssetTypes = {
         directory: ["Textures"],
         typeName: "texture",
         label: "locale.assetTypes.texture.label",
-        dependencies: textureAssetErrorDeps,
+        // dependencies: textureAssetErrorDeps,
         info: {
             clickLink:
                 "https://dev.vk.com/ru/masks/publication/resources#%D0%A2%D0%B5%D0%BA%D1%81%D1%82%D1%83%D1%80%D1%8B",
@@ -899,67 +903,6 @@ const ZMaterial = z
 //         onChanged();
 //     }
 
-export const ZMaterialArray = z.preprocess(
-    (val) => {
-        if (!Array.isArray(val)) return [val];
-        return val;
-    },
-    z.array(ZMaterial).describe({
-        ...uiDescriptions.array,
-        dependencies: [
-            {
-                source: "effects",
-                relPath: ["..", "model"],
-            },
-            {
-                source: "assets",
-                postprocess: (
-                    assets: Asset[],
-                    component: BaseControlAPI<FilePickerControlParameters>,
-                    modelPath: string
-                ) => {
-                    const { value, params } = component;
-                    const assetIndex = assets.findIndex((v) => v.path === modelPath);
-
-                    if (assetIndex < 0) {
-                        // force empty material list
-                        if (value.length) {
-                            component.value = [];
-                            component.disabled = true;
-                            return { needUpdate: true };
-                        }
-                        return { needUpdate: false };
-                    }
-
-                    const { numGeometries, processorError } = assets[assetIndex];
-
-                    if (processorError) {
-                        // component.value = [];
-                        component.disabled = true;
-                        return { needUpdate: false };
-                    }
-
-                    if (value.length === numGeometries) return { needUpdate: false }; // without this will infinte loop
-
-                    component.value = new Array(numGeometries)
-                        .fill(params.defaultElement)
-                        .map((v, i) => value[i] ?? v);
-
-                    return { needUpdate: true };
-                },
-            },
-        ],
-
-        elementName: "locale.parameters.materialArray.elementName",
-        label: "locale.parameters.materialArray.label",
-        info: { infoList: "locale.parameters.materialArray.infoList" },
-        group: "materials",
-        defaultElement: AssetTypes.material.defValue,
-        defValue: [AssetTypes.material.defValue],
-        userResizable: false,
-    })
-);
-
 export const ZBaseEffect = z
     .object({
         name: ZText.describe(uiDescriptions.none),
@@ -1083,9 +1026,13 @@ const ZPatchAnchorLabels = [
 
 const patchAnchorDeps = [
     {
-        source: "effects",
-        relPath: ["..", "anchor"],
-        postprocess: (anchor: z.infer<typeof ZPatchAnchor>, component: BaseControlAPI) => {
+        sources: [
+            {
+                key: ["effects"],
+                relPath: ["..", "anchor"],
+            },
+        ],
+        postprocess: ([anchor]: [z.infer<typeof ZPatchAnchor>], component: BaseControlAPI) => {
             component.runtimeInfo.warnings = [];
             if (anchor === ZPatchAnchor.Values.fullscreen) {
                 component.runtimeInfo.warnings.push([
@@ -1101,7 +1048,7 @@ const patchAnchorDeps = [
 
 // const patchRotationDeps = [
 //     {
-//         source:  "effects",
+//         sources:  ["effects"],
 //         relPath: ["..", "allow_rotation"],
 //         postprocess: (allowRotation, component) => {
 //             if (!allowRotation) component.disabled = true;
@@ -1177,7 +1124,7 @@ const ZPatchEffect = ZBaseEffect.extend({
             infoBody: "locale.parameters.patch.offset.infoBody",
         },
         group: "transform",
-        dependencies: patchAnchorDeps,
+        // dependencies: patchAnchorDeps,
     }),
     allow_rotation: ZBool.describe({
         ...uiDescriptions.bool,
@@ -1200,7 +1147,7 @@ const ZPatchEffect = ZBaseEffect.extend({
             infoBody: "locale.parameters.patch.rotation.infoBody",
         },
         group: "transform",
-        dependencies: patchAnchorDeps,
+        // dependencies: patchAnchorDeps,
     }),
     // pass: ZRenderPathAsset({ label: "Render Path" }),
     texture: ZTextureObject,
@@ -1286,8 +1233,11 @@ const LOOKUP_MAX_SIZE_PX = 512;
 const LOOKUP_MAX_SIZE_BYTES = 600 * 1000;
 const lookupErrorDeps = [
     {
-        source: "assets",
-        postprocess: (assets: Asset[], component: BaseControlAPI<FilePickerControlParameters>) => {
+        sources: [{ key: "assets" }],
+        postprocess: (
+            [assets]: [Asset[]],
+            component: BaseControlAPI<FilePickerControlParameters>
+        ) => {
             const { value, params } = component;
             const assetIndex = assets.findIndex((v) => v.path === value);
             if (assetIndex < 0) {
@@ -1391,7 +1341,7 @@ const ZColorfilterEffect = ZBaseEffect.extend({
             infoList: "locale.parameters.patch.size.infoList",
         },
         group: "transform",
-        dependencies: patchAnchorDeps,
+        // dependencies: patchAnchorDeps,
     }),
     offset: ZArray3D.describe({
         ...uiDescriptions.array3d,
@@ -1403,7 +1353,7 @@ const ZColorfilterEffect = ZBaseEffect.extend({
             infoList: "locale.parameters.patch.offset.infoList",
         },
         group: "transform",
-        dependencies: patchAnchorDeps,
+        // dependencies: patchAnchorDeps,
     }),
     allow_rotation: ZBool.describe({
         ...uiDescriptions.bool,
@@ -1426,14 +1376,14 @@ const ZColorfilterEffect = ZBaseEffect.extend({
             infoList: "locale.parameters.patch.rotation.infoList",
         },
         group: "transform",
-        dependencies: patchAnchorDeps,
+        // dependencies: patchAnchorDeps,
     }),
 
     lookup: ZTextureAsset({
         label: "locale.parameters.colorfilter.lookup.label",
         info: lookupInfo,
         group: "colorfilter",
-        dependencies: lookupErrorDeps,
+        // dependencies: lookupErrorDeps,
     }),
     intensity: ZNumberSlider.describe({
         ...uiDescriptions.numberSlider,
@@ -1486,10 +1436,114 @@ const ZColorfilterEffect = ZBaseEffect.extend({
     },
 });
 
+const matArrayDeps: ControlDependency[] = [
+    {
+        sources: [
+            {
+                key: ["effects"],
+                relPath: ["..", "model"],
+            },
+            {
+                key: "assets",
+            },
+        ],
+        postprocess: (
+            [modelPath, assets]: [Asset[], string],
+            component: BaseControlAPI<FilePickerControlParameters>
+        ) => {
+            console.log("trying mat dependencies");
+            const { value, params } = component;
+            const assetIndex = assets.findIndex((v) => v.path === modelPath);
+
+            if (assetIndex < 0) {
+                // force empty material list
+                if (value.length) {
+                    component.value = [];
+                    component.disabled = true;
+                    return { needUpdate: true };
+                }
+                return { needUpdate: false };
+            }
+
+            const { numGeometries, processorError } = assets[assetIndex];
+
+            if (processorError) {
+                // component.value = [];
+                component.disabled = true;
+                return { needUpdate: false };
+            }
+
+            if (value.length === numGeometries) return { needUpdate: false }; // without this will infinte loop
+
+            component.value = new Array(numGeometries)
+                .fill(params.defaultElement)
+                .map((v, i) => value[i] ?? v);
+
+            return { needUpdate: true };
+        },
+    },
+];
+
+export const ZMaterialArray = z.preprocess(
+    (val) => {
+        if (!Array.isArray(val)) return [val];
+        return val;
+    },
+    z.array(ZMaterial).describe({
+        ...uiDescriptions.array,
+        dependencies: matArrayDeps,
+
+        elementName: "locale.parameters.materialArray.elementName",
+        label: "locale.parameters.materialArray.label",
+        info: { infoList: "locale.parameters.materialArray.infoList" },
+        group: "materials",
+        defaultElement: AssetTypes.material.defValue,
+        defValue: [AssetTypes.material.defValue],
+        userResizable: false,
+    })
+);
+
+// const modelDepsTest = [
+//     ,
+//     {
+//         sources: [
+//             {
+//                 key: "effects",
+//                 relPath: ["..", "material"],
+//             },
+//             {
+//                 key : "effects"
+//             }
+//         ],
+//         postprocess: (
+//             [material, effects],
+//             component: BaseControlAPI<FilePickerControlParameters>,
+//             materialArray: string
+//         ) => {
+//             console.log("trying mat dependencies");
+//             const { value, params } = component;
+//             const assetIndex = assets.findIndex((v) => v.path === value);
+
+//             if (assetIndex < 0) {
+//                 applyValueByPath2(effects, unknownPath!!!)
+//                 return {
+//                     needUpdate: true
+//                 }
+//             }
+
+//             return
+
+//         },
+//     },
+// ];
+
 const modelDeps = [
     {
-        source: "assets",
-        postprocess: (assets: Asset[], component: BaseControlAPI<FilePickerControlParameters>) => {
+        sources: [{ key: "assets" }],
+        postprocess: (
+            [assets]: [Asset[]],
+            component: BaseControlAPI<FilePickerControlParameters>
+        ) => {
             const { value, params } = component;
             const assetIndex = assets.findIndex((v) => v.path === value);
             if (assetIndex < 0) {
@@ -1915,7 +1969,7 @@ const ZLightPointEffect = z
             ...uiDescriptions.array3d,
             // dependencies: [
             //     {
-            //         source:  "effects",
+            //         sources:  ["effects"],
             //         relPath: ["..", "range"],
             //         postprocess: (range, component) => {
             //             component.disabled = range > 500;

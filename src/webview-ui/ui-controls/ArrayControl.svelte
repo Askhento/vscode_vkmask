@@ -76,8 +76,11 @@
         onChanged();
     }
 
+    // print("array control init");
+
     onMount(async () => {
-        // print("ui", uiElements);
+        // print("ui array control mount", uiElements);
+
         const { needUpdate } = await applyDeps(component, stores, params.dependencies);
         if (needUpdate) onChanged();
     });

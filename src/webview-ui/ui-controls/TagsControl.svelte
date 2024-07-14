@@ -36,7 +36,7 @@
     }
     const dispatch = createEventDispatcher();
 
-    function onChange() {
+    function onChanged() {
         dispatch("changed", [
             {
                 value,
@@ -47,7 +47,7 @@
 
     function joinTags() {
         value = tags.join(";");
-        onChange();
+        onChanged();
     }
 
     function checkTagExist(tag) {
@@ -69,7 +69,7 @@
         if (tags.length === 0) {
             tags = [];
             value = null;
-            onChange();
+            onChanged();
             return;
         }
 

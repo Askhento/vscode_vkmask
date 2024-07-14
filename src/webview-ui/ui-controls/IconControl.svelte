@@ -44,7 +44,7 @@
             value = payload;
             // print("asset", value);
             checkIconExists();
-            onChange();
+            onChanged();
         }
 
         waiting = false;
@@ -116,7 +116,7 @@
         value = null;
         iconAsset = null;
         params.info.errors = [];
-        onChange();
+        onChanged();
         waiting = false;
     }
 
@@ -130,7 +130,7 @@
     }
 
     const dispatch = createEventDispatcher();
-    function onChange() {
+    function onChanged() {
         dispatch("changed", [
             {
                 value,

@@ -7,7 +7,7 @@
     export let label, path, params, value;
     let infoVisible = false;
 
-    function onChange(e) {
+    function toggle(e) {
         // console.log();
         value = !value; //e.target.checked;
         onChanged();
@@ -44,7 +44,7 @@
         infoVisible = true;
     }}
 >
-    <vscode-checkbox role="checkbox" checked={value} on:click={onChange} tabindex="1" />
+    <vscode-checkbox role="checkbox" checked={value} on:click={toggle} tabindex="1" />
     <InfoBox bind:visible={infoVisible} info={params.info} />
 </span>
 

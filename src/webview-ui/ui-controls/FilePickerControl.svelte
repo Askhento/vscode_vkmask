@@ -35,7 +35,7 @@
     // print("INIT", value, params);
 
     const dispatch = createEventDispatcher();
-    function onChange() {
+    function onChanged() {
         dispatch("changed", [
             {
                 value,
@@ -158,7 +158,7 @@
 
         if (payload) {
             value = payload;
-            onChange();
+            onChanged();
             // print("asset", value);
         }
 
@@ -199,13 +199,13 @@
         currentAsset = null;
         setControlElementValue(currentAsset?.baseName);
 
-        onChange();
+        onChanged();
     }
 
     async function updateDeps() {
         // console.log("file", component.path, component, value, params.dependencies);
         const { needUpdate } = await applyDeps(component, stores, params.dependencies);
-        if (needUpdate) onChange();
+        if (needUpdate) onChanged();
         return needUpdate;
     }
 
@@ -339,7 +339,7 @@
                     setControlElementValue(currentAsset?.baseName);
 
                     if (await updateDeps()) return;
-                    onChange();
+                    onChanged();
                     // searchValue = "";
                     // inputElement.value = "";
                 }}

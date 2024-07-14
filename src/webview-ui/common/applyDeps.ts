@@ -7,30 +7,44 @@ export function applyDeps(component, stores, dependencies: ControlDependency[]) 
     if (!dependencies) return { needUpdate: false };
     // console.log("aplydeps!", dependencies);
 
-    return dependencies.reduce((previous, { source, relPath, postprocess }) => {
+    return dependencies.reduce((previous, { sources, relPath, postprocess }) => {
         if (!component.path) {
             console.error("component null path");
-            return { needUpdate: false };
+            return;
         }
         const componentPath = [...component.path];
         componentPath.shift(); // remove root to be able to override in ztypes
-        const relSourcePath = relPath ? resolveRelative(relPath, componentPath) : [];
 
         // get is svelte specific
-        let dataSource = get(stores[source]);
-        // if (source[0] === "stores") dataSource = get(dataSource);
+        let hasUknownSource = false;
+        let dataSources = sources.map(({ key, relPath }) => {
+            if (!(key in stores)) {
+                console.error("unknown source ", key, component);
+                hasUknownSource = true;
+                return null;
+            }
 
-        const value = getValueByPath(dataSource, relSourcePath);
+            const store = get(stores[key]);
+
+            if (relPath) {
+                const relSourcePath = resolveRelative(relPath, componentPath);
+                return getValueByPath(store, relSourcePath);
+            } else {
+                return store;
+            }
+        });
+
+        if (hasUknownSource) return null;
 
         if (postprocess) {
             try {
-                return postprocess(value, component, previous);
+                return postprocess(dataSources, component, previous);
             } catch (error) {
                 console.error("Error apply deps:", component, value, previous, error);
-                return { needUpdate: false };
+                return null;
             }
         }
 
-        return value;
+        return null;
     }, null);
 }

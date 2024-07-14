@@ -50,7 +50,7 @@
     rgbToHex();
     const dispatch = createEventDispatcher();
 
-    function onChange() {
+    function onChanged() {
         if (path == undefined) return;
         dispatch("changed", [
             {
@@ -89,7 +89,7 @@
             // console.log("color picker on change!!!!");
             // color = e.target.value;
             hexToRGB();
-            onChange();
+            onChanged();
         }}
     />
     <InfoBox bind:visible={infoVisible} info={params.info} />
@@ -114,7 +114,7 @@
             // alpha = e.detail.value;
             // console.log("color alpha slider changed", alpha, e);
             hexToRGB();
-            onChange();
+            onChanged();
         }}
     />
 {/if}

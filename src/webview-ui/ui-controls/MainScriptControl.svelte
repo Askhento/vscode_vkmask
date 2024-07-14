@@ -39,7 +39,7 @@
 
         if (payload) {
             value = payload;
-            onChange();
+            onChanged();
             // print("asset", value);
         }
 
@@ -56,7 +56,7 @@
 
         if (payload) {
             value = payload;
-            onChange();
+            onChanged();
             print("created asset : ", value);
         }
 
@@ -89,7 +89,7 @@
         // });
 
         value = null;
-        onChange();
+        onChanged();
         waiting = false;
     }
 
@@ -103,7 +103,7 @@
     }
 
     const dispatch = createEventDispatcher();
-    function onChange() {
+    function onChanged() {
         dispatch("changed", [
             {
                 value,

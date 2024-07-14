@@ -56,9 +56,11 @@ export type ControlDataStores =
     | "tabInfo";
 
 export interface ControlDependency {
-    source: ControlDataStores;
-    relPath: ControlPath;
-    postprocess: (value: unknown, component: any, previous: unknown) => any;
+    sources: {
+        key?: ControlPath;
+        relPath?: ControlPath;
+    }[];
+    postprocess: (dataSources: unknown[], component: any, previous: unknown) => any;
 }
 
 export interface NumberSliderControlParameters extends BaseControlParameters {

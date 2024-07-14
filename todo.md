@@ -28,11 +28,11 @@
 -   add spirv visual https://github.com/gleblebedev/SpirVisualEditor
 -   show template download progress
 -   recent projects will not correctly deal with case insesitive paths
--   material obj add support
 -   material obj button move to a file
 -   add pickerui plugin
 -   fix welcome buttons overflow ?? add button component
--   make infobox alway visible ?? scroll info view
+-   make infobox always visible ?? scroll info view
+-   move dependencies to maskConfig
 
 -   filepicker when null need to reset selected index
 -   add logic to always select something
