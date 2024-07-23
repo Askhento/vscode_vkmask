@@ -26,4 +26,5 @@ vitest.config.mjs
 *.vscodeignore
 .vscode-test.js
 test.esbuild.mjs
+changePublisher.mjs
 todo.md

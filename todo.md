@@ -37,6 +37,7 @@
 -   preview move to file uri
 -   hide archive when missing project
 -   try wsl ramdisk
+-   check current version before publish
 
 -   filepicker when null need to reset selected index
 -   add logic to always select something
