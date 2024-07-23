@@ -51,7 +51,7 @@ import { downloadTemplate } from "./utils/downloadTemplate";
 // import { selection } from "./global";
 
 export async function activate(context: vscode.ExtensionContext) {
-    const thisExtension = vscode.extensions.getExtension("askhento.vkmask");
+    const thisExtension = vscode.extensions.getExtension(context.extension.id);
 
     const [major, minor, patch] = thisExtension.packageJSON.version.split(".");
     if (minor % 2 !== 0) vscode.window.showInformationMessage("Running pre-release");
