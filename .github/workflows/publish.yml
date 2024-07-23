@@ -12,6 +12,12 @@ on:
                 type: boolean
                 description: Publish extension
                 default: false
+            publisher:
+                type: choice
+                options:
+                    - dev
+                    - release
+                default: dev
 
 jobs:
     build:
@@ -32,8 +38,7 @@ jobs:
                   npm list
                   ls ./node_modules/@img
                   npx vsce --version
-
-            - run: ./publish.sh ${{ github.event.inputs.publish }}
+            - run: ./publish.sh ${{ github.event.inputs.publish }} ${{ github.event.inputs.publisher }}
               env:
                   VSCE_PAT: ${{ secrets.VSCE_PAT }}
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

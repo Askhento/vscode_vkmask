@@ -502,7 +502,6 @@ export const assetProcessors: Record<string, AssetProcessor> = {
                     .toBuffer(),
             ]);
 
-            // print(thumbnail);
             return {
                 preview: preview.toString("base64"),
                 width,

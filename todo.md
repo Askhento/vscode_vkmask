@@ -36,6 +36,7 @@
 -   move close all tabs to setting
 -   preview move to file uri
 -   hide archive when missing project
+-   try wsl ramdisk
 
 -   filepicker when null need to reset selected index
 -   add logic to always select something

@@ -1,13 +1,19 @@
 #!/bin/bash
 
 publish=$1
+publisher=$2
 
 export RELEASE=$(node -e "const {version} = require('./package.json'); console.log(version.split('.')[1] % 2 == 0)")
 echo "version is release: ${RELEASE}"
 
+
+echo pub $publisher
+if [[ -n $publisher ]]; then
+    node ./changePublisher.mjs $publisher
+fi
+
+
 npm run generateIgnoreFiles
-
-
 npm run package-all
 
 cmd=(--packagePath $(find ./vsix-packages -iname *.vsix))

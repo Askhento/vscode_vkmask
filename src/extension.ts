@@ -950,6 +950,7 @@ export async function activate(context: vscode.ExtensionContext) {
         // // ? maybe close only files that are in old project, could be usefull for opened api reference
         // await vscode.window.tabGroups.close(tabsToClose);
         // maskConfig.showConfig(true);
+        // "workspaceContains:mask.json"
 
         //!!!
         // this will ensure all the componenets will show up no matter if they closed before.
