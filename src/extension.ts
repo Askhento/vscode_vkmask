@@ -784,7 +784,7 @@ export async function activate(context: vscode.ExtensionContext) {
             const responses = (await Promise.all(
                 webviewProviders.map((provider) => {
                     if (provider.disposed) return Promise.resolve([]);
-                    print("will reqest " + provider.viewId);
+                    // print("will reqest " + provider.viewId);
                     return messageHandler.request({
                         target: provider.viewId,
                         command: RequestCommand.getLogs,
@@ -940,18 +940,16 @@ export async function activate(context: vscode.ExtensionContext) {
     // // !!! erorr handle !!!
     // ;
 
-    // await delayPromise(3000).promise;
-
     // will ensure good initialize
     if (maskConfig.updateConfigPath()) {
         recentProjectInfo.addInfo(maskConfig.currentConfigDir);
 
-        print("showing all webivews/config/closing tabs");
-        // on init need to show mask.json only! so there is no misatakes working in a wrong file
-        const tabsToClose = vscode.window.tabGroups.all.map((tg) => tg.tabs).flat();
-        // ? maybe close only files that are in old project, could be usefull for opened api reference
-        await vscode.window.tabGroups.close(tabsToClose);
-        maskConfig.showConfig(true);
+        // print("showing all webivews/config/closing tabs");
+        // // on init need to show mask.json only! so there is no misatakes working in a wrong file
+        // const tabsToClose = vscode.window.tabGroups.all.map((tg) => tg.tabs).flat();
+        // // ? maybe close only files that are in old project, could be usefull for opened api reference
+        // await vscode.window.tabGroups.close(tabsToClose);
+        // maskConfig.showConfig(true);
 
         //!!!
         // this will ensure all the componenets will show up no matter if they closed before.
@@ -963,7 +961,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 return;
             }
 
-            vscode.commands.executeCommand(provider.viewId + ".focus");
+            // vscode.commands.executeCommand(provider.viewId + ".focus");
         });
 
         // await vscode.commands.executeCommand(`vkmask.parameters.focus`);

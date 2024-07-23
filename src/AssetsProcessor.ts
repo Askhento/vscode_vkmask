@@ -20,6 +20,8 @@ import { SmartBuffer } from "smart-buffer";
 const PREVIEW_SIZE = 128;
 
 export class AssetsProcessor {
+    private static typesToProcess = new Set([AssetTypes.image, AssetTypes.model3d]);
+
     private xmlParser = new XMLParser({
         ignoreDeclaration: true,
     });
@@ -104,11 +106,9 @@ export class AssetsProcessor {
         const fileBuffer = fs.readFileSync(absPath);
         const type = await this.getFileType(ext, fileBuffer);
 
-        const typesToProcess = new Set([AssetTypes.image, AssetTypes.model3d]);
-
         let processOutput = {};
 
-        if (typesToProcess.has(type)) {
+        if (AssetsProcessor.typesToProcess.has(type)) {
             try {
                 processOutput = await this.read(type, fileBuffer);
             } catch (error) {
@@ -419,7 +419,6 @@ export const assetProcessors: Record<string, AssetProcessor> = {
             return "";
         },
     },
-    //vscode://file/f:/PROJECTOS_SSD/urhovk/vscode_vkmask/out/extension.js:15524:19
     [AssetTypes.model3d]: {
         read: (buffer: Buffer) => {
             const modelBuffer = SmartBuffer.fromBuffer(buffer);
@@ -488,10 +487,11 @@ export const assetProcessors: Record<string, AssetProcessor> = {
     [AssetTypes.image]: {
         read: async (imageBuffer: Buffer) => {
             const imgSharp = await sharp(imageBuffer);
-            const { isOpaque } = await imgSharp.stats();
-            const { width, height, size, format } = await imgSharp.metadata();
-            const preview = (
-                await imgSharp
+            // todo replace preview with file uri
+            const [{ isOpaque }, { width, height, size, format }, preview] = await Promise.all([
+                imgSharp.stats(),
+                imgSharp.metadata(),
+                imgSharp
                     .resize({
                         fit: "contain",
                         width: PREVIEW_SIZE,
@@ -499,24 +499,17 @@ export const assetProcessors: Record<string, AssetProcessor> = {
                         // withoutEnlargement: true,
                     })
                     .jpeg({ force: true, quality: 80 })
-                    .toBuffer()
-            ).toString("base64");
+                    .toBuffer(),
+            ]);
+
             // print(thumbnail);
             return {
-                preview,
+                preview: preview.toString("base64"),
                 width,
                 height,
                 size,
                 format,
                 isOpaque,
-            };
-            return {
-                preview: "",
-                width: 100,
-                height: 100,
-                size: 10,
-                format: "png",
-                isOpaque: true,
             };
         },
         write: () => {},

@@ -33,6 +33,9 @@
 -   fix welcome buttons overflow ?? add button component
 -   make infobox always visible ?? scroll info view
 -   move dependencies to maskConfig
+-   move close all tabs to setting
+-   preview move to file uri
+-   hide archive when missing project
 
 -   filepicker when null need to reset selected index
 -   add logic to always select something

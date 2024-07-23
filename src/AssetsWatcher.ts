@@ -44,6 +44,7 @@ class AssetsWatcher extends EventEmitter {
         let relative = to.at(-1).includes(".") ? path.join(...to) : path.join(...to, base); // file renaming
         const dest = path.join(this.directory, relative);
 
+        // todo compare with path.relative
         // file already in the folder
         if (file === dest) return relative;
 
@@ -166,20 +167,15 @@ class AssetsWatcher extends EventEmitter {
 
         const newAssets = files
             .filter((uri) => assetInWhiteList(uri.fsPath))
-            .map(async (uri) => {
+            .map((uri) => {
                 const slashedPath = slash(uri.fsPath);
-                return await this.processor.fileToAsset(
-                    slashedPath,
-                    this.getRelative(slashedPath),
-                    true
-                );
+                return this.processor.fileToAsset(slashedPath, this.getRelative(slashedPath), true);
             });
 
         print(`new assets count :  ${newAssets.length}`);
         // print(`builtin assets count :  ${this.builtInAssets.length}`);
 
         this.assets = await Promise.all(newAssets);
-        // print("test assets", this.assets);
         // this.assets = [...this.builtInAssets, ...newAssets];
     }
 

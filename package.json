@@ -15,8 +15,7 @@
         "Other"
     ],
     "activationEvents": [
-        "onWebviewPanel:vkmask.projectManager",
-        "workspaceContains:mask.json"
+        "onWebviewPanel:vkmask.projectManager"
     ],
     "main": "./out/extension.js",
     "l10n": "./l10n",
