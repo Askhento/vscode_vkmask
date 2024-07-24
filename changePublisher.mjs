@@ -7,12 +7,12 @@ const [publisherType] = process.argv.slice(2);
 
 const publishers = {
     dev: {
-        displayName: "vkmask_dev",
+        displayName: "askhento_dev_mask",
         publisher: "askhento",
     },
     release: {
         displayName: "VK Mask Editor",
-        publisher: "vk",
+        publisher: "vkcom",
     },
 };
 
