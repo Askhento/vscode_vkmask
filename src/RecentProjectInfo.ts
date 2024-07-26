@@ -16,7 +16,7 @@ export class RecentProjects {
     constructor(
         private context: vscode.ExtensionContext,
         private maxInfoCount: number = 10,
-        private infoStorageKey = "vkmask.recentProjects"
+        private infoStorageKey = "vk-mask-editor.recentProjects"
     ) {}
 
     //? #bug need to compare paths with path.relative ?

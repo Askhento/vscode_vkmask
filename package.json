@@ -1,5 +1,5 @@
 {
-    "name": "vkmask",
+    "name": "vk-mask-editor",
     "displayName": "askhento_dev_mask",
     "publisher": "askhento",
     "icon": "./res/icons/vkmask_main_icon_128.png",
@@ -12,40 +12,40 @@
         "Other"
     ],
     "activationEvents": [
-        "onWebviewPanel:vkmask.projectManager"
+        "onWebviewPanel:vk-mask-editor.projectManager"
     ],
     "main": "./out/extension.js",
     "l10n": "./l10n",
     "contributes": {
         "configuration": {
-            "title": "vkmask",
+            "title": "vk-mask-editor",
             "properties": {
-                "vkmask.use-builtins": {
+                "vk-mask-editor.use-builtins": {
                     "type": "boolean",
                     "default": false,
                     "description": "%locale.contribution.userSettings.useBuiltins.description%"
                 },
-                "vkmask.keep-logs": {
+                "vk-mask-editor.keep-logs": {
                     "type": "boolean",
                     "default": true,
                     "description": "%locale.contribution.userSettings.keepLogs.description%"
                 },
-                "vkmask.output-channel": {
+                "vk-mask-editor.output-channel": {
                     "type": "boolean",
                     "default": true,
                     "description": "%locale.contribution.userSettings.outputChannel.description%"
                 },
-                "vkmask.experimentalFeatures": {
+                "vk-mask-editor.experimentalFeatures": {
                     "type": "boolean",
                     "default": false,
                     "description": "%locale.contribution.userSettings.experimentalFeatures.description%"
                 },
-                "vkmask.archivePath": {
+                "vk-mask-editor.archivePath": {
                     "type": "string",
                     "default": "",
                     "description": "%locale.contribution.userSettings.archivePath.description%"
                 },
-                "vkmask.testMaskPath": {
+                "vk-mask-editor.testMaskPath": {
                     "type": "string",
                     "default": "",
                     "description": "%locale.contribution.userSettings.testMaskPath.description%"
@@ -56,264 +56,264 @@
             {
                 "icon": "$(add)",
                 "label": "%locale.contribution.command.addSubMenuHint.effect.label%",
-                "id": "vkmask.add_effect_submenu"
+                "id": "vk-mask-editor.add_effect_submenu"
             },
             {
                 "icon": "$(add)",
                 "label": "%locale.contribution.command.addSubMenuHint.plugin.label%",
-                "id": "vkmask.add_plugin_submenu"
+                "id": "vk-mask-editor.add_plugin_submenu"
             },
             {
                 "icon": "$(add)",
                 "label": "%locale.contribution.command.addSubMenuHint.asset.label%",
-                "id": "vkmask.add_asset_submenu"
+                "id": "vk-mask-editor.add_asset_submenu"
             },
             {
                 "label": "%locale.contribution.effectsSubmenu.light.label%",
-                "id": "vkmask.add_effect_submenu.light_submenu"
+                "id": "vk-mask-editor.add_effect_submenu.light_submenu"
             }
         ],
         "menus": {
             "view/title": [
                 {
-                    "command": "vkmask.dumpLogs",
-                    "when": "view == vkmask.projectManager  ",
+                    "command": "vk-mask-editor.dumpLogs",
+                    "when": "view == vk-mask-editor.projectManager  ",
                     "group": "navigation"
                 },
                 {
-                    "command": "vkmask.resetSidebar",
-                    "when": "view == vkmask.projectManager",
+                    "command": "vk-mask-editor.resetSidebar",
+                    "when": "view == vk-mask-editor.projectManager",
                     "group": "navigation"
                 },
                 {
-                    "command": "vkmask.openSettings",
-                    "when": "view == vkmask.projectManager",
+                    "command": "vk-mask-editor.openSettings",
+                    "when": "view == vk-mask-editor.projectManager",
                     "group": "navigation"
                 },
                 {
-                    "command": "vkmask.archiveProject",
-                    "when": "view == vkmask.projectManager",
+                    "command": "vk-mask-editor.archiveProject",
+                    "when": "view == vk-mask-editor.projectManager",
                     "group": "navigation"
                 },
                 {
-                    "command": "vkmask.testMaskOpen",
-                    "when": "view == vkmask.projectManager && config.vkmask.experimentalFeatures",
+                    "command": "vk-mask-editor.testMaskOpen",
+                    "when": "view == vk-mask-editor.projectManager && config.vk-mask-editor.experimentalFeatures",
                     "group": "navigation"
                 },
                 {
-                    "submenu": "vkmask.add_effect_submenu",
-                    "when": "view == vkmask.effects && vkmask.appState != 'ERROR'",
+                    "submenu": "vk-mask-editor.add_effect_submenu",
+                    "when": "view == vk-mask-editor.effects && vk-mask-editor.appState != 'ERROR'",
                     "group": "navigation"
                 },
                 {
-                    "submenu": "vkmask.add_plugin_submenu",
-                    "when": "view == vkmask.plugins && vkmask.appState != 'ERROR'",
+                    "submenu": "vk-mask-editor.add_plugin_submenu",
+                    "when": "view == vk-mask-editor.plugins && vk-mask-editor.appState != 'ERROR'",
                     "group": "navigation"
                 },
                 {
-                    "submenu": "vkmask.add_asset_submenu",
-                    "when": "view == vkmask.assetsManager && vkmask.appState != 'ERROR'",
+                    "submenu": "vk-mask-editor.add_asset_submenu",
+                    "when": "view == vk-mask-editor.assetsManager && vk-mask-editor.appState != 'ERROR'",
                     "group": "navigation"
                 }
             ],
-            "vkmask.add_effect_submenu": [
+            "vk-mask-editor.add_effect_submenu": [
                 {
-                    "command": "vkmask.add_effect.facemodel",
+                    "command": "vk-mask-editor.add_effect.facemodel",
                     "group": "3d"
                 },
                 {
-                    "command": "vkmask.add_effect.plane",
+                    "command": "vk-mask-editor.add_effect.plane",
                     "group": "3d"
                 },
                 {
-                    "command": "vkmask.add_effect.model3d",
+                    "command": "vk-mask-editor.add_effect.model3d",
                     "group": "3d"
                 },
                 {
-                    "command": "vkmask.add_effect.patch",
+                    "command": "vk-mask-editor.add_effect.patch",
                     "group": "3d"
                 },
                 {
-                    "command": "vkmask.add_effect.liquifiedwarp",
-                    "when": "config.vkmask.experimentalFeatures"
+                    "command": "vk-mask-editor.add_effect.liquifiedwarp",
+                    "when": "config.vk-mask-editor.experimentalFeatures"
                 },
                 {
-                    "command": "vkmask.add_effect.beautify",
+                    "command": "vk-mask-editor.add_effect.beautify",
                     "group": "fullscreen"
                 },
                 {
-                    "command": "vkmask.add_effect.colorfilter",
+                    "command": "vk-mask-editor.add_effect.colorfilter",
                     "group": "fullscreen"
                 },
                 {
-                    "command": "vkmask.add_effect.posteffect",
+                    "command": "vk-mask-editor.add_effect.posteffect",
                     "group": "fullscreen"
                 },
                 {
-                    "submenu": "vkmask.add_effect_submenu.light_submenu",
+                    "submenu": "vk-mask-editor.add_effect_submenu.light_submenu",
                     "group": "light"
                 }
             ],
-            "vkmask.add_effect_submenu.light_submenu": [
+            "vk-mask-editor.add_effect_submenu.light_submenu": [
                 {
-                    "command": "vkmask.add_effect.ambientLight"
+                    "command": "vk-mask-editor.add_effect.ambientLight"
                 },
                 {
-                    "command": "vkmask.add_effect.pointLight"
+                    "command": "vk-mask-editor.add_effect.pointLight"
                 },
                 {
-                    "command": "vkmask.add_effect.directLight"
+                    "command": "vk-mask-editor.add_effect.directLight"
                 }
             ],
-            "vkmask.add_plugin_submenu": [
+            "vk-mask-editor.add_plugin_submenu": [
                 {
-                    "command": "vkmask.add_plugin.mirror"
+                    "command": "vk-mask-editor.add_plugin.mirror"
                 },
                 {
-                    "command": "vkmask.add_plugin.perspective"
+                    "command": "vk-mask-editor.add_plugin.perspective"
                 },
                 {
-                    "command": "vkmask.add_plugin.fixeddetection"
+                    "command": "vk-mask-editor.add_plugin.fixeddetection"
                 },
                 {
-                    "command": "vkmask.add_plugin.pickerui",
-                    "when": "config.vkmask.experimentalFeatures"
+                    "command": "vk-mask-editor.add_plugin.pickerui",
+                    "when": "config.vk-mask-editor.experimentalFeatures"
                 }
             ],
-            "vkmask.add_asset_submenu": [
+            "vk-mask-editor.add_asset_submenu": [
                 {
-                    "command": "vkmask.add_asset.material"
+                    "command": "vk-mask-editor.add_asset.material"
                 }
             ]
         },
         "commands": [
             {
-                "command": "vkmask.add_effect.facemodel",
+                "command": "vk-mask-editor.add_effect.facemodel",
                 "title": "%locale.contribution.command.addSubMenuHint.effect.facemodel.title%",
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.facemodel.shortTtitle%"
             },
             {
-                "command": "vkmask.add_effect.plane",
+                "command": "vk-mask-editor.add_effect.plane",
                 "title": "%locale.contribution.command.addSubMenuHint.effect.plane.title%",
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.plane.shortTtitle%"
             },
             {
-                "command": "vkmask.add_effect.model3d",
+                "command": "vk-mask-editor.add_effect.model3d",
                 "title": "%locale.contribution.command.addSubMenuHint.effect.model3d.title%",
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.model3d.shortTtitle%"
             },
             {
-                "command": "vkmask.add_effect.patch",
+                "command": "vk-mask-editor.add_effect.patch",
                 "title": "%locale.contribution.command.addSubMenuHint.effect.patch.title%",
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.patch.shortTtitle%"
             },
             {
-                "command": "vkmask.add_effect.ambientLight",
+                "command": "vk-mask-editor.add_effect.ambientLight",
                 "title": "%locale.contribution.command.addSubMenuHint.effect.ambientLight.title%",
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.ambientLight.shortTtitle%"
             },
             {
-                "command": "vkmask.add_effect.pointLight",
+                "command": "vk-mask-editor.add_effect.pointLight",
                 "title": "%locale.contribution.command.addSubMenuHint.effect.pointLight.title%",
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.pointLight.shortTtitle%"
             },
             {
-                "command": "vkmask.add_effect.directLight",
+                "command": "vk-mask-editor.add_effect.directLight",
                 "title": "%locale.contribution.command.addSubMenuHint.effect.directLight.title%",
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.directLight.shortTtitle%"
             },
             {
-                "command": "vkmask.add_effect.beautify",
+                "command": "vk-mask-editor.add_effect.beautify",
                 "title": "%locale.contribution.command.addSubMenuHint.effect.beautify.title%",
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.beautify.shortTtitle%"
             },
             {
-                "command": "vkmask.add_effect.liquifiedwarp",
+                "command": "vk-mask-editor.add_effect.liquifiedwarp",
                 "title": "%locale.contribution.command.addSubMenuHint.effect.liquifiedwarp.title%",
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.liquifiedwarp.shortTtitle%"
             },
             {
-                "command": "vkmask.add_effect.colorfilter",
+                "command": "vk-mask-editor.add_effect.colorfilter",
                 "title": "%locale.contribution.command.addSubMenuHint.effect.colorfilter.title%",
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.colorfilter.shortTtitle%"
             },
             {
-                "command": "vkmask.add_effect.posteffect",
+                "command": "vk-mask-editor.add_effect.posteffect",
                 "title": "%locale.contribution.command.addSubMenuHint.effect.posteffect.title%",
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.effect.posteffect.shortTtitle%"
             },
             {
-                "command": "vkmask.add_plugin.mirror",
+                "command": "vk-mask-editor.add_plugin.mirror",
                 "title": "%locale.contribution.command.addSubMenuHint.plugin.mirror.title%",
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.plugin.mirror.shortTtitle%"
             },
             {
-                "command": "vkmask.add_plugin.perspective",
+                "command": "vk-mask-editor.add_plugin.perspective",
                 "title": "%locale.contribution.command.addSubMenuHint.plugin.perspective.title%",
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.plugin.perspective.shortTtitle%"
             },
             {
-                "command": "vkmask.add_plugin.fixeddetection",
+                "command": "vk-mask-editor.add_plugin.fixeddetection",
                 "title": "%locale.contribution.command.addSubMenuHint.plugin.fixeddetection.title%",
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.plugin.fixeddetection.shortTtitle%"
             },
             {
-                "command": "vkmask.add_plugin.pickerui",
+                "command": "vk-mask-editor.add_plugin.pickerui",
                 "title": "%locale.contribution.command.addSubMenuHint.plugin.pickerui.title%",
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.plugin.pickerui.shortTtitle%"
             },
             {
-                "command": "vkmask.add_asset.material",
+                "command": "vk-mask-editor.add_asset.material",
                 "title": "%locale.contribution.command.addSubMenuHint.asset.material.title%",
                 "shortTitle": "%locale.contribution.command.addSubMenuHint.asset.material.shortTtitle%"
             },
             {
-                "command": "vkmask.dumpLogs",
+                "command": "vk-mask-editor.dumpLogs",
                 "title": "%locale.contribution.command.dumpLogs.title%",
                 "shortTitle": "%locale.contribution.command.dumpLogs.shortTitle%",
                 "icon": "$(zap)"
             },
             {
-                "command": "vkmask.resetSidebar",
+                "command": "vk-mask-editor.resetSidebar",
                 "title": "%locale.contribution.command.resetSidebar.title%",
                 "shortTitle": "%locale.contribution.command.resetSidebar.shortTitle%",
                 "icon": "$(refresh)"
             },
             {
-                "command": "vkmask.openSettings",
+                "command": "vk-mask-editor.openSettings",
                 "title": "%locale.contribution.command.openSettings.title%",
                 "shortTitle": "%locale.contribution.command.openSettings.shortTitle%",
                 "icon": "$(settings-gear)"
             },
             {
-                "command": "vkmask.archiveProject",
+                "command": "vk-mask-editor.archiveProject",
                 "title": "%locale.contribution.command.archiveProject.title%",
                 "shortTitle": "%locale.contribution.command.archiveProject.shortTitle%",
                 "icon": "$(file-zip)"
             },
             {
-                "command": "vkmask.testMaskOpen",
+                "command": "vk-mask-editor.testMaskOpen",
                 "title": "%locale.contribution.command.testMaskOpen.title%",
                 "shortTitle": "%locale.contribution.command.testMaskOpen.shortTitle%",
-                "icon": "./res/icons/vkmask_main_icon.svg"
+                "icon": "./res/icons/vk-mask-editor_main_icon.svg"
             }
         ],
         "viewsContainers": {
             "activitybar": [
                 {
-                    "id": "vkmask_primary_bar",
-                    "title": "%locale.contribution.title.vkmask_primary_bar%",
-                    "icon": "./res/icons/vkmask_main_icon.svg"
+                    "id": "vk-mask-editor_primary_bar",
+                    "title": "%locale.contribution.title.vk-mask-editor_primary_bar%",
+                    "icon": "./res/icons/vk-mask-editor_main_icon.svg"
                 }
             ]
         },
         "views": {
-            "vkmask_primary_bar": [
+            "vk-mask-editor_primary_bar": [
                 {
                     "type": "webview",
                     "visibility": "visible",
                     "contextualTitle": "%locale.contribution.contextTitle.projectManager%",
-                    "id": "vkmask.projectManager",
+                    "id": "vk-mask-editor.projectManager",
                     "name": "%locale.contribution.name.projectManager%",
                     "icon": "./res/icons/Project_manager_icon.svg"
                 },
@@ -321,7 +321,7 @@
                     "type": "webview",
                     "visibility": "visible",
                     "contextualTitle": "%locale.contribution.contextTitle.effects%",
-                    "id": "vkmask.effects",
+                    "id": "vk-mask-editor.effects",
                     "name": "%locale.contribution.name.effects%",
                     "icon": "./res/icons/Effects_icon.svg"
                 },
@@ -329,7 +329,7 @@
                     "type": "webview",
                     "visibility": "collapsed",
                     "contextualTitle": "%locale.contribution.contextTitle.plugins%",
-                    "id": "vkmask.plugins",
+                    "id": "vk-mask-editor.plugins",
                     "name": "%locale.contribution.name.plugins%",
                     "icon": "./res/icons/Plugins_icon.svg"
                 },
@@ -337,7 +337,7 @@
                     "type": "webview",
                     "visibility": "visible",
                     "contextualTitle": "%locale.contribution.contextTitle.parameters%",
-                    "id": "vkmask.parameters",
+                    "id": "vk-mask-editor.parameters",
                     "name": "%locale.contribution.name.parameters%",
                     "icon": "./res/icons/Settings_icon.svg"
                 },
@@ -345,7 +345,7 @@
                     "type": "webview",
                     "visibility": "collapsed",
                     "contextualTitle": "%locale.contribution.contextTitle.assetsManager%",
-                    "id": "vkmask.assetsManager",
+                    "id": "vk-mask-editor.assetsManager",
                     "name": "%locale.contribution.name.assetsManager%",
                     "icon": "$(files)"
                 }

@@ -201,5 +201,5 @@ function main() {
 main();
 // printAddedKeys(
 //     new Set(["locale.parameters.textureAnimation.label"]),
-//     "F:/PROJECTOS_SSD/urhovk/vscode_vkmask/l10n/bundle.l10n.ru.json"
+//     "F:/PROJECTOS_SSD/urhovk/vscode_vk-mask-editor/l10n/bundle.l10n.ru.json"
 // );

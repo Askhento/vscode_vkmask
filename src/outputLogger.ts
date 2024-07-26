@@ -4,11 +4,9 @@
 
 // import { userSettings } from "./UserSettings";
 
-
 // export class Logger {
 //     private outputChannel: vscode.OutputChannel;
 //     private logDump: [Record<string, unknown>];
-
 
 //     constructor(extensionOuputName: string) {
 //         this.outputChannel = vscode.window.createOutputChannel(extensionOuputName);
@@ -46,14 +44,14 @@
 //             console.log.apply(console, args);
 
 //             // 3. Save logs for something
-//             if (userSettings.getSettings()["vkmask.keep-logs"].value)
+//             if (userSettings.getSettings()["vk-mask-editor.keep-logs"].value)
 //                 this.logDump.push({ "timestamp": (new Date()).getTime(), "value": args });
 
-//             if (userSettings.getSettings()["vkmask.output-channel"].value)
+//             if (userSettings.getSettings()["vk-mask-editor.output-channel"].value)
 //                 this.append(args)
 
 //         }
 //     }
 // }
 
-// export const outputlogger = new Logger("vkmask")
+// export const outputlogger = new Logger("vk-mask-editor")

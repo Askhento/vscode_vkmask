@@ -58,7 +58,7 @@
     "locale.contribution.name.parameters": "Параметры",
     "locale.contribution.name.plugins": "Плагины",
     "locale.contribution.name.projectManager": "Менеджер проекта",
-    "locale.contribution.title.vkmask_primary_bar": "ВК Маски",
+    "locale.contribution.title.vk-mask-editor_primary_bar": "ВК Маски",
     "locale.contribution.userSettings.archivePath.description": "Путь для сохранения архивов масок. Если указан неверно или значение отсутсвует, то архив сохраниться в директорию проекта",
     "locale.contribution.userSettings.experimentalFeatures.description": "Включить экспериментальные возможности",
     "locale.contribution.userSettings.keepLogs.description": "Писать логи работы",

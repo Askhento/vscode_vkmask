@@ -92,7 +92,7 @@
     function processSettings(newSettings) {
         print("new settings", newSettings);
         $settings = newSettings;
-        experimentalFeatures = $settings["vkmask.experimentalFeatures"].value;
+        experimentalFeatures = $settings["vk-mask-editor.experimentalFeatures"].value;
         // print("EXP", experimentalFeatures);
     }
 

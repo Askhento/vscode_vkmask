@@ -83,8 +83,8 @@ export async function activate(context: vscode.ExtensionContext) {
         });
     });
 
-    testMask.updateExecutionPath(slash(userSettings.settings["vkmask.testMaskPath"].value));
-    userSettings.on("configChanged:vkmask.testMaskPath", (testMaskPath) => {
+    testMask.updateExecutionPath(slash(userSettings.settings["vk-mask-editor.testMaskPath"].value));
+    userSettings.on("configChanged:vk-mask-editor.testMaskPath", (testMaskPath) => {
         print("path updated", testMaskPath.value);
         if (testMask.updateExecutionPath(testMaskPath.value)) return;
         vscode.window.showErrorMessage("locale.errorMessage.wrongTestMask");
@@ -93,9 +93,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
     let experimentalFeatures =
         context.extensionMode === vscode.ExtensionMode.Development ||
-        userSettings.settings["vkmask.experimentalFeatures"].value;
+        userSettings.settings["vk-mask-editor.experimentalFeatures"].value;
 
-    userSettings.on("configChanged:vkmask.experimentalFeatures", async (experimental) => {
+    userSettings.on("configChanged:vk-mask-editor.experimentalFeatures", async (experimental) => {
         // print("settings changed", section);
 
         experimentalFeatures = experimental.value;
@@ -180,7 +180,7 @@ export async function activate(context: vscode.ExtensionContext) {
     //     );
 
     //     assetsWatcher.on("assetsChanged", async () => {
-    //         const builtins = (await userSettings.getSettings()["vkmask.use-builtins"]
+    //         const builtins = (await userSettings.getSettings()["vk-mask-editor.use-builtins"]
     //             .value) as boolean;
 
     //         messageHandler.send({
@@ -214,7 +214,11 @@ export async function activate(context: vscode.ExtensionContext) {
         switch (newError.type) {
             case ErrorType.configMissing:
                 appState = AppState.error;
-                await vscode.commands.executeCommand("setContext", "vkmask.appState", appState);
+                await vscode.commands.executeCommand(
+                    "setContext",
+                    "vk-mask-editor.appState",
+                    appState
+                );
                 error = newError.value;
                 onConfigMissing();
                 break;
@@ -234,9 +238,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
         // ! this works actually
         // await vscode.commands.executeCommand(
-        //     `workbench.view.extension.vkmask_primary_bar.resetViewContainerLocation`
+        //     `workbench.view.extension.vk-mask-editor_primary_bar.resetViewContainerLocation`
         // );
-        // await vscode.commands.executeCommand(`vkmask.projectManager.resetViewLocation`);
+        // await vscode.commands.executeCommand(`vk-mask-editor.projectManager.resetViewLocation`);
 
         webviewProviders.forEach(async (provider) => {
             await vscode.commands.executeCommand(provider.viewId + ".focus");
@@ -330,7 +334,7 @@ export async function activate(context: vscode.ExtensionContext) {
             );
 
             assetsWatcher.on("assetsChanged", async () => {
-                const builtins = (await userSettings.getSettings()["vkmask.use-builtins"]
+                const builtins = (await userSettings.getSettings()["vk-mask-editor.use-builtins"]
                     .value) as boolean;
 
                 messageHandler.send({
@@ -719,7 +723,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     effectNames.forEach((name) => {
         context.subscriptions.push(
-            vscode.commands.registerCommand(`vkmask.add_effect.${name}`, async () => {
+            vscode.commands.registerCommand(`vk-mask-editor.add_effect.${name}`, async () => {
                 onAddTabInfo(parameters.viewId, SelectionType.effect);
                 messageHandler.send({
                     target: effects.viewId,
@@ -737,7 +741,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     pluginNames.forEach((name) => {
         context.subscriptions.push(
-            vscode.commands.registerCommand(`vkmask.add_plugin.${name}`, async () => {
+            vscode.commands.registerCommand(`vk-mask-editor.add_plugin.${name}`, async () => {
                 // !!! plugins don't have tabs for now
                 onAddTabInfo(parameters.viewId, SelectionType.plugin);
                 messageHandler.send({
@@ -762,23 +766,26 @@ export async function activate(context: vscode.ExtensionContext) {
 
     Object.entries(assetsDefaults).forEach(([assetCategory, { from, to, assetType }]) => {
         context.subscriptions.push(
-            vscode.commands.registerCommand(`vkmask.add_asset.${assetCategory}`, async () => {
-                const relativePath = await assetsWatcher.copyAssets(from, to);
-                globalThis.selection = {
-                    type: SelectionType.asset,
-                    assetType,
-                    path: relativePath,
-                    baseName: path.basename(relativePath), // !!! could be error
-                };
+            vscode.commands.registerCommand(
+                `vk-mask-editor.add_asset.${assetCategory}`,
+                async () => {
+                    const relativePath = await assetsWatcher.copyAssets(from, to);
+                    globalThis.selection = {
+                        type: SelectionType.asset,
+                        assetType,
+                        path: relativePath,
+                        baseName: path.basename(relativePath), // !!! could be error
+                    };
 
-                // print("asset selection", globalThis.selection);
-                sendSelection();
-            })
+                    // print("asset selection", globalThis.selection);
+                    sendSelection();
+                }
+            )
         );
     });
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("vkmask.dumpLogs", async () => {
+        vscode.commands.registerCommand("vk-mask-editor.dumpLogs", async () => {
             const dumpPath = maskConfig.currentConfigDir;
             // todo add timeout in case view not initialized
             const responses = (await Promise.all(
@@ -798,8 +805,8 @@ export async function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("vkmask.openSettings", async () => {
-            vscode.commands.executeCommand("workbench.action.openSettings", "vkmask");
+        vscode.commands.registerCommand("vk-mask-editor.openSettings", async () => {
+            vscode.commands.executeCommand("workbench.action.openSettings", "vk-mask-editor");
 
             // vscode.commands.executeCommand("workbench.action.openSettingsJson", {
             //     revealSetting: { key: "editor.renderWhitespace" },
@@ -809,19 +816,19 @@ export async function activate(context: vscode.ExtensionContext) {
 
     // todo hide when project missing
     context.subscriptions.push(
-        vscode.commands.registerCommand("vkmask.archiveProject", async () => {
+        vscode.commands.registerCommand("vk-mask-editor.archiveProject", async () => {
             vscode.window.showInformationMessage(
                 l10n.t("locale.commands.archiveProject.startHint")
             );
 
-            const archivePath = (await userSettings.getSettings()["vkmask.archivePath"]
+            const archivePath = (await userSettings.getSettings()["vk-mask-editor.archivePath"]
                 .value) as string;
             await archiveProject(archivePath);
         })
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("vkmask.testMaskOpen", async () => {
+        vscode.commands.registerCommand("vk-mask-editor.testMaskOpen", async () => {
             if (appState === AppState.error && error === ErrorType.configMissing) {
                 vscode.window.showErrorMessage("locale.commands.testMaskOpen.configMissing");
                 return;
@@ -832,7 +839,7 @@ export async function activate(context: vscode.ExtensionContext) {
     );
 
     context.subscriptions.push(
-        vscode.commands.registerCommand("vkmask.execute_command_by_id", async () => {
+        vscode.commands.registerCommand("vk-mask-editor.execute_command_by_id", async () => {
             // ??? add parameters ???
             const commandID = await vscode.window.showInputBox({
                 placeHolder: "Enter command",
@@ -856,7 +863,7 @@ export async function activate(context: vscode.ExtensionContext) {
     );
 
     // context.subscriptions.push(
-    //     vscode.commands.registerCommand("vkmask.jsEval", async () => {
+    //     vscode.commands.registerCommand("vk-mask-editor.jsEval", async () => {
     //         // ??? add parameters ???
     //         const code = await vscode.window.showInputBox({
     //             placeHolder: "Enter command",
@@ -917,25 +924,25 @@ export async function activate(context: vscode.ExtensionContext) {
     └─────────────────────────────────────────────────────────────────────────────┘
     */
     context.subscriptions.push(
-        vscode.commands.registerCommand("vkmask.resetSidebar", async () => {
+        vscode.commands.registerCommand("vk-mask-editor.resetSidebar", async () => {
             webviewProviders.forEach((provider) => {
                 vscode.commands.executeCommand(provider.viewId + ".resetViewLocation");
             });
         })
     );
     // // show sidebar
-    // // await vscode.commands.executeCommand("workbench.view.extension.vkmask_primary_bar.resetViewContainerLocation")
-    // // await vscode.commands.executeCommand(`workbench.view.extension.vkmask_primary_bar`)
+    // // await vscode.commands.executeCommand("workbench.view.extension.vk-mask-editor_primary_bar.resetViewContainerLocation")
+    // // await vscode.commands.executeCommand(`workbench.view.extension.vk-mask-editor_primary_bar`)
     // // vscode.commands.executeCommand(`workbench.action.focusAuxiliaryBar`)
-    // // vscode.commands.executeCommand(`vkmask_primary_bar.focus`)
+    // // vscode.commands.executeCommand(`vk-mask-editor_primary_bar.focus`)
     // workbench.action.focusAuxiliaryBar
 
     // ! additional context keys
-    // vkmask.projectManager.active
-    // vkmask.projectManager.canMove
-    // vkmask.projectManager.defaultViewLocation
-    // vkmask.projectManager.visible
-    // viewContainer.workbench.view.extension.vkmask_primary_bar.enabled
+    // vk-mask-editor.projectManager.active
+    // vk-mask-editor.projectManager.canMove
+    // vk-mask-editor.projectManager.defaultViewLocation
+    // vk-mask-editor.projectManager.visible
+    // viewContainer.workbench.view.extension.vk-mask-editor_primary_bar.enabled
 
     // // !!! erorr handle !!!
     // ;
@@ -965,9 +972,9 @@ export async function activate(context: vscode.ExtensionContext) {
             // vscode.commands.executeCommand(provider.viewId + ".focus");
         });
 
-        // await vscode.commands.executeCommand(`vkmask.parameters.focus`);
-        // await vscode.commands.executeCommand(`vkmask.assets_manager.focus`);
-        // await vscode.commands.executeCommand(`vkmask.assets_manager.removeView`);  // hides a view
+        // await vscode.commands.executeCommand(`vk-mask-editor.parameters.focus`);
+        // await vscode.commands.executeCommand(`vk-mask-editor.assets_manager.focus`);
+        // await vscode.commands.executeCommand(`vk-mask-editor.assets_manager.removeView`);  // hides a view
         if (maskConfig.parseConfig()) {
             appState = AppState.running;
             onSendAppState();
@@ -978,7 +985,7 @@ export async function activate(context: vscode.ExtensionContext) {
         print("not able to find config");
     }
     // // vscode.commands.executeCommand('workbench.action.moveFocusedView');
-    // // vscode.commands.executeCommand('vkmask.sidepanel.focus').then(() => {
+    // // vscode.commands.executeCommand('vk-mask-editor.sidepanel.focus').then(() => {
 }
 
 // This method is called when your extension is deactivated

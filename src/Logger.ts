@@ -21,7 +21,7 @@ export class Logger {
     constructor(extensionOuputName: string) {
         this.outputChannel = vscode.window.createOutputChannel(extensionOuputName);
 
-        const useOutputChannelSection = "vkmask.output-channel";
+        const useOutputChannelSection = "vk-mask-editor.output-channel";
         this.useOutputChannel = !!userSettings.getSettings()[useOutputChannelSection]?.value;
         this.updateChannelVisibility();
 
@@ -30,7 +30,7 @@ export class Logger {
             this.updateChannelVisibility();
         });
 
-        const keepLogsSection = "vkmask.keep-logs";
+        const keepLogsSection = "vk-mask-editor.keep-logs";
         this.keepLogs = !!userSettings.getSettings()[keepLogsSection]?.value;
 
         userSettings.on(`configChanged:${keepLogsSection}`, (section) => {
@@ -100,5 +100,5 @@ export class Logger {
     }
 }
 
-export const logger = new Logger("vkmask");
+export const logger = new Logger("vk-mask-editor");
 // export const getLogger = outputlogger.getLogger;

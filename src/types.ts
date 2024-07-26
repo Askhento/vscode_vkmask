@@ -1,11 +1,11 @@
 export const ViewIds = {
-    parameters: "vkmask.parameters",
-    assetsManager: "vkmask.assetsManager",
-    effects: "vkmask.effects",
-    plugins: "vkmask.plugins",
-    projectManager: "vkmask.projectManager",
-    liquifiedWarpEditor: "vkmask.liquifiedWarpEditor",
-    welcomeTemplates: "vkmask.welcomeTemplates",
+    parameters: "vk-mask-editor.parameters",
+    assetsManager: "vk-mask-editor.assetsManager",
+    effects: "vk-mask-editor.effects",
+    plugins: "vk-mask-editor.plugins",
+    projectManager: "vk-mask-editor.projectManager",
+    liquifiedWarpEditor: "vk-mask-editor.liquifiedWarpEditor",
+    welcomeTemplates: "vk-mask-editor.welcomeTemplates",
 } as const;
 
 export const RequestTarget = {

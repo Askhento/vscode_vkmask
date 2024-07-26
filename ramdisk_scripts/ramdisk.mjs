@@ -71,7 +71,7 @@ function exec(command) {
 const supportedPlatforms = ["darwin"];
 
 const ramdiskPath = path.join(__dirname, "..", "out");
-const disk = ramdisk("vkmask_build_ramdisk", ramdiskPath);
+const disk = ramdisk("vk-mask-editor_build_ramdisk", ramdiskPath);
 const createDisk = util.promisify(disk.create);
 const deleteDisk = util.promisify(disk.delete);
 

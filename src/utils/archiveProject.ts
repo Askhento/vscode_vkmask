@@ -39,7 +39,7 @@ export async function archiveProject(userArchivePath = "") {
 
     const zipFileName = path.basename(projectDirectory);
     const tmpDir = slash(os.tmpdir());
-    const tmpProjectClone = path.join(tmpDir, "vscode-vkmask", zipFileName); // ? add uuid
+    const tmpProjectClone = path.join(tmpDir, "vscode-vk-mask-editor", zipFileName); // ? add uuid
     const zipFile = path.join(archiveDirectory, `${zipFileName}.zip`);
     const zipFileUri = vscode.Uri.file(zipFile);
 

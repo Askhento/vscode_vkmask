@@ -65,7 +65,7 @@
         extensions = new Set(params.extensions);
         // print("new extensions", extensions);
         fileTypes = params.types ? new Set(params.types) : undefined;
-        if ($settings) useBuiltins = $settings["vkmask.use-builtins"].value;
+        if ($settings) useBuiltins = $settings["vk-mask-editor.use-builtins"].value;
         // print("useBuiltins", useBuiltins);
         typedAssets = $assets
             .filter((asset) => {

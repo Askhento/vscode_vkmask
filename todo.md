@@ -38,6 +38,9 @@
 -   hide archive when missing project
 -   try wsl ramdisk
 -   check current version before publish
+-   asset watcher do not run if not in project
+-   settings use buildinds don not react on filepicker
+-   liquify shows please select if array not exist
 
 -   filepicker when null need to reset selected index
 -   add logic to always select something
