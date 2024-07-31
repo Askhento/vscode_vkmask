@@ -959,7 +959,6 @@ export async function activate(context: vscode.ExtensionContext) {
         // maskConfig.showConfig(true);
         // "workspaceContains:mask.json"
 
-        //!!!
         // this will ensure all the componenets will show up no matter if they closed before.
         webviewProviders.forEach((provider) => {
             // keep theese collapsed
@@ -969,12 +968,9 @@ export async function activate(context: vscode.ExtensionContext) {
                 return;
             }
 
-            // vscode.commands.executeCommand(provider.viewId + ".focus");
+            vscode.commands.executeCommand(provider.viewId + ".focus");
         });
 
-        // await vscode.commands.executeCommand(`vk-mask-editor.parameters.focus`);
-        // await vscode.commands.executeCommand(`vk-mask-editor.assets_manager.focus`);
-        // await vscode.commands.executeCommand(`vk-mask-editor.assets_manager.removeView`);  // hides a view
         if (maskConfig.parseConfig()) {
             appState = AppState.running;
             onSendAppState();
