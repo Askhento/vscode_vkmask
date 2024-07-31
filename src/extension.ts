@@ -64,9 +64,6 @@ export async function activate(context: vscode.ExtensionContext) {
         error = null;
     logger.setMode(context.extensionMode);
 
-    assetsWatcher.attach(context.extensionPath);
-    await assetsWatcher.getBuiltinAssets();
-
     const tabInfo = new TabInfo();
 
     const recentProjectInfo = new RecentProjects(context);
@@ -950,6 +947,9 @@ export async function activate(context: vscode.ExtensionContext) {
     // will ensure good initialize
     if (maskConfig.updateConfigPath()) {
         recentProjectInfo.addInfo(maskConfig.currentConfigDir);
+
+        assetsWatcher.attach(context.extensionPath);
+        await assetsWatcher.getBuiltinAssets();
 
         // print("showing all webivews/config/closing tabs");
         // // on init need to show mask.json only! so there is no misatakes working in a wrong file

@@ -253,9 +253,14 @@
     }
 
     async function init() {
-        await Promise.all([getLocatization(), getSettings(), getAssets(), getMaskSettings()]);
-
         await getAppState();
+
+        let promises = [getLocatization(), getSettings()];
+
+        if (appState == AppState.running) promises = [...promises, getAssets(), getMaskSettings()];
+        await Promise.all(promises);
+
+        if (appState == AppState.welcome) recentProjectInfo = recentProjectInfo; // trigger reload
     }
 
     init();
