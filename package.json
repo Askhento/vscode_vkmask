@@ -82,7 +82,7 @@
                 },
                 {
                     "command": "vk-mask-editor.resetSidebar",
-                    "when": "view == vk-mask-editor.projectManager",
+                    "when": "view == vk-mask-editor.projectManager &&  vk-mask-editor.appState  &&  vk-mask-editor.appState != 'ERROR'",
                     "group": "navigation"
                 },
                 {
@@ -92,27 +92,27 @@
                 },
                 {
                     "command": "vk-mask-editor.archiveProject",
-                    "when": "view == vk-mask-editor.projectManager",
+                    "when": "view == vk-mask-editor.projectManager &&  vk-mask-editor.appState  &&  vk-mask-editor.appState != 'ERROR'",
                     "group": "navigation"
                 },
                 {
                     "command": "vk-mask-editor.testMaskOpen",
-                    "when": "view == vk-mask-editor.projectManager && config.vk-mask-editor.experimentalFeatures",
+                    "when": "view == vk-mask-editor.projectManager && config.vk-mask-editor.experimentalFeatures  &&  vk-mask-editor.appState  &&  vk-mask-editor.appState != 'ERROR'",
                     "group": "navigation"
                 },
                 {
                     "submenu": "vk-mask-editor.add_effect_submenu",
-                    "when": "view == vk-mask-editor.effects && vk-mask-editor.appState != 'ERROR'",
+                    "when": "view == vk-mask-editor.effects && vk-mask-editor.appState  &&  vk-mask-editor.appState != 'ERROR'",
                     "group": "navigation"
                 },
                 {
                     "submenu": "vk-mask-editor.add_plugin_submenu",
-                    "when": "view == vk-mask-editor.plugins && vk-mask-editor.appState != 'ERROR'",
+                    "when": "view == vk-mask-editor.plugins && vk-mask-editor.appState  &&  vk-mask-editor.appState != 'ERROR'",
                     "group": "navigation"
                 },
                 {
                     "submenu": "vk-mask-editor.add_asset_submenu",
-                    "when": "view == vk-mask-editor.assetsManager && vk-mask-editor.appState != 'ERROR'",
+                    "when": "view == vk-mask-editor.assetsManager && vk-mask-editor.appState  &&  vk-mask-editor.appState != 'ERROR'",
                     "group": "navigation"
                 }
             ],

@@ -200,7 +200,6 @@ export async function activate(context: vscode.ExtensionContext) {
         // }
 
         l10nBundle = fs.readFileSync(bundlePath, { encoding: "utf-8" });
-
         l10n.config({ contents: l10nBundle });
     }
 

@@ -60,7 +60,7 @@ export const AppState = {
     loading: "LOADING",
     running: "RUNNING",
     welcome: "WELCOME",
-    error: "ERROR",
+    error: "ERROR", // ????
 };
 
 // enum emulation
