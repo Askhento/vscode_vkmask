@@ -82,7 +82,7 @@
                 },
                 {
                     "command": "vk-mask-editor.resetSidebar",
-                    "when": "view == vk-mask-editor.projectManager &&  vk-mask-editor.appState  &&  vk-mask-editor.appState != 'ERROR'",
+                    "when": "view == vk-mask-editor.projectManager &&  vk-mask-editor.appState  &&  vk-mask-editor.appState != 'WELCOME'",
                     "group": "navigation"
                 },
                 {
@@ -92,27 +92,27 @@
                 },
                 {
                     "command": "vk-mask-editor.archiveProject",
-                    "when": "view == vk-mask-editor.projectManager &&  vk-mask-editor.appState  &&  vk-mask-editor.appState != 'ERROR'",
+                    "when": "view == vk-mask-editor.projectManager &&  vk-mask-editor.appState  &&  vk-mask-editor.appState != 'WELCOME'",
                     "group": "navigation"
                 },
                 {
                     "command": "vk-mask-editor.testMaskOpen",
-                    "when": "view == vk-mask-editor.projectManager && config.vk-mask-editor.experimentalFeatures  &&  vk-mask-editor.appState  &&  vk-mask-editor.appState != 'ERROR'",
+                    "when": "view == vk-mask-editor.projectManager && config.vk-mask-editor.experimentalFeatures  &&  vk-mask-editor.appState  &&  vk-mask-editor.appState != 'WELCOME'",
                     "group": "navigation"
                 },
                 {
                     "submenu": "vk-mask-editor.add_effect_submenu",
-                    "when": "view == vk-mask-editor.effects && vk-mask-editor.appState  &&  vk-mask-editor.appState != 'ERROR'",
+                    "when": "view == vk-mask-editor.effects && vk-mask-editor.appState  &&  vk-mask-editor.appState != 'WELCOME'",
                     "group": "navigation"
                 },
                 {
                     "submenu": "vk-mask-editor.add_plugin_submenu",
-                    "when": "view == vk-mask-editor.plugins && vk-mask-editor.appState  &&  vk-mask-editor.appState != 'ERROR'",
+                    "when": "view == vk-mask-editor.plugins && vk-mask-editor.appState  &&  vk-mask-editor.appState != 'WELCOME'",
                     "group": "navigation"
                 },
                 {
                     "submenu": "vk-mask-editor.add_asset_submenu",
-                    "when": "view == vk-mask-editor.assetsManager && vk-mask-editor.appState  &&  vk-mask-editor.appState != 'ERROR'",
+                    "when": "view == vk-mask-editor.assetsManager && vk-mask-editor.appState  &&  vk-mask-editor.appState != 'WELCOME'",
                     "group": "navigation"
                 }
             ],
@@ -323,7 +323,8 @@
                     "contextualTitle": "%locale.contribution.contextTitle.effects%",
                     "id": "vk-mask-editor.effects",
                     "name": "%locale.contribution.name.effects%",
-                    "icon": "./res/icons/Effects_icon.svg"
+                    "icon": "./res/icons/Effects_icon.svg",
+                    "when": "vk-mask-editor.appState && vk-mask-editor.appState != 'WELCOME'"
                 },
                 {
                     "type": "webview",
@@ -331,7 +332,8 @@
                     "contextualTitle": "%locale.contribution.contextTitle.plugins%",
                     "id": "vk-mask-editor.plugins",
                     "name": "%locale.contribution.name.plugins%",
-                    "icon": "./res/icons/Plugins_icon.svg"
+                    "icon": "./res/icons/Plugins_icon.svg",
+                    "when": "vk-mask-editor.appState && vk-mask-editor.appState != 'WELCOME'"
                 },
                 {
                     "type": "webview",
@@ -339,7 +341,8 @@
                     "contextualTitle": "%locale.contribution.contextTitle.parameters%",
                     "id": "vk-mask-editor.parameters",
                     "name": "%locale.contribution.name.parameters%",
-                    "icon": "./res/icons/Settings_icon.svg"
+                    "icon": "./res/icons/Settings_icon.svg",
+                    "when": "vk-mask-editor.appState && vk-mask-editor.appState != 'WELCOME'"
                 },
                 {
                     "type": "webview",
@@ -347,7 +350,8 @@
                     "contextualTitle": "%locale.contribution.contextTitle.assetsManager%",
                     "id": "vk-mask-editor.assetsManager",
                     "name": "%locale.contribution.name.assetsManager%",
-                    "icon": "$(files)"
+                    "icon": "$(files)",
+                    "when": "vk-mask-editor.appState && vk-mask-editor.appState != 'WELCOME'"
                 }
             ]
         }

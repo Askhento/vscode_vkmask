@@ -36,8 +36,10 @@ import {
     ViewIds,
     AppState,
     ErrorType,
+    AppState,
 } from "./types";
 import type { AppError } from "./types";
+import { AppStateManager } from "./AppState";
 import { effectNames, pluginNames } from "./ztypes";
 import { MaskConfig } from "./MaskConfig";
 import { BaseWebviewProvider } from "./panels/BaseWebviewProvider";
@@ -60,8 +62,11 @@ export async function activate(context: vscode.ExtensionContext) {
     checkLocalizationBundle();
     globalThis.selection = { type: SelectionType.empty };
 
-    let appState = AppState.loading,
-        error = null;
+    const appState = new AppStateManager(context, onSendAppState);
+    appState.state = {
+        state: AppState.loading,
+    };
+
     logger.setMode(context.extensionMode);
 
     const tabInfo = new TabInfo();
@@ -207,15 +212,13 @@ export async function activate(context: vscode.ExtensionContext) {
     // ? multiple errors could occur
     // ? multiple time  like removed and added config
     async function onError(newError: AppError) {
+        print("!!!ERRROR", newError);
         switch (newError.type) {
             case ErrorType.configMissing:
-                appState = AppState.error;
-                await vscode.commands.executeCommand(
-                    "setContext",
-                    "vk-mask-editor.appState",
-                    appState
-                );
-                error = newError.value;
+                appState.state = {
+                    state: AppState.welcome,
+                    error: newError.value,
+                };
                 onConfigMissing();
                 break;
 
@@ -238,11 +241,11 @@ export async function activate(context: vscode.ExtensionContext) {
         // );
         // await vscode.commands.executeCommand(`vk-mask-editor.projectManager.resetViewLocation`);
 
-        webviewProviders.forEach(async (provider) => {
-            await vscode.commands.executeCommand(provider.viewId + ".focus");
-            if (provider.viewId !== ViewIds.projectManager)
-                await vscode.commands.executeCommand(provider.viewId + ".removeView");
-        });
+        // webviewProviders.forEach(async (provider) => {
+        //     await vscode.commands.executeCommand(provider.viewId + ".focus");
+        //     if (provider.viewId !== ViewIds.projectManager)
+        //         await vscode.commands.executeCommand(provider.viewId + ".removeView");
+        // });
 
         // ? add settings   #feat
         welcomeTemplatesPanel.createOrShow();
@@ -310,10 +313,7 @@ export async function activate(context: vscode.ExtensionContext) {
         return messageHandler.send({
             target,
             command: RequestCommand.updateAppState,
-            payload: {
-                state: appState,
-                error,
-            },
+            payload: appState.state,
         });
     }
 
@@ -416,10 +416,7 @@ export async function activate(context: vscode.ExtensionContext) {
                 messageHandler.send({
                     ...data,
                     target: origin,
-                    payload: {
-                        state: appState,
-                        error,
-                    },
+                    payload: appState.state,
                 });
                 break;
 
@@ -611,9 +608,8 @@ export async function activate(context: vscode.ExtensionContext) {
             title: l10n.t("locale.commands.openProject.title"),
         };
 
-        const oldState = appState;
-        appState = AppState.loading;
-        onSendAppState();
+        const oldState = appState.state;
+        appState.state = { state: AppState.loading };
 
         vscode.window.showOpenDialog(options).then(async (fileUri) => {
             if (fileUri && fileUri[0]) {
@@ -622,13 +618,11 @@ export async function activate(context: vscode.ExtensionContext) {
                 recentProjectInfo.addInfo(folder); // !!! maybe useless!!!!
                 const folderUri = vscode.Uri.file(folder);
                 print("Selected open folder: ", maskJsonFile, folder);
-                appState = oldState;
-                onSendAppState();
+                appState.state = { state: oldState };
                 // return;
                 await vscode.commands.executeCommand(`vscode.openFolder`, folderUri);
             } else {
-                appState = oldState;
-                onSendAppState();
+                appState.state = { state: oldState };
             }
         });
     }
@@ -639,15 +633,16 @@ export async function activate(context: vscode.ExtensionContext) {
             saveLabel: l10n.t("locale.commands.createProject.buttonLabel"),
             title: l10n.t("locale.commands.createProject.title"),
         };
-        const oldState = appState;
-        appState = AppState.loading;
-        onSendAppState();
+        const oldState = appState.state;
+
+        appState.state = { state: AppState.loading };
+
         const newProjectUri = await vscode.window.showSaveDialog(options);
 
         if (!newProjectUri) {
             // on cancel
-            appState = oldState;
-            onSendAppState();
+            appState.state = { state: oldState };
+
             return;
         }
 
@@ -670,8 +665,8 @@ export async function activate(context: vscode.ExtensionContext) {
                 vscode.window.showErrorMessage(
                     l10n.t("locale.errorMessage.cannotDownloadTemplate")
                 );
-                appState = oldState;
-                onSendAppState();
+                appState.state = { state: oldState };
+
                 return;
             }
         }
@@ -825,7 +820,9 @@ export async function activate(context: vscode.ExtensionContext) {
 
     context.subscriptions.push(
         vscode.commands.registerCommand("vk-mask-editor.testMaskOpen", async () => {
-            if (appState === AppState.error && error === ErrorType.configMissing) {
+            const { state, error } = appState.state;
+
+            if (state === AppState.error && error.type === ErrorType.configMissing) {
                 vscode.window.showErrorMessage("locale.commands.testMaskOpen.configMissing");
                 return;
             }
@@ -957,7 +954,9 @@ export async function activate(context: vscode.ExtensionContext) {
         // await vscode.window.tabGroups.close(tabsToClose);
         // maskConfig.showConfig(true);
         // "workspaceContains:mask.json"
-
+        if (maskConfig.parseConfig()) {
+            appState.state = { state: AppState.running };
+        }
         // this will ensure all the componenets will show up no matter if they closed before.
         webviewProviders.forEach((provider) => {
             // keep theese collapsed
@@ -969,15 +968,8 @@ export async function activate(context: vscode.ExtensionContext) {
 
             vscode.commands.executeCommand(provider.viewId + ".focus");
         });
-
-        if (maskConfig.parseConfig()) {
-            appState = AppState.running;
-            onSendAppState();
-        }
     } else {
-        appState = AppState.welcome;
-        onSendAppState();
-        print("not able to find config");
+        appState.state = { state: AppState.welcome };
     }
     // // vscode.commands.executeCommand('workbench.action.moveFocusedView');
     // // vscode.commands.executeCommand('vk-mask-editor.sidepanel.focus').then(() => {

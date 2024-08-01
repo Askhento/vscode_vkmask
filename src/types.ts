@@ -56,13 +56,6 @@ export const RequestCommand = {
     getExtensionURI: "getExtensionURI",
 } as const;
 
-export const AppState = {
-    loading: "LOADING",
-    running: "RUNNING",
-    welcome: "WELCOME",
-    error: "ERROR", // ????
-};
-
 // enum emulation
 export const SelectionType = {
     effect: "EFFECT",
@@ -95,6 +88,18 @@ export const ErrorType = {
 export interface AppError {
     type: ObjValues<typeof ErrorType>;
     value?: any;
+}
+
+export const AppState = {
+    loading: "LOADING",
+    running: "RUNNING",
+    welcome: "WELCOME",
+    error: "ERROR", // ????
+} as const;
+
+export interface AppState {
+    state: ObjValues<typeof AppState>;
+    error?: AppError;
 }
 
 export const AssetTypes = {
