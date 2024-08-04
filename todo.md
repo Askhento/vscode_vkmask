@@ -35,12 +35,15 @@
 -   move dependencies to maskConfig
 -   move close all tabs to setting
 -   preview move to file uri
--   hide archive when missing project
 -   try wsl ramdisk
 -   check current version before publish
 -   settings use buildinds don not react on filepicker
 -   liquify shows please select if array not exist
 -   don't have ERROR state but it is used
+-   add resource import commands (textures, models, scripts, prefabs?)
+-   add resource import window with import options (compression, include animations)
+-   get assets in webview
+-   do not open console by default
 
 -   filepicker when null need to reset selected index
 -   add logic to always select something

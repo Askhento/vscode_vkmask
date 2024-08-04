@@ -359,7 +359,7 @@ export async function activate(context: vscode.ExtensionContext) {
             case RequestCommand.readAsset:
                 messageHandler.send({
                     ...data,
-                    payload: await assetsWatcher.readAsset(payload.path, payload.assetType),
+                    payload: await assetsWatcher.getAsset(payload.path, payload.assetType),
                     target: origin,
                 });
                 break;
@@ -596,6 +596,7 @@ export async function activate(context: vscode.ExtensionContext) {
             vscode.commands.executeCommand(`vscode.openFolder`, folderUri);
             return;
         }
+
         // ? need to check if new folder have mask.json
         const options: vscode.OpenDialogOptions = {
             canSelectMany: false,

@@ -105,7 +105,7 @@ export class AssetsProcessor {
         // const absPath = path.resolve(file);
         const fileBuffer = fs.readFileSync(absPath);
         const type = await this.getFileType(ext, fileBuffer);
-
+        const webviewUri = `https://file%2B.vscode-resource.vscode-cdn.net/${absPath}`;
         let processOutput = {};
 
         if (AssetsProcessor.typesToProcess.has(type)) {
@@ -125,6 +125,7 @@ export class AssetsProcessor {
         return {
             baseName: name,
             absPath,
+            webviewUri,
             path: relativePath,
             extension: ext,
             type,

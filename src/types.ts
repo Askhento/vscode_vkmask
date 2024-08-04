@@ -113,6 +113,7 @@ export interface Asset {
     baseName: string;
     absPath: string;
     extension: string;
+    webviewUri: string;
     path: string;
     type: string;
     projectFile?: boolean;

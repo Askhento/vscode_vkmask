@@ -92,11 +92,12 @@ class AssetsWatcher extends EventEmitter {
         return newRelPath;
     }
 
-    async readAsset(assetRelativePath: string, assetType: string) {
+    async getAsset(assetRelativePath: string, assetType: string) {
         const fullPath = path.join(this.directory, assetRelativePath);
-        const fileBuffer = fs.readFileSync(fullPath);
-
-        return await this.processor.read(assetType, fileBuffer);
+        // todo : check diff with relative
+        let assetIndex = this.assets.findIndex((asset) => asset.absPath === fullPath);
+        if (assetIndex == -1) return null;
+        return this.assets[assetIndex];
     }
 
     async writeAsset(assetRelativePath: string, data: any, assetType: string) {

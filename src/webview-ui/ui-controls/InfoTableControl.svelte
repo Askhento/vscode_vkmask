@@ -1,21 +1,27 @@
 <script lang="ts">
     import * as l10n from "@vscode/l10n";
+    import type { Asset } from "src/types";
 
-    export let value;
+    export let value: Asset;
 
-    // console.log("tableValue", value);
+    const allowedFields = new Set(["absPath", "width", "height", "webviewUri"]);
+
+    // console.log("tableValue", encodeURIComponent(value.webviewUri));
 </script>
 
 {#if value}
     <vscode-data-grid aria-label="Basic">
+        {#if "preview" in value}
+            <img src={value.webviewUri} class="file-preview" />
+        {/if}
         {#each Object.entries(value) as [key, data]}
-            {#if key !== "preview"}
-                <vscode-data-grid-row row-type="header">
-                    <vscode-data-grid-cell grid-column="1">{key}</vscode-data-grid-cell>
-                    <vscode-data-grid-cell grid-column="2">{data}</vscode-data-grid-cell>
-                </vscode-data-grid-row>
-            {:else}
-                <img src={"data:image/png;base64," + data} class="file-preview" />
+            {#if allowedFields.has(key)}
+                {#if key !== "webviewUri"}
+                    <vscode-data-grid-row row-type="header">
+                        <vscode-data-grid-cell grid-column="1">{key}</vscode-data-grid-cell>
+                        <vscode-data-grid-cell grid-column="2">{data}</vscode-data-grid-cell>
+                    </vscode-data-grid-row>
+                {/if}
             {/if}
         {/each}
     </vscode-data-grid>

@@ -37,7 +37,7 @@ export class BaseWebviewProvider implements WebviewViewProvider {
             enableScripts: true,
             enableCommandUris: true,
 
-            localResourceRoots: [this._extensionUri],
+            // localResourceRoots: [this._extensionUri],
         };
 
         this.webview.html = this._getWebviewContent();
@@ -51,7 +51,6 @@ export class BaseWebviewProvider implements WebviewViewProvider {
 
         // console.log("view prodiver resolver", this.viewId);
     }
-
     /**
      * Defines and returns the HTML that should be rendered within the webview panel.
      *
@@ -92,7 +91,7 @@ export class BaseWebviewProvider implements WebviewViewProvider {
           <title>vk-mask-editor</title>
           <meta charset="UTF-8" />
           <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-          <meta http-equiv="Content-Security-Policy" content="default-src 'none'; font-src ${this.webview.cspSource} 'unsafe-inline'; img-src ${this.webview.cspSource} data:; style-src ${this.webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}' 'unsafe-inline';">
+          <meta http-equiv="Content-Security-Policy" content="default-src *; font-src ${this.webview.cspSource} 'unsafe-inline'; img-src ${this.webview.cspSource} data:; style-src ${this.webview.cspSource} 'unsafe-inline'; script-src 'nonce-${nonce}' 'unsafe-inline';">
 
             <link rel="stylesheet" type="text/css" href="${globalVarsUri}">
             <link rel="stylesheet" type="text/css" href="${stylesUri}">

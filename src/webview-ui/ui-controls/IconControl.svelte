@@ -129,6 +129,19 @@
         return `command:vscode.open?${encodeURIComponent(JSON.stringify(iconUri))}`;
     }
 
+    // todo : move to utils
+    function getFileUriEncoded(abspath: string) {
+        return `https://file%2B.vscode-resource.vscode-cdn.net/${abspath}`;
+        // return encodeURIComponent(
+        //     `https://file%2B.vscode-resource.vscode-cdn.net/${abspath}`
+        //     // JSON.stringify({
+        //     //     scheme: "vscode-resource", // file
+        //     //     path: abspath,
+        //     //     authority: "",
+        //     // })
+        // );
+    }
+
     const dispatch = createEventDispatcher();
     function onChanged() {
         dispatch("changed", [
@@ -175,7 +188,9 @@
         <span class="file-preview-wrapper">
             {#if iconAsset && iconAsset.preview}
                 <a href={getIconUri()}>
-                    <img src={"data:image/png;base64," + iconAsset.preview} class="file-preview" />
+                    <img src={getFileUriEncoded(iconAsset.absPath)} class="file-preview" />
+
+                    <!-- <img src={"data:image/png;base64," + iconAsset.preview} class="file-preview" /> -->
                 </a>
             {:else}
                 <img src={missingIconData} class="file-preview" />
