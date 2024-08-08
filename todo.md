@@ -44,6 +44,7 @@
 -   add resource import window with import options (compression, include animations)
 -   get assets in webview
 -   do not open console by default
+-   asset preview round corners
 
 -   filepicker when null need to reset selected index
 -   add logic to always select something
