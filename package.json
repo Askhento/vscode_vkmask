@@ -1,6 +1,6 @@
 {
     "name": "vk-mask-editor",
-    "displayName": "askhento_dev_mask",
+    "displayName": "test_dev_mask",
     "publisher": "askhento",
     "icon": "./res/icons/vkmask_main_icon_128.png",
     "description": "%locale.contribution.extension.description%",

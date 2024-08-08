@@ -7,7 +7,7 @@ const [publisherType] = process.argv.slice(2);
 
 const publishers = {
     dev: {
-        displayName: "askhento_dev_mask",
+        displayName: "test_dev_mask",
         publisher: "askhento",
     },
     release: {
