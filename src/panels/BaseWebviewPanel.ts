@@ -14,7 +14,8 @@ export class BaseWebviewPanel {
     constructor(
         private readonly _extensionUri: vscode.Uri,
         private readonly _buildPath: string,
-        public readonly viewId: string
+        public readonly viewId: string,
+        public readonly title: string
     ) {}
 
     public createOrShow() {
@@ -32,7 +33,7 @@ export class BaseWebviewPanel {
         console.log("base panel Will create new!");
 
         // Otherwise, create a new panel.
-        this.currentPanel = vscode.window.createWebviewPanel(this.viewId, this.viewId, column, {
+        this.currentPanel = vscode.window.createWebviewPanel(this.viewId, this.title, column, {
             // Allow scripts in the webview
             enableScripts: true,
             enableCommandUris: true,

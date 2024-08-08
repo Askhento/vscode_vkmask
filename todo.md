@@ -34,7 +34,6 @@
 -   make infobox always visible ?? scroll info view
 -   move dependencies to maskConfig
 -   move close all tabs to setting
--   preview move to file uri
 -   try wsl ramdisk
 -   check current version before publish
 -   settings use buildinds don not react on filepicker
@@ -42,9 +41,10 @@
 -   don't have ERROR state but it is used
 -   add resource import commands (textures, models, scripts, prefabs?)
 -   add resource import window with import options (compression, include animations)
--   get assets in webview
--   do not open console by default
+-   get assets in webview instead of call to extension
 -   asset preview round corners
+-   set whitelist / blacklist fields for asset and preview asset
+-   if closed welcome templates there is no way to open it again
 
 -   filepicker when null need to reset selected index
 -   add logic to always select something

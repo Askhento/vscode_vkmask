@@ -170,6 +170,8 @@
     "locale.months.november": "Ноя",
     "locale.months.october": "Окт",
     "locale.months.september": "Сен",
+    "locale.panels.liquifiedWarpEditor.title": "Деформация лица",
+    "locale.panels.welcomeTemplates.title": "Библиотека примеров",
     "locale.parameters.beautify.label": "Бьюти",
     "locale.parameters.beautify.mix.infoBody": "Степень интенсивности эффекта (степень смешения с исходным изображением). Указывается, как число в диапазоне от 0.0 до 1.0.  Значение по умолчанию: 0.65. Тип данных: float.",
     "locale.parameters.beautify.mix.infoHeader": "Интенсивность смешивания",

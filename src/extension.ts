@@ -163,7 +163,8 @@ export async function activate(context: vscode.ExtensionContext) {
     const liquifiedWarpEditorPanel = new BaseWebviewPanel(
         context.extensionUri,
         liquifiedWarpEditorBuildPath,
-        ViewIds.liquifiedWarpEditor
+        ViewIds.liquifiedWarpEditor,
+        l10n.t("locale.panels.liquifiedWarpEditor.title")
     );
     webviewPanels.push(liquifiedWarpEditorPanel);
 
@@ -171,7 +172,8 @@ export async function activate(context: vscode.ExtensionContext) {
     const welcomeTemplatesPanel = new BaseWebviewPanel(
         context.extensionUri,
         welcomeTemplatesBuildPath,
-        ViewIds.welcomeTemplates
+        ViewIds.welcomeTemplates,
+        l10n.t("locale.panels.welcomeTemplates.title")
     );
     webviewPanels.push(welcomeTemplatesPanel);
 
