@@ -18,7 +18,6 @@ export class AppStateManager {
     }
 
     public set state(newState: AppState) {
-        print("!!!123", newState);
         this._state = newState;
         vscode.commands.executeCommand("setContext", "vk-mask-editor.appState", this._state.state);
 

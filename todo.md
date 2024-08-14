@@ -45,6 +45,8 @@
 -   asset preview round corners
 -   set whitelist / blacklist fields for asset and preview asset
 -   if closed welcome templates there is no way to open it again
+-   move selection to class with get/set
+-   show default panels layout
 
 -   filepicker when null need to reset selected index
 -   add logic to always select something

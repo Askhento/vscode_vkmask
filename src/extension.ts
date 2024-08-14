@@ -270,7 +270,6 @@ export async function activate(context: vscode.ExtensionContext) {
                 break;
         }
     }
-
     async function onSelection(newSelection: Selection) {
         const { type, id } = newSelection as Selection;
 
@@ -959,6 +958,10 @@ export async function activate(context: vscode.ExtensionContext) {
 
         if (maskConfig.parseConfig()) {
             appState.state = { state: AppState.running };
+            const effects = await maskConfig.getEffects();
+            if (effects.length) {
+                onSelection({ type: SelectionType.effect, id: 0 });
+            }
         }
         // this will ensure all the componenets will show up no matter if they closed before.
         webviewProviders.forEach((provider) => {
