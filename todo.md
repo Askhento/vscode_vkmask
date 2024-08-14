@@ -47,6 +47,7 @@
 -   if closed welcome templates there is no way to open it again
 -   move selection to class with get/set
 -   show default panels layout
+-   report bug package.json description locale
 
 -   filepicker when null need to reset selected index
 -   add logic to always select something

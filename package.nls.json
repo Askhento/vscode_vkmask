@@ -14,7 +14,7 @@
     "locale.contribution.userSettings.keepLogs.description": "Does it require to keep debug logs",
     "locale.contribution.userSettings.outputChannel.description": "Open console ouput at the bottom",
     "locale.contribution.userSettings.experimentalFeatures.description": "Enable experimental features",
-    "locale.contribution.extension.description": "UI for vkontakte AR development",
+    "locale.contribution.extension.description": "Редактор масок для ВКонтакте",
     "locale.contribution.command.dumpLogs.shortTitle": "vk-mask-editor logs",
     "locale.contribution.command.resetSidebar.shortTitle": "Reset sidebar",
     "locale.contribution.command.openSettings.shortTitle": "vk-mask-editor settings",
