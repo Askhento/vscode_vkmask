@@ -955,8 +955,8 @@ export async function activate(context: vscode.ExtensionContext) {
         // const tabsToClose = vscode.window.tabGroups.all.map((tg) => tg.tabs).flat();
         // // ? maybe close only files that are in old project, could be usefull for opened api reference
         // await vscode.window.tabGroups.close(tabsToClose);
-        // maskConfig.showConfig(true);
-        // "workspaceContains:mask.json"
+        maskConfig.showConfig(true);
+
         if (maskConfig.parseConfig()) {
             appState.state = { state: AppState.running };
         }
