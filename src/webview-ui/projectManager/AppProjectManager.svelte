@@ -295,7 +295,7 @@
                     {/if}
                 {/key}
             {/if}
-        {:else if appState === AppState.welcome || error.type === ErrorType.configMissing}
+        {:else if appState === AppState.welcome}
             {#key recentProjectInfo}
                 <WelcomeScreen {recentProjectInfo} />
             {/key}

@@ -64,7 +64,7 @@ export async function activate(context: vscode.ExtensionContext) {
 
     const appState = new AppStateManager(context, onSendAppState);
     appState.state = {
-        state: AppState.loading,
+        state: AppState.welcome,
     };
 
     logger.setMode(context.extensionMode);
@@ -611,7 +611,7 @@ export async function activate(context: vscode.ExtensionContext) {
         };
 
         const oldState = appState.state;
-        appState.state = { state: AppState.loading };
+        // if (appState.state.state !== AppState.welcome) appState.state = { state: AppState.loading };
 
         vscode.window.showOpenDialog(options).then(async (fileUri) => {
             if (fileUri && fileUri[0]) {
@@ -620,16 +620,16 @@ export async function activate(context: vscode.ExtensionContext) {
                 recentProjectInfo.addInfo(folder); // !!! maybe useless!!!!
                 const folderUri = vscode.Uri.file(folder);
                 print("Selected open folder: ", maskJsonFile, folder);
-                appState.state = { state: oldState };
+                appState.state = oldState;
                 // return;
                 await vscode.commands.executeCommand(`vscode.openFolder`, folderUri);
             } else {
-                appState.state = { state: oldState };
+                appState.state = oldState;
             }
         });
     }
 
-    async function createProject(url = "") {
+    async function createProject(templateName = "Empty") {
         // ! need to check if project already there !!!
         const options: vscode.SaveDialogOptions = {
             saveLabel: l10n.t("locale.commands.createProject.buttonLabel"),
@@ -637,41 +637,42 @@ export async function activate(context: vscode.ExtensionContext) {
         };
         const oldState = appState.state;
 
-        appState.state = { state: AppState.loading };
+        // if (appState.state.state != AppState.welcome) appState.state = { state: AppState.loading };
 
         const newProjectUri = await vscode.window.showSaveDialog(options);
 
         if (!newProjectUri) {
             // on cancel
-            appState.state = { state: oldState };
+            appState.state = oldState;
 
             return;
         }
 
-        if (!url) {
-            // print("sample dir", sampleProjectDir.toString());
-            const sampleProjectDir = vscode.Uri.joinPath(
-                context.extensionUri,
-                "res",
-                "empty-project"
-            );
-            copyRecursiveSync(sampleProjectDir.fsPath, newProjectUri.fsPath);
-        } else {
-            // ! could be network error
-            try {
-                vscode.window.showInformationMessage(
-                    l10n.t("locale.infoMessage.downloadStarted", newProjectUri.fsPath)
-                );
-                await downloadTemplate(newProjectUri.fsPath, url);
-            } catch (error) {
-                vscode.window.showErrorMessage(
-                    l10n.t("locale.errorMessage.cannotDownloadTemplate")
-                );
-                appState.state = { state: oldState };
+        const sampleProjectDir = vscode.Uri.joinPath(
+            context.extensionUri,
+            "res",
+            "templates",
+            templateName
+        );
 
-                return;
-            }
-        }
+        copyRecursiveSync(sampleProjectDir.fsPath, newProjectUri.fsPath);
+
+        // else {
+        //     // ! could be network error
+        //     try {
+        //         vscode.window.showInformationMessage(
+        //             l10n.t("locale.infoMessage.downloadStarted", newProjectUri.fsPath)
+        //         );
+        //         await downloadTemplate(newProjectUri.fsPath, templateName);
+        //     } catch (error) {
+        //         vscode.window.showErrorMessage(
+        //             l10n.t("locale.errorMessage.cannotDownloadTemplate")
+        //         );
+        //         appState.state = { state: oldState };
+
+        //         return;
+        //     }
+        // }
 
         recentProjectInfo.addInfo(newProjectUri.fsPath);
         vscode.commands.executeCommand(`vscode.openFolder`, newProjectUri);

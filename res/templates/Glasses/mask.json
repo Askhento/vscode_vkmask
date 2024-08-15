@@ -1,0 +1,24 @@
+{
+	"icon": "Icon.png",
+	"effects": [
+		{
+			"name": "beautify",
+			"mix": 0.65
+		},
+		{
+			"name": "patch",
+			"texture": {
+				"diffuse": "Textures/Glasses.png"
+			},
+			"anchor": "middle_eyes",
+			"size": [100.0, 100.0],
+			"offset": [0.0, -10.0, 0.0]
+		},
+		{
+			"name": "posteffect",
+			"type": "sharpen",
+			"intensity": 0.3
+		}
+	],
+	"plugins": []
+}

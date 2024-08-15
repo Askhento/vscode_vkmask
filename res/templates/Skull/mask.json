@@ -1,0 +1,18 @@
+{
+	"icon": "Icon.png",
+	"effects": [
+		{
+			"name": "facemodel",
+			"texture": {
+				"animation": {
+					"fps": 10, 
+					"type": "loop",
+					"trigget_start": "none",
+					"trigget_stop": "none"
+				},
+				"diffuse": "Textures/Skull/Skull.png"
+			}
+		}
+	],
+	"plugins": []
+}

@@ -97,8 +97,8 @@
         {#if appState === AppState.loading}
             <Loading dark={true} scale={2} />
         {/if}
-        {#each templatesData as { name, children }, i}
-            <vscode-divider class="divider" role="separator" />
+        <!-- {#each templatesData as { name, children }, i} -->
+        <!-- <vscode-divider class="divider" role="separator" />
             <div
                 class="category-header"
                 on:click={() => {
@@ -117,15 +117,15 @@
                 <h4 class="category">
                     {name}
                 </h4>
-            </div>
-            {#if $tabInfo[i]}
-                <div class="card-container" transition:slide>
-                    {#each children as data}
-                        <TemplateCard {data} onSelect={sendCreateNewProject} />
-                    {/each}
-                </div>
-            {/if}
-        {/each}
+            </div> -->
+        <!-- {#if $tabInfo[i]}
+            {/if} -->
+        <!-- {/each} -->
+        <div class="card-container" transition:slide>
+            {#each templatesData[0].children as data}
+                <TemplateCard {data} onSelect={sendCreateNewProject} />
+            {/each}
+        </div>
     </div>
 {/key}
 
