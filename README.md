@@ -9,7 +9,7 @@
 
 ### Ресурсы
 
--   [Быстрый старт](vk.com/@msx-vk-mask-editor-quick-start)
+-   [Быстрый старт](https://vk.com/@msx-vk-mask-editor-quick-start)
 -   [Руководство по созданию масок](https://dev.vk.com/ru/masks/overview)
 
 ### Обратная связь
