@@ -4,7 +4,7 @@
     "publisher": "askhento",
     "icon": "./res/icons/vkmask_main_icon_128.png",
     "description": "%locale.contribution.extension.description%",
-    "version": "0.13.0",
+    "version": "0.13.1",
     "engines": {
         "vscode": "^1.74.0"
     },
