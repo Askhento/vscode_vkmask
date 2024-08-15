@@ -12,7 +12,8 @@
 {#if value}
     <vscode-data-grid aria-label="Basic">
         {#if "preview" in value}
-            <img src={value.webviewUri} class="file-preview" />
+            <!-- <img src={value.webviewUri} class="file-preview" /> -->
+            <img src={"data:image/png;base64," + value.preview} class="file-preview" />
         {/if}
         {#each Object.entries(value) as [key, data]}
             {#if allowedFields.has(key)}
