@@ -1,7 +1,7 @@
 <script>
     export let data = {},
         onSelect;
-    const { url, descHTML } = data;
+    const { url, descHTML, preview } = data;
 </script>
 
 <div class="card">
@@ -10,7 +10,9 @@
         on:click={() => {
             onSelect(url);
         }}
-    ></div>
+    >
+        <img src={"data:image/jpg;base64," + preview} class="file-preview" />
+    </div>
     <div class="desc">{@html descHTML}</div>
 </div>
 
@@ -27,6 +29,7 @@
         border: 2px solid transparent;
 
         border-radius: var(--global-image-radius);
+        padding: var(--global-margin);
     }
 
     .card:hover {
@@ -34,10 +37,15 @@
     }
     .preview {
         background-color: var(--button-secondary-foreground);
-        border-radius: var(--global-image-radius);
         width: 100%;
-        height: 200px;
+        height: 280px;
         cursor: pointer;
+        border-radius: var(--global-image-radius);
+        overflow: hidden;
+    }
+
+    .file-preview {
+        width: 100%;
     }
     .desc {
         width: 100%;

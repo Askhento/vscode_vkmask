@@ -189,7 +189,6 @@
             {#if iconAsset && iconAsset.preview}
                 <a href={getIconUri()}>
                     <!-- <img src={getFileUriEncoded(iconAsset.absPath)} class="file-preview" /> -->
-
                     <img src={"data:image/png;base64," + iconAsset.preview} class="file-preview" />
                 </a>
             {:else}
