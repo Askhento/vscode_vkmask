@@ -140,23 +140,23 @@
         align-items: start;
         margin: var(--global-margin);
     }
-    .category-header {
+    /* .category-header {
         width: 100%;
         display: flex;
         justify-content: start;
         align-items: center;
         cursor: pointer;
-    }
+    } */
     .card-container {
         display: flex;
         width: 100%;
         justify-content: start;
         flex-wrap: wrap;
     }
-    i {
+    /* i {
         height: fit-content;
-    }
-    .category {
+    } */
+    /* .category {
         margin: var(--global-margin);
-    }
+    } */
 </style>

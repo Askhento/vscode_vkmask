@@ -47,7 +47,7 @@
 -   if closed welcome templates there is no way to open it again
 -   move selection to class with get/set
 -   show default panels layout
--   report bug package.json description locale
+-   report bug package.json description locale : https://github.com/microsoft/vscode/blob/0978e9ebf5697dbb820052ebb5455b320bea04ab/build/lib/i18n.ts
 
 -   filepicker when null need to reset selected index
 -   add logic to always select something
