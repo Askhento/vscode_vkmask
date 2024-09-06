@@ -34,12 +34,13 @@ import {
     Selection,
     SelectionType,
     ViewIds,
+    AppContext,
     AppState,
     ErrorType,
-    AppState,
+    AppContext,
 } from "./types";
 import type { AppError } from "./types";
-import { AppStateManager } from "./AppState";
+import { AppContextManager } from "./AppContextManager";
 import { effectNames, pluginNames } from "./ztypes";
 import { MaskConfig } from "./MaskConfig";
 import { BaseWebviewProvider } from "./panels/BaseWebviewProvider";
@@ -59,13 +60,15 @@ export async function activate(context: vscode.ExtensionContext) {
     if (minor % 2 !== 0) vscode.window.showInformationMessage("Running pre-release");
 
     let l10nBundle: string | l10n.l10nJsonFormat;
-    checkLocalizationBundle();
+
+    updateLocalizationBundle();
+
     globalThis.selection = { type: SelectionType.empty };
 
-    const appState = new AppStateManager(context, onSendAppState);
-    appState.state = {
+    const appContextManager = new AppContextManager(context, onSendAppContext);
+    appContextManager.set({
         state: AppState.welcome,
-    };
+    });
 
     logger.setMode(context.extensionMode);
 
@@ -75,107 +78,122 @@ export async function activate(context: vscode.ExtensionContext) {
 
     const maskConfig = new MaskConfig();
 
-    await userSettings.init(context.extensionUri);
-    userSettings.on("configChanged", (currentConfig) => {
-        print("new config", currentConfig);
-        messageHandler.send({
-            target: RequestTarget.all,
-            command: RequestCommand.updateSettings,
-            payload: currentConfig,
-        });
-    });
-
-    testMask.updateExecutionPath(slash(userSettings.settings["vk-mask-editor.testMaskPath"].value));
-    userSettings.on("configChanged:vk-mask-editor.testMaskPath", (testMaskPath) => {
-        print("path updated", testMaskPath.value);
-        if (testMask.updateExecutionPath(testMaskPath.value)) return;
-        vscode.window.showErrorMessage("locale.errorMessage.wrongTestMask");
-        // userSettings.updateSettings
-    });
-
     let experimentalFeatures =
         context.extensionMode === vscode.ExtensionMode.Development ||
         userSettings.settings["vk-mask-editor.experimentalFeatures"].value;
 
-    userSettings.on("configChanged:vk-mask-editor.experimentalFeatures", async (experimental) => {
-        // print("settings changed", section);
+    await setupUserSettingsHooks();
 
-        experimentalFeatures = experimental.value;
-        const reloadActionLabel = l10n.t("locale.experimentalFeatures.buttonReload.label");
-        const result = await vscode.window.showInformationMessage(
-            l10n.t("locale.experimentalFeatures.infoMessage.header"),
-            {
-                modal: false,
-            },
-            reloadActionLabel
-        );
-
-        if (result === reloadActionLabel) {
-            vscode.commands.executeCommand("workbench.action.reloadWindow");
-        }
-    });
+    setupDevHotReaload();
 
     maskConfig.on("error", onError);
+    maskConfig.onFileSave = onMaskConfgiSave;
+
+    // sidebar weviews
 
     const webviewsBuildPath = path.join("out", "webview-ui");
     const webviewProviders: Array<BaseWebviewProvider> = [];
 
-    const effectsBuildPath = path.join(webviewsBuildPath, "effects");
-    const effects = new EffectsViewProvider(context.extensionUri, effectsBuildPath);
-    webviewProviders.push(effects);
-    context.subscriptions.push(vscode.window.registerWebviewViewProvider(effects.viewId, effects));
+    const effects = setupWebViewProvider("effects", EffectsViewProvider);
+    const plugins = setupWebViewProvider("plugins", PluginsViewProvider);
+    const projectManager = setupWebViewProvider("projectManager", ProjectManagerViewProvider);
+    const assetsManager = setupWebViewProvider("assetsManager", AssetsManagerViewProvider);
+    const parameters = setupWebViewProvider("parameters", ParametersViewProvider);
 
-    const pluginsBuildPath = path.join(webviewsBuildPath, "plugins");
-    const plugins = new PluginsViewProvider(context.extensionUri, pluginsBuildPath);
-    webviewProviders.push(plugins);
-    context.subscriptions.push(vscode.window.registerWebviewViewProvider(plugins.viewId, plugins));
-
-    const projectManagerBuildPath = path.join(webviewsBuildPath, "projectManager");
-    const projectManager = new ProjectManagerViewProvider(
-        context.extensionUri,
-        projectManagerBuildPath
-    );
-    webviewProviders.push(projectManager);
-    context.subscriptions.push(
-        vscode.window.registerWebviewViewProvider(projectManager.viewId, projectManager)
-    );
-
-    const assetsManagerBuildPath = path.join(webviewsBuildPath, "assetsManager");
-    const assetsManager = new AssetsManagerViewProvider(
-        context.extensionUri,
-        assetsManagerBuildPath
-    );
-    webviewProviders.push(assetsManager);
-    context.subscriptions.push(
-        vscode.window.registerWebviewViewProvider(assetsManager.viewId, assetsManager)
-    );
-
-    const parametersBuildPath = path.join(webviewsBuildPath, "parameters");
-    const parameters = new ParametersViewProvider(context.extensionUri, parametersBuildPath);
-
-    webviewProviders.push(parameters);
-    context.subscriptions.push(
-        vscode.window.registerWebviewViewProvider(parameters.viewId, parameters)
-    );
+    // panels
 
     const webviewPanels: Array<BaseWebviewPanel> = [];
-    const liquifiedWarpEditorBuildPath = path.join(webviewsBuildPath, "liquifiedWarpEditor");
-    const liquifiedWarpEditorPanel = new BaseWebviewPanel(
-        context.extensionUri,
-        liquifiedWarpEditorBuildPath,
+
+    const liquifiedWarpEditorPanel = setupWebViewPanel(
+        "liquifiedWarpEditor",
         ViewIds.liquifiedWarpEditor,
         l10n.t("locale.panels.liquifiedWarpEditor.title")
     );
-    webviewPanels.push(liquifiedWarpEditorPanel);
-
-    const welcomeTemplatesBuildPath = path.join(webviewsBuildPath, "welcomeTemplates");
-    const welcomeTemplatesPanel = new BaseWebviewPanel(
-        context.extensionUri,
-        welcomeTemplatesBuildPath,
+    const welcomeTemplatesPanel = setupWebViewPanel(
+        "welcomeTemplates",
         ViewIds.welcomeTemplates,
         l10n.t("locale.panels.welcomeTemplates.title")
     );
-    webviewPanels.push(welcomeTemplatesPanel);
+
+    setupWebviewProviderMessaging();
+    setupExtensionMessaging();
+
+    setupAddEffectActions();
+    setupAddPluginActions();
+    setupAddAssetActions();
+    setupLogDumpAction();
+    setupOpenSettingsActions();
+    setupArchiveProjectAction();
+    setupOpenTestMaskActions();
+    setupRunCommandByIdAction();
+    setupResetViewsAction();
+
+    runInitialDataProcess();
+
+    // some funcs !
+
+    async function setupUserSettingsHooks() {
+        await userSettings.init(context.extensionUri);
+        userSettings.on("configChanged", (currentConfig) => {
+            // print("new config", currentConfig);
+            messageHandler.send({
+                target: RequestTarget.all,
+                command: RequestCommand.updateSettings,
+                payload: currentConfig,
+            });
+        });
+
+        testMask.updateExecutionPath(
+            slash(userSettings.settings["vk-mask-editor.testMaskPath"].value)
+        );
+        userSettings.on("configChanged:vk-mask-editor.testMaskPath", (testMaskPath) => {
+            // print("path updated", testMaskPath.value);
+            if (testMask.updateExecutionPath(testMaskPath.value)) return;
+            vscode.window.showErrorMessage("locale.errorMessage.wrongTestMask");
+        });
+
+        userSettings.on(
+            "configChanged:vk-mask-editor.experimentalFeatures",
+            async (experimental) => {
+                // print("settings changed", section);
+
+                experimentalFeatures = experimental.value;
+                const reloadActionLabel = l10n.t("locale.experimentalFeatures.buttonReload.label");
+                const result = await vscode.window.showInformationMessage(
+                    l10n.t("locale.experimentalFeatures.infoMessage.header"),
+                    {
+                        modal: false,
+                    },
+                    reloadActionLabel
+                );
+
+                if (result === reloadActionLabel) {
+                    vscode.commands.executeCommand("workbench.action.reloadWindow");
+                }
+            }
+        );
+    }
+
+    function setupWebViewProvider<T extends BaseWebviewProvider>(
+        name: string,
+        provider: new (...args) => T
+    ) {
+        const buildPath = path.join(webviewsBuildPath, name);
+        const viewProvider = new provider(context.extensionUri, buildPath);
+
+        webviewProviders.push(viewProvider);
+        context.subscriptions.push(
+            vscode.window.registerWebviewViewProvider(viewProvider.viewId, viewProvider)
+        );
+        return viewProvider;
+    }
+
+    function setupWebViewPanel(name: string, viewId: string, title: string) {
+        const panelBuildPath = path.join(webviewsBuildPath, name);
+        const panel = new BaseWebviewPanel(context.extensionUri, panelBuildPath, viewId, title);
+        webviewPanels.push(panel);
+        return panel;
+    }
 
     // webviewPanels.forEach((panel) => {
     //     // ? will cause an error for webview panel already disposed?
@@ -195,7 +213,7 @@ export async function activate(context: vscode.ExtensionContext) {
     //     });
     // });
 
-    function checkLocalizationBundle(config = { forceUpdate: false }) {
+    function updateLocalizationBundle(config = { forceUpdate: false }) {
         // l10nBundle = vscode.l10n.bundle;
         const bundlePath = vscode.l10n.uri
             ? vscode.l10n.uri.fsPath
@@ -217,10 +235,10 @@ export async function activate(context: vscode.ExtensionContext) {
         print("!!!ERRROR", newError);
         switch (newError.type) {
             case ErrorType.configMissing:
-                appState.state = {
+                appContextManager.set({
                     state: AppState.welcome,
                     error: newError.value,
-                };
+                });
                 onConfigMissing();
                 break;
 
@@ -270,6 +288,13 @@ export async function activate(context: vscode.ExtensionContext) {
                 break;
         }
     }
+
+    /*
+    ┌─────────────────────────────────────────────────────────────────────────────┐
+    │     communications                                                          │
+    └─────────────────────────────────────────────────────────────────────────────┘
+    */
+
     async function onSelection(newSelection: Selection) {
         const { type, id } = newSelection as Selection;
 
@@ -310,231 +335,230 @@ export async function activate(context: vscode.ExtensionContext) {
         }
     }
 
-    function onSendAppState(target = RequestTarget.all) {
+    function onSendAppContext(target = RequestTarget.all) {
         return messageHandler.send({
             target,
-            command: RequestCommand.updateAppState,
-            payload: appState.state,
+            command: RequestCommand.updateAppContext,
+            payload: appContextManager.get(),
         });
     }
 
-    /*
-    ┌─────────────────────────────────────────────────────────────────────────────┐
-    │     communications                                                          │
-    └─────────────────────────────────────────────────────────────────────────────┘
-    */
+    function setupWebviewProviderMessaging() {
+        webviewProviders.forEach((provider) => {
+            provider.onResolveWebviewView = () => {
+                context.subscriptions.push(
+                    messageHandler.bindViewMessageHandler(provider.webview, provider.viewId)
+                );
 
-    webviewProviders.forEach((provider) => {
-        provider.onResolveWebviewView = () => {
-            context.subscriptions.push(
-                messageHandler.bindViewMessageHandler(provider.webview, provider.viewId)
-            );
+                assetsWatcher.on("assetsChanged", async () => {
+                    const builtins = (await userSettings.getSettings()[
+                        "vk-mask-editor.use-builtins"
+                    ].value) as boolean;
 
-            assetsWatcher.on("assetsChanged", async () => {
-                const builtins = (await userSettings.getSettings()["vk-mask-editor.use-builtins"]
-                    .value) as boolean;
-
-                messageHandler.send({
-                    command: RequestCommand.updateAssets,
-                    payload: await assetsWatcher.getAssets(true),
-                    target: provider.viewId,
+                    messageHandler.send({
+                        command: RequestCommand.updateAssets,
+                        payload: await assetsWatcher.getAssets(true),
+                        target: provider.viewId,
+                    });
                 });
-            });
+            };
+        });
+    }
+
+    function setupExtensionMessaging() {
+        messageHandler.onExtensionMessage = async (data) => {
+            print("extension receives data", data);
+            const { command, target, payload, requestId, origin } = data;
+
+            switch (command) {
+                // simple requests
+                case RequestCommand.getAssets:
+                    messageHandler.send({
+                        ...data,
+                        payload: await assetsWatcher.getAssets(true),
+                        target: origin,
+                    });
+                    break;
+
+                case RequestCommand.readAsset:
+                    messageHandler.send({
+                        ...data,
+                        payload: await assetsWatcher.getAsset(payload.path, payload.assetType),
+                        target: origin,
+                    });
+                    break;
+
+                case RequestCommand.getSettings:
+                    messageHandler.send({
+                        ...data,
+                        payload: userSettings.getSettings(),
+                        target: origin,
+                    });
+                    break;
+
+                case RequestCommand.getMaskSettings:
+                    messageHandler.send({
+                        ...data,
+                        payload: await maskConfig.getMaskSettings(),
+                        target: origin,
+                    });
+                    break;
+
+                case RequestCommand.getEffects:
+                    messageHandler.send({
+                        ...data,
+                        payload: await maskConfig.getEffects(),
+                        target: origin,
+                    });
+                    break;
+
+                case RequestCommand.getPlugins:
+                    messageHandler.send({
+                        ...data,
+                        payload: await maskConfig.getPlugins(),
+                        target: origin,
+                    });
+                    break;
+
+                case RequestCommand.getSelection:
+                    messageHandler.send({
+                        ...data,
+                        payload: globalThis.selection,
+                        target: origin,
+                    });
+                    break;
+
+                case RequestCommand.getTabInfo:
+                    messageHandler.send({
+                        ...data,
+                        payload: tabInfo.get(payload.viewId),
+                        target: origin,
+                    });
+                    break;
+
+                case RequestCommand.getAppContext:
+                    messageHandler.send({
+                        ...data,
+                        target: origin,
+                        payload: appContextManager.get(),
+                    });
+                    break;
+
+                case RequestCommand.getExtensionURI:
+                    messageHandler.send({
+                        ...data,
+                        target: origin,
+                        payload: context.extensionPath,
+                    });
+                    break;
+
+                case RequestCommand.getRecentProjectInfo:
+                    messageHandler.send({
+                        ...data,
+                        target: origin,
+                        payload: await recentProjectInfo.getInfo(),
+                    });
+                    break;
+
+                // more complex  stuff
+                case RequestCommand.writeAsset:
+                    assetsWatcher.writeAsset(payload.path, payload.data, payload.assetType);
+                    break;
+
+                case RequestCommand.renameAsset:
+                    const newPath = await assetsWatcher.renameFile(payload.path, payload.newName);
+                    // !! check error
+                    const newSelection = {
+                        ...globalThis.selection,
+                        path: newPath,
+                        baseName: payload.newName,
+                    };
+                    onSelection(newSelection);
+                    sendSelection();
+                    break;
+
+                case RequestCommand.updateTabInfo:
+                    tabInfo.set(payload.viewId, payload.value);
+                    print("new info ext", tabInfo.info);
+                    break;
+
+                case RequestCommand.updateEffects:
+                    maskConfig.updateEffects(payload);
+                    sendEffects(
+                        [
+                            RequestTarget.parameters,
+                            RequestTarget.effects,
+                            RequestTarget.liquifiedWarpEditor,
+                        ].filter((t) => t !== origin)
+                    ); // !!!!!!!!
+                    break;
+                case RequestCommand.updatePlugins:
+                    maskConfig.updatePlugins(payload);
+                    break;
+                case RequestCommand.updateMaskSettings:
+                    maskConfig.updateMaskSettings(payload);
+                    break;
+
+                case RequestCommand.updateSelection:
+                    // maskConfig.
+                    onSelection(payload);
+                    // inform parameters
+                    break;
+
+                case RequestCommand.showError:
+                    showConfigError(payload);
+                    break;
+
+                case RequestCommand.openProject:
+                    openProject(payload);
+                    break;
+
+                case RequestCommand.createProject:
+                    createProject(payload);
+                    break;
+
+                case RequestCommand.getUploadedAsset:
+                    messageHandler.send({
+                        ...data,
+                        target: origin,
+                        payload: await assetsWatcher.uploadAssets(payload.extensions, payload.to),
+                    });
+                    break;
+                case RequestCommand.getCreatedAssets:
+                    messageHandler.send({
+                        ...data,
+                        target: origin,
+                        payload: await assetsWatcher.copyAssets(payload.from, payload.to),
+                    });
+                    break;
+
+                case RequestCommand.removeAsset:
+                    messageHandler.send({
+                        ...data,
+                        target: origin,
+                        payload: await assetsWatcher.removeAsset(payload),
+                    });
+                    break;
+
+                case RequestCommand.getLocalization:
+                    // Check if a l10n path is configured, if not, we will use the default language
+                    // print("locale uri : ", vscode.l10n.uri?.fsPath, vscode.env.language);
+
+                    messageHandler.send({
+                        ...data,
+                        target: origin,
+                        payload: l10nBundle,
+                    });
+
+                    break;
+
+                default:
+                    break;
+            }
         };
-    });
+    }
 
-    messageHandler.onExtensionMessage = async (data) => {
-        print("extension receives data", data);
-        const { command, target, payload, requestId, origin } = data;
-
-        switch (command) {
-            // simple requests
-            case RequestCommand.getAssets:
-                messageHandler.send({
-                    ...data,
-                    payload: await assetsWatcher.getAssets(true),
-                    target: origin,
-                });
-                break;
-
-            case RequestCommand.readAsset:
-                messageHandler.send({
-                    ...data,
-                    payload: await assetsWatcher.getAsset(payload.path, payload.assetType),
-                    target: origin,
-                });
-                break;
-
-            case RequestCommand.getSettings:
-                messageHandler.send({
-                    ...data,
-                    payload: userSettings.getSettings(),
-                    target: origin,
-                });
-                break;
-
-            case RequestCommand.getMaskSettings:
-                messageHandler.send({
-                    ...data,
-                    payload: await maskConfig.getMaskSettings(),
-                    target: origin,
-                });
-                break;
-
-            case RequestCommand.getEffects:
-                messageHandler.send({
-                    ...data,
-                    payload: await maskConfig.getEffects(),
-                    target: origin,
-                });
-                break;
-
-            case RequestCommand.getPlugins:
-                messageHandler.send({
-                    ...data,
-                    payload: await maskConfig.getPlugins(),
-                    target: origin,
-                });
-                break;
-
-            case RequestCommand.getSelection:
-                messageHandler.send({
-                    ...data,
-                    payload: globalThis.selection,
-                    target: origin,
-                });
-                break;
-
-            case RequestCommand.getTabInfo:
-                messageHandler.send({
-                    ...data,
-                    payload: tabInfo.get(payload.viewId),
-                    target: origin,
-                });
-                break;
-
-            case RequestCommand.getAppState:
-                messageHandler.send({
-                    ...data,
-                    target: origin,
-                    payload: appState.state,
-                });
-                break;
-
-            case RequestCommand.getExtensionURI:
-                messageHandler.send({
-                    ...data,
-                    target: origin,
-                    payload: context.extensionPath,
-                });
-                break;
-
-            case RequestCommand.getRecentProjectInfo:
-                messageHandler.send({
-                    ...data,
-                    target: origin,
-                    payload: await recentProjectInfo.getInfo(),
-                });
-                break;
-
-            // more complex  stuff
-            case RequestCommand.writeAsset:
-                assetsWatcher.writeAsset(payload.path, payload.data, payload.assetType);
-                break;
-
-            case RequestCommand.renameAsset:
-                const newPath = await assetsWatcher.renameFile(payload.path, payload.newName);
-                // !! check error
-                const newSelection = {
-                    ...globalThis.selection,
-                    path: newPath,
-                    baseName: payload.newName,
-                };
-                onSelection(newSelection);
-                sendSelection();
-                break;
-
-            case RequestCommand.updateTabInfo:
-                tabInfo.set(payload.viewId, payload.value);
-                print("new info ext", tabInfo.info);
-                break;
-
-            case RequestCommand.updateEffects:
-                maskConfig.updateEffects(payload);
-                sendEffects(
-                    [
-                        RequestTarget.parameters,
-                        RequestTarget.effects,
-                        RequestTarget.liquifiedWarpEditor,
-                    ].filter((t) => t !== origin)
-                ); // !!!!!!!!
-                break;
-            case RequestCommand.updatePlugins:
-                maskConfig.updatePlugins(payload);
-                break;
-            case RequestCommand.updateMaskSettings:
-                maskConfig.updateMaskSettings(payload);
-                break;
-
-            case RequestCommand.updateSelection:
-                // maskConfig.
-                onSelection(payload);
-                // inform parameters
-                break;
-
-            case RequestCommand.showError:
-                showConfigError(payload);
-                break;
-
-            case RequestCommand.openProject:
-                openProject(payload);
-                break;
-
-            case RequestCommand.createProject:
-                createProject(payload);
-                break;
-
-            case RequestCommand.getUploadedAsset:
-                messageHandler.send({
-                    ...data,
-                    target: origin,
-                    payload: await assetsWatcher.uploadAssets(payload.extensions, payload.to),
-                });
-                break;
-            case RequestCommand.getCreatedAssets:
-                messageHandler.send({
-                    ...data,
-                    target: origin,
-                    payload: await assetsWatcher.copyAssets(payload.from, payload.to),
-                });
-                break;
-
-            case RequestCommand.removeAsset:
-                messageHandler.send({
-                    ...data,
-                    target: origin,
-                    payload: await assetsWatcher.removeAsset(payload),
-                });
-                break;
-
-            case RequestCommand.getLocalization:
-                // Check if a l10n path is configured, if not, we will use the default language
-                // print("locale uri : ", vscode.l10n.uri?.fsPath, vscode.env.language);
-
-                messageHandler.send({
-                    ...data,
-                    target: origin,
-                    payload: l10nBundle,
-                });
-
-                break;
-
-            default:
-                break;
-        }
-    };
-
-    maskConfig.onFileSave = async () => {
+    async function onMaskConfgiSave() {
         // maskConfig.selection = {type : SelectionType.empty};
         // await maskConfig.clearSelection();
         print("on file save");
@@ -542,7 +566,7 @@ export async function activate(context: vscode.ExtensionContext) {
         sendEffects([RequestTarget.effects, RequestTarget.parameters]);
         sendPlugins([RequestTarget.plugins, RequestTarget.parameters]);
         sendMaskSettings(RequestTarget.projectManager);
-    };
+    }
 
     async function sendMaskSettings(target) {
         messageHandler.send({
@@ -569,7 +593,7 @@ export async function activate(context: vscode.ExtensionContext) {
     }
 
     function sendSelection(target = RequestTarget.all) {
-        return messageHandler.send({
+        messageHandler.send({
             command: RequestCommand.updateSelection,
             origin: RequestTarget.extension,
             payload: globalThis.selection,
@@ -610,8 +634,7 @@ export async function activate(context: vscode.ExtensionContext) {
             title: l10n.t("locale.commands.openProject.title"),
         };
 
-        const oldState = appState.state;
-        // if (appState.state.state !== AppState.welcome) appState.state = { state: AppState.loading };
+        const oldContext = appContextManager.get();
 
         vscode.window.showOpenDialog(options).then(async (fileUri) => {
             if (fileUri && fileUri[0]) {
@@ -620,11 +643,11 @@ export async function activate(context: vscode.ExtensionContext) {
                 recentProjectInfo.addInfo(folder); // !!! maybe useless!!!!
                 const folderUri = vscode.Uri.file(folder);
                 print("Selected open folder: ", maskJsonFile, folder);
-                appState.state = oldState;
+                appContextManager.set(oldContext);
                 // return;
                 await vscode.commands.executeCommand(`vscode.openFolder`, folderUri);
             } else {
-                appState.state = oldState;
+                appContextManager.set(oldContext);
             }
         });
     }
@@ -635,15 +658,13 @@ export async function activate(context: vscode.ExtensionContext) {
             saveLabel: l10n.t("locale.commands.createProject.buttonLabel"),
             title: l10n.t("locale.commands.createProject.title"),
         };
-        const oldState = appState.state;
-
-        // if (appState.state.state != AppState.welcome) appState.state = { state: AppState.loading };
+        const oldContext = appContextManager.get();
 
         const newProjectUri = await vscode.window.showSaveDialog(options);
 
         if (!newProjectUri) {
             // on cancel
-            appState.state = oldState;
+            appContextManager.set(oldContext);
 
             return;
         }
@@ -668,7 +689,6 @@ export async function activate(context: vscode.ExtensionContext) {
         //         vscode.window.showErrorMessage(
         //             l10n.t("locale.errorMessage.cannotDownloadTemplate")
         //         );
-        //         appState.state = { state: oldState };
 
         //         return;
         //     }
@@ -693,6 +713,7 @@ export async function activate(context: vscode.ExtensionContext) {
     // }
 
     function onAddTabInfo(viewId: string, selectionType: string) {
+        // todo : move to class ?
         if (globalThis.selection == null || globalThis.selection.type !== selectionType) {
             return;
         }
@@ -715,217 +736,214 @@ export async function activate(context: vscode.ExtensionContext) {
         });
     }
 
-    effectNames.forEach((name) => {
-        context.subscriptions.push(
-            vscode.commands.registerCommand(`vk-mask-editor.add_effect.${name}`, async () => {
-                onAddTabInfo(parameters.viewId, SelectionType.effect);
-                messageHandler.send({
-                    target: effects.viewId,
-                    command: RequestCommand.updateTabInfo,
-                    payload: tabInfo.get(effects.viewId),
-                });
-
-                await maskConfig.addEffect(name);
-
-                maskConfig.onFileSave();
-                sendSelection();
-            })
-        );
-    });
-
-    pluginNames.forEach((name) => {
-        context.subscriptions.push(
-            vscode.commands.registerCommand(`vk-mask-editor.add_plugin.${name}`, async () => {
-                // !!! plugins don't have tabs for now
-                onAddTabInfo(parameters.viewId, SelectionType.plugin);
-                messageHandler.send({
-                    target: plugins.viewId,
-                    command: RequestCommand.updateTabInfo,
-                    payload: tabInfo.get(plugins.viewId),
-                });
-                await maskConfig.addPlugin(name);
-                maskConfig.onFileSave();
-                sendSelection();
-            })
-        );
-    });
-
-    const assetsDefaults = {
-        material: {
-            from: ["res", "defaultMaterial.json"],
-            to: ["Materials", "defaultMaterial.json"],
-            assetType: "json_material",
-        },
-    };
-
-    Object.entries(assetsDefaults).forEach(([assetCategory, { from, to, assetType }]) => {
-        context.subscriptions.push(
-            vscode.commands.registerCommand(
-                `vk-mask-editor.add_asset.${assetCategory}`,
-                async () => {
-                    const relativePath = await assetsWatcher.copyAssets(from, to);
-                    globalThis.selection = {
-                        type: SelectionType.asset,
-                        assetType,
-                        path: relativePath,
-                        baseName: path.basename(relativePath), // !!! could be error
-                    };
-
-                    // print("asset selection", globalThis.selection);
-                    sendSelection();
-                }
-            )
-        );
-    });
-
-    context.subscriptions.push(
-        vscode.commands.registerCommand("vk-mask-editor.dumpLogs", async () => {
-            const dumpPath = maskConfig.currentConfigDir;
-            // todo add timeout in case view not initialized
-            const responses = (await Promise.all(
-                webviewProviders.map((provider) => {
-                    if (provider.disposed) return Promise.resolve([]);
-                    // print("will reqest " + provider.viewId);
-                    return messageHandler.request({
-                        target: provider.viewId,
-                        command: RequestCommand.getLogs,
-                    });
-                })
-            )) as MessageHandlerData<LogEntry[]>[];
-
-            const webviewLogs = responses.map((resp) => resp.payload);
-            logger.dumpLogs(webviewLogs, dumpPath);
-        })
-    );
-
-    context.subscriptions.push(
-        vscode.commands.registerCommand("vk-mask-editor.openSettings", async () => {
-            vscode.commands.executeCommand("workbench.action.openSettings", "vk-mask-editor");
-
-            // vscode.commands.executeCommand("workbench.action.openSettingsJson", {
-            //     revealSetting: { key: "editor.renderWhitespace" },
-            // });
-        })
-    );
-
-    // todo hide when project missing
-    context.subscriptions.push(
-        vscode.commands.registerCommand("vk-mask-editor.archiveProject", async () => {
-            vscode.window.showInformationMessage(
-                l10n.t("locale.commands.archiveProject.startHint")
-            );
-
-            const archivePath = (await userSettings.getSettings()["vk-mask-editor.archivePath"]
-                .value) as string;
-            await archiveProject(archivePath);
-        })
-    );
-
-    context.subscriptions.push(
-        vscode.commands.registerCommand("vk-mask-editor.testMaskOpen", async () => {
-            const { state, error } = appState.state;
-
-            if (state === AppState.error && error.type === ErrorType.configMissing) {
-                vscode.window.showErrorMessage("locale.commands.testMaskOpen.configMissing");
-                return;
-            }
-            print("opening test mask!");
-            testMask.open(maskConfig.pathMaskJSON);
-        })
-    );
-
-    context.subscriptions.push(
-        vscode.commands.registerCommand("vk-mask-editor.execute_command_by_id", async () => {
-            // ??? add parameters ???
-            const commandID = await vscode.window.showInputBox({
-                placeHolder: "Enter command",
-                prompt: "Paste or type any command ID",
-                value: "",
-            });
-
-            if (commandID === "" || commandID === undefined) {
-                vscode.window.showErrorMessage("Empty/Undefined command");
-                return;
-            }
-
-            const result = (await vscode.commands.executeCommand(commandID)) as string;
-
-            if (result) vscode.window.showInformationMessage(result);
-            print(result);
-            // vscode.commands.executeCommand("workbench.action.openSettingsJson", {
-            //     revealSetting: { key: "editor.renderWhitespace" },
-            // });
-        })
-    );
-
-    // context.subscriptions.push(
-    //     vscode.commands.registerCommand("vk-mask-editor.jsEval", async () => {
-    //         // ??? add parameters ???
-    //         const code = await vscode.window.showInputBox({
-    //             placeHolder: "Enter command",
-    //             prompt: "Paste or type any js one liner",
-    //             value: "",
-    //         });
-
-    //         if (code === "" || code === undefined) {
-    //             vscode.window.showErrorMessage("Empty/Undefined input");
-    //             return;
-    //         }
-
-    //         const result = eval(code);
-
-    //         if (result) vscode.window.showInformationMessage(result);
-    //         print(result);
-    //     })
-    // );
-
-    //
-    // // "workbench.action.movePanelToSecondarySideBar",
-    // // workbench.action.openView
-
-    if (context.extensionMode === vscode.ExtensionMode.Development) {
-        let watchLock = false;
-        let watchTimeout: NodeJS.Timeout;
-
-        // const webviewBuildDir = path.join(context.extensionPath, "out", "webview-ui");
-        const webviewWatcher = vscode.workspace.createFileSystemWatcher(
-            // "{,}"
-            new vscode.RelativePattern(context.extensionPath, "{out/**,l10n/bundle.l10n*}")
-        );
-
-        context.subscriptions.push(
-            webviewWatcher.onDidChange((fileUri) => {
-                // print("\nThe file " + fileUri.fsPath + " was modified!");
-                // if (watchLock) {
-                //     return;
-                // }
-
-                if (watchTimeout) clearTimeout(watchTimeout);
-                watchTimeout = setTimeout(() => {
-                    // watchLock = false;
-                    checkLocalizationBundle({ forceUpdate: true });
-                    vscode.commands.executeCommand("workbench.action.webview.reloadWebviewAction");
-                    print("Reload due to file changed");
-                }, 500);
-                // watchLock = true;
-            })
-        );
-
-        vscode.commands.executeCommand("workbench.action.webview.openDeveloperTools");
-    }
-
     /*
     ┌─────────────────────────────────────────────────────────────────────────────┐
     │     extension lifecycle                                                     │
     └─────────────────────────────────────────────────────────────────────────────┘
     */
-    context.subscriptions.push(
-        vscode.commands.registerCommand("vk-mask-editor.resetSidebar", async () => {
-            webviewProviders.forEach((provider) => {
-                vscode.commands.executeCommand(provider.viewId + ".resetViewLocation");
-            });
-        })
-    );
+    function setupAddEffectActions() {
+        effectNames.forEach((name) => {
+            context.subscriptions.push(
+                vscode.commands.registerCommand(`vk-mask-editor.add_effect.${name}`, async () => {
+                    onAddTabInfo(parameters.viewId, SelectionType.effect);
+                    messageHandler.send({
+                        target: effects.viewId,
+                        command: RequestCommand.updateTabInfo,
+                        payload: tabInfo.get(effects.viewId),
+                    });
+
+                    await maskConfig.addEffect(name);
+
+                    maskConfig.onFileSave();
+                    sendSelection();
+                })
+            );
+        });
+    }
+
+    function setupAddPluginActions() {
+        pluginNames.forEach((name) => {
+            context.subscriptions.push(
+                vscode.commands.registerCommand(`vk-mask-editor.add_plugin.${name}`, async () => {
+                    // !!! plugins don't have tabs for now
+                    onAddTabInfo(parameters.viewId, SelectionType.plugin);
+                    messageHandler.send({
+                        target: plugins.viewId,
+                        command: RequestCommand.updateTabInfo,
+                        payload: tabInfo.get(plugins.viewId),
+                    });
+                    await maskConfig.addPlugin(name);
+                    maskConfig.onFileSave();
+                    sendSelection();
+                })
+            );
+        });
+    }
+
+    function setupAddAssetActions() {
+        const assetsDefaults = {
+            material: {
+                from: ["res", "defaultMaterial.json"],
+                to: ["Materials", "defaultMaterial.json"],
+                assetType: "json_material",
+            },
+        };
+
+        Object.entries(assetsDefaults).forEach(([assetCategory, { from, to, assetType }]) => {
+            context.subscriptions.push(
+                vscode.commands.registerCommand(
+                    `vk-mask-editor.add_asset.${assetCategory}`,
+                    async () => {
+                        const relativePath = await assetsWatcher.copyAssets(from, to);
+                        globalThis.selection = {
+                            type: SelectionType.asset,
+                            assetType,
+                            path: relativePath,
+                            baseName: path.basename(relativePath), // !!! could be error
+                        };
+
+                        // print("asset selection", globalThis.selection);
+                        sendSelection();
+                    }
+                )
+            );
+        });
+    }
+
+    function setupLogDumpAction() {
+        context.subscriptions.push(
+            vscode.commands.registerCommand("vk-mask-editor.dumpLogs", async () => {
+                const dumpPath = maskConfig.currentConfigDir;
+                // todo add timeout in case view not initialized
+                const responses = (await Promise.all(
+                    webviewProviders.map((provider) => {
+                        if (provider.disposed) return Promise.resolve([]);
+                        // print("will reqest " + provider.viewId);
+                        return messageHandler.request({
+                            target: provider.viewId,
+                            command: RequestCommand.getLogs,
+                        });
+                    })
+                )) as MessageHandlerData<LogEntry[]>[];
+
+                const webviewLogs = responses.map((resp) => resp.payload);
+                logger.dumpLogs(webviewLogs, dumpPath);
+            })
+        );
+    }
+
+    function setupOpenSettingsActions() {
+        context.subscriptions.push(
+            vscode.commands.registerCommand("vk-mask-editor.openSettings", async () => {
+                vscode.commands.executeCommand("workbench.action.openSettings", "vk-mask-editor");
+
+                // vscode.commands.executeCommand("workbench.action.openSettingsJson", {
+                //     revealSetting: { key: "editor.renderWhitespace" },
+                // });
+            })
+        );
+    }
+
+    function setupArchiveProjectAction() {
+        // todo hide when project missing
+        context.subscriptions.push(
+            vscode.commands.registerCommand("vk-mask-editor.archiveProject", async () => {
+                vscode.window.showInformationMessage(
+                    l10n.t("locale.commands.archiveProject.startHint")
+                );
+
+                const archivePath = (await userSettings.getSettings()["vk-mask-editor.archivePath"]
+                    .value) as string;
+                await archiveProject(archivePath);
+            })
+        );
+    }
+
+    function setupOpenTestMaskActions() {
+        context.subscriptions.push(
+            vscode.commands.registerCommand("vk-mask-editor.testMaskOpen", async () => {
+                const { state, error } = appContextManager.get();
+
+                if (state === AppState.error && error.type === ErrorType.configMissing) {
+                    vscode.window.showErrorMessage("locale.commands.testMaskOpen.configMissing");
+                    return;
+                }
+                print("opening test mask!");
+                testMask.open(maskConfig.pathMaskJSON);
+            })
+        );
+    }
+
+    function setupRunCommandByIdAction() {
+        context.subscriptions.push(
+            vscode.commands.registerCommand("vk-mask-editor.execute_command_by_id", async () => {
+                // ??? add parameters ???
+                const commandID = await vscode.window.showInputBox({
+                    placeHolder: "Enter command",
+                    prompt: "Paste or type any command ID",
+                    value: "",
+                });
+
+                if (commandID === "" || commandID === undefined) {
+                    vscode.window.showErrorMessage("Empty/Undefined command");
+                    return;
+                }
+
+                const result = (await vscode.commands.executeCommand(commandID)) as string;
+
+                if (result) vscode.window.showInformationMessage(result);
+                print(result);
+                // vscode.commands.executeCommand("workbench.action.openSettingsJson", {
+                //     revealSetting: { key: "editor.renderWhitespace" },
+                // });
+            })
+        );
+    }
+
+    function setupDevHotReaload() {
+        if (context.extensionMode === vscode.ExtensionMode.Development) {
+            let watchLock = false;
+            let watchTimeout: NodeJS.Timeout;
+
+            // const webviewBuildDir = path.join(context.extensionPath, "out", "webview-ui");
+            const webviewWatcher = vscode.workspace.createFileSystemWatcher(
+                // "{,}"
+                new vscode.RelativePattern(context.extensionPath, "{out/**,l10n/bundle.l10n*}")
+            );
+
+            context.subscriptions.push(
+                webviewWatcher.onDidChange((fileUri) => {
+                    // print("\nThe file " + fileUri.fsPath + " was modified!");
+                    // if (watchLock) {
+                    //     return;
+                    // }
+
+                    if (watchTimeout) clearTimeout(watchTimeout);
+                    watchTimeout = setTimeout(() => {
+                        // watchLock = false;
+                        updateLocalizationBundle({ forceUpdate: true });
+                        vscode.commands.executeCommand(
+                            "workbench.action.webview.reloadWebviewAction"
+                        );
+                        print("Reload due to file changed");
+                    }, 500);
+                    // watchLock = true;
+                })
+            );
+
+            vscode.commands.executeCommand("workbench.action.webview.openDeveloperTools");
+        }
+    }
+
+    function setupResetViewsAction() {
+        context.subscriptions.push(
+            vscode.commands.registerCommand("vk-mask-editor.resetSidebar", async () => {
+                webviewProviders.forEach((provider) => {
+                    vscode.commands.executeCommand(provider.viewId + ".resetViewLocation");
+                });
+            })
+        );
+    }
     // // show sidebar
     // // await vscode.commands.executeCommand("workbench.view.extension.vk-mask-editor_primary_bar.resetViewContainerLocation")
     // // await vscode.commands.executeCommand(`workbench.view.extension.vk-mask-editor_primary_bar`)
@@ -944,39 +962,44 @@ export async function activate(context: vscode.ExtensionContext) {
     // ;
 
     // will ensure good initialize
-    if (maskConfig.updateConfigPath()) {
-        recentProjectInfo.addInfo(maskConfig.currentConfigDir);
+    function runInitialDataProcess() {
+        if (maskConfig.updateConfigPath()) {
+            recentProjectInfo.addInfo(maskConfig.currentConfigDir);
 
-        assetsWatcher.attach(context.extensionPath);
-        await assetsWatcher.getBuiltinAssets();
+            assetsWatcher.attach(context.extensionPath);
+            await assetsWatcher.getBuiltinAssets();
 
-        // print("showing all webivews/config/closing tabs");
-        // // on init need to show mask.json only! so there is no misatakes working in a wrong file
-        // const tabsToClose = vscode.window.tabGroups.all.map((tg) => tg.tabs).flat();
-        // // ? maybe close only files that are in old project, could be usefull for opened api reference
-        // await vscode.window.tabGroups.close(tabsToClose);
-        maskConfig.showConfig(true);
+            // print("showing all webivews/config/closing tabs");
+            // // on init need to show mask.json only! so there is no misatakes working in a wrong file
+            // const tabsToClose = vscode.window.tabGroups.all.map((tg) => tg.tabs).flat();
+            // // ? maybe close only files that are in old project, could be usefull for opened api reference
+            // await vscode.window.tabGroups.close(tabsToClose);
+            maskConfig.showConfig(true);
 
-        if (maskConfig.parseConfig()) {
-            appState.state = { state: AppState.running };
-            const effects = await maskConfig.getEffects();
-            if (effects.length) {
-                onSelection({ type: SelectionType.effect, id: 0 });
+            if (maskConfig.parseConfig()) {
+                appContextManager.set({ state: AppState.running });
+                const effects = await maskConfig.getEffects();
+                if (effects.length) {
+                    onSelection({ type: SelectionType.effect, id: 0 });
+                }
             }
+            // this will ensure all the componenets will show up no matter if they closed before.
+            webviewProviders.forEach((provider) => {
+                // keep theese collapsed
+                // ?maybe only  for first  run?
+                if (
+                    provider.viewId === ViewIds.assetsManager ||
+                    provider.viewId === ViewIds.plugins
+                ) {
+                    // vscode.commands.executeCommand(provider.viewId + ".removeView");
+                    return;
+                }
+
+                vscode.commands.executeCommand(provider.viewId + ".focus");
+            });
+        } else {
+            appContextManager.set({ state: AppState.welcome });
         }
-        // this will ensure all the componenets will show up no matter if they closed before.
-        webviewProviders.forEach((provider) => {
-            // keep theese collapsed
-            // ?maybe only  for first  run?
-            if (provider.viewId === ViewIds.assetsManager || provider.viewId === ViewIds.plugins) {
-                // vscode.commands.executeCommand(provider.viewId + ".removeView");
-                return;
-            }
-
-            vscode.commands.executeCommand(provider.viewId + ".focus");
-        });
-    } else {
-        appState.state = { state: AppState.welcome };
     }
     // // vscode.commands.executeCommand('workbench.action.moveFocusedView');
     // // vscode.commands.executeCommand('vk-mask-editor.sidepanel.focus').then(() => {
