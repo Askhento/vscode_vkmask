@@ -54,23 +54,20 @@ import { downloadTemplate } from "./utils/downloadTemplate";
 // import { selection } from "./global";
 
 export async function activate(context: vscode.ExtensionContext) {
+    logger.setMode(context.extensionMode);
     const thisExtension = vscode.extensions.getExtension(context.extension.id);
-
-    const [major, minor, patch] = thisExtension.packageJSON.version.split(".");
-    if (minor % 2 !== 0) vscode.window.showInformationMessage("Running pre-release");
 
     let l10nBundle: string | l10n.l10nJsonFormat;
 
-    updateLocalizationBundle();
+    globalThis.selection = { type: SelectionType.empty }; // ? do need this
 
-    globalThis.selection = { type: SelectionType.empty };
-
-    const appContextManager = new AppContextManager(context, onSendAppContext);
+    const appContextManager = new AppContextManager(context, onSendAppContext); // ? inital state
     appContextManager.set({
         state: AppState.welcome,
     });
 
-    logger.setMode(context.extensionMode);
+    // ! decide use Contructor or Singletone
+    // ! decide use events or callback funcitons
 
     const tabInfo = new TabInfo();
 
@@ -78,13 +75,14 @@ export async function activate(context: vscode.ExtensionContext) {
 
     const maskConfig = new MaskConfig();
 
+    userSettings.init(context.extensionUri);
+
     let experimentalFeatures =
         context.extensionMode === vscode.ExtensionMode.Development ||
         userSettings.settings["vk-mask-editor.experimentalFeatures"].value;
 
-    await setupUserSettingsHooks();
-
-    setupDevHotReaload();
+    updateLocalizationBundle();
+    setupUserSettingsHooks(); // ? split
 
     maskConfig.on("error", onError);
     maskConfig.onFileSave = onMaskConfgiSave;
@@ -128,12 +126,19 @@ export async function activate(context: vscode.ExtensionContext) {
     setupRunCommandByIdAction();
     setupResetViewsAction();
 
-    runInitialDataProcess();
+    runInitialDataProcess(); // !what a mess
+
+    showPreReleaseInfo();
+    setupDevHotReaload();
 
     // some funcs !
 
-    async function setupUserSettingsHooks() {
-        await userSettings.init(context.extensionUri);
+    function showPreReleaseInfo() {
+        const [major, minor, patch] = thisExtension.packageJSON.version.split(".");
+        if (minor % 2 !== 0) vscode.window.showInformationMessage("Running pre-release");
+    }
+
+    function setupUserSettingsHooks() {
         userSettings.on("configChanged", (currentConfig) => {
             // print("new config", currentConfig);
             messageHandler.send({
